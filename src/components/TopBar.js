@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import TopBarSearchBar from './TopBarSearchBar';
 import PropTypes from 'prop-types';
 import './styles/TopBar.css';
 
@@ -150,7 +151,7 @@ const TopBar = (props) => {
 				</button>
 				{browseDropDown}
 			</div>
-			<div id="search-bar-container"></div>
+			<TopBarSearchBar queryBooksFunction={props.queryBooksFunction} />
 			{rightSection}
 		</div>
 	);
@@ -162,6 +163,7 @@ TopBar.propTypes = {
 	profileName: PropTypes.string,
 	favoriteGenres: PropTypes.arrayOf(PropTypes.string),
 	signOut: PropTypes.func,
+	queryBooksFunction: PropTypes.func,
 };
 
 export default TopBar;
