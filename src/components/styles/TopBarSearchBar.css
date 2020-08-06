@@ -107,3 +107,55 @@
     padding: 12px 0px;
     background-color: white;
 }
+
+#loadingSpinner {
+    display: inline-block;
+    position: relative;
+    right: 30px;
+    bottom: 3.5px;
+    width: 18px;
+    height: 18px;
+}
+
+#loadingSpinner div {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    margin: 3.0px;
+    border: 3.0px solid rgb(51, 51, 51);
+    border-radius: 50%;
+    animation: spinner-ring 1.2s infinite linear;
+    border-color: rgb(51, 51, 51) transparent transparent transparent;
+}
+
+#loadingSpinner div:nth-child(3) {
+    animation-delay: -0.2s;
+}
+
+@keyframes spinner-ring {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+#search-magnifiying-glass {
+    display: inline-block;
+    position: relative;
+    background: url(https://s.gr-assets.com/assets/layout/header/icn_nav_search.svg);
+    width: 18px;
+    height: 19px;
+    background-repeat: no-repeat;
+    padding: 0px;
+    right: 25px;
+    bottom: 0.5px;
+}
+
+#search-magnifiying-glass span {
+    display: none;
+}

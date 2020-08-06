@@ -49,6 +49,7 @@ const App = () => {
 					'Romance',
 				]}
 				queryBooksFunction={queryBooks}
+				profileName="Helder"
 			/>
 		</div>
 	);

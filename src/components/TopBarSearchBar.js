@@ -3,10 +3,16 @@ import PropTypes from 'prop-types';
 import './styles/TopBarSearchBar.css';
 
 const TopBarSearchBar = (props) => {
+// TODO: loadingSpinner animation and lenses icon
+
 	const [searchBarInput, setSearchBarInput] = useState('');
     const [resultsSection, setResultsSection] = useState(null);
+    const [loading, setLoading] = useState(false);
     useEffect(() => {
         const generateResults = async () => {
+            if (searchBarInput !== '') {
+                setLoading(true);
+            }
             const queryResults = await props.queryBooksFunction(searchBarInput);
             return (
                 <div id="search-books-results">
@@ -48,6 +54,7 @@ const TopBarSearchBar = (props) => {
         
         const assignResultsToDisplay = async () => {
             const results = await generateResults();
+            setLoading(false);
             if (searchBarInput !== '') {
                 setResultsSection(results);
             } else {
@@ -57,6 +64,17 @@ const TopBarSearchBar = (props) => {
 
         assignResultsToDisplay();
     }, [setResultsSection, props, searchBarInput]);
+
+    const inputIcon = loading ?
+        <div id="loadingSpinner">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div> :
+        <a id="search-magnifiying-glass" href="/">
+            <span></span>
+        </a>;
 
 	return (
         <div id="top-bar-search-bar-container">
@@ -70,6 +88,7 @@ const TopBarSearchBar = (props) => {
                         setSearchBarInput(e.target.value);
                     }}
                 />
+                {inputIcon}
 		    </div>
 			{resultsSection}
         </div>

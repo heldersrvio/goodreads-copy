@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import TopBarSearchBar from './TopBarSearchBar';
 import PropTypes from 'prop-types';
 import './styles/TopBar.css';
@@ -6,6 +6,19 @@ import './styles/TopBar.css';
 const TopBar = (props) => {
 	const [browseClicked, setBrowseClicked] = useState(false);
 	const [profileClicked, setProfileClicked] = useState(false);
+	const browseRef = useRef(null);
+	const profileRef = useRef(null);
+
+	useEffect(() => {
+		document.addEventListener('click', (event) => {
+			if (browseRef !== null && browseRef.current !== undefined && !browseRef.current.contains(event.target)) {
+				setBrowseClicked(false);
+			}
+			if (profileRef !== null && profileRef.current !== undefined && !profileRef.current.contains(event.target)) {
+				setProfileClicked(false);
+			}
+		})
+	});
 
 	const rightSection = !props.isLoggedIn ? (
 		<div id="right-section">
@@ -30,10 +43,48 @@ const TopBar = (props) => {
 					<span></span>
 				</a>
 			</div>
-			<div id="profile-button-container">
-				<button id="profile-button">
+			<div id="profile-button-container" ref={profileRef}>
+				<button id="profile-button" onClick={() => setProfileClicked(!profileClicked)}>
 					<img alt="profile" src={props.profileImage}></img>
 				</button>
+				<div id="profile-drop-down" className={profileClicked ? 'visible' : 'hidden'}>
+					<div id="top-section">
+						<span>{props.profileName.toUpperCase()}</span>
+						<ul>
+							<li>
+								<a href="/">Profile</a>
+							</li>
+							<li>
+								<a href="/">Friends</a>
+							</li>
+							<li>
+								<a href="/">Quotes</a>
+							</li>
+							<li>
+								<a href="/">Favorite genres</a>
+							</li>
+							<li>
+								<a href="/">Friends' recommendations</a>
+							</li>
+						</ul>
+					</div>
+					<div id="bottom-section">
+						<ul>
+							<li>
+								<a href="/">Account settings</a>
+							</li>
+							<li>
+								<a href="/">Help</a>
+							</li>
+							<li>
+								<a href="/" onClick={(e) => {
+									e.preventDefault();
+									props.signOut();
+								}}>Sign out</a>
+							</li>
+						</ul>
+					</div>
+				</div>
 			</div>
 		</div>
 	);
@@ -141,7 +192,7 @@ const TopBar = (props) => {
 					My Books
 				</a>
 			</div>
-			<div id="browse-button-container">
+			<div id="browse-button-container" ref={browseRef}>
 				<button
 					id="browse-button"
 					onClick={() => setBrowseClicked(!browseClicked)}
