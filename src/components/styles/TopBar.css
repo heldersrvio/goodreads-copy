@@ -14,8 +14,8 @@
 
 #right-section {
 	display: flex;
-    flex-direction: row;
-    margin-left: 150px;
+	flex-direction: row;
+	margin-left: 150px;
 }
 
 a,
@@ -110,29 +110,36 @@ button.clicked {
 }
 
 #browse-button-container {
-    width: 110px;
+	width: 110px;
 }
 
-#browse-drop-down ul, #profile-drop-down #top-section ul, #profile-drop-down #bottom-section ul {
+#browse-drop-down ul,
+#profile-drop-down #top-section ul,
+#profile-drop-down #bottom-section ul {
 	padding-left: 0px;
 	margin-top: 0px;
 }
 
-#browse-drop-down li, #profile-drop-down #top-section li, #profile-drop-down #bottom-section li {
+#browse-drop-down li,
+#profile-drop-down #top-section li,
+#profile-drop-down #bottom-section li {
 	padding-top: 0px;
 	padding-bottom: 17px;
 	padding-left: 15px;
 	padding-right: 15px;
 }
 
-#browse-drop-down li a, #profile-drop-down #top-section li a, #profile-drop-down #bottom-section li a {
+#browse-drop-down li a,
+#profile-drop-down #top-section li a,
+#profile-drop-down #bottom-section li a {
 	color: rgb(51, 51, 51);
 	font-size: 14px;
 	display: inline;
 	padding: 0px;
 }
 
-#browse-drop-down span, #profile-drop-down #top-section span {
+#browse-drop-down span,
+#profile-drop-down #top-section span {
 	color: rgb(56, 33, 16);
 	font-size: 12px;
 	font-weight: bold;
@@ -142,7 +149,9 @@ button.clicked {
 	display: block;
 }
 
-#browse-drop-down-left-section, #profile-drop-down #top-section, #profile-drop-down #bottom-section {
+#browse-drop-down-left-section,
+#profile-drop-down #top-section,
+#profile-drop-down #bottom-section {
 	background-color: white;
 	padding-right: 10px;
 }
@@ -233,4 +242,14 @@ li {
 	height: 35px;
 	padding-top: 0px;
 	padding-bottom: 0px;
+}
+
+#notifications-button-container {
+	width: 50px;
+}
+
+#notifications-drop-down {
+	position: relative;
+	width: 330px;
+	right: 200px;
 }

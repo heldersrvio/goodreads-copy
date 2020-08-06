@@ -6,19 +6,54 @@ import './styles/TopBar.css';
 const TopBar = (props) => {
 	const [browseClicked, setBrowseClicked] = useState(false);
 	const [profileClicked, setProfileClicked] = useState(false);
+	const [notificationsClicked, setNotificationsClicked] = useState(false);
+	const [notifications, setNotifications] = useState(null);
 	const browseRef = useRef(null);
 	const profileRef = useRef(null);
 
 	useEffect(() => {
 		document.addEventListener('click', (event) => {
-			if (browseRef !== null && browseRef.current !== undefined && !browseRef.current.contains(event.target)) {
+			if (
+				browseRef !== null &&
+				browseRef.current !== undefined &&
+				!browseRef.current.contains(event.target)
+			) {
 				setBrowseClicked(false);
 			}
-			if (profileRef !== null && profileRef.current !== undefined && !profileRef.current.contains(event.target)) {
+			if (
+				profileRef !== null &&
+				profileRef.current !== undefined &&
+				!profileRef.current.contains(event.target)
+			) {
 				setProfileClicked(false);
 			}
-		})
+		});
 	});
+
+	const getNotifications = async () => {
+		const query = await props.fetchNotifications();
+		setNotifications(query);
+	};
+
+	const setNotificationsforDisplay = () => {
+		if (notifications === null) {
+			return null;
+		}
+		return notifications.map((notification) => (
+			<div className="notification-card">
+				<div className="notification-card-left-section">
+					<img src={notification.image} alt="notification user" />
+				</div>
+				<div className="notification-card-right-section">
+					<span>
+						<strong>{notification.name}</strong> {notification.content}
+					</span>
+					<br></br>
+					<span>{notification.time}</span>
+				</div>
+			</div>
+		));
+	};
 
 	const rightSection = !props.isLoggedIn ? (
 		<div id="right-section">
@@ -36,7 +71,27 @@ const TopBar = (props) => {
 	) : (
 		<div id="right-section">
 			<div id="notifications-button-container">
-				<button id="notifications-button"></button>
+				<button
+					id="notifications-button"
+					onClick={() => {
+						setNotificationsClicked(!notificationsClicked);
+						getNotifications();
+					}}
+				></button>
+				<div
+					id="notifications-drop-down"
+					className={notificationsClicked ? 'visible' : 'hidden'}
+				>
+					<div id="top-section">
+						<a id="notifications-a" href="/">
+							NOTIFICATIONS
+						</a>
+						<a id="view-all-notifications-a" href="/">
+							View all notifications
+						</a>
+					</div>
+					<div id="bottom-section">{setNotificationsforDisplay()}</div>
+				</div>
 			</div>
 			<div id="friends-link-container">
 				<a id="friends-link" href="/">
@@ -44,10 +99,16 @@ const TopBar = (props) => {
 				</a>
 			</div>
 			<div id="profile-button-container" ref={profileRef}>
-				<button id="profile-button" onClick={() => setProfileClicked(!profileClicked)}>
+				<button
+					id="profile-button"
+					onClick={() => setProfileClicked(!profileClicked)}
+				>
 					<img alt="profile" src={props.profileImage}></img>
 				</button>
-				<div id="profile-drop-down" className={profileClicked ? 'visible' : 'hidden'}>
+				<div
+					id="profile-drop-down"
+					className={profileClicked ? 'visible' : 'hidden'}
+				>
 					<div id="top-section">
 						<span>{props.profileName.toUpperCase()}</span>
 						<ul>
@@ -77,10 +138,15 @@ const TopBar = (props) => {
 								<a href="/">Help</a>
 							</li>
 							<li>
-								<a href="/" onClick={(e) => {
-									e.preventDefault();
-									props.signOut();
-								}}>Sign out</a>
+								<a
+									href="/"
+									onClick={(e) => {
+										e.preventDefault();
+										props.signOut();
+									}}
+								>
+									Sign out
+								</a>
 							</li>
 						</ul>
 					</div>
@@ -215,6 +281,7 @@ TopBar.propTypes = {
 	favoriteGenres: PropTypes.arrayOf(PropTypes.string),
 	signOut: PropTypes.func,
 	queryBooksFunction: PropTypes.func,
+	fetchNotifications: PropTypes.func,
 };
 
 export default TopBar;

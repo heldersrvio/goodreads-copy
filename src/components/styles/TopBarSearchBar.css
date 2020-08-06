@@ -2,160 +2,160 @@
 @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap');
 
 #top-bar-search-bar {
-    display: flex;
-    align-items: center;
+	display: flex;
+	align-items: center;
 }
 
 #top-bar-search-bar-container {
-    margin-top: 10px;
+	margin-top: 10px;
 }
 
 #search-books-input {
-    height: 24px;
-    width: 458px;
-    padding: 4px 26px 4px 8px;
-    border: 1px solid rgb(220, 214, 204);
-    color: rgb(51, 51, 51);
-    border-radius: 3px;
-    font-size: 14px;
-    font-family: 'Lato', 'Helvetica Neue', Helvetica, sans-serif;
+	height: 24px;
+	width: 458px;
+	padding: 4px 26px 4px 8px;
+	border: 1px solid rgb(220, 214, 204);
+	color: rgb(51, 51, 51);
+	border-radius: 3px;
+	font-size: 14px;
+	font-family: 'Lato', 'Helvetica Neue', Helvetica, sans-serif;
 }
 
 ::placeholder {
-    color: grey;
+	color: grey;
 }
 
 #search-books-input:focus {
-    border-color: rgb(185, 173, 153);
-    box-shadow: rgba(185, 173, 153, 0.5) 0px 0px 4px 0px;
+	border-color: rgb(185, 173, 153);
+	box-shadow: rgba(185, 173, 153, 0.5) 0px 0px 4px 0px;
 }
 
 .search-results-book-card-cover-section img {
-    width: 50px;
-    height: 75px;
+	width: 50px;
+	height: 75px;
 }
 
 .search-result-book-card {
-    display: flex;
-    flex-direction: row;
-    background-color: white;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid gainsboro;
+	display: flex;
+	flex-direction: row;
+	background-color: white;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	border-bottom: 1px solid gainsboro;
 }
 
 .search-result-book-card:hover {
-    background-color: rgb(244, 241, 234);
+	background-color: rgb(244, 241, 234);
 }
 
 .search-result-book-card span {
-    line-height: 20px;
+	line-height: 20px;
 }
 
 .search-results-book-card-title-section {
-    display: flex;
-    flex-wrap: nowrap;
-    flex-direction: column;
-    padding-left: 10px;
+	display: flex;
+	flex-wrap: nowrap;
+	flex-direction: column;
+	padding-left: 10px;
 }
 
 .results-card-book-title {
-    color: rgb(51, 51, 51);
-    font-size: 14px;
-    font-weight: bold;
-    overflow: hidden;
+	color: rgb(51, 51, 51);
+	font-size: 14px;
+	font-weight: bold;
+	overflow: hidden;
 }
 
 .search-results-book-card-author {
-    height: 20px;
-    display: flex;
-    align-items: center;
-    margin-top: 5px;
-    color: rgb(51, 51, 51);
-    font-size: 12px;
-    font-family: 'Merriweather', 'Georgia', serif;
-    overflow: hidden;
-    padding: 0px;
+	height: 20px;
+	display: flex;
+	align-items: center;
+	margin-top: 5px;
+	color: rgb(51, 51, 51);
+	font-size: 12px;
+	font-family: 'Merriweather', 'Georgia', serif;
+	overflow: hidden;
+	padding: 0px;
 }
 
 .search-results-book-card-author span {
-    display: inline-block;
-    line-height: 20px;
+	display: inline-block;
+	line-height: 20px;
 }
 
 #search-books-results {
-    width: 492px;
-    box-shadow: rgba(0, 0, 0, 0.15) 0px 1px 2px 0px;
-    overflow: hidden;
+	width: 492px;
+	box-shadow: rgba(0, 0, 0, 0.15) 0px 1px 2px 0px;
+	overflow: hidden;
 }
 
 #search-books-results-bottom-section a {
-    text-align: center;
-    line-height: 20px;
-    color: rgb(0, 99, 93);
-    font-size: 14px;
+	text-align: center;
+	line-height: 20px;
+	color: rgb(0, 99, 93);
+	font-size: 14px;
 }
 
 #search-books-results-bottom-section a:hover {
-    color: rgb(0, 99, 93);
-    font-size: 14px;
-    text-decoration: underline;
-    background-color: white;
+	color: rgb(0, 99, 93);
+	font-size: 14px;
+	text-decoration: underline;
+	background-color: white;
 }
 
 #search-books-results-bottom-section {
-    padding: 12px 0px;
-    background-color: white;
+	padding: 12px 0px;
+	background-color: white;
 }
 
 #loadingSpinner {
-    display: inline-block;
-    position: relative;
-    right: 30px;
-    bottom: 3.5px;
-    width: 18px;
-    height: 18px;
+	display: inline-block;
+	position: relative;
+	right: 30px;
+	bottom: 3.5px;
+	width: 18px;
+	height: 18px;
 }
 
 #loadingSpinner div {
-    box-sizing: border-box;
-    display: block;
-    position: absolute;
-    width: 18px;
-    height: 18px;
-    margin: 3.0px;
-    border: 3.0px solid rgb(51, 51, 51);
-    border-radius: 50%;
-    animation: spinner-ring 1.2s infinite linear;
-    border-color: rgb(51, 51, 51) transparent transparent transparent;
+	box-sizing: border-box;
+	display: block;
+	position: absolute;
+	width: 18px;
+	height: 18px;
+	margin: 3px;
+	border: 3px solid rgb(51, 51, 51);
+	border-radius: 50%;
+	animation: spinner-ring 1.2s infinite linear;
+	border-color: rgb(51, 51, 51) transparent transparent transparent;
 }
 
 #loadingSpinner div:nth-child(3) {
-    animation-delay: -0.2s;
+	animation-delay: -0.2s;
 }
 
 @keyframes spinner-ring {
-    0% {
-        transform: rotate(0deg);
-    }
+	0% {
+		transform: rotate(0deg);
+	}
 
-    100% {
-        transform: rotate(360deg);
-    }
+	100% {
+		transform: rotate(360deg);
+	}
 }
 
 #search-magnifiying-glass {
-    display: inline-block;
-    position: relative;
-    background: url(https://s.gr-assets.com/assets/layout/header/icn_nav_search.svg);
-    width: 18px;
-    height: 19px;
-    background-repeat: no-repeat;
-    padding: 0px;
-    right: 25px;
-    bottom: 0.5px;
+	display: inline-block;
+	position: relative;
+	background: url(https://s.gr-assets.com/assets/layout/header/icn_nav_search.svg);
+	width: 18px;
+	height: 19px;
+	background-repeat: no-repeat;
+	padding: 0px;
+	right: 25px;
+	bottom: 0.5px;
 }
 
 #search-magnifiying-glass span {
-    display: none;
+	display: none;
 }
