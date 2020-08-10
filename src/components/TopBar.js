@@ -355,6 +355,9 @@ TopBar.propTypes = {
 	signOut: PropTypes.func,
 	queryBooksFunction: PropTypes.func,
 	fetchNotifications: PropTypes.func,
+	fetchNewFriends: PropTypes.func,
+	setNewFriendsToZero: PropTypes.func,
+	setNewNotificationsToSeen: PropTypes.func,
 };
 
 export default TopBar;
