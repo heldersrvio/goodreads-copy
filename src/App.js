@@ -33,6 +33,18 @@ const App = () => {
 		}
 	};
 
+	const queryNotifications = async () => {
+		try {
+			const query = await database.current
+				.collection(`heldersrvioNotifications`)
+				.limit(9)
+				.get();
+			return query.docs.map((document) => document.data());
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	return (
 		<div className="App">
 			<TopBar
@@ -50,6 +62,7 @@ const App = () => {
 				]}
 				queryBooksFunction={queryBooks}
 				profileName="Helder"
+				fetchNotifications={queryNotifications}
 			/>
 		</div>
 	);

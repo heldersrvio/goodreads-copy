@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { formatDistance } from 'date-fns';
 import TopBarSearchBar from './TopBarSearchBar';
 import PropTypes from 'prop-types';
 import './styles/TopBar.css';
@@ -10,6 +11,7 @@ const TopBar = (props) => {
 	const [notifications, setNotifications] = useState(null);
 	const browseRef = useRef(null);
 	const profileRef = useRef(null);
+	const notificationsRef = useRef(null);
 
 	useEffect(() => {
 		document.addEventListener('click', (event) => {
@@ -26,6 +28,14 @@ const TopBar = (props) => {
 				!profileRef.current.contains(event.target)
 			) {
 				setProfileClicked(false);
+			}
+
+			if (
+				notificationsRef !== null &&
+				notificationsRef.current !== undefined &&
+				!notificationsRef.current.contains(event.target)
+			) {
+				setNotificationsClicked(false);
 			}
 		});
 	});
@@ -46,10 +56,18 @@ const TopBar = (props) => {
 				</div>
 				<div className="notification-card-right-section">
 					<span>
-						<strong>{notification.name}</strong> {notification.content}
+						<strong>{notification.name}</strong>,{' '}
+						{notification.nonAnchorContent !== undefined
+							? notification.nonAnchorContent
+							: ''}{' '}
+						<a href={notification.anchorSrc}>{notification.content}</a>
 					</span>
 					<br></br>
-					<span>{notification.time}</span>
+					<span className="date-distance-span">
+						{formatDistance(notification.time.toDate(), new Date(), {
+							addSuffix: true,
+						})}
+					</span>
 				</div>
 			</div>
 		));
@@ -70,13 +88,14 @@ const TopBar = (props) => {
 		</div>
 	) : (
 		<div id="right-section">
-			<div id="notifications-button-container">
+			<div id="notifications-button-container" ref={notificationsRef}>
 				<button
 					id="notifications-button"
 					onClick={() => {
 						setNotificationsClicked(!notificationsClicked);
 						getNotifications();
 					}}
+					className={notificationsClicked ? 'clicked' : ''}
 				></button>
 				<div
 					id="notifications-drop-down"
@@ -102,6 +121,7 @@ const TopBar = (props) => {
 				<button
 					id="profile-button"
 					onClick={() => setProfileClicked(!profileClicked)}
+					className={profileClicked ? 'clicked' : ''}
 				>
 					<img alt="profile" src={props.profileImage}></img>
 				</button>
