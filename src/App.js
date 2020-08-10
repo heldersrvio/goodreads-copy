@@ -36,10 +36,48 @@ const App = () => {
 	const queryNotifications = async () => {
 		try {
 			const query = await database.current
-				.collection(`heldersrvioNotifications`)
+				.collection('heldersrvioNotifications')
 				.limit(9)
 				.get();
 			return query.docs.map((document) => document.data());
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const getNumberOfNewFriends = async () => {
+		try {
+			const query = await database.current
+				.collection('users')
+				.where('username', '==', 'heldersrvio')
+				.get();
+			return query.docs.map((document) => document.data())[0].newFriendsRequests
+				.length;
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const setNewNotificationsToSeen = async () => {
+		try {
+			const query = await database.current
+				.collection('heldersrvioNotifications')
+				.get();
+			query.forEach((doc) => doc.ref.set({ new: false }, { merge: true }));
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const setNewFriendsToZero = async () => {
+		try {
+			const query = await database.current
+				.collection('users')
+				.where('username', '==', 'heldersrvio')
+				.get();
+			query.forEach((doc) =>
+				doc.ref.set({ newFriendsRequests: [] }, { merge: true })
+			);
 		} catch (error) {
 			console.log(error);
 		}
@@ -63,6 +101,9 @@ const App = () => {
 				queryBooksFunction={queryBooks}
 				profileName="Helder"
 				fetchNotifications={queryNotifications}
+				fetchNewFriends={getNumberOfNewFriends}
+				setNewFriendsToZero={setNewFriendsToZero}
+				setNewNotificationsToSeen={setNewNotificationsToSeen}
 			/>
 		</div>
 	);

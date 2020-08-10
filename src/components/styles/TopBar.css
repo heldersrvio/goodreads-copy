@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,300;1,400&display=swap');
 
 #top-bar {
+	position: -webkit-sticky;
 	position: sticky;
 	top: 0;
 	left: 0;
@@ -343,4 +344,40 @@ li {
 .notification-card-right-section a:hover {
 	background-color: white;
 	text-decoration: underline;
+}
+
+#friends-link,
+#notifications-button {
+	position: relative;
+}
+
+#friends-link span,
+#notifications-button span {
+	background-color: #fa604a;
+	color: white;
+	font-family: 'Lato', 'Helvetica Neue', Helvetica, sans-serif;
+	font-size: 12px;
+	padding: 3px;
+	position: absolute;
+	top: 4px;
+	right: 4px;
+	line-height: 1.15;
+	border-radius: 3px;
+}
+
+#notifications-drop-down #loadingSpinner {
+	position: relative;
+	left: 150px;
+	margin-top: 15px;
+	margin-bottom: 15px;
+	font-family: 'Lato', 'Helvetica Neue', Helvetica, sans-serif;
+}
+
+#no-notifications-span {
+	margin: 0px 115px;
+	padding: 10px 0px;
+	display: block;
+	font-family: 'Lato', 'Helvetica Neue', Helvetica, sans-serif;
+	font-size: 14px;
+	width: 100px;
 }

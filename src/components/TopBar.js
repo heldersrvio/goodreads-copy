@@ -9,11 +9,25 @@ const TopBar = (props) => {
 	const [profileClicked, setProfileClicked] = useState(false);
 	const [notificationsClicked, setNotificationsClicked] = useState(false);
 	const [notifications, setNotifications] = useState(null);
+	const [newNotifications, setNewNotifications] = useState(0);
+	const [newFriends, setNewFriends] = useState(0);
 	const browseRef = useRef(null);
 	const profileRef = useRef(null);
 	const notificationsRef = useRef(null);
 
 	useEffect(() => {
+		const checkForNewNotifications = async () => {
+			const query = await props.fetchNotifications();
+			setNewNotifications(
+				query.filter((notification) => notification.new === true).length
+			);
+		};
+
+		const checkForNewFriends = async () => {
+			const numberOfNewFriends = await props.fetchNewFriends();
+			setNewFriends(numberOfNewFriends);
+		};
+
 		document.addEventListener('click', (event) => {
 			if (
 				browseRef !== null &&
@@ -38,6 +52,9 @@ const TopBar = (props) => {
 				setNotificationsClicked(false);
 			}
 		});
+
+		checkForNewNotifications();
+		checkForNewFriends();
 	});
 
 	const getNotifications = async () => {
@@ -73,6 +90,15 @@ const TopBar = (props) => {
 		));
 	};
 
+	const loadingSpinner = (
+		<div id="loadingSpinner">
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>
+	);
+
 	const rightSection = !props.isLoggedIn ? (
 		<div id="right-section">
 			<div id="sign-in-link-container">
@@ -92,30 +118,50 @@ const TopBar = (props) => {
 				<button
 					id="notifications-button"
 					onClick={() => {
+						if (newNotifications > 0) {
+							console.log('Here');
+							props.setNewNotificationsToSeen();
+							setNewNotifications(0);
+						}
 						setNotificationsClicked(!notificationsClicked);
 						getNotifications();
 					}}
 					className={notificationsClicked ? 'clicked' : ''}
-				></button>
+				>
+					{newNotifications > 0 ? <span>{newNotifications}</span> : null}
+				</button>
 				<div
 					id="notifications-drop-down"
 					className={notificationsClicked ? 'visible' : 'hidden'}
 				>
-					<div id="top-section">
-						<a id="notifications-a" href="/">
-							NOTIFICATIONS
-						</a>
-						<a id="view-all-notifications-a" href="/">
-							View all notifications
-						</a>
-					</div>
+					{notifications !== null && notifications.length > 0 ? (
+						<div id="top-section">
+							<a id="notifications-a" href="/">
+								NOTIFICATIONS
+							</a>
+							<a id="view-all-notifications-a" href="/">
+								View all notifications
+							</a>
+						</div>
+					) : notifications !== null ? (
+						<span id="no-notifications-span">No notifications</span>
+					) : (
+						loadingSpinner
+					)}
 					<div id="bottom-section">{setNotificationsforDisplay()}</div>
 				</div>
 			</div>
 			<div id="friends-link-container">
-				<a id="friends-link" href="/">
-					<span></span>
-				</a>
+				<button
+					id="friends-link"
+					onClick={async () => {
+						await props.setNewFriendsToZero();
+						setNewFriends(0);
+						document.location.href = 'https://www.google.com';
+					}}
+				>
+					{newFriends > 0 ? <span>{newFriends}</span> : null}
+				</button>
 			</div>
 			<div id="profile-button-container" ref={profileRef}>
 				<button
@@ -123,7 +169,14 @@ const TopBar = (props) => {
 					onClick={() => setProfileClicked(!profileClicked)}
 					className={profileClicked ? 'clicked' : ''}
 				>
-					<img alt="profile" src={props.profileImage}></img>
+					<img
+						alt="profile"
+						src={
+							props.profileImage !== null
+								? props.profileImage
+								: 'https://s.gr-assets.com/assets/nophoto/user/u_60x60-267f0ca0ea48fd3acfd44b95afa64f01.png'
+						}
+					></img>
 				</button>
 				<div
 					id="profile-drop-down"
