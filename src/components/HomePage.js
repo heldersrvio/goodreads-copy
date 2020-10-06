@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import HomePageTopBar from './HomePageTopBar';
+import HomePageTopSection from './HomePageTopSection';
 
 const HomePage = (props) => {
     return (
-        <HomePageTopBar signIn={props.signIn} />
+        <HomePageTopSection signIn={props.signIn} />
     );
 };
 

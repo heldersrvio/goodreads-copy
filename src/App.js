@@ -84,6 +84,11 @@ const App = () => {
 		}
 	};
 
+	const rememberLogin = (email, password) => {
+		localStorage.email = email;
+		localStorage.password = password;
+	};
+
 	return (
 		/*
 		<div className="App">

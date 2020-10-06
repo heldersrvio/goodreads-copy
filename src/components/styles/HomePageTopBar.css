@@ -1,10 +1,9 @@
 #home-page-top-bar {
-    background: -webkit-radial-gradient(rgb(248, 247, 242), rgb(224, 222, 206));
+    background: transparent;
     display: flex;
     justify-content: space-around;
     padding-top: 10px;
     padding-bottom: 5px;
-    border-bottom: 1pt solid gainsboro;
 }
 
 label, #forgot-password-a {
