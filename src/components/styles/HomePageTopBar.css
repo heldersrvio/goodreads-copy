@@ -1,0 +1,80 @@
+#home-page-top-bar {
+    background: -webkit-radial-gradient(rgb(248, 247, 242), rgb(224, 222, 206));
+    display: flex;
+    justify-content: space-around;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1pt solid gainsboro;
+}
+
+label, #forgot-password-a {
+    margin-top: 3px;
+    color: rgb(153, 153, 153);
+    font-size: 12px;
+    font-family: Lato, "Helvetica Neue", Helvetica, sans-serif;
+}
+
+button:hover, a:hover {
+    background: transparent;
+}
+
+#forgot-password-a {
+    height: 15px;
+    line-height: 15px;
+    padding: 0;
+}
+
+#forgot-password-a:hover {
+    text-decoration: underline;
+}
+
+input[type="email"], input[type="password"] {
+    font-family: Lato, "Helvetica Neue", Helvetica, sans-serif;
+    font-size: 13px;
+    width: 120px;
+    padding: 5px;
+    border: 1pt solid gainsboro;
+    border-radius: 2px;
+}
+
+input:focus {
+    border: 1pt solid rgb(185, 173, 153);
+    box-shadow: rgba(185, 173, 153, 0.5) 0px 0px 4px 0px;
+}
+
+#signin-form {
+    padding-top: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 349px;
+}
+
+#form-email {
+    display: flex;
+    flex-direction: column;
+}
+
+input[type="checkbox"] {
+    width: 12px;
+    height: 12px;
+    margin-right: 5px;
+}
+
+button {
+    width: 67px;
+    height: 32px;
+    font-size: 14px;
+    font-family: Lato, "Helvetica Neue", Helvetica, sans-serif;
+    background-color: rgb(56, 33, 16);
+    color: white;
+    line-height: 14px;
+    border: 1pt solid black;
+    border-radius: 2px;
+    padding: 0;
+}
+
+button:hover {
+    background-color: rgb(88, 55, 31);
+    color: white;
+}
