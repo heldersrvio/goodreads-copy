@@ -7,6 +7,7 @@
     padding-top: 30px;
     padding-left: 170px;
     padding-right: 170px;
+    height: calc(100% - 66px - 30px);
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -15,6 +16,10 @@
 #new-account-section, #create-new-account {
     display: flex;
     flex-direction: column;
+}
+
+#new-account-section {
+    justify-content: space-between;
 }
 
 #create-new-account {
@@ -31,7 +36,14 @@
 #sign-in-sms {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(51, 51, 51);
+    color: white;
+    font-size: 14px;
+    font-family: Lato, "Helvetica Neue", Helvetica, sans-serif;
+    height: 50px;
+    border-radius: 4px 4px 0px 0px;
 }
 
 #create-new-account input {
@@ -41,6 +53,7 @@
     font-size: 16px;
     border-radius: 3px;
     border: 1pt solid gainsboro;
+    color: rgb(51, 51, 51);
 }
 
 #create-new-account input:focus {
@@ -58,7 +71,7 @@
     font-size: 10px;
 }
 
-button, button:hover {
+#sign-up-button, #sign-up-button:hover {
     width: 95px;
     height: 38px;
     padding: 8px;
@@ -69,4 +82,41 @@ button, button:hover {
     font-size: 18px;
     line-height: 18px;
     border-radius: 4px;
+}
+
+#sign-up-button:hover {
+    background-color: rgb(255, 213, 109);
+}
+
+#facebook-button {
+    background: url('https://www.goodreads.com/assets/gr/share_module/share_facebook_circle-ecf94fc18c887e845025d979d27f758d.svg');
+}
+
+#twitter-button {
+    background: url('https://s.gr-assets.com/assets/gr/share_module/share_twitter_circle-1e3cc199af6bf2bd798502acf873657a.svg')
+}
+
+#google-button {
+    background: url('https://s.gr-assets.com/assets/gr/third_party/google_circle-694153be668f0720f058e755b6f136c6.png')
+}
+
+#amazon-button {
+    background: url('https://www.goodreads.com/assets/gr/third_party/amazon_circle-5596868f0d928f2945f3374b01f5e10b.png');
+}
+
+#sign-in-sms button {
+    width: 26px;
+    height: 26px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border: none;
+    margin-left: 6px;
+}
+
+#sign-in-sms span {
+    margin-right: 3px;
+}
+
+#headline {
+    margin-top: 20px;
 }
