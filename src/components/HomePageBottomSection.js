@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import './styles/HomePageBottomSection.css';
 
 const HomePageBottomSection = (props) => {
 	const [searchTerm, setSearchTerm] = useState('');
@@ -61,18 +62,21 @@ const HomePageBottomSection = (props) => {
 					<div className="discovery">
 						<div className="discovery-left-section">
 							<span>Because {props.recExample1.userName} liked...</span>
-							{props.recExample1.bookList.map((book, index) => {
-								return (
-									<a href={props.recExample1.bookLinkList[index]}>
-										<img
-											src={props.recExample1.bookCoverList[index]}
-											alt={book}
-										/>
-									</a>
-								);
-							})}
+							<div className="book-recs">
+								{props.recExample1.bookList.map((book, index) => {
+									return (
+										<a href={props.recExample1.bookLinkList[index]}>
+											<img
+												src={props.recExample1.bookCoverList[index]}
+												alt={book}
+											/>
+										</a>
+									);
+								})}
+							</div>
 						</div>
 						<img
+							className="rec-arrow"
 							src="https://www.goodreads.com/assets/home/discovery_arrow.png"
 							alt="Arrow"
 						/>
@@ -98,18 +102,21 @@ const HomePageBottomSection = (props) => {
 					<div className="discovery">
 						<div className="discovery-left-section">
 							<span>Because {props.recExample2.userName} liked...</span>
-							{props.recExample2.bookList.map((book, index) => {
-								return (
-									<a href={props.recExample2.bookLinkList[index]}>
-										<img
-											src={props.recExample2.bookCoverList[index]}
-											alt={book}
-										/>
-									</a>
-								);
-							})}
+							<div className="book-recs">
+								{props.recExample2.bookList.map((book, index) => {
+									return (
+										<a href={props.recExample2.bookLinkList[index]}>
+											<img
+												src={props.recExample2.bookCoverList[index]}
+												alt={book}
+											/>
+										</a>
+									);
+								})}
+							</div>
 						</div>
 						<img
+							className="rec-arrow"
 							src="https://www.goodreads.com/assets/home/discovery_arrow.png"
 							alt="Arrow"
 						/>

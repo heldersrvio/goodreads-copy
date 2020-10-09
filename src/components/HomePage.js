@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import HomePageTopSection from './HomePageTopSection';
 import HomePageBottomSectiom from './HomePageBottomSection';
+import './styles/HomePage.css';
 
 const HomePage = (props) => {
 	return (

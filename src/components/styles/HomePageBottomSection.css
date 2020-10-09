@@ -1,0 +1,115 @@
+#homepage-bottom-section {
+	margin-top: 20px;
+	background-color: white;
+	padding: 0px 175px;
+	display: flex;
+	flex-direction: row;
+}
+
+.left-section h2,
+.right-section h2 {
+	font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-size: 18px;
+	margin-bottom: 20px;
+}
+
+#homepage-bottom-section-main {
+	width: 585px;
+}
+
+#homepage-bottom-section-main .intro {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.intro {
+	margin-bottom: 30px;
+}
+
+.intro .left-section,
+.intro .right-section {
+	width: 280px;
+}
+
+.intro .left-section span,
+.intro .right-section span {
+	font-family: Lato, 'Helvetica Neue', Helvetica, sans-serif;
+	font-size: 14px;
+	color: rgb(51, 51, 51);
+}
+
+.discovery-left-section {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+}
+
+.discovery-box {
+	background-color: #f4f2e9;
+	border-radius: 10px;
+	padding-top: 15px;
+	padding-bottom: 20px;
+}
+
+.discovery-box h2 {
+	font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-size: 18px;
+	margin-left: 15px;
+	margin-bottom: 20px;
+}
+
+.discovery-box span {
+	color: rgb(24, 24, 24);
+	font-size: 12px;
+	font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.discovery {
+	background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAoCAYAAAA%2FtpB3AAAAOElEQVQIW2M6uG%2FlfyZGRkYGdIIBCKAsRgYMWXSCAU5gUYzVAAaELA5tCHUQAxjQZIFir16%2FhXAByw8GmnhQCm8AAAAASUVORK5CYII%3D');
+	background-position-y: bottom;
+	background-repeat: repeat-x;
+	height: 180px;
+	padding-left: 15px;
+	margin-top: 10px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.discovery-left-section,
+.discovery-right-section {
+	display: flex;
+	flex-direction: column;
+}
+
+.discovery-right-section {
+	margin-right: 80px;
+}
+
+i {
+	font-style: italic;
+}
+
+.discovery a img {
+	height: 120px;
+}
+
+.discovery a {
+	padding: 0;
+	margin-right: 10px;
+}
+
+.book-recs {
+	display: flex;
+	flex-direction: row;
+	margin-top: 15px;
+}
+
+.book-rec-and-source {
+	margin-top: 15px;
+}
+
+.rec-arrow {
+	align-self: center;
+}
