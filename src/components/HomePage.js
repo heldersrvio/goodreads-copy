@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import HomePageTopSection from './HomePageTopSection';
 import HomePageBottomSectiom from './HomePageBottomSection';
+import HomePageFootBar from './HomePageFootBar';
 import './styles/HomePage.css';
 
 const HomePage = (props) => {
@@ -135,6 +136,7 @@ const HomePage = (props) => {
 					},
 				]}
 			/>
+			<HomePageFootBar />
 		</div>
 	);
 };
