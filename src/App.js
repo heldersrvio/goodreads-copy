@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import TopBar from './components/TopBar';
 import HomePage from './components/HomePage';
 import firebase from 'firebase/app';
@@ -19,6 +19,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 const App = () => {
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const database = useRef(null);
 	database.current = firebase.firestore();
 
@@ -85,33 +86,51 @@ const App = () => {
 		}
 	};
 
+	const signOut = async () => {
+		console.log('Signing out...');
+		try {
+			await firebase.auth().signOut();
+			console.log('Done');
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	let firstPage = isLoggedIn ? <TopBar
+		isLoggedIn={true}
+		profileImage="https://camo.githubusercontent.com/db6bd56a6ead4c0d902278e7c1f642ea166d9ddd/687474703a2f2f69636f6e732e69636f6e617263686976652e636f6d2f69636f6e732f746865686f74682f73656f2f3235362f73656f2d70616e64612d69636f6e2e706e67"
+		favoriteGenres={[
+			'Science Fiction',
+			'Manga',
+			'Contemporary',
+			'Fantasy',
+			'Fiction',
+			'Graphic Novels',
+			'Historical Fiction',
+			'Romance',
+		]}
+		queryBooksFunction={queryBooks}
+		profileName="Helder"
+		fetchNotifications={queryNotifications}
+		fetchNewFriends={getNumberOfNewFriends}
+		setNewFriendsToZero={setNewFriendsToZero}
+		setNewNotificationsToSeen={setNewNotificationsToSeen}
+		signOut={signOut}
+	/> : 
+	<HomePage />;
+
+	firebase.auth().onAuthStateChanged((user) => {
+		console.log('Here');
+		if (user !== null) {
+			setIsLoggedIn(true);
+		} else {
+			setIsLoggedIn(false);
+		}
+	})
+
 	return (
-		/*
 		<div className="App">
-			<TopBar
-				isLoggedIn={true}
-				profileImage="https://camo.githubusercontent.com/db6bd56a6ead4c0d902278e7c1f642ea166d9ddd/687474703a2f2f69636f6e732e69636f6e617263686976652e636f6d2f69636f6e732f746865686f74682f73656f2f3235362f73656f2d70616e64612d69636f6e2e706e67"
-				favoriteGenres={[
-					'Science Fiction',
-					'Manga',
-					'Contemporary',
-					'Fantasy',
-					'Fiction',
-					'Graphic Novels',
-					'Historical Fiction',
-					'Romance',
-				]}
-				queryBooksFunction={queryBooks}
-				profileName="Helder"
-				fetchNotifications={queryNotifications}
-				fetchNewFriends={getNumberOfNewFriends}
-				setNewFriendsToZero={setNewFriendsToZero}
-				setNewNotificationsToSeen={setNewNotificationsToSeen}
-			/>
-		</div>
-		*/
-		<div className="App">
-			<HomePage />
+			{firstPage}
 		</div>
 	);
 };

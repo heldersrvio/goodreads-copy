@@ -13,7 +13,7 @@
 	box-shadow: 0px 0.5px 2px rgb(185, 185, 185);
 }
 
-#right-section {
+#top-bar-right-section {
 	display: flex;
 	flex-direction: row;
 	margin-left: 150px;
@@ -115,15 +115,15 @@ button.clicked {
 }
 
 #browse-drop-down ul,
-#profile-drop-down #top-section ul,
-#profile-drop-down #bottom-section ul {
+#profile-drop-down-top-section ul,
+#profile-drop-down-bottom-section ul {
 	padding-left: 0px;
 	margin-top: 0px;
 }
 
 #browse-drop-down li,
-#profile-drop-down #top-section li,
-#profile-drop-down #bottom-section li {
+#profile-drop-down-top-section li,
+#profile-drop-down-bottom-section li {
 	padding-top: 0px;
 	padding-bottom: 17px;
 	padding-left: 15px;
@@ -131,8 +131,8 @@ button.clicked {
 }
 
 #browse-drop-down li a,
-#profile-drop-down #top-section li a,
-#profile-drop-down #bottom-section li a {
+#profile-drop-down-top-section li a,
+#profile-drop-down-bottom-section li a {
 	color: rgb(51, 51, 51);
 	font-size: 14px;
 	display: inline;
@@ -140,7 +140,7 @@ button.clicked {
 }
 
 #browse-drop-down span,
-#profile-drop-down #top-section span {
+#profile-drop-down-top-section span {
 	color: rgb(56, 33, 16);
 	font-size: 12px;
 	font-weight: bold;
@@ -151,8 +151,8 @@ button.clicked {
 }
 
 #browse-drop-down-left-section,
-#profile-drop-down #top-section,
-#profile-drop-down #bottom-section {
+#profile-drop-down-top-section,
+#profile-drop-down-bottom-section {
 	background-color: white;
 	padding-right: 10px;
 }
@@ -200,8 +200,8 @@ button.clicked {
 
 #browse-drop-down-left-section li a:hover,
 #all-genres-a:hover,
-#profile-drop-down #top-section li a:hover,
-#profile-drop-down #bottom-section li a:hover {
+#profile-drop-down-top-section li a:hover,
+#profile-drop-down-bottom-section li a:hover {
 	color: rgb(51, 51, 51);
 	font-size: 14px;
 	background-color: inherit;
@@ -226,20 +226,20 @@ li {
 	box-shadow: 0px 5px 10px rgb(199, 199, 199);
 }
 
-#profile-drop-down #top-section span {
+#profile-drop-down-top-section span {
 	color: rgb(51, 51, 51);
 	font-size: 14px;
 }
 
-#profile-drop-down #top-section {
+#profile-drop-down-top-section {
 	border-bottom: 1px solid rgb(212, 212, 212);
 }
 
-#profile-drop-down #top-section {
+#profile-drop-down-top-section {
 	padding-bottom: 10px;
 }
 
-#profile-drop-down #bottom-section li {
+#profile-drop-down-bottom-section li {
 	height: 35px;
 	padding-top: 0px;
 	padding-bottom: 0px;
@@ -257,12 +257,12 @@ li {
 	box-shadow: 0px 5px 10px rgb(199, 199, 199);
 }
 
-#notifications-drop-down #bottom-section {
+#notifications-drop-down-bottom-section {
 	max-height: 380px;
 	overflow: scroll;
 }
 
-#notifications-drop-down #top-section #notifications-a {
+#notifications-drop-down-top-section #notifications-a {
 	color: rgb(56, 33, 16);
 	font-size: 12px;
 	font-family: 'Lato', 'Helvetica Neue', Helvetica, sans-serif;
@@ -272,12 +272,12 @@ li {
 	padding: 0px;
 }
 
-#notifications-drop-down #top-section #notifications-a:hover,
-#notifications-drop-down #top-section #view-all-notifications-a:hover {
+#notifications-drop-down-top-section #notifications-a:hover,
+#notifications-drop-down-top-section #view-all-notifications-a:hover {
 	background-color: transparent;
 }
 
-#notifications-drop-down #top-section #view-all-notifications-a {
+#notifications-drop-down-top-section #view-all-notifications-a {
 	color: rgb(0, 99, 93);
 	font-size: 12px;
 	font-family: 'Lato', 'Helvetica Neue', Helvetica, sans-serif;
@@ -286,7 +286,7 @@ li {
 	padding: 0px;
 }
 
-#notifications-drop-down #top-section {
+#notifications-drop-down-top-section {
 	width: 298px;
 	padding: 8px 16px;
 	border-bottom: 1px solid rgb(216, 216, 216);

@@ -31,6 +31,7 @@ const TopBar = (props) => {
 		document.addEventListener('click', (event) => {
 			if (
 				browseRef !== null &&
+				browseRef.current !== null &&
 				browseRef.current !== undefined &&
 				!browseRef.current.contains(event.target)
 			) {
@@ -38,6 +39,7 @@ const TopBar = (props) => {
 			}
 			if (
 				profileRef !== null &&
+				profileRef.current !== null &&
 				profileRef.current !== undefined &&
 				!profileRef.current.contains(event.target)
 			) {
@@ -46,6 +48,7 @@ const TopBar = (props) => {
 
 			if (
 				notificationsRef !== null &&
+				notificationsRef.current !== null &&
 				notificationsRef.current !== undefined &&
 				!notificationsRef.current.contains(event.target)
 			) {
@@ -100,20 +103,20 @@ const TopBar = (props) => {
 	);
 
 	const rightSection = !props.isLoggedIn ? (
-		<div id="right-section">
-			<div id="sign-in-link-container">
-				<a id="sign-in-link" href="/">
+		<div id="top-bar-right-section">
+			<div id="top-bar-sign-in-link-container">
+				<a id="top-bar-sign-in-link" href="/">
 					Sign In
 				</a>
 			</div>
-			<div id="join-link-container">
-				<a id="join-link" href="/">
+			<div id="top-bar-join-link-container">
+				<a id="top-bar-join-link" href="/">
 					Join
 				</a>
 			</div>
 		</div>
 	) : (
-		<div id="right-section">
+		<div id="top-bar-right-section">
 			<div id="notifications-button-container" ref={notificationsRef}>
 				<button
 					id="notifications-button"
@@ -135,7 +138,7 @@ const TopBar = (props) => {
 					className={notificationsClicked ? 'visible' : 'hidden'}
 				>
 					{notifications !== null && notifications.length > 0 ? (
-						<div id="top-section">
+						<div id="notifications-drop-down-top-section">
 							<a id="notifications-a" href="/">
 								NOTIFICATIONS
 							</a>
@@ -148,7 +151,7 @@ const TopBar = (props) => {
 					) : (
 						loadingSpinner
 					)}
-					<div id="bottom-section">{setNotificationsforDisplay()}</div>
+					<div id="notifications-drop-down-bottom-section">{setNotificationsforDisplay()}</div>
 				</div>
 			</div>
 			<div id="friends-link-container">
@@ -182,7 +185,7 @@ const TopBar = (props) => {
 					id="profile-drop-down"
 					className={profileClicked ? 'visible' : 'hidden'}
 				>
-					<div id="top-section">
+					<div id="profile-drop-down-top-section">
 						<span>{props.profileName.toUpperCase()}</span>
 						<ul>
 							<li>
@@ -202,7 +205,7 @@ const TopBar = (props) => {
 							</li>
 						</ul>
 					</div>
-					<div id="bottom-section">
+					<div id="profile-drop-down-bottom-section">
 						<ul>
 							<li>
 								<a href="/">Account settings</a>

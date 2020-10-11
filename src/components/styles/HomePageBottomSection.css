@@ -133,7 +133,7 @@ i {
 
 #search-a {
 	position: absolute;
-	top: 1012px;
+	top: 1030px;
 	left: 463px;
 }
 
@@ -152,14 +152,15 @@ i {
 #more-book-lists {
 	padding: 0;
 	height: 22px;
-	color: rgb(0, 99, 93);
+    color: rgb(0, 99, 93);
+    text-decoration: none;
 	font-size: 14px;
 	line-height: 21px;
 	font-family: Lato, 'Helvetica Neue', Helvetica, sans-serif;
 }
 
 #genre-list a:hover,
-.book-list-preview-left a:hover {
+.book-list-preview-left a:hover, #more-book-lists:hover {
 	text-decoration: underline;
 }
 

@@ -14,8 +14,8 @@ label,
 	font-family: Lato, 'Helvetica Neue', Helvetica, sans-serif;
 }
 
-button:hover,
-a:hover {
+#home-page-top-bar button:hover,
+#home-page-top-bar a:hover {
 	background: transparent;
 }
 
@@ -39,7 +39,7 @@ input[type='password'] {
 	border-radius: 2px;
 }
 
-input:focus {
+#home-page-top-bar input:focus {
 	border: 1pt solid rgb(185, 173, 153);
 	box-shadow: rgba(185, 173, 153, 0.5) 0px 0px 4px 0px;
 }
@@ -63,7 +63,7 @@ input[type='checkbox'] {
 	margin-right: 5px;
 }
 
-button {
+#home-page-top-bar button {
 	width: 67px;
 	height: 32px;
 	font-size: 14px;
@@ -76,7 +76,7 @@ button {
 	padding: 0;
 }
 
-button:hover {
+#home-page-top-bar button:hover {
 	background-color: rgb(88, 55, 31);
 	color: white;
 }
