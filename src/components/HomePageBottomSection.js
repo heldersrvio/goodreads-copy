@@ -65,7 +65,7 @@ const HomePageBottomSection = (props) => {
 							<div className="book-recs">
 								{props.recExample1.bookList.map((book, index) => {
 									return (
-										<a href={props.recExample1.bookLinkList[index]}>
+										<a href={props.recExample1.bookLinkList[index]} key={index}>
 											<img
 												src={props.recExample1.bookCoverList[index]}
 												alt={book}
@@ -150,18 +150,27 @@ const HomePageBottomSection = (props) => {
 							setSearchTerm(e.target.value);
 						}}
 					/>
-					{genreList.map((genre) => {
-						return (
-							<a
-								href={`/genres/${genre
-									.toLowerCase()
-									.replace(' ', '')
-									.replace("'", '')}`}
-							>
-								{genre}
-							</a>
-						);
-					})}
+					<a href={`/search?utf8=✓&query=${searchTerm}`} id="search-a">
+						<img
+							id="magnifying-glass-img"
+							src="https://www.goodreads.com/assets/layout/magnifying_glass-a2d7514d50bcee1a0061f1ece7821750.png"
+							alt="Magnifying glass"
+						></img>
+					</a>
+					<div id="genre-list">
+						{genreList.map((genre) => {
+							return (
+								<a
+									href={`/genres/${genre
+										.toLowerCase()
+										.replace(' ', '')
+										.replace("'", '')}`}
+								>
+									{genre}
+								</a>
+							);
+						})}
+					</div>
 				</div>
 			</div>
 			<div id="homepage-bottom-section-right">
@@ -172,7 +181,14 @@ const HomePageBottomSection = (props) => {
 							<div className="book-list-preview-left">
 								<a href={list.link}>{list.title}</a>
 								<span>
-									{list.bookQuantity} books | {list.voterQuantity} voters
+									{list.bookQuantity
+										.toString()
+										.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}{' '}
+									books |{' '}
+									{list.voterQuantity
+										.toString()
+										.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}{' '}
+									voters
 								</span>
 							</div>
 							<div className="book-list-preview-right">
@@ -184,13 +200,12 @@ const HomePageBottomSection = (props) => {
 									);
 								})}
 							</div>
-							<br></br>
-							<a id="more-book-lists" href="/list">
-								More book lists
-							</a>
 						</div>
 					);
 				})}
+				<a id="more-book-lists" href="/list">
+					More book lists
+				</a>
 			</div>
 		</div>
 	);
