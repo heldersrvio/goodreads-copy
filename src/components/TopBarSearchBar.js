@@ -17,9 +17,9 @@ const TopBarSearchBar = (props) => {
 			return (
 				<div id="search-books-results">
 					<div id="search-books-results-top-section">
-						{queryResults.map((book) => {
+						{queryResults.map((book, index) => {
 							return (
-								<a className="search-result-book-card" href="/">
+								<a className="search-result-book-card" href="/" key={index}>
 									<div className="search-results-book-card-cover-section">
 										<img src={book.cover} alt="cover art" />
 									</div>

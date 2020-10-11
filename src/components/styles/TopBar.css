@@ -107,7 +107,7 @@ button.clicked {
 	display: flex;
 	flex-direction: row;
 	box-shadow: 0px 5px 10px rgb(199, 199, 199);
-	width: 300px;
+	width: 310px;
 }
 
 #browse-button-container {
@@ -161,7 +161,7 @@ button.clicked {
 	border-left: 1pt solid rgb(211, 211, 211);
 	background-color: rgb(246, 246, 246);
 	padding-top: 20px;
-	padding-right: 15px;
+	padding-right: 20px;
 }
 
 #browse-drop-down-right-section ul {

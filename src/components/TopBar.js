@@ -151,7 +151,9 @@ const TopBar = (props) => {
 					) : (
 						loadingSpinner
 					)}
-					<div id="notifications-drop-down-bottom-section">{setNotificationsforDisplay()}</div>
+					<div id="notifications-drop-down-bottom-section">
+						{setNotificationsforDisplay()}
+					</div>
 				</div>
 			</div>
 			<div id="friends-link-container">

@@ -1,3 +1,12 @@
 #homepage {
 	background-color: rgb(249, 248, 244);
 }
+
+#homepage a {
+	background-color: transparent;
+	height: auto;
+}
+
+#homepage button {
+	background-size: contain;
+}
