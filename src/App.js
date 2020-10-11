@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import TopBar from './components/TopBar';
 import HomePage from './components/HomePage';
 import firebase from 'firebase/app';
+import 'firebase/auth';
 import 'firebase/firestore';
 import './styles/App.css';
 
@@ -84,11 +85,6 @@ const App = () => {
 		}
 	};
 
-	const rememberLogin = (email, password) => {
-		localStorage.email = email;
-		localStorage.password = password;
-	};
-
 	return (
 		/*
 		<div className="App">
@@ -115,7 +111,7 @@ const App = () => {
 		</div>
 		*/
 		<div className="App">
-			<HomePage signIn={(email, password, rememberMe) => {}} />
+			<HomePage />
 		</div>
 	);
 };

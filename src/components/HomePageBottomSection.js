@@ -105,7 +105,7 @@ const HomePageBottomSection = (props) => {
 							<div className="book-recs">
 								{props.recExample2.bookList.map((book, index) => {
 									return (
-										<a href={props.recExample2.bookLinkList[index]}>
+										<a href={props.recExample2.bookLinkList[index]} key={index}>
 											<img
 												src={props.recExample2.bookCoverList[index]}
 												alt={book}
@@ -165,6 +165,7 @@ const HomePageBottomSection = (props) => {
 										.toLowerCase()
 										.replace(' ', '')
 										.replace("'", '')}`}
+									key={genre}
 								>
 									{genre}
 								</a>
@@ -175,9 +176,9 @@ const HomePageBottomSection = (props) => {
 			</div>
 			<div id="homepage-bottom-section-right">
 				<span id="love-lists">Love lists?</span>
-				{props.popularLists.map((list) => {
+				{props.popularLists.map((list, index) => {
 					return (
-						<div className="book-list-preview">
+						<div className="book-list-preview" key={index}>
 							<div className="book-list-preview-left">
 								<a href={list.link}>{list.title}</a>
 								<span>
@@ -194,7 +195,7 @@ const HomePageBottomSection = (props) => {
 							<div className="book-list-preview-right">
 								{list.topBookNames.map((book, index) => {
 									return (
-										<a href={list.topBookLinks[index]}>
+										<a href={list.topBookLinks[index]} key={index}>
 											<img src={list.topBookCovers[index]} alt={book} />
 										</a>
 									);
