@@ -12,7 +12,7 @@ a {
 	padding: 0;
 }
 
-.left-section {
+#homepage-footbar .left-section span {
 	color: rgb(118, 118, 118);
 	font-size: 16px;
 	font-family: Lato, 'Helvetica Neue', Helvetica, sans-serif;
