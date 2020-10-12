@@ -1,47 +1,7 @@
 import React, { useState } from 'react';
-import firebase from 'firebase/app';
-import 'firebase/auth';
+import PropTypes from 'prop-types';
 import HomePageTopBar from './HomePageTopBar';
 import './styles/HomePageTopSection.css';
-
-const passwordSignIn = async (email, password, rememberMe) => {
-	try {
-		firebase.auth().signInWithEmailAndPassword(email, password);
-		if (rememberMe) {
-			localStorage.user = email;
-			localStorage.password = password;
-		}
-	} catch (error) {
-		console.log(error.code);
-	}
-};
-
-const facebookSignIn = async () => {
-	const provider = new firebase.auth.FacebookAuthProvider();
-	try {
-		await firebase.auth().signInWithPopup(provider);
-	} catch (error) {
-		console.log(error.code);
-	}
-};
-
-const twitterSignIn = async () => {
-	const provider = new firebase.auth.TwitterAuthProvider();
-	try {
-		await firebase.auth().signInWithPopup(provider);
-	} catch (error) {
-		console.log(error.code);
-	}
-};
-
-const googleSignIn = async () => {
-	const provider = new firebase.auth.GoogleAuthProvider();
-	try {
-		await firebase.auth().signInWithPopup(provider);
-	} catch (error) {
-		console.log(error.code);
-	}
-};
 
 const HomePageTopSection = (props) => {
 	const [name, setName] = useState('');
@@ -50,7 +10,7 @@ const HomePageTopSection = (props) => {
 
 	return (
 		<div id="homepage-top-section">
-			<HomePageTopBar signIn={passwordSignIn} />
+			<HomePageTopBar signIn={props.passwordSignIn} />
 			<div id="new-user-presentation">
 				<div id="headline">
 					<img
@@ -88,13 +48,13 @@ const HomePageTopSection = (props) => {
 					</div>
 					<div id="sign-in-sms">
 						<span>or sign in using</span>
-						<button id="facebook-button" onClick={facebookSignIn}>
+						<button id="facebook-button" onClick={props.facebookSignIn}>
 							<span></span>
 						</button>
-						<button id="twitter-button" onClick={twitterSignIn}>
+						<button id="twitter-button" onClick={props.twitterSignIn}>
 							<span></span>
 						</button>
-						<button id="google-button" onClick={googleSignIn}>
+						<button id="google-button" onClick={props.googleSignIn}>
 							<span></span>
 						</button>
 					</div>
@@ -102,6 +62,13 @@ const HomePageTopSection = (props) => {
 			</div>
 		</div>
 	);
+};
+
+HomePageTopSection.propTypes = {
+	passwordSignIn: PropTypes.func,
+	facebookSignIn: PropTypes.func,
+	twitterSignIn: PropTypes.func,
+	googleSignIn: PropTypes.func,
 };
 
 export default HomePageTopSection;

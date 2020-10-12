@@ -96,6 +96,45 @@ const App = () => {
 		}
 	};
 
+	const passwordSignIn = async (email, password, rememberMe) => {
+		try {
+			firebase.auth().signInWithEmailAndPassword(email, password);
+			if (rememberMe) {
+				localStorage.user = email;
+				localStorage.password = password;
+			}
+		} catch (error) {
+			window.location.href = '/user/sign_in';
+		}
+	};
+
+	const facebookSignIn = async () => {
+		const provider = new firebase.auth.FacebookAuthProvider();
+		try {
+			await firebase.auth().signInWithPopup(provider);
+		} catch (error) {
+			console.log(error.code);
+		}
+	};
+
+	const twitterSignIn = async () => {
+		const provider = new firebase.auth.TwitterAuthProvider();
+		try {
+			await firebase.auth().signInWithPopup(provider);
+		} catch (error) {
+			console.log(error.code);
+		}
+	};
+
+	const googleSignIn = async () => {
+		const provider = new firebase.auth.GoogleAuthProvider();
+		try {
+			await firebase.auth().signInWithPopup(provider);
+		} catch (error) {
+			console.log(error.code);
+		}
+	};
+
 	let firstPage = isLoggedIn ? (
 		<TopBar
 			isLoggedIn={true}
@@ -119,7 +158,12 @@ const App = () => {
 			signOut={signOut}
 		/>
 	) : (
-		<HomePage />
+		<HomePage
+			passwordSignIn={passwordSignIn}
+			facebookSignIn={facebookSignIn}
+			twitterSignIn={twitterSignIn}
+			googleSignIn={googleSignIn}
+		/>
 	);
 
 	firebase.auth().onAuthStateChanged((user) => {
