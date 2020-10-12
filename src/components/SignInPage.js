@@ -46,7 +46,7 @@ const SignInPage = (props) => {
 					<span id="or-span">or</span>
 				</p>
 				{errorMessage}
-				<div id="sign-in-page-main-card-center">
+				<form id="sign-in-page-main-card-center">
 					<label htmlFor="sign-in-page-email">Email address</label>
 					<input
 						type="email"
@@ -62,13 +62,15 @@ const SignInPage = (props) => {
 						value={password}
 						onChange={(e) => setPassword(e.target.value)}
 					></input>
-					<input
-						type="checkbox"
-						id="sign-in-page-keep-in"
-						value={rememberMe}
-						onChange={() => setRememberMe(!rememberMe)}
-					></input>
-					<label htmlFor="sign-in-page-keep-in">Keep me signed in</label>
+					<div id="sign-in-page-checkbox-and-label">
+						<input
+							type="checkbox"
+							id="sign-in-page-keep-in"
+							value={rememberMe}
+							onChange={() => setRememberMe(!rememberMe)}
+						></input>
+						<label htmlFor="sign-in-page-keep-in">Keep me signed in</label>
+					</div>
 					<div id="sign-in-page-main-card-center-bottom-buttons">
 						<button
 							id="sign-in-page-sign-in"
@@ -80,12 +82,13 @@ const SignInPage = (props) => {
 							Forgot password
 						</a>
 					</div>
-				</div>
+				</form>
 				<div id="sign-in-page-main-card-bottom">
 					<span>Not a member?</span>
 					<a href="/user/sign_up">Sign up</a>
 				</div>
 			</div>
+			<div id="sign-in-page-bottom-section"></div>
 		</div>
 	);
 };

@@ -4,7 +4,6 @@
 	background: url('https://www.goodreads.com/assets/layout/tan-bg-texture.jpg');
 	background-repeat: repeat;
 	height: 100%;
-	text-align: center;
 }
 
 #sign-in-page a {
@@ -18,8 +17,8 @@
 
 #sign-in-page-home-link img {
 	position: absolute;
-    width: 140px;
-    left: 10px;
+	width: 140px;
+	left: 10px;
 	margin-top: 23px;
 }
 
@@ -138,4 +137,101 @@
 	background-position-x: 170px;
 	background-position-y: 7px;
 	margin-bottom: 30px;
+}
+
+#sign-in-page-main-card-center {
+	display: flex;
+	flex-direction: column;
+	margin-left: calc(50% - 150px);
+}
+
+#sign-in-page-main-card-center label {
+	color: rgb(51, 51, 51);
+	font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	margin-bottom: 2px;
+}
+
+#sign-in-page-main-card-center input[type='email'],
+#sign-in-page-main-card-center input[type='password'] {
+	width: 300px;
+	padding: 10px 4px;
+	color: rgb(51, 51, 51);
+	font-size: 15px;
+	font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-weight: bold;
+	border: 1px solif rgb(204, 204, 204);
+	border-radius: 3px;
+	margin-bottom: 7px;
+}
+
+#sign-in-page-main-card-center input[type='email']:focus,
+#sign-in-page-main-card-center input[type='password']:focus {
+	background-color: rgb(249, 249, 249);
+	box-shadow: rgba(185, 173, 153, 0.5) 0px 0px 4px 0px;
+}
+
+#sign-in-page-main-card-center ::placeholder {
+	color: rgb(204, 204, 204);
+}
+
+#sign-in-page-main-card-center-bottom-buttons {
+	margin-top: 30px;
+	display: flex;
+	flex-direction: row;
+}
+
+#sign-in-page-sign-in {
+	background-color: rgb(244, 241, 234);
+	color: rgb(51, 51, 51);
+	border: 1px solid rgb(214, 208, 196);
+	border-radius: 3px;
+	padding: 12px 24px;
+	line-height: 18px;
+}
+
+#sign-in-page-sign-in:hover {
+	background-color: rgb(237, 230, 214);
+}
+
+#sign-in-page-forgot-password {
+	color: rgb(0, 99, 93);
+	font-size: 13px;
+}
+
+#sign-in-page-forgot-password:hover {
+	text-decoration: underline;
+}
+
+#sign-in-page-main-card-bottom {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	margin: 25px 0px 40px 0px;
+}
+
+#sign-in-page-main-card-bottom span {
+	font-size: 12px;
+	font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	color: rgb(51, 51, 51);
+}
+
+#sign-in-page-main-card-bottom a {
+	font-size: 12px;
+	font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	color: rgb(0, 99, 93);
+	line-height: 12px;
+}
+
+#sign-in-page-main-card-bottom a:hover {
+	text-decoration: underline;
+}
+
+#sign-in-page-bottom-section {
+	width: 100%;
+	height: 58px;
+	position: absolute;
+	bottom: 0;
+	background-image: url('https://www.goodreads.com/assets/layout/bookrow.jpg');
 }
