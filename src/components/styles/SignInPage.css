@@ -1,0 +1,140 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap');
+
+#sign-in-page {
+	background: url('https://www.goodreads.com/assets/layout/tan-bg-texture.jpg');
+	background-repeat: repeat;
+	height: 100%;
+	text-align: center;
+}
+
+#sign-in-page a {
+	width: auto;
+	height: auto;
+}
+
+#sign-in-page a:hover {
+	background-color: transparent;
+}
+
+#sign-in-page-home-link img {
+	position: absolute;
+	width: 140px;
+	margin-top: 23px;
+}
+
+#sign-in-page-main-card {
+	position: absolute;
+	background-color: white;
+	width: 50%;
+	margin-left: 25%;
+	top: 15px;
+	border-radius: 4px;
+	border: 1px solid rgb(208, 208, 200);
+	box-shadow: 0px 1px 1px 0px rgb(208, 208, 200);
+}
+
+#sign-in-page-main-card-top {
+	text-align: center;
+}
+
+#sign-in-page-main-card-top h1 {
+	color: rgb(56, 33, 16);
+	font-size: 20px;
+	font-weight: 700;
+	font-family: 'Merriweather', Georgia, 'Times New Roman', serif;
+	margin-top: 25px;
+}
+
+#sign-in-page-main-card-top > button {
+	line-height: 16px;
+	text-align: center;
+	margin-left: calc(50% - 149px);
+	margin-top: 15px;
+	width: 298px;
+	height: 44px;
+	padding: 8px 12px;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	border: 1px solid rgb(78, 105, 162);
+	border-radius: 3px;
+	background-color: rgb(59, 89, 152);
+	color: white;
+	font-family: Lato, 'Helvetica Neue', Helvetica, sans-serif;
+	font-size: 14px;
+}
+
+#sign-in-page-main-card-top > button:hover {
+	background-color: rgb(78, 105, 162);
+}
+
+#sign-in-page .facebook-icon {
+	display: inline-block;
+	width: 21px;
+	height: 21px;
+	background: url('https://www.goodreads.com/assets/gr/icons/icon_facebook.svg');
+}
+
+.continue-with-facebook-label {
+	display: inline-block;
+	margin-left: 7px;
+	margin-top: auto;
+}
+
+#sign-in-page-main-card-top .smaller-buttons {
+	display: flex;
+	margin-top: 15px;
+	flex-direction: row;
+	justify-content: center;
+	font-size: 12px;
+	line-height: 14px;
+	font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+#sign-in-page-main-card-top .smaller-buttons button {
+	color: rgb(102, 102, 102);
+	height: auto;
+}
+
+#sign-in-page-main-card-top .smaller-buttons button:hover {
+	color: rgb(102, 102, 102);
+	background-color: transparent;
+	text-decoration: underline;
+}
+
+.smaller-buttons #sign-in-with-twitter {
+	background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAARCAMAAADwppwCAAAABGdBTUEAALGPC%2FxhBQAAAAFzUkdCAK7OHOkAAACZUExURf%2F%2F%2FxaZ1vr9%2FfX6%2FK%2Fk%2Bvv9%2FlPF9Bqt8f7%2B%2Fhmn6o%2FZ%2BRil5rDX51is0JzN4hec2vf7%2FaHf%2BRmq7Siz8ROJv%2Fr9%2Ftjx%2Fc3m8bjg8T2t3Cat5yaSwkGexaLc9aLe%2BBih4pjQ6FmrzXK31OTy9xKGvPP5%2FO32%2Buz2%2Bj%2Bfx%2Fn8%2Ff3%2B%2Fla34L7e7CePvMvt%2FBWW0rjg8HzS9zyv4Q4G1owAAACUSURBVBjTY2CgLuCAUjxKfEwMDExwcWZesAwHL6M8vzSPojJcQp1bgxlIiXOzs7MLMUopwCU02TlFgGZIsIOBHMIKNUF2dn4VGUmIBJLdqowgAU5OsDgbsqsE2RFAFllCgEUYLiGALKGlLQQT50Lzoh4XRJyNFVWc2cAIm7iOrog%2ByEnCLGjqGUTFWAy5WMREiQpYAAyNCBM93g98AAAAAElFTkSuQmCC');
+	background-position: left;
+	background-repeat: no-repeat;
+	padding-left: 20px;
+}
+
+.smaller-buttons #sign-in-with-google {
+	background: url('data:image/gif;base64,R0lGODlhEAAQANUAAIqKiri4uM%2FPz6Wlpe3t7Z2dncLCwq%2Bvr5mZmdnZ2cnJyfj4%2BJCQkKmpqeHh4bOzs7u7u6GhodXV1f%2F%2F%2F%2FHx8b29vd%2Ff36urq5WVlejo6LW1tczMzKOjo8XFxfv7%2B9HR0eXl5aenp7GxsfPz862trdfX1%2B%2Fv75OTk4uLi5%2Bfn7%2B%2Fv5mZmfn5%2Bdvb29PT0%2F%2F%2F%2FwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEHAC8ALAAAAAAQABAAAAaxwJfAQCwaiYLXprNpOp9NJqRTqUIGkUJhIKp2IAGIGNKQgAgEi2AceATeAYsjIDAZ4O2DZq%2BhSB59G3waByQPhw8jBFojCogPJA0HkwcKFCASEpSTDQMXnxcNKRILFRGgF1gNqwMYBgkLCwGrq1kDtwMUCZIZBLgDBQgRwwoewhEPHsPDCBhaBQYTEAAoEhbPBRgnCM8uExO6WVoIJwMMGAjp6usYDAMvEQDy8%2FTyES9BADs%3D');
+	background-position: left;
+	background-repeat: no-repeat;
+	padding-left: 20px;
+}
+
+#or-span {
+	text-align: center;
+	font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	background-position-x: 340px;
+	background-position-y: 7px;
+	margin-right: 0;
+	display: block;
+	color: rgb(153, 153, 153);
+	background-image: url('https://www.goodreads.com/assets/layout/divider_right.png');
+	background-repeat: no-repeat;
+}
+
+#or-container {
+	width: 640px;
+	text-align: center;
+	background-image: url('https://www.goodreads.com/assets/layout/divider_left.png');
+	background-repeat: no-repeat;
+	background-position-x: 170px;
+	background-position-y: 7px;
+	margin-bottom: 30px;
+}

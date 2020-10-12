@@ -105,6 +105,7 @@ const App = () => {
 			}
 		} catch (error) {
 			window.location.href = '/user/sign_in';
+			console.log(window.location.href);
 		}
 	};
 

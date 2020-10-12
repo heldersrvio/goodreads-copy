@@ -1,10 +1,20 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import './styles/SignInPage.css';
 
 const SignInPage = (props) => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [rememberMe, setRememberMe] = useState(false);
+
+	const errorMessage = props.error ? (
+		<div id="wrong-email-password-message">
+			<span>
+				Sorry, that email or password isn't right. You can{' '}
+				<a href="/user/forgot_password">reset your password.</a>
+			</span>
+		</div>
+	) : null;
 
 	return (
 		<div id="sign-in-page">
@@ -17,22 +27,25 @@ const SignInPage = (props) => {
 			<div id="sign-in-page-main-card">
 				<div id="sign-in-page-main-card-top">
 					<h1>Sign in to Goodreads</h1>
-					<button
-						id="continue-with-facebook"
-						onClick={props.facebookSignIn}
-					></button>
+					<button id="continue-with-facebook" onClick={props.facebookSignIn}>
+						<span className="facebook-icon"></span>
+						<span className="continue-with-facebook-label">
+							Continue with Facebook
+						</span>
+					</button>
 					<div className="smaller-buttons">
-						<button
-							id="sign-in-with-twitter"
-							onClick={props.twitterSignIn}
-						></button>
-						<button
-							id="sign-in-with-google"
-							onClick={props.googleSignIn}
-						></button>
+						<button id="sign-in-with-twitter" onClick={props.twitterSignIn}>
+							Sign in with Twitter
+						</button>
+						<button id="sign-in-with-google" onClick={props.googleSignIn}>
+							Sign in with Google
+						</button>
 					</div>
 				</div>
-				<span id="or-span">or</span>
+				<p id="or-container">
+					<span id="or-span">or</span>
+				</p>
+				{errorMessage}
 				<div id="sign-in-page-main-card-center">
 					<label htmlFor="sign-in-page-email">Email address</label>
 					<input
@@ -84,3 +97,5 @@ SignInPage.propTypes = {
 	twitterSignIn: PropTypes.func,
 	googleSignIn: PropTypes.func,
 };
+
+export default SignInPage;
