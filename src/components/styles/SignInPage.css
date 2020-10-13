@@ -232,7 +232,7 @@
 .sign-in-up-page-bottom-section {
 	width: 100%;
 	height: 58px;
-	position: absolute;
+	position: relative;
 	top: 100%;
 	background-image: url('https://www.goodreads.com/assets/layout/bookrow.jpg');
 }

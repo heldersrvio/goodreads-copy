@@ -1,0 +1,40 @@
+#sign-out-page .sign-in-up-page-main-card-top {
+	padding-top: 16px;
+	text-align: center;
+}
+
+#sign-out-main-card-top span {
+	margin-bottom: 15px;
+}
+
+#sign-out-page .sign-in-up-page-main-card-top a {
+	width: 125px;
+	margin-left: calc(50% - 62.5px);
+}
+
+#sign-out-page-bottom a {
+	width: 95px;
+	margin-left: calc(50% - 44.5px);
+	margin-bottom: 35px;
+}
+
+#sign-out-page .sign-in-up-page-main-card-top a,
+#sign-out-page-bottom a {
+	font-weight: bold;
+	color: rgb(0, 99, 93);
+	padding: 0;
+}
+
+#sign-out-page .sign-in-up-page-main-card-top a:hover,
+#sign-out-page-bottom a:hover {
+	text-decoration: underline;
+}
+
+#sign-out-or-container {
+	margin-bottom: 5px;
+}
+
+#sign-out-page .sign-in-up-page-bottom-section {
+	position: relative;
+	top: 100%;
+}

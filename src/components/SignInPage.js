@@ -19,7 +19,7 @@ const SignInPage = (props) => {
 		) : null;
 
 	return (
-		<div className="sign-in-up-page">
+		<div className="sign-in-up-page" id="sign-in-page">
 			<a className="sign-in-up-page-home-link" href="/">
 				<img
 					src="https://www.goodreads.com/assets/layout/goodreads_logo_324-a908b923dc3ed9b7a13f3da4d1ffb2df.png"

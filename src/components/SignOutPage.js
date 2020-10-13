@@ -1,4 +1,5 @@
 import React from 'react';
+import './styles/SignOutPage.css';
 
 const SignOutPage = () => {
 	return (
@@ -10,11 +11,14 @@ const SignOutPage = () => {
 				/>
 			</a>
 			<div className="sign-in-up-page-main-card">
-				<div className="sign-in-up-page-main-card-top">
+				<div
+					className="sign-in-up-page-main-card-top"
+					id="sign-out-main-card-top"
+				>
 					<span>You've been signed out.</span>
 					<a href="/">Goodreads Home</a>
 				</div>
-				<p className="or-container">
+				<p className="or-container" id="sign-out-or-container">
 					<span className="or-span">or</span>
 				</p>
 				<div id="sign-out-page-bottom">
