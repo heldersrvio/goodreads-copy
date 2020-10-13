@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import './styles/SignUpPage.css';
 
 const SignUpPage = (props) => {
 	const [email, setEmail] = useState('');
@@ -7,7 +8,21 @@ const SignUpPage = (props) => {
 	const [name, setName] = useState('');
 	const location = useLocation();
 
-	//TODO: error message
+	const errorMessage =
+		location.state !== undefined && location.state.error === 'name' ? (
+			<span>Sorry, you must enter a name to sign up for Goodreads.</span>
+		) : location.state !== undefined &&
+		  location.state.error === 'email-missing' ? (
+			<span>
+				Sorry, you must enter an email address to sign up for Goodreads.
+			</span>
+		) : location.state !== undefined &&
+		  location.state.error === 'email-exists' ? (
+			<span>
+				Sorry, that email has already been used to sign up for Goodreads.{' '}
+				<a href="/user/sign_in">Sign in</a>
+			</span>
+		) : null;
 
 	return (
 		<div className="sign-in-up-page">
@@ -39,11 +54,13 @@ const SignUpPage = (props) => {
 						</button>
 					</div>
 				</div>
-				<p id="or-container">
-					<span id="or-span">or</span>
+				<p className="or-container" id="sign-up-or-container">
+					<span className="or-span">or</span>
 				</p>
 				<h2 className="sign-up-with-email">Sign Up with Email</h2>
-				{/*errorMessage*/}
+				{errorMessage !== null ? (
+					<div id="wrong-email-password-message">{errorMessage}</div>
+				) : null}
 				<form className="sign-in-up-page-main-card-center">
 					<label htmlFor="sign-up-page-name">Name</label>
 					<input
@@ -71,7 +88,10 @@ const SignUpPage = (props) => {
 						value={password}
 						onChange={(e) => setPassword(e.target.value)}
 					></input>
-					<div className="sign-in-up-page-main-card-center-bottom-buttons">
+					<div
+						className="sign-in-up-page-main-card-center-bottom-buttons"
+						id="sign-up-card-bottom-buttons"
+					>
 						<button
 							className="sign-in-up-page-sign-in"
 							onClick={() => props.signUp(email, password, name)}
@@ -85,6 +105,12 @@ const SignUpPage = (props) => {
 							<span>Already a member?</span>
 							<a href="/user/sign_in">Sign in</a>
 						</div>
+					</div>
+					<div id="sign-up-page-main-card-bottom">
+						<span>
+							By clicking “Sign up” I confirm that I am at least 13 years of
+							age.
+						</span>
 					</div>
 				</form>
 			</div>

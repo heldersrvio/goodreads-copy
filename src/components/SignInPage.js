@@ -44,8 +44,8 @@ const SignInPage = (props) => {
 						</button>
 					</div>
 				</div>
-				<p id="or-container">
-					<span id="or-span">or</span>
+				<p className="or-container">
+					<span className="or-span">or</span>
 				</p>
 				{errorMessage}
 				<form className="sign-in-up-page-main-card-center">

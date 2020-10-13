@@ -1,0 +1,65 @@
+.sign-in-up-page-main-card-top > span {
+	font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-size: 16px;
+	line-height: 22px;
+	color: rgb(51, 51, 51);
+	display: block;
+	width: 80%;
+	margin-left: 10%;
+	margin-top: 15px;
+	margin-bottom: 25px;
+}
+
+h2.sign-up-with-email {
+	font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-size: 16px;
+	line-height: 18px;
+	font-weight: bold;
+	color: rgb(51, 51, 51);
+	text-align: center;
+}
+
+.sign-in-up-page-main-card-center input[type='text']:focus {
+	background-color: rgb(249, 249, 249);
+	box-shadow: rgba(185, 173, 153, 0.5) 0px 0px 4px 0px;
+}
+
+.sign-in-up-page-main-card-center ::placeholder {
+	color: rgb(204, 204, 204);
+}
+
+.sign-in-up-page-main-card-center input[type='text'] {
+	width: 300px;
+	padding: 10px 4px;
+	color: rgb(51, 51, 51);
+	font-size: 15px;
+	font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-weight: bold;
+	border: 1px solid rgb(204, 204, 204);
+	border-radius: 3px;
+	margin-bottom: 7px;
+}
+
+#sign-up-or-container {
+	margin-bottom: 10px;
+}
+
+.sign-in-up-page-sign-in:hover {
+	color: rgb(51, 51, 51);
+}
+
+#sign-up-page-already-member {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin: 0;
+	text-align: center;
+	margin-left: 25px;
+}
+
+#sign-up-page-main-card-bottom {
+	color: rgb(170, 170, 170);
+	font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	margin: 25px 0;
+}
