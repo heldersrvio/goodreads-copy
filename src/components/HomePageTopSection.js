@@ -40,7 +40,12 @@ const HomePageTopSection = (props) => {
 							onChange={(e) => setPassword(e.target.value)}
 						></input>
 						<div id="sign-up-confirmation">
-							<button id="sign-up-button" onClick={() => props.signUp(email, password, name)}>Sign up</button>
+							<button
+								id="sign-up-button"
+								onClick={() => props.signUp(email, password, name)}
+							>
+								Sign up
+							</button>
 							<span>
 								By clicking “Sign up” I confirm that I am at least 13 years old.
 							</span>

@@ -92,7 +92,9 @@ const App = () => {
 		console.log('Signing out...');
 		try {
 			await firebase.auth().signOut();
-			console.log('Done');
+			history.push({
+				pathname: '/user/sign_out',
+			});
 		} catch (error) {
 			console.log(error);
 		}

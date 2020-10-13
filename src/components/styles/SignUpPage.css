@@ -1,5 +1,7 @@
-html, body, #sign-up-page {
-    height: 105%;
+html,
+body,
+#sign-up-page {
+	height: 105%;
 }
 
 .sign-in-up-page-main-card-top > span {
@@ -69,14 +71,14 @@ h2.sign-up-with-email {
 }
 
 .sign-up-error {
-    margin-top: 20px;
+	margin-top: 20px;
 }
 
 .sign-up-error a {
-    font-weight: bold;
+	font-weight: bold;
 }
 
 #sign-up-page .sign-in-up-page-bottom-section {
-    position: relative;
-    top: 100%;
+	position: relative;
+	top: 100%;
 }

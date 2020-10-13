@@ -59,7 +59,9 @@ const SignUpPage = (props) => {
 				</p>
 				<h2 className="sign-up-with-email">Sign Up with Email</h2>
 				{errorMessage !== null ? (
-					<div id="wrong-email-password-message" className="sign-up-error">{errorMessage}</div>
+					<div id="wrong-email-password-message" className="sign-up-error">
+						{errorMessage}
+					</div>
 				) : null}
 				<form className="sign-in-up-page-main-card-center">
 					<label htmlFor="sign-up-page-name">Name</label>
