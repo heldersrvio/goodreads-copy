@@ -1,44 +1,44 @@
 @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap');
 
-#sign-in-page {
+.sign-in-up-page {
 	background: url('https://www.goodreads.com/assets/layout/tan-bg-texture.jpg');
 	background-repeat: repeat;
-    height: 100%;
+	height: 100%;
 }
 
-#sign-in-page a {
+.sign-in-up-page a {
 	width: auto;
 	height: auto;
 }
 
-#sign-in-page a:hover {
+.sign-in-up-page a:hover {
 	background-color: transparent;
 }
 
-#sign-in-page-home-link img {
+.sign-in-up-page-home-link img {
 	position: absolute;
 	width: 140px;
 	left: 10px;
 	margin-top: 23px;
 }
 
-#sign-in-page-main-card {
+.sign-in-up-page-main-card {
 	position: absolute;
 	background-color: white;
 	width: 50%;
-    margin-left: 25%;
-    margin-bottom: 20px;
+	margin-left: 25%;
+	margin-bottom: 20px;
 	top: 15px;
 	border-radius: 4px;
 	border: 1px solid rgb(208, 208, 200);
 	box-shadow: 0px 1px 1px 0px rgb(208, 208, 200);
 }
 
-#sign-in-page-main-card-top {
+.sign-in-up-page-main-card-top {
 	text-align: center;
 }
 
-#sign-in-page-main-card-top h1 {
+.sign-in-up-page-main-card-top h1 {
 	color: rgb(56, 33, 16);
 	font-size: 20px;
 	font-weight: 700;
@@ -46,7 +46,7 @@
 	margin-top: 25px;
 }
 
-#sign-in-page-main-card-top > button {
+.sign-in-up-page-main-card-top > button {
 	line-height: 16px;
 	text-align: center;
 	margin-left: calc(50% - 149px);
@@ -65,11 +65,11 @@
 	font-size: 14px;
 }
 
-#sign-in-page-main-card-top > button:hover {
+.sign-in-up-page-main-card-top > button:hover {
 	background-color: rgb(78, 105, 162);
 }
 
-#sign-in-page .facebook-icon {
+.sign-in-up-page .facebook-icon {
 	display: inline-block;
 	width: 21px;
 	height: 21px;
@@ -82,7 +82,7 @@
 	margin-top: auto;
 }
 
-#sign-in-page-main-card-top .smaller-buttons {
+.sign-in-up-page-main-card-top .smaller-buttons {
 	display: flex;
 	margin-top: 15px;
 	flex-direction: row;
@@ -92,12 +92,12 @@
 	font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
-#sign-in-page-main-card-top .smaller-buttons button {
+.sign-in-up-page-main-card-top .smaller-buttons button {
 	color: rgb(102, 102, 102);
 	height: auto;
 }
 
-#sign-in-page-main-card-top .smaller-buttons button:hover {
+.sign-in-up-page-main-card-top .smaller-buttons button:hover {
 	color: rgb(102, 102, 102);
 	background-color: transparent;
 	text-decoration: underline;
@@ -140,13 +140,13 @@
 	margin-bottom: 30px;
 }
 
-#sign-in-page-main-card-center {
+.sign-in-up-page-main-card-center {
 	display: flex;
 	flex-direction: column;
 	margin-left: calc(50% - 150px);
 }
 
-#sign-in-page-main-card-center label {
+.sign-in-up-page-main-card-center label {
 	color: rgb(51, 51, 51);
 	font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	font-size: 12px;
@@ -154,8 +154,8 @@
 	margin-bottom: 2px;
 }
 
-#sign-in-page-main-card-center input[type='email'],
-#sign-in-page-main-card-center input[type='password'] {
+.sign-in-up-page-main-card-center input[type='email'],
+.sign-in-up-page-main-card-center input[type='password'] {
 	width: 300px;
 	padding: 10px 4px;
 	color: rgb(51, 51, 51);
@@ -167,23 +167,23 @@
 	margin-bottom: 7px;
 }
 
-#sign-in-page-main-card-center input[type='email']:focus,
-#sign-in-page-main-card-center input[type='password']:focus {
+.sign-in-up-page-main-card-center input[type='email']:focus,
+.sign-in-up-page-main-card-center input[type='password']:focus {
 	background-color: rgb(249, 249, 249);
 	box-shadow: rgba(185, 173, 153, 0.5) 0px 0px 4px 0px;
 }
 
-#sign-in-page-main-card-center ::placeholder {
+.sign-in-up-page-main-card-center ::placeholder {
 	color: rgb(204, 204, 204);
 }
 
-#sign-in-page-main-card-center-bottom-buttons {
+.sign-in-up-page-main-card-center-bottom-buttons {
 	margin-top: 30px;
 	display: flex;
 	flex-direction: row;
 }
 
-#sign-in-page-sign-in {
+.sign-in-up-page-sign-in {
 	background-color: rgb(244, 241, 234);
 	color: rgb(51, 51, 51);
 	border: 1px solid rgb(214, 208, 196);
@@ -192,44 +192,44 @@
 	line-height: 18px;
 }
 
-#sign-in-page-sign-in:hover {
+.sign-in-up-page-sign-in:hover {
 	background-color: rgb(237, 230, 214);
 }
 
-#sign-in-page-forgot-password {
+.sign-in-up-page-forgot-password {
 	color: rgb(0, 99, 93);
 	font-size: 13px;
 }
 
-#sign-in-page-forgot-password:hover {
+.sign-in-up-page-forgot-password:hover {
 	text-decoration: underline;
 }
 
-#sign-in-page-main-card-bottom {
+.sign-in-up-page-main-card-bottom {
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
 	margin: 25px 0px 40px 0px;
 }
 
-#sign-in-page-main-card-bottom span {
+.sign-in-up-page-main-card-bottom span {
 	font-size: 12px;
 	font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	color: rgb(51, 51, 51);
 }
 
-#sign-in-page-main-card-bottom a {
+.sign-in-up-page-main-card-bottom a {
 	font-size: 12px;
 	font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	color: rgb(0, 99, 93);
 	line-height: 12px;
 }
 
-#sign-in-page-main-card-bottom a:hover {
+.sign-in-up-page-main-card-bottom a:hover {
 	text-decoration: underline;
 }
 
-#sign-in-page-bottom-section {
+.sign-in-up-page-bottom-section {
 	width: 100%;
 	height: 58px;
 	position: absolute;
@@ -238,32 +238,32 @@
 }
 
 #wrong-email-password-message {
-    text-align: center;
-    padding: 12px;
-    background-color: rgb(253, 183, 173);
-    border: 1px solid rgb(250, 96, 74);
-    border-radius: 3px;
-    width: 80%;
-    margin-left: 10%;
-    margin-bottom: 25px;
+	text-align: center;
+	padding: 12px;
+	background-color: rgb(253, 183, 173);
+	border: 1px solid rgb(250, 96, 74);
+	border-radius: 3px;
+	width: 80%;
+	margin-left: 10%;
+	margin-bottom: 25px;
 }
 
 #wrong-email-password-message span {
-    color: rgb(51, 51, 51);
-    font-size: 12px;
-    font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	color: rgb(51, 51, 51);
+	font-size: 12px;
+	font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 #wrong-email-password-message a {
-    display: inline;
-    padding: 0;
-    font-size: 12px;
-    font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    color: rgb(0, 99, 93);
-    text-decoration: underline;
-    line-height: 18px;
+	display: inline;
+	padding: 0;
+	font-size: 12px;
+	font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	color: rgb(0, 99, 93);
+	text-decoration: underline;
+	line-height: 18px;
 }
 
 #wrong-email-password-message a:hover {
-    text-decoration: none;
+	text-decoration: none;
 }

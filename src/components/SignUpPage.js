@@ -1,22 +1,13 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import './styles/SignInPage.css';
 
-const SignInPage = (props) => {
+const SignUpPage = (props) => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
-	const [rememberMe, setRememberMe] = useState(false);
+	const [name, setName] = useState('');
 	const location = useLocation();
 
-	const errorMessage =
-		location.state !== undefined && location.state.error !== undefined ? (
-			<div id="wrong-email-password-message">
-				<span>
-					Sorry, that email or password isn't right. You can{' '}
-					<a href="/user/forgot_password">reset your password.</a>
-				</span>
-			</div>
-		) : null;
+	//TODO: error message
 
 	return (
 		<div className="sign-in-up-page">
@@ -28,7 +19,11 @@ const SignInPage = (props) => {
 			</a>
 			<div className="sign-in-up-page-main-card">
 				<div className="sign-in-up-page-main-card-top">
-					<h1>Sign in to Goodreads</h1>
+					<h1>Sign up for Goodreads</h1>
+					<span>
+						Sign up to see what your friends are reading, get book
+						recommendations, and join the world’s largest community of readers.
+					</span>
 					<button id="continue-with-facebook" onClick={props.facebookSignIn}>
 						<span className="facebook-icon"></span>
 						<span className="continue-with-facebook-label">
@@ -47,8 +42,18 @@ const SignInPage = (props) => {
 				<p id="or-container">
 					<span id="or-span">or</span>
 				</p>
-				{errorMessage}
+				<h2 className="sign-up-with-email">Sign Up with Email</h2>
+				{/*errorMessage*/}
 				<form className="sign-in-up-page-main-card-center">
+					<label htmlFor="sign-up-page-name">Name</label>
+					<input
+						type="text"
+						className="sign-in-up-page-email"
+						id="sign-up-page-name"
+						placeholder="Name"
+						value={name}
+						onChange={(e) => setName(e.target.value)}
+					></input>
 					<label htmlFor="sign-in-page-email">Email address</label>
 					<input
 						type="email"
@@ -66,39 +71,26 @@ const SignInPage = (props) => {
 						value={password}
 						onChange={(e) => setPassword(e.target.value)}
 					></input>
-					<div className="sign-in-up-page-checkbox-and-label">
-						<input
-							type="checkbox"
-							className="sign-in-up-page-keep-in"
-							id="sign-in-page-keep-in"
-							value={rememberMe}
-							onChange={() => setRememberMe(!rememberMe)}
-						></input>
-						<label htmlFor="sign-in-page-keep-in">Keep me signed in</label>
-					</div>
 					<div className="sign-in-up-page-main-card-center-bottom-buttons">
 						<button
 							className="sign-in-up-page-sign-in"
-							onClick={() => props.passwordSignIn(email, password, rememberMe)}
+							onClick={() => props.signUp(email, password, name)}
 						>
-							Sign in
+							Sign up
 						</button>
-						<a
-							className="sign-in-up-page-forgot-password"
-							href="/user/forgot_password"
+						<div
+							className="sign-in-up-page-main-card-bottom"
+							id="sign-up-page-already-member"
 						>
-							Forgot password
-						</a>
+							<span>Already a member?</span>
+							<a href="/user/sign_in">Sign in</a>
+						</div>
 					</div>
 				</form>
-				<div className="sign-in-up-page-main-card-bottom">
-					<span>Not a member?</span>
-					<a href="/user/sign_up">Sign up</a>
-				</div>
 			</div>
 			<div className="sign-in-up-page-bottom-section"></div>
 		</div>
 	);
 };
 
-export default SignInPage;
+export default SignUpPage;
