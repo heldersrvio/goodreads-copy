@@ -3,7 +3,7 @@
 #sign-in-page {
 	background: url('https://www.goodreads.com/assets/layout/tan-bg-texture.jpg');
 	background-repeat: repeat;
-	height: 100%;
+    height: 100%;
 }
 
 #sign-in-page a {
@@ -26,7 +26,8 @@
 	position: absolute;
 	background-color: white;
 	width: 50%;
-	margin-left: 25%;
+    margin-left: 25%;
+    margin-bottom: 20px;
 	top: 15px;
 	border-radius: 4px;
 	border: 1px solid rgb(208, 208, 200);
@@ -232,6 +233,37 @@
 	width: 100%;
 	height: 58px;
 	position: absolute;
-	bottom: 0;
+	top: 100%;
 	background-image: url('https://www.goodreads.com/assets/layout/bookrow.jpg');
+}
+
+#wrong-email-password-message {
+    text-align: center;
+    padding: 12px;
+    background-color: rgb(253, 183, 173);
+    border: 1px solid rgb(250, 96, 74);
+    border-radius: 3px;
+    width: 80%;
+    margin-left: 10%;
+    margin-bottom: 25px;
+}
+
+#wrong-email-password-message span {
+    color: rgb(51, 51, 51);
+    font-size: 12px;
+    font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+#wrong-email-password-message a {
+    display: inline;
+    padding: 0;
+    font-size: 12px;
+    font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: rgb(0, 99, 93);
+    text-decoration: underline;
+    line-height: 18px;
+}
+
+#wrong-email-password-message a:hover {
+    text-decoration: none;
 }

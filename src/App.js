@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { useHistory } from 'react-router-dom';
 import TopBar from './components/TopBar';
 import HomePage from './components/HomePage';
 import firebase from 'firebase/app';
@@ -21,6 +22,7 @@ firebase.initializeApp(firebaseConfig);
 const App = () => {
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const database = useRef(null);
+	const history = useHistory();
 	database.current = firebase.firestore();
 
 	const queryBooks = async (searchString) => {
@@ -104,8 +106,10 @@ const App = () => {
 				localStorage.password = password;
 			}
 		} catch (error) {
-			window.location.href = '/user/sign_in';
-			console.log(window.location.href);
+			history.push({
+				pathname: '/user/sign_in',
+				state: { error: error },
+			});
 		}
 	};
 

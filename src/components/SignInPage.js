@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import './styles/SignInPage.css';
 
 const SignInPage = (props) => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
-	const [rememberMe, setRememberMe] = useState(false);
+    const [rememberMe, setRememberMe] = useState(false);
+    const location = useLocation();
 
-	const errorMessage = props.error ? (
+	const errorMessage = location.state !== undefined && location.state.error !== undefined ? (
 		<div id="wrong-email-password-message">
 			<span>
 				Sorry, that email or password isn't right. You can{' '}
