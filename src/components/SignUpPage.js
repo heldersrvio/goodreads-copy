@@ -25,7 +25,7 @@ const SignUpPage = (props) => {
 		) : null;
 
 	return (
-		<div className="sign-in-up-page">
+		<div className="sign-in-up-page" id="sign-up-page">
 			<a className="sign-in-up-page-home-link" href="/">
 				<img
 					src="https://www.goodreads.com/assets/layout/goodreads_logo_324-a908b923dc3ed9b7a13f3da4d1ffb2df.png"
@@ -59,7 +59,7 @@ const SignUpPage = (props) => {
 				</p>
 				<h2 className="sign-up-with-email">Sign Up with Email</h2>
 				{errorMessage !== null ? (
-					<div id="wrong-email-password-message">{errorMessage}</div>
+					<div id="wrong-email-password-message" className="sign-up-error">{errorMessage}</div>
 				) : null}
 				<form className="sign-in-up-page-main-card-center">
 					<label htmlFor="sign-up-page-name">Name</label>

@@ -1,3 +1,7 @@
+html, body, #sign-up-page {
+    height: 105%;
+}
+
 .sign-in-up-page-main-card-top > span {
 	font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	font-size: 16px;
@@ -62,4 +66,17 @@ h2.sign-up-with-email {
 	font-family: Lato, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	font-size: 12px;
 	margin: 25px 0;
+}
+
+.sign-up-error {
+    margin-top: 20px;
+}
+
+.sign-up-error a {
+    font-weight: bold;
+}
+
+#sign-up-page .sign-in-up-page-bottom-section {
+    position: relative;
+    top: 100%;
 }

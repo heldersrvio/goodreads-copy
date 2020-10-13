@@ -108,7 +108,7 @@ const App = () => {
 		} catch (error) {
 			history.push({
 				pathname: '/user/sign_in',
-				state: { error: error },
+				state: { error: error.message },
 			});
 		}
 	};
@@ -140,6 +140,32 @@ const App = () => {
 		}
 	};
 
+	const signUp = async (email, password, name) => {
+		try {
+			if (name.length === 0) {
+				throw new Error('name');
+			}
+			if (email.length === 0) {
+				throw new Error('email-missing');
+			}
+			const newUserDocRef = database.current.collection('users').doc(email);
+			const newUserDoc = await newUserDocRef.get();
+			if (newUserDoc.exists) {
+				throw new Error('email-exists');
+			}
+			await database.current.collection('users').doc(email).set({
+				name,
+				email,
+				password,
+			});
+		} catch (error) {
+			history.push({
+				pathname: '/user/sign_up',
+				state: { error: error.message },
+			});
+		}
+	};
+
 	let firstPage = isLoggedIn ? (
 		<TopBar
 			isLoggedIn={true}
@@ -168,6 +194,7 @@ const App = () => {
 			facebookSignIn={facebookSignIn}
 			twitterSignIn={twitterSignIn}
 			googleSignIn={googleSignIn}
+			signUp={signUp}
 		/>
 	);
 

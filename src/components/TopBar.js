@@ -179,7 +179,7 @@ const TopBar = (props) => {
 						src={
 							props.profileImage !== null
 								? props.profileImage
-								: 'https://camo.githubusercontent.com/db6bd56a6ead4c0d902278e7c1f642ea166d9ddd/687474703a2f2f69636f6e732e69636f6e617263686976652e636f6d2f69636f6e732f746865686f74682f73656f2f3235362f73656f2d70616e64612d69636f6e2e706e67'
+								: 'https://www.goodreads.com/assets/nophoto/user/u_60x60-267f0ca0ea48fd3acfd44b95afa64f01.png'
 						}
 					></img>
 				</button>

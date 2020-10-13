@@ -13,6 +13,7 @@ const HomePage = (props) => {
 				facebookSignIn={props.facebookSignIn}
 				twitterSignIn={props.twitterSignIn}
 				googleSignIn={props.googleSignIn}
+				signUp={props.signUp}
 			/>
 			<HomePageBottomSectiom
 				recExample1={{
@@ -151,6 +152,7 @@ HomePage.propTypes = {
 	facebookSignIn: PropTypes.func,
 	twitterSignIn: PropTypes.func,
 	googleSignIn: PropTypes.func,
+	signUp: PropTypes.func,
 };
 
 export default HomePage;
