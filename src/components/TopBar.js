@@ -326,25 +326,27 @@ const TopBar = (props) => {
 					<span>GH</span>
 				</a>
 			</div>
-			<div id="home-link-container">
-				<a id="home-link" href="/">
-					Home
-				</a>
-			</div>
-			<div id="my-books-link-container">
-				<a id="my-books-link" href="/">
-					My Books
-				</a>
-			</div>
-			<div id="browse-button-container" ref={browseRef}>
-				<button
-					id="browse-button"
-					onClick={() => setBrowseClicked(!browseClicked)}
-					className={browseClicked ? 'clicked' : ''}
-				>
-					Browse ▾
-				</button>
-				{browseDropDown}
+			<div id="top-bar-left-section">
+				<div id="home-link-container">
+					<a id="home-link" href="/">
+						Home
+					</a>
+				</div>
+				<div id="my-books-link-container">
+					<a id="my-books-link" href="/">
+						My Books
+					</a>
+				</div>
+				<div id="browse-button-container" ref={browseRef}>
+					<button
+						id="browse-button"
+						onClick={() => setBrowseClicked(!browseClicked)}
+						className={browseClicked ? 'clicked' : ''}
+					>
+						Browse ▾
+					</button>
+					{browseDropDown}
+				</div>
 			</div>
 			<TopBarSearchBar queryBooksFunction={props.queryBooksFunction} />
 			{rightSection}
