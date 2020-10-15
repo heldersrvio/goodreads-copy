@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import TopBar from './components/TopBar';
 import HomePage from './components/HomePage';
+import Dashboard from './components/Dashboard';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
@@ -169,27 +170,54 @@ const App = () => {
 	};
 
 	let firstPage = isLoggedIn ? (
-		<TopBar
-			isLoggedIn={true}
-			profileImage="https://camo.githubusercontent.com/db6bd56a6ead4c0d902278e7c1f642ea166d9ddd/687474703a2f2f69636f6e732e69636f6e617263686976652e636f6d2f69636f6e732f746865686f74682f73656f2f3235362f73656f2d70616e64612d69636f6e2e706e67"
-			favoriteGenres={[
-				'Science Fiction',
-				'Manga',
-				'Contemporary',
-				'Fantasy',
-				'Fiction',
-				'Graphic Novels',
-				'Historical Fiction',
-				'Romance',
-			]}
-			queryBooksFunction={queryBooks}
-			profileName="Helder"
-			fetchNotifications={queryNotifications}
-			fetchNewFriends={getNumberOfNewFriends}
-			setNewFriendsToZero={setNewFriendsToZero}
-			setNewNotificationsToSeen={setNewNotificationsToSeen}
-			signOut={signOut}
-		/>
+		<div id="user-home">
+			<TopBar
+				isLoggedIn={true}
+				profileImage="https://camo.githubusercontent.com/db6bd56a6ead4c0d902278e7c1f642ea166d9ddd/687474703a2f2f69636f6e732e69636f6e617263686976652e636f6d2f69636f6e732f746865686f74682f73656f2f3235362f73656f2d70616e64612d69636f6e2e706e67"
+				favoriteGenres={[
+					'Science Fiction',
+					'Manga',
+					'Contemporary',
+					'Fantasy',
+					'Fiction',
+					'Graphic Novels',
+					'Historical Fiction',
+					'Romance',
+				]}
+				queryBooksFunction={queryBooks}
+				profileName="Helder"
+				fetchNotifications={queryNotifications}
+				fetchNewFriends={getNumberOfNewFriends}
+				setNewFriendsToZero={setNewFriendsToZero}
+				setNewNotificationsToSeen={setNewNotificationsToSeen}
+				signOut={signOut}
+			/>
+			<Dashboard
+				userCode="2345"
+				numberOfReadBooks={40}
+				wantToReadBooks={[
+					{
+						cover:
+							'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1533612066i/41045016._SY180_.jpg',
+						title: 'The Dark Truth',
+						page: '/book/show/41045016-the-dark-truth',
+					},
+					{
+						cover:
+							'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1328346428i/11802424._SY180_.jpg',
+						title: 'The Trafficked',
+						page: '/book/show/11802424-the-trafficked',
+					},
+					{
+						cover:
+							'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1390760180i/6656._SY180_.jpg',
+						title: 'The Divine Comedy',
+						page: '/book/show/6656.The_Divine_Comedy',
+					},
+				]}
+				readingBooks={[]}
+			/>
+		</div>
 	) : (
 		<HomePage
 			passwordSignIn={passwordSignIn}

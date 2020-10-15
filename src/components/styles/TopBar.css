@@ -414,15 +414,18 @@ li {
 		width: 50%;
 	}
 
-	#home-link-container, #my-books-link-container, #browse-button-container {
+	#home-link-container,
+	#my-books-link-container,
+	#browse-button-container {
 		flex: 1;
 	}
 
-	#top-bar-left-section a, #top-bar-left-section button {
+	#top-bar-left-section a,
+	#top-bar-left-section button {
 		text-align: center;
 		margin-left: auto;
 		margin-right: auto;
-		width: calc(100% - 30px)
+		width: calc(100% - 30px);
 	}
 
 	#top-bar-search-bar-container {
@@ -432,7 +435,8 @@ li {
 }
 
 @media only screen and (max-width: 725px) {
-	#friends-link-container, #notifications-button-container {
+	#friends-link-container,
+	#notifications-button-container {
 		display: none;
 	}
 
