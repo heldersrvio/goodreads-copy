@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import DashboardUpdates from './DashboardUpdates';
+import './styles/Dashboard.css';
 
 const Dashboard = (props) => {
 	return (
@@ -14,7 +15,10 @@ const Dashboard = (props) => {
 						}
 						return (
 							<div className="dashboard-shelf-reading-book-card">
-								<a href={book.page}>
+								<a
+									href={book.page}
+									className="dashboard-shelf-reading-book-card-cover-a"
+								>
 									<img
 										className="dashboard-shelf-reading-book-card-cover"
 										src={book.cover}
@@ -22,14 +26,16 @@ const Dashboard = (props) => {
 									/>
 								</a>
 								<div className="dashboard-shelf-reading-book-card-details">
-									<a href={book.page}>{book.title}</a>
+									<a className="dashboard-shelf-book-title-a" href={book.page}>
+										{book.title}
+									</a>
 									<span>
 										by <a href={book.authorPage}>{book.author}</a>{' '}
 										{book.authorHasBadge ? (
 											<span className="author-badge"></span>
 										) : null}
 									</span>
-									<button id="dashboard-update-progress">
+									<button className="dashboard-update-progress">
 										Update progress
 									</button>
 								</div>
@@ -95,13 +101,17 @@ const Dashboard = (props) => {
 			</div>
 			<DashboardUpdates queryUpdates={() => {}} />
 			<div id="dashboard-right-section">
-				{//TODO: TOP SECTION
+				{
+					//TODO: TOP SECTION
 				}
 				<div id="dashboard-bottom">
 					<div className="top-section">
-						<span id="connect-span">CONNECT</span>
+						<h2 className="connect-h2">CONNECT</h2>
 						<div className="social-media-links">
-							<a className="facebook-a" href="https://www.facebook.com/Goodreads/">
+							<a
+								className="facebook-a"
+								href="https://www.facebook.com/Goodreads/"
+							>
 								<img
 									src="https://s.gr-assets.com/assets/site_footer/footer_facebook-ea4ab848f8e86c5f5c98311bc9495a1b.svg"
 									alt="Facebook logo"

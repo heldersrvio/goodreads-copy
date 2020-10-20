@@ -215,7 +215,27 @@ const App = () => {
 						page: '/book/show/6656.The_Divine_Comedy',
 					},
 				]}
-				readingBooks={[]}
+				readingBooks={[
+					{
+						cover:
+							'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320534275i/958549._SY180_.jpg',
+						title: 'The Bible as History',
+						page: '/book/show/958549.The_Bible_as_History',
+						authorPage: '/author/show/221172.Werner_Keller',
+						author: 'Werner Keller',
+						authorHasBadge: false,
+					},
+					{
+						cover:
+							'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1562033943i/43667389._SX120_.jpg',
+						title:
+							'Stop Self-Sabotage: Six Steps to Unlock Your True Motivation, Harness Your Willpower, and Get Out of Your Own Way',
+						page: '/book/show/43667389-stop-self-sabotage',
+						authorPage: '/author/show/19274073.Judy_Ho',
+						author: 'Judy Ho',
+						authorHasBadge: true,
+					},
+				]}
 			/>
 		</div>
 	) : (

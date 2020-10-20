@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap');
+
+#dashboard {
+	display: flex;
+	flex-direction: row;
+	padding-top: 15px;
+	padding: 15px 40px 0 40px;
+}
+
+#dashboard a {
+	display: inline-block;
+}
+
+#dashboard a,
+#dashboard button {
+	line-height: 20px;
+}
+
+#dashboard span {
+	height: auto;
+}
+
+#dashboard a,
+#dashboard button {
+	padding: 0;
+	height: auto;
+}
+
+#dashboard a {
+	width: auto;
+}
+
+#dashboard a:hover {
+	background-color: transparent;
+}
+
+#dashboard-shelf {
+	flex: 1;
+}
+
+#dashboard-updates {
+	flex: 2;
+}
+
+#dashboard-right-section {
+	flex: 1;
+}
+
+#dashboard h2 {
+	color: rgb(51, 51, 51);
+	font-family: Lato, 'Helvetica Neue', Helvetica, sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+#dashboard-shelf-currently-reading-h2 {
+	margin-bottom: 15px;
+}
+
+.dashboard-shelf-reading-book-card {
+	display: flex;
+	flex-direction: row;
+	margin-bottom: 15px;
+}
+
+.dashboard-shelf-book-title-a {
+	display: inline-block;
+	color: rgb(51, 51, 51);
+	font-family: 'Merriweather', Georgia, serif;
+	font-size: 14px;
+	font-weight: bold;
+	max-height: 20px;
+	max-width: 170px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.dashboard-shelf-reading-book-card-cover-a {
+	width: 95px !important;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.dashboard-shelf-reading-book-card-cover-a img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+.dashboard-shelf-reading-book-card-details {
+	display: flex;
+	flex-direction: column;
+	padding-left: 10px;
+}
+
+.dashboard-shelf-book-title-a:hover,
+.dashboard-shelf-reading-book-card-details span a:hover {
+	color: rgb(51, 51, 51);
+	text-decoration: underline;
+}
+
+.dashboard-shelf-reading-book-card-details span,
+.dashboard-shelf-reading-book-card-details span a {
+	color: rgb(51, 51, 51);
+	font-family: 'Merriweather', Georgia, serif;
+	font-size: 12px;
+	line-height: 12px;
+}
+
+.dashboard-update-progress {
+	background-color: transparent;
+	color: rgb(56, 33, 16);
+	border: 1px solid rgb(56, 33, 16);
+	font-family: Lato, 'Helvetica Neue', Helvetica, sans-serif;
+	font-size: 11px;
+	width: 105.25px;
+	padding: 4px 12px;
+	border-radius: 3px;
+}
+
+.dashboard-update-progress:hover {
+	background-color: rgb(56, 33, 16);
+	color: white;
+}
