@@ -54,16 +54,21 @@ const Dashboard = (props) => {
 				</div>
 				<div id="dashboard-shelf-want-to-read">
 					<h2 id="dashboard-shelf-want-to-read-h2">WANT TO READ</h2>
-					{props.wantToReadBooks.map((book, index) => {
-						if (index > 5) {
-							return null;
-						}
-						return (
-							<a className="dashboard-shelf-want-to-read-book" href={book.page}>
-								<img src={book.cover} alt={book.title}></img>
-							</a>
-						);
-					})}
+					<div id="dashboard-shelf-want-to-read-grid">
+						{props.wantToReadBooks.map((book, index) => {
+							if (index > 5) {
+								return null;
+							}
+							return (
+								<a
+									className="dashboard-shelf-want-to-read-book"
+									href={book.page}
+								>
+									<img src={book.cover} alt={book.title}></img>
+								</a>
+							);
+						})}
+					</div>
 					<a
 						id="view-all-to-read"
 						href={`/review/list/${props.userCode}?shelf=to-read`}

@@ -214,6 +214,12 @@ const App = () => {
 						title: 'The Divine Comedy',
 						page: '/book/show/6656.The_Divine_Comedy',
 					},
+					{
+						cover:
+							'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1390760180i/6656._SY180_.jpg',
+						title: 'The Divine Comedy',
+						page: '/book/show/6656.The_Divine_Comedy',
+					},
 				]}
 				readingBooks={[
 					{

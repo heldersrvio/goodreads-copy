@@ -5,6 +5,7 @@
 	flex-direction: row;
 	padding-top: 15px;
 	padding: 15px 40px 0 40px;
+	background-color: rgba(244, 241, 234, 0.5);
 }
 
 #dashboard a {
@@ -38,10 +39,6 @@
 	flex: 1;
 }
 
-#dashboard-updates {
-	flex: 2;
-}
-
 #dashboard-right-section {
 	flex: 1;
 }
@@ -53,10 +50,11 @@
 	font-weight: bold;
 }
 
-#dashboard-shelf-currently-reading, #dashboard-shelf-want-to-read {
-    padding-bottom: 15px;
-    margin-bottom: 15px;
-    border-bottom: 1px solid gainsboro;
+#dashboard-shelf-currently-reading,
+#dashboard-shelf-want-to-read {
+	padding-bottom: 15px;
+	margin-bottom: 15px;
+	border-bottom: 1px solid gainsboro;
 }
 
 #dashboard-shelf-currently-reading-h2 {
@@ -131,59 +129,83 @@
 }
 
 #dashboard-shelf-currently-reading-bottom {
-    display: flex;
-    flex-direction: line;
-    align-items: center;
+	display: flex;
+	flex-direction: line;
+	align-items: center;
 }
 
 #dashboard-shelf-currently-reading-bottom span {
-    padding: 0 5px;
+	padding: 0 5px;
 }
 
-#dashboard-shelf-currently-reading-bottom a, #dashboard-shelf-currently-reading-bottom button, #view-all-to-read, #dashboard-shelf-bookshelves-bottom a {
-    color: rgb(0, 99, 93);
-    font-family: Lato, "Helvetica Neue", Helvetica, sans-serif;
-    font-size: 14px;
+#dashboard-shelf-currently-reading-bottom a,
+#dashboard-shelf-currently-reading-bottom button,
+#view-all-to-read,
+#dashboard-shelf-bookshelves-bottom a {
+	color: rgb(0, 99, 93);
+	font-family: Lato, 'Helvetica Neue', Helvetica, sans-serif;
+	font-size: 14px;
 }
 
-#dashboard-shelf-currently-reading-bottom a:hover, #dashboard-shelf-currently-reading-bottom button:hover, #view-all-to-read:hover, #dashboard-shelf-bookshelves-bottom a:hover {
-    background-color: transparent;
-    text-decoration: underline;
+#dashboard-shelf-currently-reading-bottom a:hover,
+#dashboard-shelf-currently-reading-bottom button:hover,
+#view-all-to-read:hover,
+#dashboard-shelf-bookshelves-bottom a:hover {
+	background-color: transparent;
+	text-decoration: underline;
+}
+
+#dashboard-shelf-want-to-read {
+	display: flex;
+	flex-direction: column;
 }
 
 .dashboard-shelf-want-to-read-book {
-    height: 96px !important;
-    width: 96px !important;
-    overflow: hidden;
-    display: flex;
-    margin-right: 4px;
-    margin-top: 8px;
+	height: 96px !important;
+	width: 96px !important;
+	overflow: hidden;
+	display: flex;
+	margin-right: 4px;
+	margin-top: 8px;
 }
 
 #dashboard-shelf-want-to-read-h2 {
-    margin-bottom: 10px;
+	margin-bottom: 10px;
 }
 
 #view-all-to-read {
-    margin-top: 10px;
+	margin-top: 10px;
 }
 
 #bookshelves-h2 {
-    margin-bottom: 15px;
+	margin-bottom: 15px;
 }
 
 #dashboard-shelf-bookshelves-bottom {
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 150px;
+	display: flex;
+	flex-direction: row;
+	margin-bottom: 150px;
 }
 
-#dashboard-shelf-bookshelves-numbers, #dashboard-shelf-bookshelves-titles {
-    display: flex;
-    flex-direction: column;
+#dashboard-shelf-bookshelves-numbers,
+#dashboard-shelf-bookshelves-titles {
+	display: flex;
+	flex-direction: column;
 }
 
 #dashboard-shelf-bookshelves-numbers {
-    align-items: flex-end;
-    margin-right: 10px;
+	align-items: flex-end;
+	margin-right: 10px;
+}
+
+#dashboard .connect-h2 {
+	margin-bottom: 10px;
+}
+
+#dashboard .social-media-links {
+	margin-bottom: 30px;
+}
+
+#dashboard .bottom-section .bottom-section-links {
+	margin-bottom: 20px;
 }
