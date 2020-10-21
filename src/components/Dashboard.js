@@ -42,13 +42,15 @@ const Dashboard = (props) => {
 							</div>
 						);
 					})}
-					<div id="dashboard-shelf-currently-reading-bottom">
+					<span id="dashboard-shelf-currently-reading-bottom">
 						<a href={`/review/list/${props.userCode}?shelf=currently-reading`}>
 							View all books
 						</a>
+						<span>·</span>
 						<button id="add-a-book">Add a book</button>
+						<span>·</span>
 						<button id="general-update">General update</button>
-					</div>
+					</span>
 				</div>
 				<div id="dashboard-shelf-want-to-read">
 					<h2 id="dashboard-shelf-want-to-read-h2">WANT TO READ</h2>
