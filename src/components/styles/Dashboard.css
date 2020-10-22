@@ -209,3 +209,17 @@
 #dashboard .bottom-section .bottom-section-links {
 	margin-bottom: 20px;
 }
+
+.author-badge {
+	display: inline-block;
+	background-image: url('https://www.goodreads.com/assets/layout/gr_author_badge.svg');
+	width: 14px;
+	height: 14px !important;
+	background-repeat: no-repeat;
+	background-position: bottom;
+}
+
+.author-badge-wrapper {
+	width: 20px;
+	height: 20px !important;
+}

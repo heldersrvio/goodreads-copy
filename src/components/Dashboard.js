@@ -32,7 +32,9 @@ const Dashboard = (props) => {
 									<span>
 										by <a href={book.authorPage}>{book.author}</a>{' '}
 										{book.authorHasBadge ? (
-											<span className="author-badge"></span>
+											<span className="author-badge-wrapper">
+												<span className="author-badge"></span>
+											</span>
 										) : null}
 									</span>
 									<button className="dashboard-update-progress">
