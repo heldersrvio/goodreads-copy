@@ -28,12 +28,29 @@ const App = () => {
 
 	const queryBooks = async (searchString) => {
 		try {
-			const query = await database.current
-				.collection('books')
-				.where('searchTerms', 'array-contains', searchString.toLowerCase())
-				.limit(5)
-				.get();
-			return query.docs.map((document) => document.data());
+			const bookQuery = await database.current.collection('books').get();
+			const titleQueryResults = await bookQuery.docs
+				.map((document) => document.data())
+				.filter(async (doc) => {
+					if (doc.title.toLowerCase().includes(searchString.toLowerCase())) {
+						return true;
+					} else {
+						const authorQuery = await database.current
+							.collection('authors')
+							.doc(doc.authorId)
+							.get();
+						if (
+							authorQuery
+								.data()
+								.name.toLowerCase()
+								.includes(searchString.toLowerCase())
+						) {
+							return true;
+						}
+						return false;
+					}
+				});
+			return titleQueryResults.slice(6);
 		} catch (error) {
 			console.log(error);
 		}
