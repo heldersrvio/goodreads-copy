@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import TopBar from './components/TopBar';
 import HomePage from './components/HomePage';
@@ -21,10 +21,59 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 const App = () => {
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const [userUID, setUserUID] = useState(null);
+	const [userInfo, setUserInfo] = useState({});
+	const [loading, setLoading] = useState(true);
 	const database = useRef(null);
 	const history = useHistory();
 	database.current = firebase.firestore();
+
+	useEffect(() => {
+		const queryUserInfo = async () => {
+			if (userUID === null) {
+				return userInfo;
+			}
+			let newUserInfo = {};
+			try {
+				const userQuery = await database.current
+					.collection('users')
+					.doc(userUID)
+					.get();
+				const userQueryData = userQuery.data();
+				newUserInfo = { ...userQueryData };
+				const bookInstancesQuery = await database.current
+					.collection('userBooksInstances')
+					.where('userId', '==', userUID)
+					.get();
+				const bookInstancesQueryData = bookInstancesQuery.docs.map((document) =>
+					document.data()
+				);
+				newUserInfo.numberOfReadBooks = bookInstancesQueryData.filter(
+					(instance) => instance.status === 'read'
+				).length;
+				const userBooks = await queryBookInstanceDetails(
+					bookInstancesQueryData.filter(
+						(instance) => instance.status !== 'read'
+					)
+				);
+				newUserInfo.wantToReadBooks = userBooks[0];
+				newUserInfo.readingBooks = userBooks[1];
+				return newUserInfo;
+			} catch (error) {
+				console.log(error);
+			}
+		};
+
+		const modifyUserInfo = async () => {
+			const newUserInfo = await queryUserInfo();
+			setUserInfo(newUserInfo);
+			setLoading(false);
+		};
+
+		if (userUID !== null) {
+			modifyUserInfo();
+		}
+	}, [userUID, userInfo]);
 
 	const queryBooks = async (searchString) => {
 		try {
@@ -74,13 +123,15 @@ const App = () => {
 	};
 
 	const getNumberOfNewFriends = async () => {
+		if (userUID === null) {
+			return 0;
+		}
 		try {
 			const query = await database.current
 				.collection('users')
-				.where('username', '==', 'heldersrvio')
+				.doc(userUID)
 				.get();
-			return query.docs.map((document) => document.data())[0].newFriendsRequests
-				.length;
+			return query.data().newFriendsRequests.length;
 		} catch (error) {
 			console.log(error);
 		}
@@ -115,6 +166,7 @@ const App = () => {
 		console.log('Signing out...');
 		try {
 			await firebase.auth().signOut();
+			localStorage.userInfo = null;
 			history.push({
 				pathname: '/user/sign_out',
 			});
@@ -165,6 +217,44 @@ const App = () => {
 		}
 	};
 
+	const queryBookInstanceDetails = async (bookInstanceData) => {
+		let wantToReadBooks = [];
+		let readingBooks = [];
+		for (let i = 0; i < bookInstanceData.length; i++) {
+			const bookObj = {};
+			const bookQuery = await database.current
+				.collection('books')
+				.doc(bookInstanceData[i].bookId)
+				.get();
+			const bookQueryData = bookQuery.data();
+			bookObj.title = bookQueryData.title;
+			bookObj.cover = bookQueryData.cover;
+			bookObj.page =
+				'/book/show/' +
+				bookInstanceData[i].bookId +
+				'.' +
+				bookQueryData.title.replace(/ /g, '_');
+			if (bookInstanceData[i].status === 'to-read') {
+				wantToReadBooks.push(bookObj);
+			} else {
+				const authorQuery = await database.current
+					.collection('authors')
+					.doc(bookQueryData.authorId)
+					.get();
+				const authorQueryData = authorQuery.data();
+				bookObj.author = authorQueryData.name;
+				bookObj.authorPage =
+					'/author/show/' +
+					bookQueryData.authorId +
+					'.' +
+					authorQueryData.name.replace(/ /g, '_');
+				bookObj.authorHasBadge = authorQueryData.GRMember;
+				readingBooks.push(bookObj);
+			}
+		}
+		return [wantToReadBooks, readingBooks];
+	};
+
 	const signUp = async (email, password, name) => {
 		try {
 			if (name.length === 0) {
@@ -191,96 +281,36 @@ const App = () => {
 		}
 	};
 
-	let firstPage = isLoggedIn ? (
-		<div id="user-home">
-			<TopBar
-				isLoggedIn={true}
-				profileImage="https://camo.githubusercontent.com/db6bd56a6ead4c0d902278e7c1f642ea166d9ddd/687474703a2f2f69636f6e732e69636f6e617263686976652e636f6d2f69636f6e732f746865686f74682f73656f2f3235362f73656f2d70616e64612d69636f6e2e706e67"
-				favoriteGenres={[
-					'Science Fiction',
-					'Manga',
-					'Contemporary',
-					'Fantasy',
-					'Fiction',
-					'Graphic Novels',
-					'Historical Fiction',
-					'Romance',
-				]}
-				queryBooksFunction={queryBooks}
-				profileName="Helder"
-				fetchNotifications={queryNotifications}
-				fetchNewFriends={getNumberOfNewFriends}
-				setNewFriendsToZero={setNewFriendsToZero}
-				setNewNotificationsToSeen={setNewNotificationsToSeen}
-				signOut={signOut}
+	let firstPage =
+		userUID !== null && !loading ? (
+			<div id="user-home">
+				<TopBar
+					isLoggedIn={true}
+					userInfo={userInfo}
+					queryBooksFunction={queryBooks}
+					fetchNotifications={queryNotifications}
+					fetchNewFriends={getNumberOfNewFriends}
+					setNewFriendsToZero={setNewFriendsToZero}
+					setNewNotificationsToSeen={setNewNotificationsToSeen}
+					signOut={signOut}
+				/>
+				<Dashboard userCode={userUID} userInfo={userInfo} />
+			</div>
+		) : (
+			<HomePage
+				passwordSignIn={passwordSignIn}
+				facebookSignIn={facebookSignIn}
+				twitterSignIn={twitterSignIn}
+				googleSignIn={googleSignIn}
+				signUp={signUp}
 			/>
-			<Dashboard
-				userCode="2345"
-				numberOfReadBooks={40}
-				wantToReadBooks={[
-					{
-						cover:
-							'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1533612066i/41045016._SY180_.jpg',
-						title: 'The Dark Truth',
-						page: '/book/show/41045016-the-dark-truth',
-					},
-					{
-						cover:
-							'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1328346428i/11802424._SY180_.jpg',
-						title: 'The Trafficked',
-						page: '/book/show/11802424-the-trafficked',
-					},
-					{
-						cover:
-							'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1390760180i/6656._SY180_.jpg',
-						title: 'The Divine Comedy',
-						page: '/book/show/6656.The_Divine_Comedy',
-					},
-					{
-						cover:
-							'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1390760180i/6656._SY180_.jpg',
-						title: 'The Divine Comedy',
-						page: '/book/show/6656.The_Divine_Comedy',
-					},
-				]}
-				readingBooks={[
-					{
-						cover:
-							'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320534275i/958549._SY180_.jpg',
-						title: 'The Bible as History',
-						page: '/book/show/958549.The_Bible_as_History',
-						authorPage: '/author/show/221172.Werner_Keller',
-						author: 'Werner Keller',
-						authorHasBadge: false,
-					},
-					{
-						cover:
-							'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1562033943i/43667389._SX120_.jpg',
-						title:
-							'Stop Self-Sabotage: Six Steps to Unlock Your True Motivation, Harness Your Willpower, and Get Out of Your Own Way',
-						page: '/book/show/43667389-stop-self-sabotage',
-						authorPage: '/author/show/19274073.Judy_Ho',
-						author: 'Judy Ho',
-						authorHasBadge: true,
-					},
-				]}
-			/>
-		</div>
-	) : (
-		<HomePage
-			passwordSignIn={passwordSignIn}
-			facebookSignIn={facebookSignIn}
-			twitterSignIn={twitterSignIn}
-			googleSignIn={googleSignIn}
-			signUp={signUp}
-		/>
-	);
+		);
 
 	firebase.auth().onAuthStateChanged((user) => {
 		if (user !== null) {
-			setIsLoggedIn(true);
+			setUserUID(user.uid);
 		} else {
-			setIsLoggedIn(false);
+			setUserUID(null);
 		}
 	});
 

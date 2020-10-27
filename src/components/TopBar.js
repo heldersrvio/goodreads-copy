@@ -177,8 +177,9 @@ const TopBar = (props) => {
 					<img
 						alt="profile"
 						src={
-							props.profileImage !== null
-								? props.profileImage
+							props.userInfo !== undefined &&
+							props.userInfo.profileImage !== undefined
+								? props.userInfo.profileImage
 								: 'https://www.goodreads.com/assets/nophoto/user/u_60x60-267f0ca0ea48fd3acfd44b95afa64f01.png'
 						}
 					></img>
@@ -188,7 +189,12 @@ const TopBar = (props) => {
 					className={profileClicked ? 'visible' : 'hidden'}
 				>
 					<div id="profile-drop-down-top-section">
-						<span>{props.profileName.toUpperCase()}</span>
+						<span>
+							{props.userInfo !== undefined &&
+							props.userInfo.firstName !== undefined
+								? props.userInfo.firstName.toUpperCase()
+								: ''}
+						</span>
 						<ul>
 							<li>
 								<a href="/">Profile</a>
@@ -279,11 +285,14 @@ const TopBar = (props) => {
 		<div id="browse-drop-down-right-section">
 			<span>FAVORITE GENRES</span>
 			<ul>
-				{props.favoriteGenres.map((genre) => (
-					<li key={genre}>
-						<a href="/">{genre}</a>
-					</li>
-				))}
+				{props.userInfo !== undefined &&
+				props.userInfo.favoriteGenres !== undefined
+					? props.userInfo.favoriteGenres.map((genre) => (
+							<li key={genre}>
+								<a href="/">{genre}</a>
+							</li>
+					  ))
+					: null}
 			</ul>
 			<a href="/" id="all-genres-a">
 				All Genres
@@ -356,9 +365,11 @@ const TopBar = (props) => {
 
 TopBar.propTypes = {
 	isLoggedIn: PropTypes.bool,
-	profileImage: PropTypes.string,
-	profileName: PropTypes.string,
-	favoriteGenres: PropTypes.arrayOf(PropTypes.string),
+	userInfo: PropTypes.shape({
+		profileImage: PropTypes.string,
+		firstName: PropTypes.string,
+		favoriteGenres: PropTypes.arrayOf(PropTypes.string),
+	}),
 	signOut: PropTypes.func,
 	queryBooksFunction: PropTypes.func,
 	fetchNotifications: PropTypes.func,

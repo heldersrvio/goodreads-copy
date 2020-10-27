@@ -9,41 +9,50 @@ const Dashboard = (props) => {
 			<div id="dashboard-shelf">
 				<div id="dashboard-shelf-currently-reading">
 					<h2 id="dashboard-shelf-currently-reading-h2">CURRENTLY READING</h2>
-					{props.readingBooks.map((book, index) => {
-						if (index > 1) {
-							return null;
-						}
-						return (
-							<div className="dashboard-shelf-reading-book-card">
-								<a
-									href={book.page}
-									className="dashboard-shelf-reading-book-card-cover-a"
-								>
-									<img
-										className="dashboard-shelf-reading-book-card-cover"
-										src={book.cover}
-										alt={book.title}
-									/>
-								</a>
-								<div className="dashboard-shelf-reading-book-card-details">
-									<a className="dashboard-shelf-book-title-a" href={book.page}>
-										{book.title}
-									</a>
-									<span>
-										by <a href={book.authorPage}>{book.author}</a>{' '}
-										{book.authorHasBadge ? (
-											<span className="author-badge-wrapper">
-												<span className="author-badge"></span>
+					{props.userInfo !== undefined &&
+					props.userInfo.readingBooks !== undefined
+						? props.userInfo.readingBooks.map((book, index) => {
+								if (index > 1) {
+									return null;
+								}
+								return (
+									<div
+										className="dashboard-shelf-reading-book-card"
+										key={index}
+									>
+										<a
+											href={book.page}
+											className="dashboard-shelf-reading-book-card-cover-a"
+										>
+											<img
+												className="dashboard-shelf-reading-book-card-cover"
+												src={book.cover}
+												alt={book.title}
+											/>
+										</a>
+										<div className="dashboard-shelf-reading-book-card-details">
+											<a
+												className="dashboard-shelf-book-title-a"
+												href={book.page}
+											>
+												{book.title}
+											</a>
+											<span>
+												by <a href={book.authorPage}>{book.author}</a>{' '}
+												{book.authorHasBadge ? (
+													<span className="author-badge-wrapper">
+														<span className="author-badge"></span>
+													</span>
+												) : null}
 											</span>
-										) : null}
-									</span>
-									<button className="dashboard-update-progress">
-										Update progress
-									</button>
-								</div>
-							</div>
-						);
-					})}
+											<button className="dashboard-update-progress">
+												Update progress
+											</button>
+										</div>
+									</div>
+								);
+						  })
+						: null}
 					<span id="dashboard-shelf-currently-reading-bottom">
 						<a href={`/review/list/${props.userCode}?shelf=currently-reading`}>
 							View all books
@@ -57,19 +66,23 @@ const Dashboard = (props) => {
 				<div id="dashboard-shelf-want-to-read">
 					<h2 id="dashboard-shelf-want-to-read-h2">WANT TO READ</h2>
 					<div id="dashboard-shelf-want-to-read-grid">
-						{props.wantToReadBooks.map((book, index) => {
-							if (index > 5) {
-								return null;
-							}
-							return (
-								<a
-									className="dashboard-shelf-want-to-read-book"
-									href={book.page}
-								>
-									<img src={book.cover} alt={book.title}></img>
-								</a>
-							);
-						})}
+						{props.userInfo !== undefined &&
+						props.userInfo.wantToReadBooks !== undefined
+							? props.userInfo.wantToReadBooks.map((book, index) => {
+									if (index > 5) {
+										return null;
+									}
+									return (
+										<a
+											key={index}
+											className="dashboard-shelf-want-to-read-book"
+											href={book.page}
+										>
+											<img src={book.cover} alt={book.title}></img>
+										</a>
+									);
+							  })
+							: null}
 					</div>
 					<a
 						id="view-all-to-read"
@@ -82,16 +95,25 @@ const Dashboard = (props) => {
 					<h2 id="bookshelves-h2">BOOKSHELVES</h2>
 					<div id="dashboard-shelf-bookshelves-bottom">
 						<div id="dashboard-shelf-bookshelves-numbers">
+							<a href={`/review/list/${props.userCode}?shelf=to-read`}>
+								{props.userInfo !== undefined &&
+								props.userInfo.wantToReadBooks !== undefined
+									? props.userInfo.wantToReadBooks.length
+									: null}
+							</a>
 							<a
 								href={`/review/list/${props.userCode}?shelf=currently-reading`}
 							>
-								{props.readingBooks.length}
-							</a>
-							<a href={`/review/list/${props.userCode}?shelf=to-read`}>
-								{props.wantToReadBooks.length}
+								{props.userInfo !== undefined &&
+								props.userInfo.readingBooks !== undefined
+									? props.userInfo.readingBooks.length
+									: null}
 							</a>
 							<a href={`/review/list/${props.userCode}?shelf=read`}>
-								{props.numberOfReadBooks}
+								{props.userInfo !== undefined &&
+								props.userInfo.numberOfReadBooks !== undefined
+									? props.userInfo.numberOfReadBooks
+									: null}
 							</a>
 						</div>
 						<div id="dashboard-shelf-bookshelves-titles">
@@ -182,24 +204,26 @@ const Dashboard = (props) => {
 };
 
 Dashboard.propTypes = {
-	readingBooks: PropTypes.arrayOf(
-		PropTypes.shape({
-			cover: PropTypes.string,
-			title: PropTypes.string,
-			page: PropTypes.string,
-			authorPage: PropTypes.string,
-			author: PropTypes.string,
-			authorHasBadge: PropTypes.bool,
-		})
-	),
-	wantToReadBooks: PropTypes.arrayOf(
-		PropTypes.shape({
-			cover: PropTypes.string,
-			title: PropTypes.string,
-			page: PropTypes.string,
-		})
-	),
-	numberOfReadBooks: PropTypes.number,
+	userInfo: PropTypes.shape({
+		readingBooks: PropTypes.arrayOf(
+			PropTypes.shape({
+				cover: PropTypes.string,
+				title: PropTypes.string,
+				page: PropTypes.string,
+				authorPage: PropTypes.string,
+				author: PropTypes.string,
+				authorHasBadge: PropTypes.bool,
+			})
+		),
+		wantToReadBooks: PropTypes.arrayOf(
+			PropTypes.shape({
+				cover: PropTypes.string,
+				title: PropTypes.string,
+				page: PropTypes.string,
+			})
+		),
+		numberOfReadBooks: PropTypes.number,
+	}),
 	userCode: PropTypes.string,
 };
 
