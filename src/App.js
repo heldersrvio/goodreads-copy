@@ -29,28 +29,33 @@ const App = () => {
 	const queryBooks = async (searchString) => {
 		try {
 			const bookQuery = await database.current.collection('books').get();
-			const titleQueryResults = await bookQuery.docs
-				.map((document) => document.data())
-				.filter(async (doc) => {
-					if (doc.title.toLowerCase().includes(searchString.toLowerCase())) {
-						return true;
-					} else {
-						const authorQuery = await database.current
-							.collection('authors')
-							.doc(doc.authorId)
+			const books = await Promise.all(
+				bookQuery.docs.map(async (document) => {
+					const bookObj = {};
+					const data = document.data();
+					bookObj.title = data.title;
+					bookObj.cover = data.cover;
+					if (data.series !== undefined) {
+						bookObj.seriesInstance = data.seriesInstance;
+						const seriesQuery = await database.current
+							.collection('series')
+							.doc(data.series)
 							.get();
-						if (
-							authorQuery
-								.data()
-								.name.toLowerCase()
-								.includes(searchString.toLowerCase())
-						) {
-							return true;
-						}
-						return false;
+						bookObj.series = seriesQuery.data().name;
 					}
-				});
-			return titleQueryResults.slice(6);
+					const authorQuery = await database.current
+						.collection('authors')
+						.doc(data.authorId)
+						.get();
+					bookObj.author = authorQuery.data().name;
+					return bookObj;
+				})
+			);
+			return books.filter(
+				(book) =>
+					book.title.toLowerCase().includes(searchString.toLowerCase()) ||
+					book.author.toLowerCase().includes(searchString.toLowerCase())
+			);
 		} catch (error) {
 			console.log(error);
 		}

@@ -18,6 +18,9 @@ const TopBarSearchBar = (props) => {
 				<div id="search-books-results">
 					<div id="search-books-results-top-section">
 						{queryResults.map((book, index) => {
+							if (index > 4) {
+								return null;
+							}
 							return (
 								<a className="search-result-book-card" href="/" key={index}>
 									<div className="search-results-book-card-cover-section">
@@ -26,7 +29,7 @@ const TopBarSearchBar = (props) => {
 									<div className="search-results-book-card-title-section">
 										<span className="results-card-book-title">
 											<strong>
-												{book.series === null && book.seriesInstance !== null
+												{book.series === undefined
 													? book.title
 													: `${book.title} (${book.series}, #${book.seriesInstance})`}
 											</strong>
