@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import HomePageTopBar from './HomePageTopBar';
+import Firebase from '../Firebase';
 import './styles/HomePageTopSection.css';
 
-const HomePageTopSection = (props) => {
+const HomePageTopSection = () => {
 	const [name, setName] = useState('');
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
+	const history = useHistory();
 
 	return (
 		<div id="homepage-top-section">
-			<HomePageTopBar signIn={props.passwordSignIn} />
+			<HomePageTopBar />
 			<div id="new-user-presentation">
 				<div id="headline">
 					<img
@@ -42,7 +44,7 @@ const HomePageTopSection = (props) => {
 						<div id="sign-up-confirmation">
 							<button
 								id="sign-up-button"
-								onClick={() => props.signUp(email, password, name)}
+								onClick={() => Firebase.signUp(email, password, name, history)}
 							>
 								Sign up
 							</button>
@@ -53,13 +55,13 @@ const HomePageTopSection = (props) => {
 					</div>
 					<div id="sign-in-sms">
 						<span>or sign in using</span>
-						<button id="facebook-button" onClick={props.facebookSignIn}>
+						<button id="facebook-button" onClick={Firebase.facebookSignIn}>
 							<span></span>
 						</button>
-						<button id="twitter-button" onClick={props.twitterSignIn}>
+						<button id="twitter-button" onClick={Firebase.twitterSignIn}>
 							<span></span>
 						</button>
-						<button id="google-button" onClick={props.googleSignIn}>
+						<button id="google-button" onClick={Firebase.googleSignIn}>
 							<span></span>
 						</button>
 					</div>
@@ -67,14 +69,6 @@ const HomePageTopSection = (props) => {
 			</div>
 		</div>
 	);
-};
-
-HomePageTopSection.propTypes = {
-	passwordSignIn: PropTypes.func,
-	facebookSignIn: PropTypes.func,
-	twitterSignIn: PropTypes.func,
-	googleSignIn: PropTypes.func,
-	signUp: PropTypes.func,
 };
 
 export default HomePageTopSection;

@@ -1,20 +1,13 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import HomePageTopSection from './HomePageTopSection';
 import HomePageBottomSectiom from './HomePageBottomSection';
 import HomePageFootBar from './HomePageFootBar';
 import './styles/HomePage.css';
 
-const HomePage = (props) => {
+const HomePage = () => {
 	return (
 		<div id="homepage">
-			<HomePageTopSection
-				passwordSignIn={props.passwordSignIn}
-				facebookSignIn={props.facebookSignIn}
-				twitterSignIn={props.twitterSignIn}
-				googleSignIn={props.googleSignIn}
-				signUp={props.signUp}
-			/>
+			<HomePageTopSection />
 			<HomePageBottomSectiom
 				recExample1={{
 					userName: 'Shomeret',
@@ -145,14 +138,6 @@ const HomePage = (props) => {
 			<HomePageFootBar />
 		</div>
 	);
-};
-
-HomePage.propTypes = {
-	passwordSignIn: PropTypes.func,
-	facebookSignIn: PropTypes.func,
-	twitterSignIn: PropTypes.func,
-	googleSignIn: PropTypes.func,
-	signUp: PropTypes.func,
 };
 
 export default HomePage;

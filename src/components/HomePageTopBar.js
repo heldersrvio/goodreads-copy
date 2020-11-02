@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
+import Firebase from '../Firebase';
 import './styles/HomePageTopBar.css';
 
-const HomePageTopBar = (props) => {
+const HomePageTopBar = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [rememberMe, setRememberMe] = useState(false);
+	const history = useHistory();
 
 	return (
 		<div id="home-page-top-bar">
@@ -50,7 +52,7 @@ const HomePageTopBar = (props) => {
 					<button
 						id="sign-in-button"
 						onClick={() =>
-							props.signIn(props.email, props.password, props.rememberMe)
+							Firebase.signIn(email, password, rememberMe, history)
 						}
 					>
 						Sign In
@@ -59,10 +61,6 @@ const HomePageTopBar = (props) => {
 			</div>
 		</div>
 	);
-};
-
-HomePageTopBar.propTypes = {
-	signIn: PropTypes.func,
 };
 
 export default HomePageTopBar;
