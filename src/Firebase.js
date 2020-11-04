@@ -248,9 +248,9 @@ const Firebase = (() => {
 		}
 	};
 
-	const modifyUserInfo = async (userUID, setUserInfo) => {
+	const modifyUserInfo = async (userUID) => {
 		const newUserInfo = await queryUserInfo(userUID);
-		setUserInfo(newUserInfo);
+		return newUserInfo;
 	};
 
 	const addBookToShelf = async (userUID, bookId, status) => {};

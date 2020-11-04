@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { formatDistance } from 'date-fns';
 import TopBarSearchBar from './TopBarSearchBar';
 import Firebase from '../Firebase';
-import PropTypes from 'prop-types';
 import './styles/TopBar.css';
 
-const TopBar = (props) => {
+const TopBar = () => {
 	const [browseClicked, setBrowseClicked] = useState(false);
 	const [profileClicked, setProfileClicked] = useState(false);
 	const [notificationsClicked, setNotificationsClicked] = useState(false);
@@ -18,6 +18,8 @@ const TopBar = (props) => {
 	const notificationsRef = useRef(null);
 	const history = useHistory();
 
+	const user = useSelector((state) => state);
+
 	useEffect(() => {
 		const checkForNewNotifications = async () => {
 			const query = await Firebase.queryNotifications();
@@ -28,7 +30,7 @@ const TopBar = (props) => {
 
 		const checkForNewFriends = async () => {
 			const numberOfNewFriends = await Firebase.getNumberOfNewFriends(
-				props.userUID
+				user.userUID
 			);
 			setNewFriends(numberOfNewFriends);
 		};
@@ -108,7 +110,7 @@ const TopBar = (props) => {
 	);
 
 	const rightSection =
-		props.userUID === null ? (
+		user.userUID === null ? (
 			<div id="top-bar-right-section">
 				<div id="top-bar-sign-in-link-container">
 					<a id="top-bar-sign-in-link" href="/">
@@ -182,9 +184,9 @@ const TopBar = (props) => {
 						<img
 							alt="profile"
 							src={
-								Firebase.userInfo !== undefined &&
-								Firebase.userInfo.profileImage !== undefined
-									? Firebase.userInfo.profileImage
+								user.userInfo !== undefined &&
+								user.userInfo.profileImage !== undefined
+									? user.userInfo.profileImage
 									: 'https://www.goodreads.com/assets/nophoto/user/u_60x60-267f0ca0ea48fd3acfd44b95afa64f01.png'
 							}
 						></img>
@@ -195,9 +197,9 @@ const TopBar = (props) => {
 					>
 						<div id="profile-drop-down-top-section">
 							<span>
-								{Firebase.userInfo !== undefined &&
-								Firebase.userInfo.firstName !== undefined
-									? Firebase.userInfo.firstName.toUpperCase()
+								{user.userInfo !== undefined &&
+								user.userInfo.firstName !== undefined
+									? user.userInfo.firstName.toUpperCase()
 									: ''}
 							</span>
 							<ul>
@@ -245,7 +247,7 @@ const TopBar = (props) => {
 		);
 
 	const browseDropDownGenresList =
-		props.userUID === null ? (
+		user.userUID === null ? (
 			<div id="browse-drop-down-right-section">
 				<span>GENRES</span>
 				<ul>
@@ -291,9 +293,9 @@ const TopBar = (props) => {
 			<div id="browse-drop-down-right-section">
 				<span>FAVORITE GENRES</span>
 				<ul>
-					{Firebase.userInfo !== undefined &&
-					Firebase.userInfo.favoriteGenres !== undefined
-						? Firebase.userInfo.favoriteGenres.map((genre) => (
+					{user.userInfo !== undefined &&
+					user.userInfo.favoriteGenres !== undefined
+						? user.userInfo.favoriteGenres.map((genre) => (
 								<li key={genre}>
 									<a href="/">{genre}</a>
 								</li>
@@ -367,15 +369,6 @@ const TopBar = (props) => {
 			{rightSection}
 		</div>
 	);
-};
-
-TopBar.propTypes = {
-	userUID: PropTypes.string,
-	userInfo: PropTypes.shape({
-		profileImage: PropTypes.string,
-		firstName: PropTypes.string,
-		favoriteGenres: PropTypes.arrayOf(PropTypes.string),
-	}),
 };
 
 export default TopBar;

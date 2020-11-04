@@ -1,20 +1,22 @@
 import React from 'react';
 import DashboardUpdates from './DashboardUpdates';
 import TopBar from './TopBar';
-import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import './styles/Dashboard.css';
 
-const Dashboard = (props) => {
+const Dashboard = () => {
+	const user = useSelector((state) => state);
+
 	return (
 		<div id="user-home">
-			<TopBar userUID={props.userUID} userInfo={props.userInfo} />
+			<TopBar />
 			<div id="dashboard">
 				<div id="dashboard-shelf">
 					<div id="dashboard-shelf-currently-reading">
 						<h2 id="dashboard-shelf-currently-reading-h2">CURRENTLY READING</h2>
-						{props.userInfo !== undefined &&
-						props.userInfo.readingBooks !== undefined
-							? props.userInfo.readingBooks.map((book, index) => {
+						{user.userInfo !== undefined &&
+						user.userInfo.readingBooks !== undefined
+							? user.userInfo.readingBooks.map((book, index) => {
 									if (index > 1) {
 										return null;
 									}
@@ -57,7 +59,7 @@ const Dashboard = (props) => {
 							  })
 							: null}
 						<span id="dashboard-shelf-currently-reading-bottom">
-							<a href={`/review/list/${props.userUID}?shelf=currently-reading`}>
+							<a href={`/review/list/${user.userUID}?shelf=currently-reading`}>
 								View all books
 							</a>
 							<span>·</span>
@@ -69,9 +71,9 @@ const Dashboard = (props) => {
 					<div id="dashboard-shelf-want-to-read">
 						<h2 id="dashboard-shelf-want-to-read-h2">WANT TO READ</h2>
 						<div id="dashboard-shelf-want-to-read-grid">
-							{props.userInfo !== undefined &&
-							props.userInfo.wantToReadBooks !== undefined
-								? props.userInfo.wantToReadBooks.map((book, index) => {
+							{user.userInfo !== undefined &&
+							user.userInfo.wantToReadBooks !== undefined
+								? user.userInfo.wantToReadBooks.map((book, index) => {
 										if (index > 5) {
 											return null;
 										}
@@ -89,7 +91,7 @@ const Dashboard = (props) => {
 						</div>
 						<a
 							id="view-all-to-read"
-							href={`/review/list/${props.userUID}?shelf=to-read`}
+							href={`/review/list/${user.userUID}?shelf=to-read`}
 						>
 							View all books
 						</a>
@@ -98,37 +100,37 @@ const Dashboard = (props) => {
 						<h2 id="bookshelves-h2">BOOKSHELVES</h2>
 						<div id="dashboard-shelf-bookshelves-bottom">
 							<div id="dashboard-shelf-bookshelves-numbers">
-								<a href={`/review/list/${props.userUID}?shelf=to-read`}>
-									{props.userInfo !== undefined &&
-									props.userInfo.wantToReadBooks !== undefined
-										? props.userInfo.wantToReadBooks.length
+								<a href={`/review/list/${user.userUID}?shelf=to-read`}>
+									{user.userInfo !== undefined &&
+									user.userInfo.wantToReadBooks !== undefined
+										? user.userInfo.wantToReadBooks.length
 										: null}
 								</a>
 								<a
-									href={`/review/list/${props.userUID}?shelf=currently-reading`}
+									href={`/review/list/${user.userUID}?shelf=currently-reading`}
 								>
-									{props.userInfo !== undefined &&
-									props.userInfo.readingBooks !== undefined
-										? props.userInfo.readingBooks.length
+									{user.userInfo !== undefined &&
+									user.userInfo.readingBooks !== undefined
+										? user.userInfo.readingBooks.length
 										: null}
 								</a>
-								<a href={`/review/list/${props.userUID}?shelf=read`}>
-									{props.userInfo !== undefined &&
-									props.userInfo.numberOfReadBooks !== undefined
-										? props.userInfo.numberOfReadBooks
+								<a href={`/review/list/${user.userUID}?shelf=read`}>
+									{user.userInfo !== undefined &&
+									user.userInfo.numberOfReadBooks !== undefined
+										? user.userInfo.numberOfReadBooks
 										: null}
 								</a>
 							</div>
 							<div id="dashboard-shelf-bookshelves-titles">
 								<a
-									href={`/review/list/${props.userUID}?shelf=currently-reading`}
+									href={`/review/list/${user.userUID}?shelf=currently-reading`}
 								>
 									Want to Read
 								</a>
-								<a href={`/review/list/${props.userUID}?shelf=to-read`}>
+								<a href={`/review/list/${user.userUID}?shelf=to-read`}>
 									Currently Reading
 								</a>
-								<a href={`/review/list/${props.userUID}?shelf=read`}>Read</a>
+								<a href={`/review/list/${user.userUID}?shelf=read`}>Read</a>
 							</div>
 						</div>
 					</div>
@@ -205,30 +207,6 @@ const Dashboard = (props) => {
 			</div>
 		</div>
 	);
-};
-
-Dashboard.propTypes = {
-	userUID: PropTypes.string,
-	userInfo: PropTypes.shape({
-		readingBooks: PropTypes.arrayOf(
-			PropTypes.shape({
-				page: PropTypes.string,
-				cover: PropTypes.string,
-				title: PropTypes.string,
-				author: PropTypes.string,
-				authorPage: PropTypes.string,
-				authorHasBadge: PropTypes.bool,
-			})
-		),
-		wantToReadBooks: PropTypes.arrayOf(
-			PropTypes.shape({
-				page: PropTypes.string,
-				cover: PropTypes.string,
-				title: PropTypes.string,
-			})
-		),
-		numberOfReadBooks: PropTypes.number,
-	}),
 };
 
 export default Dashboard;
