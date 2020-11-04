@@ -22,6 +22,13 @@ const App = () => {
 		updateUserInfo();
 	}, [userUID]);
 
+	const FirstPage = (props) => {
+		if (props.isLoggedIn && !props.loading) {
+			return <Dashboard userUID={userUID} userInfo={userInfo} />;
+		}
+		return <HomePage />;
+	};
+
 	firebase.auth().onAuthStateChanged((user) => {
 		if (user !== null) {
 			setUserUID(user.uid);
@@ -29,13 +36,6 @@ const App = () => {
 			setUserUID(null);
 		}
 	});
-
-	const FirstPage = (props) => {
-		if (props.isLoggedIn && !props.loading) {
-			return <Dashboard userUID={userUID} userInfo={userInfo} />;
-		}
-		return <HomePage />;
-	};
 
 	return (
 		<div className="App">

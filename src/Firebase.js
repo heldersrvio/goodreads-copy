@@ -253,6 +253,12 @@ const Firebase = (() => {
 		setUserInfo(newUserInfo);
 	};
 
+	const addBookToShelf = async (userUID, bookId, status) => {};
+
+	const removeBookFromShelf = async (userUID, bookId) => {};
+
+	const updateBookInShelf = async (userUID, bookId, progress) => {};
+
 	return {
 		queryBooks,
 		queryNotifications,
@@ -267,6 +273,9 @@ const Firebase = (() => {
 		queryBookInstanceDetails,
 		signUp,
 		modifyUserInfo,
+		addBookToShelf,
+		removeBookFromShelf,
+		updateBookInShelf,
 	};
 })();
 
