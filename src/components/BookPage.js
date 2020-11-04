@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import Firebase from '../Firebase';
 //import TopBar from './TopBar';
@@ -8,6 +9,8 @@ const BookPage = (props) => {
 	const [enlargingCover, setEnlargingCover] = useState(false);
 	const [savingShelf, setSavingShelf] = useState(false);
 
+	const user = useSelector((state) => state);
+
 	const displayRemoveBookConfirm = () => {
 		window.confirm(
 			'Removing a book deletes your rating, review, etc. Remove this book from all your shelves?'
@@ -16,7 +19,7 @@ const BookPage = (props) => {
 
 	const removeBookSafely = () => {
 		if (displayRemoveBookConfirm()) {
-			Firebase.removeBookFromShelf(props.userUID, props.book.id);
+			Firebase.removeBookFromShelf(user.userUID, props.book.id);
 		}
 	};
 
@@ -30,11 +33,7 @@ const BookPage = (props) => {
 				className="book-page-want-to-read-button"
 				onClick={async () => {
 					setSavingShelf(true);
-					await Firebase.addBookToShelf(
-						props.userUID,
-						props.book.id,
-						'to-read'
-					);
+					await Firebase.addBookToShelf(user.userUID, props.book.id, 'to-read');
 					setSavingShelf(false);
 				}}
 			>

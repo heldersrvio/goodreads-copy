@@ -1,7 +1,7 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import DashboardUpdates from './DashboardUpdates';
 import TopBar from './TopBar';
-import { useSelector } from 'react-redux';
 import './styles/Dashboard.css';
 
 const Dashboard = () => {
