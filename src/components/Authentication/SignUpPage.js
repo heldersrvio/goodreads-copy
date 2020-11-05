@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import './styles/SignUpPage.css';
+import '../styles/Authentication/SignUpPage.css';
 
 const SignUpPage = (props) => {
 	const [email, setEmail] = useState('');

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import reducer from './reducers/reducer';
-import HomePage from './components/HomePage';
-import Dashboard from './components/Dashboard';
+import HomePage from './components/Authentication/HomePage';
+import Dashboard from './components/Dashboard/Dashboard';
 import Firebase from './Firebase';
 import firebase from 'firebase/app';
 import 'firebase/auth';

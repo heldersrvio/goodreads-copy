@@ -2,7 +2,7 @@ import React from 'react';
 import HomePageTopSection from './HomePageTopSection';
 import HomePageBottomSectiom from './HomePageBottomSection';
 import HomePageFootBar from './HomePageFootBar';
-import './styles/HomePage.css';
+import '../styles/Authentication/HomePage.css';
 
 const HomePage = () => {
 	return (

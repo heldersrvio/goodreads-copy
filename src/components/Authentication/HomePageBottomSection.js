@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import './styles/HomePageBottomSection.css';
+import '../styles/Authentication/HomePageBottomSection.css';
 
 const HomePageBottomSection = (props) => {
 	const [searchTerm, setSearchTerm] = useState('');

@@ -3,8 +3,8 @@ import { useHistory } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { formatDistance } from 'date-fns';
 import TopBarSearchBar from './TopBarSearchBar';
-import Firebase from '../Firebase';
-import './styles/TopBar.css';
+import Firebase from '../../Firebase';
+import '../styles/Global/TopBar.css';
 
 const TopBar = () => {
 	const [browseClicked, setBrowseClicked] = useState(false);

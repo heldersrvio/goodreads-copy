@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import HomePageTopBar from './HomePageTopBar';
-import Firebase from '../Firebase';
-import './styles/HomePageTopSection.css';
+import Firebase from '../../Firebase';
+import '../styles/Authentication/HomePageTopSection.css';
 
 const HomePageTopSection = () => {
 	const [name, setName] = useState('');

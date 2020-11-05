@@ -5,10 +5,10 @@ import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import reducer from './reducers/reducer';
 import App from './App';
-import SignInPage from './components/SignInPage';
-import SignUpPage from './components/SignUpPage';
-import SignOutPage from './components/SignOutPage';
-import ForgotPasswordPage from './components/ForgotPasswordPage';
+import SignInPage from './components/Authentication/SignInPage';
+import SignUpPage from './components/Authentication/SignUpPage';
+import SignOutPage from './components/Authentication/SignOutPage';
+import ForgotPasswordPage from './components/Authentication/ForgotPasswordPage';
 
 const store = createStore(reducer.userReducer);
 

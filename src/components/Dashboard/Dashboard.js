@@ -1,8 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import DashboardUpdates from './DashboardUpdates';
-import TopBar from './TopBar';
-import './styles/Dashboard.css';
+import TopBar from '../Global/TopBar';
+import '../styles/Dashboard/Dashboard.css';
 
 const Dashboard = () => {
 	const user = useSelector((state) => state);

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './styles/DashboardUpdates.css';
+import '../styles/Dashboard/DashboardUpdates.css';
 
 const DashboardUpdates = () => {
 	//TODO: Everything

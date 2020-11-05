@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Firebase from '../Firebase';
-import './styles/TopBarSearchBar.css';
+import Firebase from '../../Firebase';
+import '../styles/Global/TopBarSearchBar.css';
 
 const TopBarSearchBar = (props) => {
 	// TODO: loadingSpinner animation and lenses icon

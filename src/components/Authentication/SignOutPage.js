@@ -1,5 +1,5 @@
 import React from 'react';
-import './styles/SignOutPage.css';
+import '../styles/Authentication/SignOutPage.css';
 
 const SignOutPage = () => {
 	return (

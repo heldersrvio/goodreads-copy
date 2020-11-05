@@ -1,5 +1,5 @@
 import React from 'react';
-import './styles/HomePageFootBar.css';
+import '../styles/Authentication/HomePageFootBar.css';
 
 const HomePageFootBar = () => {
 	return (

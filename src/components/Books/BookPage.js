@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import Firebase from '../Firebase';
+import Firebase from '../../Firebase';
 //import TopBar from './TopBar';
 //import HomePageFootBar from './HomePageFootBar';
 

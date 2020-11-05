@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import './styles/ForgotPasswordPage.css';
+import '../styles/Authentication/ForgotPasswordPage.css';
 
 const ForgotPasswordPage = (props) => {
 	const [email, setEmail] = useState('');

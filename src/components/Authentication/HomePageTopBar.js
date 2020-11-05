@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import Firebase from '../Firebase';
-import './styles/HomePageTopBar.css';
+import Firebase from '../../Firebase';
+import '../styles/Authentication/HomePageTopBar.css';
 
 const HomePageTopBar = () => {
 	const [email, setEmail] = useState('');
