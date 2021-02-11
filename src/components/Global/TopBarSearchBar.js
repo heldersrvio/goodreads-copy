@@ -31,7 +31,7 @@ const TopBarSearchBar = (props) => {
 											<strong>
 												{book.series === undefined
 													? book.title
-													: `${book.title} (${book.series}, #${book.seriesInstance})`}
+													: `${book.title} (${book.series.name}, #${book.seriesInstance})`}
 											</strong>
 										</span>
 										<div className="search-results-book-card-author">

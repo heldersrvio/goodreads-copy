@@ -17,13 +17,14 @@ const Firebase = (() => {
 
 	const database = firebase.firestore();
 
-	const queryBooks = async (searchString) => {
+	const queryAllBooks = async () => {
 		try {
 			const bookQuery = await database.collection('books').get();
-			const books = await Promise.all(
+			return await Promise.all(
 				bookQuery.docs.map(async (document) => {
 					const bookObj = {};
 					const data = document.data();
+					bookObj.id = document.id;
 					bookObj.title = data.title;
 					bookObj.cover = data.cover;
 					if (data.series !== undefined) {
@@ -32,17 +33,69 @@ const Firebase = (() => {
 							.collection('series')
 							.doc(data.series)
 							.get();
-						bookObj.series = seriesQuery.data().name;
+						bookObj.series = { ...seriesQuery.data() };
 					}
-					const authorQuery = await database
+					bookObj.authorNames = [];
+					bookObj.authorFunctions = [];
+					bookObj.authorPages = [];
+					const mainAuthorQuery = await database
 						.collection('authors')
 						.doc(data.authorId)
 						.get();
-					bookObj.author = authorQuery.data().name;
+					const otherAuthorsQuery =
+						data.otherAuthors !== undefined
+							? await Promise.all(
+									data.otherAuthors.map(
+										async (author) =>
+											await database.collection('authors').doc(author.id).get()
+									)
+							  )
+							: null;
+					const otherAuthorsQueryData =
+						otherAuthorsQuery !== null
+							? otherAuthorsQuery.map((document) => document.data())
+							: null;
+					if (
+						otherAuthorsQueryData !== null &&
+						otherAuthorsQueryData[0] === undefined
+					) {
+						console.log(bookObj.title);
+					}
+					bookObj.authorNames.push(mainAuthorQuery.data().name);
+					bookObj.authorPages.push(
+						`/author/show/${data.authorId}${mainAuthorQuery
+							.data()
+							.name.replace(' ', '_')}`
+					);
+					bookObj.authorIsMember = mainAuthorQuery.data().GRMember;
+					bookObj.authorFollowerCount =
+						mainAuthorQuery.data().followersIds !== undefined
+							? mainAuthorQuery.data().followersIds.length
+							: 0;
+					if (otherAuthorsQueryData !== null) {
+						for (let i = 0; i < otherAuthorsQueryData.length; i++) {
+							bookObj.authorNames.push(otherAuthorsQueryData[i].name);
+							bookObj.authorPages.push(
+								`/author/show/${data.otherAuthors[i].id}${otherAuthorsQueryData[
+									i
+								].name.replace(' ', '_')}`
+							);
+							bookObj.authorFunctions.push(data.otherAuthors[i].role);
+						}
+					}
+
 					return bookObj;
 				})
 			);
-			return books.filter(
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const queryBooks = async (searchString) => {
+		try {
+			const allBooksQuery = await queryAllBooks();
+			return allBooksQuery.filter(
 				(book) =>
 					book.title.toLowerCase().includes(searchString.toLowerCase()) ||
 					book.author.toLowerCase().includes(searchString.toLowerCase())
