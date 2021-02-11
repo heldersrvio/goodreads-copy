@@ -17,7 +17,7 @@ const Firebase = (() => {
 
 	const database = firebase.firestore();
 
-	const queryAllBooks = async () => {
+	const queryAllBooks = async (userUID) => {
 		try {
 			const bookQuery = await database.collection('books').get();
 			return await Promise.all(
@@ -33,7 +33,21 @@ const Firebase = (() => {
 							.collection('series')
 							.doc(data.series)
 							.get();
-						bookObj.series = { ...seriesQuery.data() };
+						bookObj.series = { name: seriesQuery.data().name };
+						bookObj.series.page = `/series/${
+							seriesQuery.id
+						}-${bookObj.series.name.toLowerCase().replace(' ', '-')}`;
+						const booksInSeriesQuery = await database
+							.collection('books')
+							.where('series', '==', bookObj.series.name)
+							.where('title', '!=', bookObj.title)
+							.get();
+						bookObj.series.otherBooksIds = booksInSeriesQuery.map(
+							(document) => document.id
+						);
+						bookObj.series.otherBooksCovers = booksInSeriesQuery.map(
+							(document) => document.data().cover
+						);
 					}
 					bookObj.authorNames = [];
 					bookObj.authorFunctions = [];
@@ -84,6 +98,54 @@ const Firebase = (() => {
 						}
 					}
 
+					if (userUID !== null) {
+						const bookInstanceQuery = await database
+							.collection('userBooksInstances')
+							.where('userId', '==', userUID)
+							.where('bookId', '==', bookObj.id)
+							.get();
+						const bookInstanceQueryResults = bookInstanceQuery.map((document) =>
+							document.data()
+						);
+						if (bookInstanceQueryResults.length > 0) {
+							bookObj.userStatus = bookInstanceQueryResults[0].status;
+							bookObj.userProgress = bookInstanceQueryResults[0].progress;
+						}
+						const allBookInstancesQuery = await database
+							.collection('userBooksInstances')
+							.where('bookId', '==', bookObj.id)
+							.get();
+						bookObj.fiveRatings = 0;
+						bookObj.fourRatings = 0;
+						bookObj.threeRatings = 0;
+						bookObj.twoRatings = 0;
+						bookObj.oneRatings = 0;
+						bookObj.addedBy = 0;
+						bookObj.toReads = 0;
+						allBookInstancesQuery.forEach((document) => {
+							bookObj.addedBy++;
+							if (document.data().status === 'to-read') {
+								bookObj.toReads++;
+							}
+							switch (document.data().rating) {
+								case 5:
+									bookObj.fiveRatings++;
+									break;
+								case 4:
+									bookObj.fourRatings++;
+									break;
+								case 3:
+									bookObj.threeRatings++;
+									break;
+								case 2:
+									bookObj.twoRatings++;
+									break;
+								default:
+									bookObj.oneRatings++;
+							}
+						});
+					}
+
 					return bookObj;
 				})
 			);
@@ -92,9 +154,9 @@ const Firebase = (() => {
 		}
 	};
 
-	const queryBooks = async (searchString) => {
+	const queryBooks = async (userUID, searchString) => {
 		try {
-			const allBooksQuery = await queryAllBooks();
+			const allBooksQuery = await queryAllBooks(userUID);
 			return allBooksQuery.filter(
 				(book) =>
 					book.title.toLowerCase().includes(searchString.toLowerCase()) ||

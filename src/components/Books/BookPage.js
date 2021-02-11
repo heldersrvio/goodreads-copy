@@ -154,7 +154,7 @@ BookPage.propTypes = {
 		toReads: PropTypes.number,
 		thisEditionRating: PropTypes.number,
 		thisEditionRatings: PropTypes.number,
-		thisEdtionAddedBy: PropTypes.number,
+		thisEditionAddedBy: PropTypes.number,
 		preSynopsis: PropTypes.string,
 		synopsis: PropTypes.string,
 		amazonLink: PropTypes.string,

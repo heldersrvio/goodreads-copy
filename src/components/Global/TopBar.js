@@ -365,7 +365,7 @@ const TopBar = () => {
 					{browseDropDown}
 				</div>
 			</div>
-			<TopBarSearchBar />
+			<TopBarSearchBar userUID={user.userUID} />
 			{rightSection}
 		</div>
 	);

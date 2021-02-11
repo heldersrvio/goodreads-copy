@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Firebase from '../../Firebase';
+import PropTypes from 'prop-types';
 import '../styles/Global/TopBarSearchBar.css';
 
 const TopBarSearchBar = (props) => {
@@ -13,7 +14,10 @@ const TopBarSearchBar = (props) => {
 			if (searchBarInput !== '') {
 				setLoading(true);
 			}
-			const queryResults = await Firebase.queryBooks(searchBarInput);
+			const queryResults = await Firebase.queryBooks(
+				props.userUID,
+				searchBarInput
+			);
 			return (
 				<div id="search-books-results">
 					<div id="search-books-results-top-section">
@@ -98,6 +102,10 @@ const TopBarSearchBar = (props) => {
 			{resultsSection}
 		</div>
 	);
+};
+
+TopBarSearchBar.propTypes = {
+	userUID: PropTypes.string,
 };
 
 export default TopBarSearchBar;
