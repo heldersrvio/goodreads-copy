@@ -17,6 +17,146 @@ const Firebase = (() => {
 
 	const database = firebase.firestore();
 
+	const getSeriesDetailsForBook = async (rootBook, bookTitle) => {
+		const rootBookQuery = await database
+			.collection('rootBooks')
+			.doc(rootBook)
+			.get();
+		const seriesInfo = {};
+		if (rootBookQuery.data().series !== undefined) {
+			seriesInfo.seriesInstance = rootBookQuery.data().seriesInstance;
+			const seriesQuery = await database
+				.collection('series')
+				.doc(rootBookQuery.data().series)
+				.get();
+			seriesInfo.series = { name: seriesQuery.data().name };
+			seriesInfo.series.page = `/series/${
+				seriesQuery.id
+			}-${seriesInfo.series.name.toLowerCase().replace(' ', '-')}`;
+			const booksInSeriesQuery = await database
+				.collection('books')
+				.where('series', '==', seriesInfo.series.name)
+				.where('title', '!=', bookTitle)
+				.get();
+			seriesInfo.series.otherBooksIds = booksInSeriesQuery.docs.map(
+				(document) => document.id
+			);
+			seriesInfo.series.otherBooksCovers = booksInSeriesQuery.docs.map(
+				(document) => document.data().cover
+			);
+		}
+		return seriesInfo;
+	};
+
+	const getMainAuthorDetailsForBook = async (rootBook) => {
+		const rootBookQuery = await database
+			.collection('rootBooks')
+			.doc(rootBook)
+			.get();
+		const mainAuthorQuery = await database
+			.collection('authors')
+			.doc(rootBookQuery.data().authorId)
+			.get();
+		const authorDetails = {};
+		authorDetails.authorNames = [];
+		authorDetails.authorPages = [];
+		authorDetails.authorNames.push(mainAuthorQuery.data().name);
+		authorDetails.authorPages.push(
+			`/author/show/${
+				rootBookQuery.data().authorId
+			}${mainAuthorQuery.data().name.replace(' ', '_')}`
+		);
+		authorDetails.authorIsMember = mainAuthorQuery.data().GRMember;
+		authorDetails.authorFollowerCount =
+			mainAuthorQuery.data().followersIds !== undefined
+				? mainAuthorQuery.data().followersIds.length
+				: 0;
+		return authorDetails;
+	};
+
+	const getOtherAuthorsDetailsForBook = async (
+		otherAuthors,
+		authorNames,
+		authorPages,
+		authorFunctions
+	) => {
+		const otherAuthorsQuery =
+			otherAuthors !== undefined
+				? await Promise.all(
+						otherAuthors.map(
+							async (author) =>
+								await database.collection('authors').doc(author.id).get()
+						)
+				  )
+				: null;
+		const otherAuthorsQueryData =
+			otherAuthorsQuery !== null
+				? otherAuthorsQuery.map((document) => document.data())
+				: null;
+		if (otherAuthorsQueryData !== null) {
+			for (let i = 0; i < otherAuthorsQueryData.length; i++) {
+				authorNames.push(otherAuthorsQueryData[i].name);
+				authorPages.push(
+					`/author/show/${otherAuthors[i].id}${otherAuthorsQueryData[
+						i
+					].name.replace(' ', '_')}`
+				);
+				authorFunctions.push(otherAuthors[i].role);
+			}
+		}
+	};
+
+	const getUserDetailsForBook = async (userUID, bookId) => {
+		if (userUID !== null) {
+			const bookInstanceQuery = await database
+				.collection('userBooksInstances')
+				.where('userId', '==', userUID)
+				.where('bookId', '==', bookId)
+				.get();
+			const bookInstanceQueryResults = bookInstanceQuery.docs.map((document) =>
+				document.data()
+			);
+			const userDetails = {};
+			if (bookInstanceQueryResults.length > 0) {
+				userDetails.userStatus = bookInstanceQueryResults[0].status;
+				userDetails.userProgress = bookInstanceQueryResults[0].progress;
+			}
+			const allBookInstancesQuery = await database
+				.collection('userBooksInstances')
+				.where('bookId', '==', bookId)
+				.get();
+			userDetails.fiveRatings = 0;
+			userDetails.fourRatings = 0;
+			userDetails.threeRatings = 0;
+			userDetails.twoRatings = 0;
+			userDetails.oneRatings = 0;
+			userDetails.addedBy = 0;
+			userDetails.toReads = 0;
+			allBookInstancesQuery.docs.forEach((document) => {
+				userDetails.addedBy++;
+				if (document.data().status === 'to-read') {
+					userDetails.toReads++;
+				}
+				switch (document.data().rating) {
+					case 5:
+						userDetails.fiveRatings++;
+						break;
+					case 4:
+						userDetails.fourRatings++;
+						break;
+					case 3:
+						userDetails.threeRatings++;
+						break;
+					case 2:
+						userDetails.twoRatings++;
+						break;
+					default:
+						userDetails.oneRatings++;
+				}
+			});
+		}
+	};
+
 	const queryAllBooks = async (userUID) => {
 		try {
 			const bookQuery = await database.collection('books').get();
@@ -27,123 +167,24 @@ const Firebase = (() => {
 					bookObj.id = document.id;
 					bookObj.title = data.title;
 					bookObj.cover = data.cover;
-					const rootBookQuery = await database
-						.collection('rootBooks')
-						.doc(data.rootBook)
-						.get();
-					if (rootBookQuery.data().series !== undefined) {
-						bookObj.seriesInstance = rootBookQuery.data().seriesInstance;
-						const seriesQuery = await database
-							.collection('series')
-							.doc(rootBookQuery.data().series)
-							.get();
-						bookObj.series = { name: seriesQuery.data().name };
-						bookObj.series.page = `/series/${
-							seriesQuery.id
-						}-${bookObj.series.name.toLowerCase().replace(' ', '-')}`;
-						const booksInSeriesQuery = await database
-							.collection('books')
-							.where('series', '==', bookObj.series.name)
-							.where('title', '!=', bookObj.title)
-							.get();
-						bookObj.series.otherBooksIds = booksInSeriesQuery.docs.map(
-							(document) => document.id
-						);
-						bookObj.series.otherBooksCovers = booksInSeriesQuery.docs.map(
-							(document) => document.data().cover
-						);
-					}
-					bookObj.authorNames = [];
-					bookObj.authorFunctions = [];
-					bookObj.authorPages = [];
-					const mainAuthorQuery = await database
-						.collection('authors')
-						.doc(rootBookQuery.data().authorId)
-						.get();
-					const otherAuthorsQuery =
-						data.otherAuthors !== undefined
-							? await Promise.all(
-									data.otherAuthors.map(
-										async (author) =>
-											await database.collection('authors').doc(author.id).get()
-									)
-							  )
-							: null;
-					const otherAuthorsQueryData =
-						otherAuthorsQuery !== null
-							? otherAuthorsQuery.map((document) => document.data())
-							: null;
-					bookObj.authorNames.push(mainAuthorQuery.data().name);
-					bookObj.authorPages.push(
-						`/author/show/${data.authorId}${mainAuthorQuery
-							.data()
-							.name.replace(' ', '_')}`
+					const seriesDetails = await getSeriesDetailsForBook(
+						data.rootBook,
+						bookObj.title
 					);
-					bookObj.authorIsMember = mainAuthorQuery.data().GRMember;
-					bookObj.authorFollowerCount =
-						mainAuthorQuery.data().followersIds !== undefined
-							? mainAuthorQuery.data().followersIds.length
-							: 0;
-					if (otherAuthorsQueryData !== null) {
-						for (let i = 0; i < otherAuthorsQueryData.length; i++) {
-							bookObj.authorNames.push(otherAuthorsQueryData[i].name);
-							bookObj.authorPages.push(
-								`/author/show/${data.otherAuthors[i].id}${otherAuthorsQueryData[
-									i
-								].name.replace(' ', '_')}`
-							);
-							bookObj.authorFunctions.push(data.otherAuthors[i].role);
-						}
-					}
-
-					if (userUID !== null) {
-						const bookInstanceQuery = await database
-							.collection('userBooksInstances')
-							.where('userId', '==', userUID)
-							.where('bookId', '==', bookObj.id)
-							.get();
-						const bookInstanceQueryResults = bookInstanceQuery.docs.map(
-							(document) => document.data()
-						);
-						if (bookInstanceQueryResults.length > 0) {
-							bookObj.userStatus = bookInstanceQueryResults[0].status;
-							bookObj.userProgress = bookInstanceQueryResults[0].progress;
-						}
-						const allBookInstancesQuery = await database
-							.collection('userBooksInstances')
-							.where('bookId', '==', bookObj.id)
-							.get();
-						bookObj.fiveRatings = 0;
-						bookObj.fourRatings = 0;
-						bookObj.threeRatings = 0;
-						bookObj.twoRatings = 0;
-						bookObj.oneRatings = 0;
-						bookObj.addedBy = 0;
-						bookObj.toReads = 0;
-						allBookInstancesQuery.docs.forEach((document) => {
-							bookObj.addedBy++;
-							if (document.data().status === 'to-read') {
-								bookObj.toReads++;
-							}
-							switch (document.data().rating) {
-								case 5:
-									bookObj.fiveRatings++;
-									break;
-								case 4:
-									bookObj.fourRatings++;
-									break;
-								case 3:
-									bookObj.threeRatings++;
-									break;
-								case 2:
-									bookObj.twoRatings++;
-									break;
-								default:
-									bookObj.oneRatings++;
-							}
-						});
-					}
-
+					Object.assign(bookObj, seriesDetails);
+					const mainAuthorDetails = await getMainAuthorDetailsForBook(
+						data.rootBook
+					);
+					Object.assign(bookObj, mainAuthorDetails);
+					bookObj.authorFunctions = [];
+					await getOtherAuthorsDetailsForBook(
+						data.otherAuthors,
+						bookObj.authorNames,
+						bookObj.authorPages,
+						bookObj.authorFunctions
+					);
+					const userDetails = await getUserDetailsForBook(userUID, bookObj.id);
+					Object.assign(bookObj, userDetails);
 					return bookObj;
 				})
 			);
