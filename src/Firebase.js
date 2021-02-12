@@ -42,10 +42,10 @@ const Firebase = (() => {
 							.where('series', '==', bookObj.series.name)
 							.where('title', '!=', bookObj.title)
 							.get();
-						bookObj.series.otherBooksIds = booksInSeriesQuery.map(
+						bookObj.series.otherBooksIds = booksInSeriesQuery.docs.map(
 							(document) => document.id
 						);
-						bookObj.series.otherBooksCovers = booksInSeriesQuery.map(
+						bookObj.series.otherBooksCovers = booksInSeriesQuery.docs.map(
 							(document) => document.data().cover
 						);
 					}
@@ -69,12 +69,6 @@ const Firebase = (() => {
 						otherAuthorsQuery !== null
 							? otherAuthorsQuery.map((document) => document.data())
 							: null;
-					if (
-						otherAuthorsQueryData !== null &&
-						otherAuthorsQueryData[0] === undefined
-					) {
-						console.log(bookObj.title);
-					}
 					bookObj.authorNames.push(mainAuthorQuery.data().name);
 					bookObj.authorPages.push(
 						`/author/show/${data.authorId}${mainAuthorQuery
@@ -104,8 +98,8 @@ const Firebase = (() => {
 							.where('userId', '==', userUID)
 							.where('bookId', '==', bookObj.id)
 							.get();
-						const bookInstanceQueryResults = bookInstanceQuery.map((document) =>
-							document.data()
+						const bookInstanceQueryResults = bookInstanceQuery.docs.map(
+							(document) => document.data()
 						);
 						if (bookInstanceQueryResults.length > 0) {
 							bookObj.userStatus = bookInstanceQueryResults[0].status;
@@ -122,7 +116,7 @@ const Firebase = (() => {
 						bookObj.oneRatings = 0;
 						bookObj.addedBy = 0;
 						bookObj.toReads = 0;
-						allBookInstancesQuery.forEach((document) => {
+						allBookInstancesQuery.docs.forEach((document) => {
 							bookObj.addedBy++;
 							if (document.data().status === 'to-read') {
 								bookObj.toReads++;
