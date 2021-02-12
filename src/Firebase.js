@@ -27,11 +27,15 @@ const Firebase = (() => {
 					bookObj.id = document.id;
 					bookObj.title = data.title;
 					bookObj.cover = data.cover;
-					if (data.series !== undefined) {
-						bookObj.seriesInstance = data.seriesInstance;
+					const rootBookQuery = await database
+						.collection('rootBooks')
+						.doc(data.rootBook)
+						.get();
+					if (rootBookQuery.data().series !== undefined) {
+						bookObj.seriesInstance = rootBookQuery.data().seriesInstance;
 						const seriesQuery = await database
 							.collection('series')
-							.doc(data.series)
+							.doc(rootBookQuery.data().series)
 							.get();
 						bookObj.series = { name: seriesQuery.data().name };
 						bookObj.series.page = `/series/${
@@ -54,7 +58,7 @@ const Firebase = (() => {
 					bookObj.authorPages = [];
 					const mainAuthorQuery = await database
 						.collection('authors')
-						.doc(data.authorId)
+						.doc(rootBookQuery.data().authorId)
 						.get();
 					const otherAuthorsQuery =
 						data.otherAuthors !== undefined
