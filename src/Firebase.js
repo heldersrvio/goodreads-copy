@@ -359,6 +359,80 @@ const Firebase = (() => {
 		);
 	};
 
+	const getAlsoEnjoyedBooksForBook = async (rootBook) => {
+		const rootBookQuery = await database
+			.collection('rootBooks')
+			.doc(rootBook)
+			.get();
+		if (rootBookQuery.data().alsoEnjoyed === undefined) {
+			return [];
+		}
+		return await Promise.all(
+			rootBookQuery.data().alsoEnjoyed.map(async (book) => {
+				const bookQuery = await database
+					.collection('books')
+					.where('rootBook', '==', book)
+					.where('mainEdition', '==', true)
+					.get();
+				return {
+					id: bookQuery.docs[0].id,
+					cover: bookQuery.docs[0].data().cover,
+				};
+			})
+		);
+	};
+
+	const getQuizQuestionsForBook = async (rootBook) => {
+		const questions = [];
+		const quizQuery = await database
+			.collection('quizzes')
+			.where('books', 'array-contains', rootBook)
+			.get();
+		quizQuery.docs.forEach((document) => {
+			document.data().questions.forEach((question) => {
+				const questionObject = {
+					quizId: document.id,
+					quizTitle: document.data().title,
+				};
+				questionObject.question = question.mainQuestion;
+				questionObject.options = question.answers;
+				questions.push(questionObject);
+			});
+		});
+		return questions;
+	};
+
+	const getArticlesForBook = async (rootBook) => {
+		const articleQuery = await database
+			.collection('articles')
+			.where('featuredBooks', 'array-contains', rootBook)
+			.get();
+		return articleQuery.docs.map((document) => {
+			return {
+				id: document.id,
+				title: document.data().title,
+				image: document.data().image,
+				content: document.data().content,
+				likeCount: document.data().usersWhoLiked.length,
+				commentCount: document.data().comments.length,
+			};
+		});
+	};
+
+	const getQuotesForBook = async (rootBook) => {
+		const quoteQuery = await database
+			.collection('quotes')
+			.where('rootBook', '==', rootBook)
+			.get();
+		return quoteQuery.docs.map((document) => {
+			return {
+				id: document.id,
+				text: document.data().text,
+				likeCount: document.data().usersWhoLiked.length,
+			};
+		});
+	};
+
 	const queryAllBooks = async (userUID) => {
 		try {
 			const bookQuery = await database.collection('books').get();
@@ -402,6 +476,12 @@ const Firebase = (() => {
 					bookObj.publishedBooksByAuthor = await getPublishedBooksByAuthor(
 						data.rootBook
 					);
+					bookObj.alsoEnjoyedBooks = await getAlsoEnjoyedBooksForBook(
+						data.rootBook
+					);
+					bookObj.articles = await getArticlesForBook(data.rootBook);
+					bookObj.quizQuestions = await getQuizQuestionsForBook(data.rootBook);
+					bookObj.quotes = await getQuotesForBook(data.rootBook);
 					return bookObj;
 				})
 			);
@@ -652,6 +732,7 @@ const Firebase = (() => {
 	const updateBookInShelf = async (userUID, bookId, progress) => {};
 
 	return {
+		queryAllBooks,
 		queryBooks,
 		queryNotifications,
 		getNumberOfNewFriends,

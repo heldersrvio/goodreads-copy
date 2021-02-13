@@ -209,7 +209,6 @@ BookPage.propTypes = {
 				quizId: PropTypes.string,
 				quizTitle: PropTypes.string,
 				question: PropTypes.string,
-				subQuestion: PropTypes.string,
 				options: PropTypes.arrayOf(PropTypes.string),
 			})
 		),
