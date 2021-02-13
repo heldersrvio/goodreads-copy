@@ -278,6 +278,87 @@ const Firebase = (() => {
 		return firstEditionInfo;
 	};
 
+	const getListsForBook = async (bookId) => {
+		const listsQuery = await database
+			.collection('lists')
+			.where('books', 'array-contains', bookId)
+			.get();
+		const lists = await Promise.all(
+			listsQuery.docs.map(async (document) => {
+				const list = {};
+				list.id = document.id;
+				list.bookIds = document.data().books;
+				list.voterCount = document.data().userVotes.length;
+				list.bookTitles = [];
+				list.bookCovers = [];
+				await Promise.all(
+					list.bookIds.map(async (id) => {
+						const bookQuery = await database.collection('books').doc(id).get();
+						list.bookTitles.push(bookQuery.data().title);
+						list.bookCovers.push(bookQuery.data().cover);
+					})
+				);
+			})
+		);
+		return lists;
+	};
+
+	const getGenresForBook = async (rootBook) => {
+		const shelfQuery = await database
+			.collection('shelves')
+			.where('rootBooks', 'array-contains', rootBook)
+			.where('genre', '!=', null)
+			.get();
+		const genreDictionary = {};
+		await Promise.all(
+			shelfQuery.docs.map(async (document) => {
+				const genreQuery = await database
+					.collection('genres')
+					.doc(document.data().genre)
+					.get();
+				if (genreDictionary[genreQuery.data().name] === undefined) {
+					genreDictionary[genreQuery.data().name] = 1;
+				} else {
+					genreDictionary[genreQuery.data().name] += 1;
+				}
+			})
+		);
+		const genres = Object.keys(genreDictionary).map((key, index) => {
+			return {
+				genre: key,
+				userCount: genreDictionary[key],
+			};
+		});
+		return genres;
+	};
+
+	const getPublishedBooksByAuthor = async (rootBook) => {
+		const rootBookQuery = await database
+			.collection('rootBooks')
+			.doc(rootBook)
+			.get();
+		const authorId = rootBookQuery.data().authorId;
+		const rootBooksByAuthorQuery = await database
+			.collection('rootBooks')
+			.where('authorId', '==', authorId)
+			.get();
+		return await Promise.all(
+			rootBooksByAuthorQuery.docs.map(async (document) => {
+				if (document.id !== rootBook) {
+					const bookQuery = await database
+						.collection('books')
+						.where('rootBook', '==', document.id)
+						.where('mainEdition', '==', true)
+						.get();
+					return {
+						id: bookQuery.docs[0].id,
+						cover: bookQuery.docs[0].data().cover,
+					};
+				}
+			})
+		);
+	};
+
 	const queryAllBooks = async (userUID) => {
 		try {
 			const bookQuery = await database.collection('books').get();
@@ -316,6 +397,11 @@ const Firebase = (() => {
 						data.rootBook
 					);
 					Object.assign(bookObj, firstEditionInfo);
+					bookObj.lists = await getListsForBook(bookObj.id);
+					bookObj.genres = await getGenresForBook(data.rootBook);
+					bookObj.publishedBooksByAuthor = await getPublishedBooksByAuthor(
+						data.rootBook
+					);
 					return bookObj;
 				})
 			);
@@ -324,13 +410,36 @@ const Firebase = (() => {
 		}
 	};
 
+	const queryAllBooksForSearchBar = async () => {
+		const bookQuery = await database.collection('books').get();
+		return await Promise.all(
+			bookQuery.docs.map(async (document) => {
+				const bookObj = {};
+				const data = document.data();
+				bookObj.id = document.id;
+				bookObj.title = data.title;
+				bookObj.cover = data.cover;
+				const seriesDetails = await getSeriesDetailsForBook(
+					data.rootBook,
+					bookObj.title
+				);
+				Object.assign(bookObj, seriesDetails);
+				const mainAuthorDetails = await getMainAuthorDetailsForBook(
+					data.rootBook
+				);
+				Object.assign(bookObj, mainAuthorDetails);
+				return bookObj;
+			})
+		);
+	};
+
 	const queryBooks = async (userUID, searchString) => {
 		try {
 			const allBooksQuery = await queryAllBooks(userUID);
 			return allBooksQuery.filter(
 				(book) =>
 					book.title.toLowerCase().includes(searchString.toLowerCase()) ||
-					book.author.toLowerCase().includes(searchString.toLowerCase())
+					book.authorNames[0].toLowerCase().includes(searchString.toLowerCase())
 			);
 		} catch (error) {
 			console.log(error);

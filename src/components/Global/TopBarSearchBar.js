@@ -39,8 +39,8 @@ const TopBarSearchBar = (props) => {
 											</strong>
 										</span>
 										<div className="search-results-book-card-author">
-											<span>{`by ${book.author}`}</span>
-											{book.hasGoodReadsAuthor ? (
+											<span>{`by ${book.authorNames[0]}`}</span>
+											{book.authorIsMember ? (
 												<span className="results-author-badge"></span>
 											) : null}
 										</div>
