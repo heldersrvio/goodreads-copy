@@ -159,7 +159,6 @@ BookPage.propTypes = {
 		synopsis: PropTypes.string,
 		amazonLink: PropTypes.string,
 		type: PropTypes.string,
-		edition: PropTypes.string,
 		publisher: PropTypes.string,
 		pages: PropTypes.number,
 		editionPublishedDate: PropTypes.instanceOf(Date),

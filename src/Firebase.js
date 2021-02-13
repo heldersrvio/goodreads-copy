@@ -135,8 +135,10 @@ const Firebase = (() => {
 			}
 			const allBookInstancesQuery = await database
 				.collection('userBooksInstances')
-				.where('bookId', '==', bookId)
 				.get();
+			userDetails.thisEditionRatings = 0;
+			userDetails.thisEditionRating = 0;
+			userDetails.thisEditionAddedBy = 0;
 			userDetails.fiveRatings = 0;
 			userDetails.fourRatings = 0;
 			userDetails.threeRatings = 0;
@@ -144,28 +146,46 @@ const Firebase = (() => {
 			userDetails.oneRatings = 0;
 			userDetails.addedBy = 0;
 			userDetails.toReads = 0;
+			const bookQuery = await database.collection('books').doc(bookId).get();
+			const rootBook = bookQuery.data().rootBook;
+			const allEditionsQuery = await database
+				.collection('books')
+				.where('rootBook', '==', rootBook)
+				.get();
+			const allEditionsQueryBooks = allEditionsQuery.docs.map(
+				(document) => document.id
+			);
 			allBookInstancesQuery.docs.forEach((document) => {
-				userDetails.addedBy++;
-				if (document.data().status === 'to-read') {
-					userDetails.toReads++;
-				}
-				switch (document.data().rating) {
-					case 5:
-						userDetails.fiveRatings++;
-						break;
-					case 4:
-						userDetails.fourRatings++;
-						break;
-					case 3:
-						userDetails.threeRatings++;
-						break;
-					case 2:
-						userDetails.twoRatings++;
-						break;
-					default:
-						userDetails.oneRatings++;
+				if (allEditionsQueryBooks.includes(document.data().bookId)) {
+					if (document.data().bookId === bookId) {
+						userDetails.thisEditionRatings++;
+						userDetails.thisEditionRating += document.data().rating;
+						userDetails.thisEditionAddedBy++;
+					}
+					userDetails.addedBy++;
+					if (document.data().status === 'to-read') {
+						userDetails.toReads++;
+					}
+					switch (document.data().rating) {
+						case 5:
+							userDetails.fiveRatings++;
+							break;
+						case 4:
+							userDetails.fourRatings++;
+							break;
+						case 3:
+							userDetails.threeRatings++;
+							break;
+						case 2:
+							userDetails.twoRatings++;
+							break;
+						default:
+							userDetails.oneRatings++;
+					}
 				}
 			});
+			userDetails.thisEditionRating =
+				userDetails.thisEditionRating / userDetails.thisEditionRatings;
 		}
 	};
 
@@ -209,6 +229,55 @@ const Firebase = (() => {
 		return reviewDetails;
 	};
 
+	const getMiscDetailsForBook = (bookDocumentData) => {
+		const miscDetails = {};
+		if (bookDocumentData.preSynopsis !== undefined) {
+			miscDetails.preSynopsis = bookDocumentData.preSynopsis;
+		}
+		if (bookDocumentData.synopsis !== undefined) {
+			miscDetails.synopsis = bookDocumentData.synopsis;
+		}
+		if (bookDocumentData.amazonLink !== undefined) {
+			miscDetails.amazonLink = bookDocumentData.amazonLink;
+		}
+		if (bookDocumentData.type !== undefined) {
+			miscDetails.type = bookDocumentData.type;
+		}
+		if (bookDocumentData.publisher !== undefined) {
+			miscDetails.publisher = bookDocumentData.publisher;
+		}
+		if (bookDocumentData.pages !== undefined) {
+			miscDetails.pages = bookDocumentData.pages;
+		}
+		if (bookDocumentData.publishedDate !== undefined) {
+			miscDetails.editionPublishedDate = bookDocumentData.publishedDate.toDate();
+		}
+		if (bookDocumentData.ISBN !== undefined) {
+			miscDetails.ISBN = bookDocumentData.ISBN;
+		}
+		if (bookDocumentData.language !== undefined) {
+			miscDetails.language = bookDocumentData.language;
+		}
+		return miscDetails;
+	};
+
+	const getFirstEditionInfoForBook = async (rootBook) => {
+		const firstEditionInfo = {};
+		const firstEditionQuery = await database
+			.collection('books')
+			.where('rootBook', '==', rootBook)
+			.orderBy('publishedDate')
+			.limit(1)
+			.get();
+		firstEditionInfo.firstEditionPublishedYear = firstEditionQuery.docs[0]
+			.data()
+			.publishedDate.toDate()
+			.getFullYear();
+		firstEditionInfo.originalId = firstEditionQuery.docs[0].id;
+		firstEditionInfo.originalTitle = firstEditionQuery.docs[0].data().title;
+		return firstEditionInfo;
+	};
+
 	const queryAllBooks = async (userUID) => {
 		try {
 			const bookQuery = await database.collection('books').get();
@@ -219,6 +288,7 @@ const Firebase = (() => {
 					bookObj.id = document.id;
 					bookObj.title = data.title;
 					bookObj.cover = data.cover;
+					Object.assign(bookObj, getMiscDetailsForBook(data));
 					const seriesDetails = await getSeriesDetailsForBook(
 						data.rootBook,
 						bookObj.title
@@ -242,6 +312,10 @@ const Firebase = (() => {
 						bookObj.title
 					);
 					Object.assign(bookObj, reviewDetails);
+					const firstEditionInfo = await getFirstEditionInfoForBook(
+						data.rootBook
+					);
+					Object.assign(bookObj, firstEditionInfo);
 					return bookObj;
 				})
 			);
