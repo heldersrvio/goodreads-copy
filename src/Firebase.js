@@ -29,6 +29,10 @@ const Firebase = (() => {
 		return '/author/show/' + authorId + '.' + name.replace(/ /g, '_');
 	};
 
+	const generateListPage = (listId, title) => {
+		return '/list/show/' + listId + '.' + title.replace(/ /g, '_');
+	};
+
 	const getSeriesDetailsForBook = async (rootBook, bookTitle) => {
 		const rootBookQuery = await database
 			.collection('rootBooks')
@@ -287,6 +291,7 @@ const Firebase = (() => {
 			listsQuery.docs.map(async (document) => {
 				const list = {};
 				list.id = document.id;
+				list.title = document.data().title;
 				list.bookIds = document.data().books;
 				list.voterCount = document.data().userVotes.length;
 				list.bookTitles = [];
@@ -298,6 +303,7 @@ const Firebase = (() => {
 						list.bookCovers.push(bookQuery.data().cover);
 					})
 				);
+				return list;
 			})
 		);
 		return lists;
@@ -732,6 +738,7 @@ const Firebase = (() => {
 		generateBookPage,
 		generateSeriesPage,
 		generateAuthorPage,
+		generateListPage,
 		queryBookById,
 		queryBooks,
 		queryNotifications,

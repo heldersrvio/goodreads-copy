@@ -5,6 +5,8 @@ import { format } from 'date-fns';
 //import TopBar from './TopBar';
 //import HomePageFootBar from './HomePageFootBar';
 
+//Missing other editions
+
 const BookPage = ({ match }) => {
 	const {
 		params: { bookPageId },
@@ -85,7 +87,7 @@ const BookPage = ({ match }) => {
 			</button>
 		);
 
-	const bookPageInfoLeft = (
+	const bookPageInfoLeft = loaded ? (
 		<div className="book-page-book-info-left">
 			<div className="book-page-book-info-cover-wrap">
 				<img
@@ -126,9 +128,9 @@ const BookPage = ({ match }) => {
 				{/* The stars go here */}
 			</div>
 		</div>
-	);
+	) : null;
 
-	const bookPageTitleArea = (
+	const bookPageTitleArea = loaded ? (
 		<div className="book-page-title-area">
 			<h1 className="book-page-book-title">
 				{bookInfo.title}
@@ -151,9 +153,9 @@ const BookPage = ({ match }) => {
 				) : null}
 			</span>
 		</div>
-	);
+	) : null;
 
-	const bookPageRatingsArea = (
+	const bookPageRatingsArea = loaded ? (
 		<div className="book-page-ratings-area">
 			<div className="book-page-general-rating">
 				{/* Stars and general rating go here */}
@@ -178,9 +180,9 @@ const BookPage = ({ match }) => {
 				{`${bookInfo.reviews.length} reviews`}
 			</a>
 		</div>
-	);
+	) : null;
 
-	const bookPageSynopsisArea = (
+	const bookPageSynopsisArea = loaded ? (
 		<div className="book-page-synopsis-area">
 			{bookInfo.preSynopsis !== undefined ? (
 				<p className="pre-synopsis">
@@ -189,24 +191,24 @@ const BookPage = ({ match }) => {
 			) : null}
 			<p className="synopsis">{bookInfo.synopsis}</p>
 		</div>
-	);
+	) : null;
 
-	const bookPageGetACopy = (
+	const bookPageGetACopy = loaded ? (
 		<div className="book-page-get-a-copy">
 			<span>GET A COPY</span>
 			<a href={bookInfo.amazonLink}>Amazon</a>
 		</div>
-	);
+	) : null;
 
-	const bookPageBookInfoDetailsExpanded = (
+	const bookPageBookInfoDetailsExpanded = loaded ? (
 		<div className="book-page-book-info-details-expanded">
 			<div className="book-page-book-info-details-expanded-left">
-				<span>ISBN</span>
+				{bookInfo.ISBN !== undefined ? <span>ISBN</span> : null}
 				<span>Edition Language</span>
 				{bookInfo.series !== undefined ? <span>Series</span> : null}
 			</div>
 			<div className="book-page-book-info-details-expanded-right">
-				<span>{bookInfo.ISBN}</span>
+				{bookInfo.ISBN !== undefined ? <span>{bookInfo.ISBN}</span> : null}
 				<span>{bookInfo.language}</span>
 				{bookInfo.series !== undefined ? (
 					<a
@@ -215,9 +217,9 @@ const BookPage = ({ match }) => {
 				) : null}
 			</div>
 		</div>
-	);
+	) : null;
 
-	const bookPageBookInfoDetails = (
+	const bookPageBookInfoDetails = loaded ? (
 		<div className="book-page-book-info-details">
 			<span className="book-type-and-pages">
 				{bookInfo.type !== undefined
@@ -239,7 +241,7 @@ const BookPage = ({ match }) => {
 				<a href="/">Edit Details</a>
 			</div>
 		</div>
-	);
+	) : null;
 
 	const bookPageInfoRight = (
 		<div className="book-page-book-info-right">
@@ -258,8 +260,102 @@ const BookPage = ({ match }) => {
 		</div>
 	);
 
+	const bookPageListsWithBook =
+		bookInfo.lists !== undefined ? (
+			<div className="book-page-lists-with-book">
+				<div className="book-page-lists-with-book-top">
+					<a className="lists-with-book-a" href={`/lists/book/${bookInfo.id}`}>
+						LISTS WITH THIS BOOK
+					</a>
+				</div>
+				<div className="book-page-lists-with-book-bottom">
+					{bookInfo.lists.map((list) => (
+						<div className="book-page-lists-with-book-pv" key={list.id}>
+							<div className="book-page-lists-with-book-pv-top">
+								{list.bookIds.map((bookId, index) => (
+									<a
+										className="book-page-lists-book-pv"
+										href={Firebase.generateListPage(list.id, list.title)}
+										key={index}
+									>
+										<img
+											src={list.bookCovers[index]}
+											alt={list.bookTitles[index]}
+										/>
+									</a>
+								))}
+							</div>
+							<div className="book-page-lists-with-book-pv-bottom">
+								<a
+									className="book-page-lists-with-book-pv-title"
+									href={Firebase.generateListPage(list.id, list.title)}
+								>
+									{list.title}
+								</a>
+								<span className="book-page-lists-with-book-pv-stats">{`${list.bookIds.length} books – ${list.voterCount} voters`}</span>
+							</div>
+						</div>
+					))}
+				</div>
+				<div className="book-page-lists-with-book-more">
+					<a
+						className="more-lists-with-book-a"
+						href={`/lists/book/${bookInfo.id}`}
+					>
+						More lists with this book...
+					</a>
+				</div>
+			</div>
+		) : loaded ? (
+			<div className="book-page-lists-with-book">
+				<div className="book-page-lists-with-book-top">
+					<a className="lists-with-book-a" href={`/lists/book/${bookInfo.id}`}>
+						LISTS WITH THIS BOOK
+					</a>
+				</div>
+				<div className="not-featured-listopia">
+					<span>
+						This book is not yet featured on Listopia.{' '}
+						<a href="/list">Add this book to your favorite list »</a>
+					</span>
+				</div>
+			</div>
+		) : null;
+
+	const bookPageCommunityReviews = loaded ? (
+		<div className="book-page-community-reviews">
+			<div className="book-page-community-reviews-top">
+				<span className="book-page-community-reviews-title">
+					COMMUNITY REVIEWS
+				</span>
+				<span className="book-page-community-reviews-showing">
+					{bookInfo.reviews.length === 0
+						? 'Showing 0-0'
+						: bookInfo.reviews.length < 30
+						? `Showing 1-${bookInfo.reviews.length}`
+						: 'Showing 1-30'}
+				</span>
+			</div>
+			<div className="ratings-section">
+				<div className="ratings-section-top">{bookPageRatingsArea}</div>
+				<div className="ratings-section-bottom">
+					<div className="ratings-section-bottom-left">
+						<a href="/">Filters</a>
+						<span>|</span>
+						<a href="/">Sort order</a>
+					</div>
+					<div className="ratings-section-bottom-right">{/* Search box */}</div>
+				</div>
+			</div>
+		</div>
+	) : null;
+
 	const bookPageMainContentLeft = (
-		<div className="book-page-main-content-left">{bookPageBookInfo}</div>
+		<div className="book-page-main-content-left">
+			{bookPageBookInfo}
+			{bookPageListsWithBook}
+			{bookPageCommunityReviews}
+		</div>
 	);
 
 	const bookPageMainContent = loaded ? (
