@@ -8,6 +8,7 @@ import App from './App';
 import SignInPage from './components/Authentication/SignInPage';
 import SignUpPage from './components/Authentication/SignUpPage';
 import SignOutPage from './components/Authentication/SignOutPage';
+import BookPage from './components/Books/BookPage';
 import ForgotPasswordPage from './components/Authentication/ForgotPasswordPage';
 
 const store = createStore(reducer.userReducer);
@@ -21,6 +22,7 @@ ReactDOM.render(
 					<Route path="/user/sign_out" component={SignOutPage} />
 					<Route path="/user/sign_up" component={SignUpPage} />
 					<Route path="/user/sign_in" component={SignInPage} />
+					<Route path="/book/show/:bookPageId" component={BookPage} />
 					<Route path="/" component={App} />
 				</Switch>
 			</BrowserRouter>

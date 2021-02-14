@@ -119,7 +119,7 @@ const Firebase = (() => {
 	};
 
 	const getUserDetailsForBook = async (userUID, bookId) => {
-		if (userUID !== null) {
+		if (userUID !== null && userUID !== undefined) {
 			const bookInstanceQuery = await database
 				.collection('userBooksInstances')
 				.where('userId', '==', userUID)
@@ -433,58 +433,55 @@ const Firebase = (() => {
 		});
 	};
 
-	const queryAllBooks = async (userUID) => {
+	const queryBookById = async (userUID, bookId) => {
 		try {
-			const bookQuery = await database.collection('books').get();
-			return await Promise.all(
-				bookQuery.docs.map(async (document) => {
-					const bookObj = {};
-					const data = document.data();
-					bookObj.id = document.id;
-					bookObj.title = data.title;
-					bookObj.cover = data.cover;
-					Object.assign(bookObj, getMiscDetailsForBook(data));
-					const seriesDetails = await getSeriesDetailsForBook(
-						data.rootBook,
-						bookObj.title
-					);
-					Object.assign(bookObj, seriesDetails);
-					const mainAuthorDetails = await getMainAuthorDetailsForBook(
-						data.rootBook
-					);
-					Object.assign(bookObj, mainAuthorDetails);
-					bookObj.authorFunctions = [];
-					await getOtherAuthorsDetailsForBook(
-						data.otherAuthors,
-						bookObj.authorNames,
-						bookObj.authorPages,
-						bookObj.authorFunctions
-					);
-					const userDetails = await getUserDetailsForBook(userUID, bookObj.id);
-					Object.assign(bookObj, userDetails);
-					const reviewDetails = await getReviewDetailsForBook(
-						data.rootBook,
-						bookObj.title
-					);
-					Object.assign(bookObj, reviewDetails);
-					const firstEditionInfo = await getFirstEditionInfoForBook(
-						data.rootBook
-					);
-					Object.assign(bookObj, firstEditionInfo);
-					bookObj.lists = await getListsForBook(bookObj.id);
-					bookObj.genres = await getGenresForBook(data.rootBook);
-					bookObj.publishedBooksByAuthor = await getPublishedBooksByAuthor(
-						data.rootBook
-					);
-					bookObj.alsoEnjoyedBooks = await getAlsoEnjoyedBooksForBook(
-						data.rootBook
-					);
-					bookObj.articles = await getArticlesForBook(data.rootBook);
-					bookObj.quizQuestions = await getQuizQuestionsForBook(data.rootBook);
-					bookObj.quotes = await getQuotesForBook(data.rootBook);
-					return bookObj;
-				})
+			const bookQueryDocument = await database
+				.collection('books')
+				.doc(bookId)
+				.get();
+			const bookObj = {};
+			const data = bookQueryDocument.data();
+			bookObj.id = bookQueryDocument.id;
+			bookObj.title = data.title;
+			bookObj.cover = data.cover;
+			Object.assign(bookObj, getMiscDetailsForBook(data));
+			const seriesDetails = await getSeriesDetailsForBook(
+				data.rootBook,
+				bookObj.title
 			);
+			Object.assign(bookObj, seriesDetails);
+			const mainAuthorDetails = await getMainAuthorDetailsForBook(
+				data.rootBook
+			);
+			Object.assign(bookObj, mainAuthorDetails);
+			bookObj.authorFunctions = [];
+			await getOtherAuthorsDetailsForBook(
+				data.otherAuthors,
+				bookObj.authorNames,
+				bookObj.authorPages,
+				bookObj.authorFunctions
+			);
+			const userDetails = await getUserDetailsForBook(userUID, bookObj.id);
+			Object.assign(bookObj, userDetails);
+			const reviewDetails = await getReviewDetailsForBook(
+				data.rootBook,
+				bookObj.title
+			);
+			Object.assign(bookObj, reviewDetails);
+			const firstEditionInfo = await getFirstEditionInfoForBook(data.rootBook);
+			Object.assign(bookObj, firstEditionInfo);
+			bookObj.lists = await getListsForBook(bookObj.id);
+			bookObj.genres = await getGenresForBook(data.rootBook);
+			bookObj.publishedBooksByAuthor = await getPublishedBooksByAuthor(
+				data.rootBook
+			);
+			bookObj.alsoEnjoyedBooks = await getAlsoEnjoyedBooksForBook(
+				data.rootBook
+			);
+			bookObj.articles = await getArticlesForBook(data.rootBook);
+			bookObj.quizQuestions = await getQuizQuestionsForBook(data.rootBook);
+			bookObj.quotes = await getQuotesForBook(data.rootBook);
+			return bookObj;
 		} catch (error) {
 			console.log(error);
 		}
@@ -513,9 +510,9 @@ const Firebase = (() => {
 		);
 	};
 
-	const queryBooks = async (userUID, searchString) => {
+	const queryBooks = async (searchString) => {
 		try {
-			const allBooksQuery = await queryAllBooks(userUID);
+			const allBooksQuery = await queryAllBooksForSearchBar();
 			return allBooksQuery.filter(
 				(book) =>
 					book.title.toLowerCase().includes(searchString.toLowerCase()) ||
@@ -732,7 +729,7 @@ const Firebase = (() => {
 	const updateBookInShelf = async (userUID, bookId, progress) => {};
 
 	return {
-		queryAllBooks,
+		queryBookById,
 		queryBooks,
 		queryNotifications,
 		getNumberOfNewFriends,

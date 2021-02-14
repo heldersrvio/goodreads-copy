@@ -14,10 +14,7 @@ const TopBarSearchBar = (props) => {
 			if (searchBarInput !== '') {
 				setLoading(true);
 			}
-			const queryResults = await Firebase.queryBooks(
-				props.userUID,
-				searchBarInput
-			);
+			const queryResults = await Firebase.queryBooks(searchBarInput);
 			return (
 				<div id="search-books-results">
 					<div id="search-books-results-top-section">
