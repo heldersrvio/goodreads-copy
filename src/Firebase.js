@@ -729,6 +729,9 @@ const Firebase = (() => {
 	const updateBookInShelf = async (userUID, bookId, progress) => {};
 
 	return {
+		generateBookPage,
+		generateSeriesPage,
+		generateAuthorPage,
 		queryBookById,
 		queryBooks,
 		queryNotifications,
