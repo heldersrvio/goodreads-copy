@@ -322,6 +322,127 @@ const BookPage = ({ match }) => {
 			</div>
 		) : null;
 
+	const startYourReviewSection =
+		loaded && user.userInfo !== undefined ? (
+			<div className="start-your-review-section">
+				<div className="start-your-review-profile-picture">
+					<img
+						alt="profile"
+						src={
+							user.userInfo.profileImage !== undefined
+								? user.userInfo.profileImage
+								: 'https://www.goodreads.com/assets/nophoto/user/u_60x60-267f0ca0ea48fd3acfd44b95afa64f01.png'
+						}
+					></img>
+				</div>
+				<div className="start-your-review-section-right">
+					<span>
+						<a
+							href={Firebase.generateUserPage(
+								user.userUID,
+								user.userInfo.firstName
+							)}
+						>
+							{user.userInfo.firstName},
+						</a>{' '}
+						start your review of {bookInfo.title}
+					</span>
+					<div className="start-your-review-section-right-stars-write">
+						<div className="start-your-review-section-right-starts">
+							{/* Stars go here */}
+						</div>
+						<button className="write-review-button">Write a review</button>
+					</div>
+				</div>
+			</div>
+		) : null;
+
+	const reviewList = loaded
+		? bookInfo.reviews.map((review, index) => {
+				return (
+					<div className="book-page-review-instance" key={index}>
+						<img
+							className="book-page-review-instance-profile-image"
+							src={
+								review.profileImage !== undefined
+									? review.profileImage
+									: 'https://www.goodreads.com/assets/nophoto/user/u_60x60-267f0ca0ea48fd3acfd44b95afa64f01.png'
+							}
+							alt={review.userName}
+						/>
+						<div className="book-page-review-instance-right">
+							<div className="book-page-review-instance-right-top-line">
+								<span className="book-page-review-instance-user-rated">
+									<a
+										href={Firebase.generateUserPage(
+											review.user,
+											review.userName.split(' ')[0]
+										)}
+									>
+										{review.userName}
+									</a>{' '}
+									rated it <div>{/* Stars go here */}</div>
+								</span>
+								<a
+									className="book-page-review-instance-date"
+									href={Firebase.generateReviewPage(review.id)}
+								>
+									{format(review.date, 'MMM dd, yyyy')}
+								</a>
+							</div>
+							{review.recommendsItFor !== undefined ? (
+								<span className="recommends-it-for">
+									Recommends it for:{' '}
+									<span className="recommends-it-for-answer">
+										{review.recommendsItFor}
+									</span>
+								</span>
+							) : null}
+							{review.shelves !== undefined ? (
+								<span className="book-page-review-instance-shelves">
+									Shelves:{' '}
+									<span className="book-page-review-instance-shelves-answer">
+										{review.shelves.map((shelf, index) => {
+											return (
+												<span>
+													<a
+														href={Firebase.generateShelfPage(
+															review.user,
+															review.userName.split(' ')[0],
+															shelf
+														)}
+													>
+														{shelf}
+													</a>
+													{index !== review.shelves.length - 1 ? ', ' : null}
+												</span>
+											);
+										})}
+									</span>
+								</span>
+							) : null}
+							<p className="book-page-review-main-body">{review.text}</p>
+							<div className="book-page-review-bottom">
+								<a
+									className="book-page-review-likes"
+									href={Firebase.generateReviewLikesPage(review.id)}
+								>
+									{review.numberOfLikes} likes
+								</a>
+								<button className="book-page-review-like-button">Like</button>
+								<a
+									className="book-page-review-see-review"
+									href={Firebase.generateReviewPage(review.id)}
+								>
+									see review
+								</a>
+							</div>
+						</div>
+					</div>
+				);
+		  })
+		: null;
+
 	const bookPageCommunityReviews = loaded ? (
 		<div className="book-page-community-reviews">
 			<div className="book-page-community-reviews-top">
@@ -345,6 +466,29 @@ const BookPage = ({ match }) => {
 						<a href="/">Sort order</a>
 					</div>
 					<div className="ratings-section-bottom-right">{/* Search box */}</div>
+				</div>
+			</div>
+			<div className="reviews-section">
+				{bookInfo.reviews.filter((review) => {
+					if (user.userInfo !== undefined) {
+						if (
+							user.userInfo.firstName !== undefined &&
+							user.userInfo.lastName !== undefined
+						) {
+							return (
+								review.userName ===
+								user.userInfo.firstName + user.userInfo.lastName
+							);
+						} else if (user.userInfo.firstName !== undefined) {
+							return review.userName === user.userInfo.firstName;
+						}
+					}
+					return false;
+				}).length > 0
+					? null
+					: startYourReviewSection}
+				<div className="book-page-reviews-section-review-list">
+					{reviewList}
 				</div>
 			</div>
 		</div>

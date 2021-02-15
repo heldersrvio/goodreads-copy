@@ -33,6 +33,29 @@ const Firebase = (() => {
 		return '/list/show/' + listId + '.' + title.replace(/ /g, '_');
 	};
 
+	const generateUserPage = (userId, firstName) => {
+		return '/user/show/' + userId + '-' + firstName.toLowerCase();
+	};
+
+	const generateShelfPage = (userId, firstName, shelf) => {
+		return (
+			'/review/list/' +
+			userId +
+			'-' +
+			firstName.toLowerCase() +
+			'?shelf=' +
+			shelf
+		);
+	};
+
+	const generateReviewPage = (reviewId) => {
+		return '/review/show/' + reviewId;
+	};
+
+	const generateReviewLikesPage = (reviewId) => {
+		return '/rating/voters/' + reviewId + '?resource_type=Review';
+	};
+
 	const getSeriesDetailsForBook = async (rootBook, bookTitle) => {
 		const rootBookQuery = await database
 			.collection('rootBooks')
@@ -208,7 +231,7 @@ const Firebase = (() => {
 			})
 		);
 		const reviewDetails = {};
-		await Promise.all(
+		reviewDetails.reviews = await Promise.all(
 			bookReviews.map(async (document) => {
 				const review = {};
 				review.user = document.data().user;
@@ -220,16 +243,24 @@ const Firebase = (() => {
 				if (userQuery.data().lastName !== undefined) {
 					review.userName = review.userName + ' ' + userQuery.data().lastName;
 				}
+				if (userQuery.data().profileImage !== undefined) {
+					review.profileImage = userQuery.data().profileImage;
+				}
+				if (userQuery.data().shelves !== undefined) {
+					review.shelves = document.data().shelves;
+				}
 				review.id = document.id;
-				review.shelves = document.data().shelves;
+				review.date = document.data().date.toDate();
 				review.edition = document.data().bookEdition;
 				review.editionLink = generateBookPage(review.edition, title);
 				review.text = document.data().text;
 				review.numberOfLikes = document.data().usersWhoLiked.length;
+				if (document.data().recommendsItFor !== undefined) {
+					review.recommendsItFor = document.data().recommendsItFor;
+				}
 				return review;
 			})
 		);
-		reviewDetails.reviews = bookReviews;
 		return reviewDetails;
 	};
 
@@ -739,6 +770,10 @@ const Firebase = (() => {
 		generateSeriesPage,
 		generateAuthorPage,
 		generateListPage,
+		generateUserPage,
+		generateShelfPage,
+		generateReviewPage,
+		generateReviewLikesPage,
 		queryBookById,
 		queryBooks,
 		queryNotifications,
