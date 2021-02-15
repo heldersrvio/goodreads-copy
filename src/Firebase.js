@@ -37,7 +37,7 @@ const Firebase = (() => {
 		return '/user/show/' + userId + '-' + firstName.toLowerCase();
 	};
 
-	const generateShelfPage = (userId, firstName, shelf) => {
+	const generateReviewShelfPage = (userId, firstName, shelf) => {
 		return (
 			'/review/list/' +
 			userId +
@@ -48,12 +48,39 @@ const Firebase = (() => {
 		);
 	};
 
+	const generateBookGenreShelfPage = (bookId, title, genre) => {
+		return (
+			'/shelf/users/' +
+			bookId +
+			'.' +
+			title.replace(/ /g, '_') +
+			'?shelf=' +
+			genre.toLowerCase().replace(/ /g, '-')
+		);
+	};
+
+	const generateBookTopShelvesPage = (bookId) => {
+		return '/work/shelves/' + bookId;
+	};
+
+	const generateBookStatsPage = (bookId, title) => {
+		return '/book/stats?id=' + bookId + '.' + title.replace(/ /g, '_');
+	};
+
 	const generateReviewPage = (reviewId) => {
 		return '/review/show/' + reviewId;
 	};
 
 	const generateReviewLikesPage = (reviewId) => {
 		return '/rating/voters/' + reviewId + '?resource_type=Review';
+	};
+
+	const generateSimilarBooksPage = (bookId, title) => {
+		return '/book/similar/' + bookId + '.' + title.replace(/ /g, '_');
+	};
+
+	const generateGenrePage = (genre) => {
+		return '/genres/' + genre.toLowerCase().replace(/ /g, '-');
 	};
 
 	const getSeriesDetailsForBook = async (rootBook, bookTitle) => {
@@ -413,6 +440,7 @@ const Firebase = (() => {
 					.get();
 				return {
 					id: bookQuery.docs[0].id,
+					title: bookQuery.docs[0].data().title,
 					cover: bookQuery.docs[0].data().cover,
 				};
 			})
@@ -771,9 +799,14 @@ const Firebase = (() => {
 		generateAuthorPage,
 		generateListPage,
 		generateUserPage,
-		generateShelfPage,
+		generateReviewShelfPage,
 		generateReviewPage,
 		generateReviewLikesPage,
+		generateBookGenreShelfPage,
+		generateBookTopShelvesPage,
+		generateBookStatsPage,
+		generateSimilarBooksPage,
+		generateGenrePage,
 		queryBookById,
 		queryBooks,
 		queryNotifications,

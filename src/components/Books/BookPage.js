@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Firebase from '../../Firebase';
 import { format } from 'date-fns';
-//import TopBar from './TopBar';
+import '../styles/Books/BookPage.css';
+import TopBar from '../Global/TopBar';
 //import HomePageFootBar from './HomePageFootBar';
 
 //Missing other editions
@@ -406,7 +407,7 @@ const BookPage = ({ match }) => {
 											return (
 												<span>
 													<a
-														href={Firebase.generateShelfPage(
+														href={Firebase.generateReviewShelfPage(
 															review.user,
 															review.userName.split(' ')[0],
 															shelf
@@ -502,8 +503,91 @@ const BookPage = ({ match }) => {
 		</div>
 	);
 
+	const bookPageMainContentRightTop = loaded ? (
+		<div className="book-page-main-content-right-top">
+			<button className="recommend-book-button">Recommend it</button>
+			<span className="book-page-main-content-right-top-separator">|</span>
+			<a
+				href={Firebase.generateBookStatsPage(bookInfo.id, bookInfo.title)}
+				className="book-page-book-stats-a"
+			>
+				Stats
+			</a>
+		</div>
+	) : null;
+
+	const bookPageReadersAlsoEnjoyedSection = loaded ? (
+		<div className="book-page-readers-also-enjoyed">
+			<div className="book-page-readers-also-enjoyed-main">
+				<span>READERS ALSO ENJOYED</span>
+				{bookInfo.alsoEnjoyedBooks.map((book, index) => {
+					return (
+						<a
+							key={index}
+							className="book-page-also-enjoyed-book-a"
+							href={Firebase.generateBookPage(book.id, book.title)}
+						>
+							<img src={book.cover} alt={book.title} />
+						</a>
+					);
+				})}
+			</div>
+			<a
+				className="book-page-readers-also-enjoyed-similar-books-a"
+				href={Firebase.generateSimilarBooksPage(bookInfo.id, bookInfo.title)}
+			>
+				See similar books...
+			</a>
+		</div>
+	) : null;
+
+	const bookPageGenres = loaded ? (
+		<div className="book-page-genres">
+			<div className="book-page-genres-main">
+				<span className="book-page-genres-title">GENRES</span>
+				<div className="book-page-genres-list">
+					{bookInfo.genres.map((genre, index) => {
+						return (
+							<div className="book-page-genres-list-cell" key={index}>
+								<a href={Firebase.generateGenrePage(genre.genre)}>
+									{genre.genre}
+								</a>
+								<a
+									href={Firebase.generateBookGenreShelfPage(
+										bookInfo.id,
+										bookInfo.title,
+										genre
+									)}
+								>
+									{genre.userCount} users
+								</a>
+							</div>
+						);
+					})}
+				</div>
+			</div>
+			<a
+				className="book-page-genres-see-top-shelves"
+				href={Firebase.generateBookTopShelvesPage(bookInfo.id)}
+			>
+				See top shelves...
+			</a>
+		</div>
+	) : null;
+
+	const bookPageMainContentRight = (
+		<div className="book-page-main-content-right">
+			{bookPageMainContentRightTop}
+			{bookPageReadersAlsoEnjoyedSection}
+			{bookPageGenres}
+		</div>
+	);
+
 	const bookPageMainContent = loaded ? (
-		<div className="book-page-main-content">{bookPageMainContentLeft}</div>
+		<div className="book-page-main-content">
+			{bookPageMainContentLeft}
+			{bookPageMainContentRight}
+		</div>
 	) : null;
 
 	const bookPageEnlargingCover = (
@@ -522,6 +606,7 @@ const BookPage = ({ match }) => {
 
 	return (
 		<div className="book-page">
+			<TopBar />
 			{bookPageMainContent}
 			{bookPageEnlargingCover}
 		</div>
