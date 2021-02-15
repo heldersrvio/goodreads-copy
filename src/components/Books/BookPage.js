@@ -575,11 +575,78 @@ const BookPage = ({ match }) => {
 		</div>
 	) : null;
 
+	const bookPageAuthorAboutSection = loaded ? (
+		<div className="author-about-section">
+			<a
+				className="author-about-section-title-a"
+				href={bookInfo.authorPages[0]}
+			>{`ABOUT ${bookInfo.authorNames[0]}`}</a>
+			<div className="author-about-section-preview">
+				<a href={bookInfo.authorPages[0]}>
+					<img
+						src={
+							bookInfo.mainAuthorPicture !== undefined
+								? bookInfo.mainAuthorPicture
+								: 'https://www.goodreads.com/assets/nophoto/user/u_60x60-267f0ca0ea48fd3acfd44b95afa64f01.png'
+						}
+						alt={bookInfo.authorNames[0]}
+					/>
+				</a>
+				<div className="author-about-section-preview-right">
+					<a
+						className="author-about-section-preview-name"
+						href={bookInfo.authorPages[0]}
+					>
+						{bookInfo.authorNames[0]}
+						<span>{/* Goodreads seal if member else null */}</span>
+					</a>
+					<span className="author-about-section-preview-follower-count">
+						{bookInfo.authorFollowerCount}
+					</span>
+					<button className="book-page-follow-author-button">
+						Follow Author
+					</button>
+				</div>
+				{bookInfo.mainAuthorAbout !== undefined ? (
+					<p className="author-about-section-about">
+						{bookInfo.mainAuthorAbout}
+					</p>
+				) : null}
+			</div>
+		</div>
+	) : null;
+
+	const bookPageBooksByAuthorSection = loaded ? (
+		<div className="book-page-books-by-author">
+			<div className="book-page-books-by-author-main">
+				<a
+					className="book-page-books-by-author-a"
+					href={bookInfo.booksByAuthorPage}
+				>{`BOOKS BY ${bookInfo.authorNames[0].toUpperCase()}`}</a>
+				{bookInfo.publishedBooksByAuthor.map((book, index) => {
+					return (
+						<a key={index} href={book.page}>
+							<img src={book.cover} alt={book.id} />
+						</a>
+					);
+				})}
+			</div>
+			<a
+				className="book-page-books-by-author-more"
+				href={bookInfo.booksByAuthorPage}
+			>
+				More...
+			</a>
+		</div>
+	) : null;
+
 	const bookPageMainContentRight = (
 		<div className="book-page-main-content-right">
 			{bookPageMainContentRightTop}
 			{bookPageReadersAlsoEnjoyedSection}
 			{bookPageGenres}
+			{bookPageAuthorAboutSection}
+			{bookPageBooksByAuthorSection}
 		</div>
 	);
 

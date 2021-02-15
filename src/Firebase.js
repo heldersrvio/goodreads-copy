@@ -83,6 +83,10 @@ const Firebase = (() => {
 		return '/genres/' + genre.toLowerCase().replace(/ /g, '-');
 	};
 
+	const generateBooksByAuthorPage = (authorId, name) => {
+		return '/author/list/' + authorId + '.' + name.replace(/ /g, '_');
+	};
+
 	const getSeriesDetailsForBook = async (rootBook, bookTitle) => {
 		const rootBookQuery = await database
 			.collection('rootBooks')
@@ -139,6 +143,16 @@ const Firebase = (() => {
 			mainAuthorQuery.data().followersIds !== undefined
 				? mainAuthorQuery.data().followersIds.length
 				: 0;
+		authorDetails.booksByAuthorPage = generateBooksByAuthorPage(
+			rootBookQuery.data().authorId,
+			mainAuthorQuery.data().name
+		);
+		if (mainAuthorQuery.data().about !== undefined) {
+			authorDetails.mainAuthorAbout = mainAuthorQuery.data().about;
+		}
+		if (mainAuthorQuery.data().picture !== undefined) {
+			authorDetails.mainAuthorPicture = mainAuthorQuery.data().picture;
+		}
 		return authorDetails;
 	};
 
@@ -417,6 +431,10 @@ const Firebase = (() => {
 					return {
 						id: bookQuery.docs[0].id,
 						cover: bookQuery.docs[0].data().cover,
+						page: Firebase.generateBookPage(
+							bookQuery.docs[0].id,
+							bookQuery.docs[0].title
+						),
 					};
 				}
 			})
@@ -807,6 +825,7 @@ const Firebase = (() => {
 		generateBookStatsPage,
 		generateSimilarBooksPage,
 		generateGenrePage,
+		generateBooksByAuthorPage,
 		queryBookById,
 		queryBooks,
 		queryNotifications,
