@@ -17,75 +17,130 @@ const Firebase = (() => {
 
 	const database = firebase.firestore();
 
-	const generateBookPage = (bookId, title) => {
-		return '/book/show/' + bookId + '.' + title.replace(/ /g, '_');
-	};
+	const pageGenerator = (() => {
+		const generateBookPage = (bookId, title) => {
+			return '/book/show/' + bookId + '.' + title.replace(/ /g, '_');
+		};
 
-	const generateSeriesPage = (seriesId, name) => {
-		return `/series/${seriesId}-${name.toLowerCase().replace(/ /g, '-')}`;
-	};
+		const generateSeriesPage = (seriesId, name) => {
+			return `/series/${seriesId}-${name.toLowerCase().replace(/ /g, '-')}`;
+		};
 
-	const generateAuthorPage = (authorId, name) => {
-		return '/author/show/' + authorId + '.' + name.replace(/ /g, '_');
-	};
+		const generateAuthorPage = (authorId, name) => {
+			return '/author/show/' + authorId + '.' + name.replace(/ /g, '_');
+		};
 
-	const generateListPage = (listId, title) => {
-		return '/list/show/' + listId + '.' + title.replace(/ /g, '_');
-	};
+		const generateListPage = (listId, title) => {
+			return '/list/show/' + listId + '.' + title.replace(/ /g, '_');
+		};
 
-	const generateUserPage = (userId, firstName) => {
-		return '/user/show/' + userId + '-' + firstName.toLowerCase();
-	};
+		const generateUserPage = (userId, firstName) => {
+			return '/user/show/' + userId + '-' + firstName.toLowerCase();
+		};
 
-	const generateReviewShelfPage = (userId, firstName, shelf) => {
-		return (
-			'/review/list/' +
-			userId +
-			'-' +
-			firstName.toLowerCase() +
-			'?shelf=' +
-			shelf
-		);
-	};
+		const generateReviewShelfPage = (userId, firstName, shelf) => {
+			return (
+				'/review/list/' +
+				userId +
+				'-' +
+				firstName.toLowerCase() +
+				'?shelf=' +
+				shelf
+			);
+		};
 
-	const generateBookGenreShelfPage = (bookId, title, genre) => {
-		return (
-			'/shelf/users/' +
-			bookId +
-			'.' +
-			title.replace(/ /g, '_') +
-			'?shelf=' +
-			genre.toLowerCase().replace(/ /g, '-')
-		);
-	};
+		const generateBookGenreShelfPage = (bookId, title, genre) => {
+			return (
+				'/shelf/users/' +
+				bookId +
+				'.' +
+				title.replace(/ /g, '_') +
+				'?shelf=' +
+				genre.toLowerCase().replace(/ /g, '-')
+			);
+		};
 
-	const generateBookTopShelvesPage = (bookId) => {
-		return '/work/shelves/' + bookId;
-	};
+		const generateBookTopShelvesPage = (bookId) => {
+			return '/work/shelves/' + bookId;
+		};
 
-	const generateBookStatsPage = (bookId, title) => {
-		return '/book/stats?id=' + bookId + '.' + title.replace(/ /g, '_');
-	};
+		const generateBookStatsPage = (bookId, title) => {
+			return '/book/stats?id=' + bookId + '.' + title.replace(/ /g, '_');
+		};
 
-	const generateReviewPage = (reviewId) => {
-		return '/review/show/' + reviewId;
-	};
+		const generateReviewPage = (reviewId) => {
+			return '/review/show/' + reviewId;
+		};
 
-	const generateReviewLikesPage = (reviewId) => {
-		return '/rating/voters/' + reviewId + '?resource_type=Review';
-	};
+		const generateReviewLikesPage = (reviewId) => {
+			return '/rating/voters/' + reviewId + '?resource_type=Review';
+		};
 
-	const generateSimilarBooksPage = (bookId, title) => {
-		return '/book/similar/' + bookId + '.' + title.replace(/ /g, '_');
-	};
+		const generateSimilarBooksPage = (bookId, title) => {
+			return '/book/similar/' + bookId + '.' + title.replace(/ /g, '_');
+		};
 
-	const generateGenrePage = (genre) => {
-		return '/genres/' + genre.toLowerCase().replace(/ /g, '-');
-	};
+		const generateGenrePage = (genre) => {
+			return '/genres/' + genre.toLowerCase().replace(/ /g, '-');
+		};
 
-	const generateBooksByAuthorPage = (authorId, name) => {
-		return '/author/list/' + authorId + '.' + name.replace(/ /g, '_');
-	};
+		const generateBooksByAuthorPage = (authorId, name) => {
+			return '/author/list/' + authorId + '.' + name.replace(/ /g, '_');
+		};
+
+		const generateArticlePage = (articleId, title) => {
+			return (
+				'/blog/show/' + articleId + '-' + title.toLowerCase().replace(/ /g, '-')
+			);
+		};
+
+		const generateBookTriviaPage = (bookId, title) => {
+			return '/trivia/work/' + bookId + '.' + title.replace(/ /g, '_');
+		};
+
+		const generateQuizPage = (quizId, title) => {
+			return (
+				'/quizzes/' + quizId + '-' + title.toLowerCase().replace(/ /g, '-')
+			);
+		};
+
+		const generateBookQuotesPage = (bookId, title) => {
+			return (
+				'/work/quotes/' + bookId + '-' + title.toLowerCase().replace(/ /g, '-')
+			);
+		};
+
+		const generateQuotePage = (quoteId, text) => {
+			return (
+				'/quotes/' +
+				quoteId +
+				'-' +
+				text.slice(0, 50).toLowerCase().replace(/ /g, '-')
+			);
+		};
+
+		return {
+			generateBookPage,
+			generateSeriesPage,
+			generateAuthorPage,
+			generateListPage,
+			generateUserPage,
+			generateReviewShelfPage,
+			generateReviewPage,
+			generateReviewLikesPage,
+			generateBookGenreShelfPage,
+			generateBookTopShelvesPage,
+			generateBookStatsPage,
+			generateSimilarBooksPage,
+			generateGenrePage,
+			generateBooksByAuthorPage,
+			generateArticlePage,
+			generateBookTriviaPage,
+			generateQuizPage,
+			generateBookQuotesPage,
+			generateQuotePage,
+		};
+	})();
 
 	const getSeriesDetailsForBook = async (rootBook, bookTitle) => {
 		const rootBookQuery = await database
@@ -100,7 +155,7 @@ const Firebase = (() => {
 				.doc(rootBookQuery.data().series)
 				.get();
 			seriesInfo.series = { name: seriesQuery.data().name };
-			seriesInfo.series.page = generateSeriesPage(
+			seriesInfo.series.page = pageGenerator.generateSeriesPage(
 				seriesQuery.id,
 				seriesInfo.series.name
 			);
@@ -133,7 +188,7 @@ const Firebase = (() => {
 		authorDetails.authorPages = [];
 		authorDetails.authorNames.push(mainAuthorQuery.data().name);
 		authorDetails.authorPages.push(
-			generateAuthorPage(
+			pageGenerator.generateAuthorPage(
 				rootBookQuery.data().authorId,
 				mainAuthorQuery.data().name
 			)
@@ -143,7 +198,7 @@ const Firebase = (() => {
 			mainAuthorQuery.data().followersIds !== undefined
 				? mainAuthorQuery.data().followersIds.length
 				: 0;
-		authorDetails.booksByAuthorPage = generateBooksByAuthorPage(
+		authorDetails.booksByAuthorPage = pageGenerator.generateBooksByAuthorPage(
 			rootBookQuery.data().authorId,
 			mainAuthorQuery.data().name
 		);
@@ -179,7 +234,10 @@ const Firebase = (() => {
 			for (let i = 0; i < otherAuthorsQueryData.length; i++) {
 				authorNames.push(otherAuthorsQueryData[i].name);
 				authorPages.push(
-					generateAuthorPage(otherAuthors[i].id, otherAuthorsQueryData[i].name)
+					pageGenerator.generateAuthorPage(
+						otherAuthors[i].id,
+						otherAuthorsQueryData[i].name
+					)
 				);
 				authorFunctions.push(otherAuthors[i].role);
 			}
@@ -293,7 +351,10 @@ const Firebase = (() => {
 				review.id = document.id;
 				review.date = document.data().date.toDate();
 				review.edition = document.data().bookEdition;
-				review.editionLink = generateBookPage(review.edition, title);
+				review.editionLink = pageGenerator.generateBookPage(
+					review.edition,
+					title
+				);
 				review.text = document.data().text;
 				review.numberOfLikes = document.data().usersWhoLiked.length;
 				if (document.data().recommendsItFor !== undefined) {
@@ -431,7 +492,7 @@ const Firebase = (() => {
 					return {
 						id: bookQuery.docs[0].id,
 						cover: bookQuery.docs[0].data().cover,
-						page: Firebase.generateBookPage(
+						page: Firebase.pageGenerator.generateBookPage(
 							bookQuery.docs[0].id,
 							bookQuery.docs[0].title
 						),
@@ -476,6 +537,11 @@ const Firebase = (() => {
 				const questionObject = {
 					quizId: document.id,
 					quizTitle: document.data().title,
+					quizDescription: document.data().title,
+					quizPage: pageGenerator.generateQuizPage(
+						document.id,
+						document.data().title
+					),
 				};
 				questionObject.question = question.mainQuestion;
 				questionObject.options = question.answers;
@@ -502,15 +568,34 @@ const Firebase = (() => {
 		});
 	};
 
+	const getQuotesPageForBook = async (rootBook) => {
+		const mainEditionQuery = await database
+			.collection('books')
+			.where('rootBook', '==', rootBook)
+			.where('mainEdition', '==', true)
+			.get();
+		return {
+			quotesPage: pageGenerator.generateBookQuotesPage(
+				mainEditionQuery.documents[0].id,
+				mainEditionQuery.documents[0].data().title
+			),
+		};
+	};
+
 	const getQuotesForBook = async (rootBook) => {
 		const quoteQuery = await database
 			.collection('quotes')
 			.where('rootBook', '==', rootBook)
+			.limit(2)
 			.get();
 		return quoteQuery.docs.map((document) => {
 			return {
 				id: document.id,
 				text: document.data().text,
+				page: pageGenerator.generateQuotePage(
+					document.id,
+					document.data().text
+				),
 				likeCount: document.data().usersWhoLiked.length,
 			};
 		});
@@ -563,6 +648,7 @@ const Firebase = (() => {
 			);
 			bookObj.articles = await getArticlesForBook(data.rootBook);
 			bookObj.quizQuestions = await getQuizQuestionsForBook(data.rootBook);
+			bookObj.quotesPage = await getQuotesPageForBook(data.rootBook);
 			bookObj.quotes = await getQuotesForBook(data.rootBook);
 			return bookObj;
 		} catch (error) {
@@ -720,7 +806,7 @@ const Firebase = (() => {
 			const bookQueryData = bookQuery.data();
 			bookObj.title = bookQueryData.title;
 			bookObj.cover = bookQueryData.cover;
-			bookObj.page = generateBookPage(
+			bookObj.page = pageGenerator.generateBookPage(
 				bookInstanceData[i].bookId,
 				bookQueryData.title
 			);
@@ -733,7 +819,7 @@ const Firebase = (() => {
 					.get();
 				const authorQueryData = authorQuery.data();
 				bookObj.author = authorQueryData.name;
-				bookObj.authorPage = generateAuthorPage(
+				bookObj.authorPage = pageGenerator.generateAuthorPage(
 					bookQueryData.authorId,
 					authorQueryData.name
 				);
@@ -812,20 +898,7 @@ const Firebase = (() => {
 	const updateBookInShelf = async (userUID, bookId, progress) => {};
 
 	return {
-		generateBookPage,
-		generateSeriesPage,
-		generateAuthorPage,
-		generateListPage,
-		generateUserPage,
-		generateReviewShelfPage,
-		generateReviewPage,
-		generateReviewLikesPage,
-		generateBookGenreShelfPage,
-		generateBookTopShelvesPage,
-		generateBookStatsPage,
-		generateSimilarBooksPage,
-		generateGenrePage,
-		generateBooksByAuthorPage,
+		pageGenerator,
 		queryBookById,
 		queryBooks,
 		queryNotifications,

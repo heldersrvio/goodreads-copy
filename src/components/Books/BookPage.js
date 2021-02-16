@@ -16,6 +16,9 @@ const BookPage = ({ match }) => {
 	const [loaded, setLoaded] = useState(false);
 	const [enlargingCover, setEnlargingCover] = useState(false);
 	const [savingShelf, setSavingShelf] = useState(false);
+	const [quizQuestionOptionSelected, setQuizQuestionOptionSelected] = useState(
+		-1
+	);
 
 	const user = useSelector((state) => state);
 
@@ -51,10 +54,13 @@ const BookPage = ({ match }) => {
 	};
 
 	const bookAddress = loaded
-		? Firebase.generateBookPage(bookInfo.id, bookInfo.title)
+		? Firebase.pageGenerator.generateBookPage(bookInfo.id, bookInfo.title)
 		: '';
 	const originalBookAddress = loaded
-		? Firebase.generateBookPage(bookInfo.originalId, bookInfo.originalTitle)
+		? Firebase.pageGenerator.generateBookPage(
+				bookInfo.originalId,
+				bookInfo.originalTitle
+		  )
 		: '';
 	const addToShelfButton =
 		loaded && bookInfo.userStatus === 'reading' ? (
@@ -276,7 +282,10 @@ const BookPage = ({ match }) => {
 								{list.bookIds.map((bookId, index) => (
 									<a
 										className="book-page-lists-book-pv"
-										href={Firebase.generateListPage(list.id, list.title)}
+										href={Firebase.pageGenerator.generateListPage(
+											list.id,
+											list.title
+										)}
 										key={index}
 									>
 										<img
@@ -289,7 +298,10 @@ const BookPage = ({ match }) => {
 							<div className="book-page-lists-with-book-pv-bottom">
 								<a
 									className="book-page-lists-with-book-pv-title"
-									href={Firebase.generateListPage(list.id, list.title)}
+									href={Firebase.pageGenerator.generateListPage(
+										list.id,
+										list.title
+									)}
 								>
 									{list.title}
 								</a>
@@ -339,7 +351,7 @@ const BookPage = ({ match }) => {
 				<div className="start-your-review-section-right">
 					<span>
 						<a
-							href={Firebase.generateUserPage(
+							href={Firebase.pageGenerator.generateUserPage(
 								user.userUID,
 								user.userInfo.firstName
 							)}
@@ -375,7 +387,7 @@ const BookPage = ({ match }) => {
 							<div className="book-page-review-instance-right-top-line">
 								<span className="book-page-review-instance-user-rated">
 									<a
-										href={Firebase.generateUserPage(
+										href={Firebase.pageGenerator.generateUserPage(
 											review.user,
 											review.userName.split(' ')[0]
 										)}
@@ -386,7 +398,7 @@ const BookPage = ({ match }) => {
 								</span>
 								<a
 									className="book-page-review-instance-date"
-									href={Firebase.generateReviewPage(review.id)}
+									href={Firebase.pageGenerator.generateReviewPage(review.id)}
 								>
 									{format(review.date, 'MMM dd, yyyy')}
 								</a>
@@ -407,7 +419,7 @@ const BookPage = ({ match }) => {
 											return (
 												<span>
 													<a
-														href={Firebase.generateReviewShelfPage(
+														href={Firebase.pageGenerator.generateReviewShelfPage(
 															review.user,
 															review.userName.split(' ')[0],
 															shelf
@@ -426,14 +438,16 @@ const BookPage = ({ match }) => {
 							<div className="book-page-review-bottom">
 								<a
 									className="book-page-review-likes"
-									href={Firebase.generateReviewLikesPage(review.id)}
+									href={Firebase.pageGenerator.generateReviewLikesPage(
+										review.id
+									)}
 								>
 									{review.numberOfLikes} likes
 								</a>
 								<button className="book-page-review-like-button">Like</button>
 								<a
 									className="book-page-review-see-review"
-									href={Firebase.generateReviewPage(review.id)}
+									href={Firebase.pageGenerator.generateReviewPage(review.id)}
 								>
 									see review
 								</a>
@@ -508,7 +522,10 @@ const BookPage = ({ match }) => {
 			<button className="recommend-book-button">Recommend it</button>
 			<span className="book-page-main-content-right-top-separator">|</span>
 			<a
-				href={Firebase.generateBookStatsPage(bookInfo.id, bookInfo.title)}
+				href={Firebase.pageGenerator.generateBookStatsPage(
+					bookInfo.id,
+					bookInfo.title
+				)}
 				className="book-page-book-stats-a"
 			>
 				Stats
@@ -525,7 +542,10 @@ const BookPage = ({ match }) => {
 						<a
 							key={index}
 							className="book-page-also-enjoyed-book-a"
-							href={Firebase.generateBookPage(book.id, book.title)}
+							href={Firebase.pageGenerator.generateBookPage(
+								book.id,
+								book.title
+							)}
 						>
 							<img src={book.cover} alt={book.title} />
 						</a>
@@ -534,7 +554,10 @@ const BookPage = ({ match }) => {
 			</div>
 			<a
 				className="book-page-readers-also-enjoyed-similar-books-a"
-				href={Firebase.generateSimilarBooksPage(bookInfo.id, bookInfo.title)}
+				href={Firebase.pageGenerator.generateSimilarBooksPage(
+					bookInfo.id,
+					bookInfo.title
+				)}
 			>
 				See similar books...
 			</a>
@@ -549,11 +572,11 @@ const BookPage = ({ match }) => {
 					{bookInfo.genres.map((genre, index) => {
 						return (
 							<div className="book-page-genres-list-cell" key={index}>
-								<a href={Firebase.generateGenrePage(genre.genre)}>
+								<a href={Firebase.pageGenerator.generateGenrePage(genre.genre)}>
 									{genre.genre}
 								</a>
 								<a
-									href={Firebase.generateBookGenreShelfPage(
+									href={Firebase.pageGenerator.generateBookGenreShelfPage(
 										bookInfo.id,
 										bookInfo.title,
 										genre
@@ -568,7 +591,7 @@ const BookPage = ({ match }) => {
 			</div>
 			<a
 				className="book-page-genres-see-top-shelves"
-				href={Firebase.generateBookTopShelvesPage(bookInfo.id)}
+				href={Firebase.pageGenerator.generateBookTopShelvesPage(bookInfo.id)}
 			>
 				See top shelves...
 			</a>
@@ -640,6 +663,155 @@ const BookPage = ({ match }) => {
 		</div>
 	) : null;
 
+	const bookPageArticlesFeaturingBook =
+		loaded && bookInfo.articles.length > 0 ? (
+			<div className="book-page-articles">
+				<span className="book-page-articles-title">
+					ARTICLES FEATURING THIS BOOK
+				</span>
+				<div className="book-page-articles-article">
+					{bookInfo.articles[0].image !== undefined ? (
+						<img
+							className="book-page-article-image"
+							src={bookInfo.articles[0].image}
+							alt={bookInfo.articles[0].title}
+						/>
+					) : null}
+					<a
+						className="book-page-article-title-a"
+						href={Firebase.pageGenerator.generateArticlePage(
+							bookInfo.articles[0].id,
+							bookInfo.articles[0].title
+						)}
+					>
+						{bookInfo.articles[0].title}
+					</a>
+					<p className="book-page-article-content">
+						{bookInfo.articles[0].content}
+					</p>
+					<a
+						className="book-page-article-read-more-a"
+						href={Firebase.pageGenerator.generateArticlePage(
+							bookInfo.articles[0].id,
+							bookInfo.articles[0].title
+						)}
+					>
+						Read more...
+					</a>
+					<div className="book-page-articles-article-bottom">
+						<span>{`${bookInfo.articles[0].likeCount} likes`}</span>
+						<span>·</span>
+						<span>{`${bookInfo.articles[0].commentCount} comments`}</span>
+					</div>
+				</div>
+			</div>
+		) : null;
+
+	const bookPageQuizQuestionIndex = loaded
+		? Math.floor(Math.random() * bookInfo.quizQuestions.length)
+		: -1;
+
+	const bookPageQuizQuestion = loaded ? (
+		bookInfo.quizQuestions.length > 0 ? (
+			<div className="book-page-quiz-section">
+				<a
+					className="book-page-quiz-question-a"
+					href={Firebase.pageGenerator.generateBookTriviaPage(
+						bookInfo.id,
+						bookInfo.title
+					)}
+				>
+					QUIZ QUESTION
+				</a>
+				<div className="book-page-quiz-question-main">
+					<a
+						className="book-page-quiz-title-a"
+						href={bookInfo.quizQuestions[bookPageQuizQuestionIndex].quizPage}
+					>
+						{bookInfo.quizQuestions[bookPageQuizQuestionIndex].quizTitle}
+					</a>
+					<span className="book-page-quiz-description">
+						{bookInfo.quizQuestions[bookPageQuizQuestionIndex].quizDescription}
+					</span>
+					<div className="book-page-quiz-question-main-actual-question">
+						<span>
+							{bookInfo.quizQuestions[bookPageQuizQuestionIndex].question}
+						</span>
+						{bookInfo.quizQuestions[bookPageQuizQuestionIndex].options.map(
+							(option, index) => {
+								return (
+									<div className="book-page-quiz-answer" key={index}>
+										<input
+											id={`quiz-radio-${index}`}
+											type="radio"
+											checked={quizQuestionOptionSelected === index}
+											value={option}
+											onChange={(e) => {
+												setQuizQuestionOptionSelected(index);
+											}}
+										/>
+										<label htmlFor={`quiz-radio-${index}`}>{option}</label>
+									</div>
+								);
+							}
+						)}
+					</div>
+				</div>
+				<a
+					className="book-page-quiz-question-take"
+					href={bookInfo.quizQuestions[bookPageQuizQuestionIndex].quizPage}
+				>
+					Take this quizz...
+				</a>
+			</div>
+		) : (
+			<div className="book-page-quiz-section">
+				<a
+					className="book-page-quiz-question-a"
+					href={Firebase.pageGenerator.generateBookTriviaPage(
+						bookInfo.id,
+						bookInfo.title
+					)}
+				>{`QUIZZES ABOUT ${bookInfo.title.toUpperCase()}:...`}</a>
+				<span className="book-page-no-quizzes-yet-span">
+					No quizzes yet.{' '}
+					<a
+						className="book-page-add-quizzes-now-a"
+						href={Firebase.pageGenerator.generateBookTriviaPage(
+							bookInfo.id,
+							bookInfo.title
+						)}
+					>
+						Add some now »
+					</a>
+				</span>
+			</div>
+		)
+	) : null;
+
+	const bookPageQuotes =
+		loaded && bookInfo.quotes.length > 0 ? (
+			<div className="book-page-quotes-section">
+				<a
+					className="book-page-quotes-section-a"
+					href={bookInfo.quotesPage}
+				>{`QUOTES FROM ${bookInfo.title.toUpperCase()}:...`}</a>
+				<div className="book-info-quotes-section-main">
+					{bookInfo.quotes.map((quote, index) => {
+						return (
+							<span className="book-page-quotes-section-quote" key={index}>
+								{`"${quote.text}" – `}
+								<a href={quote.page}>{`${quote.likeCount} likes`}</a>
+							</span>
+						);
+					})}
+				</div>
+				<a className="book-info-quotes-more-quotes" href={bookInfo.quotesPage}>
+					More quotes...
+				</a>
+			</div>
+		) : null;
+
 	const bookPageMainContentRight = (
 		<div className="book-page-main-content-right">
 			{bookPageMainContentRightTop}
@@ -647,6 +819,9 @@ const BookPage = ({ match }) => {
 			{bookPageGenres}
 			{bookPageAuthorAboutSection}
 			{bookPageBooksByAuthorSection}
+			{bookPageArticlesFeaturingBook}
+			{bookPageQuizQuestion}
+			{bookPageQuotes}
 		</div>
 	);
 
