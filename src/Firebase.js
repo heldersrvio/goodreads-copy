@@ -384,8 +384,8 @@ const Firebase = (() => {
 		if (bookDocumentData.publisher !== undefined) {
 			miscDetails.publisher = bookDocumentData.publisher;
 		}
-		if (bookDocumentData.pages !== undefined) {
-			miscDetails.pages = bookDocumentData.pages;
+		if (bookDocumentData.pageCount !== undefined) {
+			miscDetails.pageCount = bookDocumentData.pageCount;
 		}
 		if (bookDocumentData.publishedDate !== undefined) {
 			miscDetails.editionPublishedDate = bookDocumentData.publishedDate.toDate();

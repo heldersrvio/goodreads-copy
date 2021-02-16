@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
 
 .book-page-main-content a {
 	display: inline;
@@ -11,6 +12,10 @@
 
 .book-page-main-content {
 	margin: 15px 155px;
+}
+
+.book-page-main-content-left {
+	width: 70%;
 }
 
 .book-page-book-info {
@@ -84,4 +89,269 @@ span.book-page-author-name a:hover,
 .book-page-ratings-area {
 	display: flex;
 	flex-direction: row;
+	justify-content: space-between;
+	width: 60%;
+	margin-top: 10px;
+}
+
+.book-page-ratings-area button,
+.book-page-ratings-area a {
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	color: rgb(0, 99, 93);
+	padding: 0;
+	font-size: 12px;
+	line-height: 18px;
+	height: 18px;
+}
+
+.book-page-ratings-area button:hover,
+.book-page-ratings-area a:hover {
+	background-color: transparent;
+	text-decoration: underline;
+}
+
+span.book-page-ratings-dot {
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	color: rgb(153, 153, 153);
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.book-page-synopsis-wrapper {
+	padding-bottom: 10px;
+	border-bottom: 1px solid rgb(216, 216, 216);
+}
+
+.book-page-synopsis-wrapper button {
+	color: rgb(0, 99, 93);
+	padding: 0;
+	display: inline;
+	font-family: 'Merriweather', Georgia, serif;
+	font-size: 14px;
+	line-height: 21px;
+	font-weight: 400;
+}
+
+.book-page-synopsis-wrapper button:hover {
+	background-color: transparent;
+	text-decoration: underline;
+	color: rgb(0, 99, 93);
+}
+
+.book-page-synopsis-area {
+	height: 105px;
+	margin-top: 10px;
+	overflow: hidden;
+}
+
+.book-page-synopsis-area-full {
+	height: auto;
+	margin-top: 10px;
+	overflow: hidden;
+}
+
+.book-page-synopsis-area p,
+.book-page-synopsis-area-full p {
+	color: rgb(24, 24, 24);
+	font-family: 'Merriweather', Georgia, serif;
+	font-size: 14px;
+	line-height: 21px;
+	font-weight: 400;
+}
+
+.book-page-get-a-copy {
+	margin-top: 10px;
+	padding-bottom: 7px;
+	display: flex;
+	flex-direction: column;
+	border-bottom: 1px solid rgb(216, 216, 216);
+}
+
+.book-page-get-a-copy span,
+.book-page-lists-with-book-top a.lists-with-book-a,
+.book-page-community-reviews-title {
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	color: rgb(56, 33, 16);
+	font-size: 12px;
+	font-weight: 700;
+}
+
+.book-page-get-a-copy a {
+	display: inline-block;
+	color: rgb(51, 51, 51);
+	padding: 10px;
+	border: 1px solid rgb(214, 208, 196);
+	border-radius: 3px;
+	background-color: rgb(244, 241, 234);
+	width: 50px;
+	height: 14px;
+	font-size: 14px;
+	line-height: 14px;
+	margin-top: 15px;
+}
+
+.book-page-get-a-copy a:hover {
+	background-color: rgb(237, 230, 214);
+	color: rgb(51, 51, 51);
+}
+
+.book-page-book-info-details {
+	color: rgb(51, 51, 51);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+	display: flex;
+	flex-direction: column;
+	margin-top: 7px;
+}
+
+.book-page-book-info-details span.book-publication-original-year {
+	color: rgb(153, 153, 153);
+}
+
+.book-page-book-info-bottom {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.book-page-book-info-bottom button.show-more-book-info-details-button,
+.book-page-book-info-bottom a.book-page-book-info-edit-details {
+	background-color: transparent;
+	display: block;
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 24px;
+	padding: 0;
+	height: 24px;
+	width: auto;
+}
+
+.book-page-book-info-bottom button.show-more-book-info-details-button {
+	color: rgb(0, 99, 93);
+}
+
+.book-page-book-info-bottom a.book-page-book-info-edit-details {
+	color: rgb(153, 153, 153);
+}
+
+.book-page-book-info-bottom button.show-more-book-info-details-button:hover,
+.book-page-book-info-bottom a.book-page-book-info-edit-details:hover,
+.book-page-book-info-details-expanded-right a:hover,
+.book-page-lists-with-book-more a.more-lists-with-book-a:hover {
+	text-decoration: underline;
+}
+
+.book-page-book-info-details-expanded {
+	display: flex;
+	flex-direction: row;
+	padding-top: 15px;
+}
+
+.book-page-book-info-details-expanded-left,
+.book-page-book-info-details-expanded-right {
+	display: flex;
+	flex-direction: column;
+}
+
+.book-page-book-info-details-expanded-left {
+	color: rgb(56, 33, 16);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-weight: 700;
+	font-size: 12px;
+	line-height: 18px;
+	padding-right: 15px;
+}
+
+.book-page-book-info-details-expanded-right a,
+.book-page-lists-with-book-bottom a.book-page-lists-with-book-pv-title {
+	color: rgb(0, 99, 93);
+	background-color: transparent;
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+	padding: 0;
+	height: 18px;
+}
+
+.book-page-book-info-details-expanded-right a {
+	display: block;
+	width: auto;
+}
+
+.book-page-lists-with-book {
+	margin-top: 30px;
+	margin-bottom: 50px;
+}
+
+.book-page-lists-with-book-top {
+	border-bottom: 1px solid rgb(216, 216, 216);
+	height: 40px;
+}
+
+.book-page-lists-with-book-top a.lists-with-book-a:hover,
+.book-page-lists-with-book-bottom a.book-page-lists-with-book-pv-title:hover {
+	text-decoration: underline;
+}
+
+.book-page-lists-with-book-bottom {
+	padding-top: 10px;
+	padding-left: 10px;
+	overflow: hidden;
+}
+
+.book-page-lists-with-book-bottom a.book-page-lists-with-book-pv-title {
+	font-weight: 700;
+	display: inline;
+}
+
+.book-page-lists-with-book-pv-bottom {
+	padding-top: 3px;
+}
+
+.book-page-lists-with-book-pv-bottom .book-page-lists-with-book-pv-stats {
+	color: rgb(153, 153, 153);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+	display: block;
+}
+
+.book-page-lists-with-book-pv-top {
+	display: flex;
+	flex-direction: row;
+	width: 285px;
+	overflow: hidden;
+}
+
+.book-page-lists-book-pv,
+.book-page-lists-book-pv img {
+	width: 55px;
+	height: 80px;
+	margin-right: 2px;
+}
+
+.book-page-lists-with-book-more a.more-lists-with-book-a {
+	color: rgb(0, 99, 93);
+	display: block;
+	float: right;
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 13px;
+	font-weight: 700;
+	line-height: 18px;
+	width: 152px;
+	height: 18px;
+}
+
+.book-page-community-reviews-top {
+	padding-bottom: 5px;
+	border-bottom: 1px solid rgb(216, 216, 216);
+}
+
+.book-page-community-reviews-top .book-page-community-reviews-showing {
+	float: right;
+	color: rgb(24, 24, 24);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 11px;
+	line-height: 14px;
 }

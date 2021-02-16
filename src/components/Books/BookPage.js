@@ -19,6 +19,8 @@ const BookPage = ({ match }) => {
 	const [quizQuestionOptionSelected, setQuizQuestionOptionSelected] = useState(
 		-1
 	);
+	const [synopsisShowMore, setSynopsisShowMore] = useState(false);
+	const [showMoreBookInfoDetails, setShowMoreBookInfoDetails] = useState(false);
 
 	const user = useSelector((state) => state);
 
@@ -188,7 +190,9 @@ const BookPage = ({ match }) => {
 			<div className="book-page-general-rating">
 				{/* Stars and general rating go here */}
 			</div>
+			<span className="book-page-ratings-dot">·</span>
 			<button className="rating-details">Rating details</button>
+			<span className="book-page-ratings-dot">·</span>
 			<a
 				className="book-page-ratings-count"
 				href={`${bookPageId}#other-reviews`}
@@ -201,6 +205,7 @@ const BookPage = ({ match }) => {
 					bookInfo.oneRatings
 				} ratings`}
 			</a>
+			<span className="book-page-ratings-dot">·</span>
 			<a
 				className="book-page-reviews-count"
 				href={`${bookPageId}#other-reviews`}
@@ -213,13 +218,29 @@ const BookPage = ({ match }) => {
 	) : null;
 
 	const bookPageSynopsisArea = loaded ? (
-		<div className="book-page-synopsis-area">
-			{bookInfo.preSynopsis !== undefined ? (
-				<p className="pre-synopsis">
-					<b>{bookInfo.preSynopsis}</b>
-				</p>
-			) : null}
-			<p className="synopsis">{bookInfo.synopsis}</p>
+		<div className="book-page-synopsis-wrapper">
+			<div
+				className={
+					synopsisShowMore
+						? 'book-page-synopsis-area-full'
+						: 'book-page-synopsis-area'
+				}
+			>
+				{bookInfo.preSynopsis !== undefined ? (
+					<p className="pre-synopsis">
+						<b>{bookInfo.preSynopsis}</b>
+					</p>
+				) : null}
+				<p className="synopsis">{bookInfo.synopsis}</p>
+			</div>
+			<button
+				className="synopsis-show-more"
+				onClick={(e) => {
+					setSynopsisShowMore((previous) => !previous);
+				}}
+			>
+				{synopsisShowMore ? '(less)' : '...more'}
+			</button>
 		</div>
 	) : null;
 
@@ -233,11 +254,13 @@ const BookPage = ({ match }) => {
 	const bookPageBookInfoDetailsExpanded = loaded ? (
 		<div className="book-page-book-info-details-expanded">
 			<div className="book-page-book-info-details-expanded-left">
+				<span>Original Title</span>
 				{bookInfo.ISBN !== undefined ? <span>ISBN</span> : null}
 				<span>Edition Language</span>
 				{bookInfo.series !== undefined ? <span>Series</span> : null}
 			</div>
 			<div className="book-page-book-info-details-expanded-right">
+				<span>{bookInfo.originalTitle}</span>
 				{bookInfo.ISBN !== undefined ? <span>{bookInfo.ISBN}</span> : null}
 				<span>{bookInfo.language}</span>
 				{bookInfo.series !== undefined ? (
@@ -253,8 +276,8 @@ const BookPage = ({ match }) => {
 		<div className="book-page-book-info-details">
 			<span className="book-type-and-pages">
 				{bookInfo.type !== undefined
-					? `${bookInfo.type}, ${bookInfo.pages}`
-					: bookInfo.pages}
+					? `${bookInfo.type}, ${bookInfo.pageCount} pages`
+					: `${bookInfo.pageCount} pages`}
 			</span>
 			<span className="book-publication">
 				{`Published ${format(
@@ -263,12 +286,22 @@ const BookPage = ({ match }) => {
 				)} by ${bookInfo.publisher}`}
 				{bookInfo.firstEditionPublishedYear !==
 				bookInfo.editionPublishedDate.getYear() ? (
-					<span className="book-publication-original-year">{`(first published ${bookInfo.firstEditionPublishedYear})`}</span>
+					<span className="book-publication-original-year">{` (first published ${bookInfo.firstEditionPublishedYear})`}</span>
 				) : null}
 			</span>
-			{bookPageBookInfoDetailsExpanded}
-			<div className="book-page-book-info-edit-details">
-				<a href="/">Edit Details</a>
+			{showMoreBookInfoDetails ? bookPageBookInfoDetailsExpanded : null}
+			<div className="book-page-book-info-bottom">
+				<button
+					className="show-more-book-info-details-button"
+					onClick={(e) => {
+						setShowMoreBookInfoDetails((previous) => !previous);
+					}}
+				>
+					{showMoreBookInfoDetails ? '...Less Detail' : 'More Details...'}
+				</button>
+				<a href="/" className="book-page-book-info-edit-details">
+					Edit Details
+				</a>
 			</div>
 		</div>
 	) : null;
