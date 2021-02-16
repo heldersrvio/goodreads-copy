@@ -139,26 +139,47 @@ const BookPage = ({ match }) => {
 
 	const bookPageTitleArea = loaded ? (
 		<div className="book-page-title-area">
-			<h1 className="book-page-book-title">
-				{bookInfo.title}
-				{bookInfo.series !== undefined ? (
-					<a
-						className="book-page-book-title-series-a"
-						href={bookInfo.series.page}
-					>{`(${bookInfo.series.name} #${bookInfo.seriesInstance})`}</a>
-				) : (
-					''
-				)}
-			</h1>
+			<h1 className="book-page-book-title">{bookInfo.title}</h1>
+			{bookInfo.series !== undefined ? (
+				<a
+					className="book-page-book-title-series-a"
+					href={bookInfo.series.page}
+				>{`(${bookInfo.series.name} #${bookInfo.seriesInstance})`}</a>
+			) : (
+				''
+			)}
 			<span className="book-page-author-name">
 				by{' '}
 				<a className="book-page-author-name-a" href={bookInfo.authorPages[0]}>
 					{bookInfo.authorNames[0]}
 				</a>
 				{bookInfo.authorIsMember ? (
-					<span className="book-page-goodreads-author">(Goodreads Author)</span>
+					<span>
+						<span className="book-page-goodreads-author">
+							{' '}
+							(Goodreads Author)
+						</span>
+						{bookInfo.authorNames.length > 1 ? ',' : ''}
+					</span>
 				) : null}
 			</span>
+			{bookInfo.authorNames.slice(1).map((authorName, index) => {
+				return (
+					<span key={index}>
+						<a
+							className="book-page-other-author-name-a"
+							href={bookInfo.authorPages[index]}
+						>
+							{authorName}
+						</a>
+						<span className="book-page-goodreads-other-author">
+							{' '}
+							({bookInfo.authorFunctions[index]})
+						</span>
+						{index === bookInfo.authorNames.length - 1 ? ',' : ''}
+					</span>
+				);
+			})}
 		</div>
 	) : null;
 
@@ -184,7 +205,9 @@ const BookPage = ({ match }) => {
 				className="book-page-reviews-count"
 				href={`${bookPageId}#other-reviews`}
 			>
-				{`${bookInfo.reviews.length} reviews`}
+				{`${bookInfo.reviews.length} ${
+					bookInfo.reviews.length === 1 ? 'review' : 'reviews'
+				}`}
 			</a>
 		</div>
 	) : null;

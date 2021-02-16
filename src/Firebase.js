@@ -245,6 +245,7 @@ const Firebase = (() => {
 	};
 
 	const getUserDetailsForBook = async (userUID, bookId) => {
+		const userDetails = {};
 		if (userUID !== null && userUID !== undefined) {
 			const bookInstanceQuery = await database
 				.collection('userBooksInstances')
@@ -254,65 +255,65 @@ const Firebase = (() => {
 			const bookInstanceQueryResults = bookInstanceQuery.docs.map((document) =>
 				document.data()
 			);
-			const userDetails = {};
 			if (bookInstanceQueryResults.length > 0) {
 				userDetails.userStatus = bookInstanceQueryResults[0].status;
 				userDetails.userProgress = bookInstanceQueryResults[0].progress;
 			}
-			const allBookInstancesQuery = await database
-				.collection('userBooksInstances')
-				.get();
-			userDetails.thisEditionRatings = 0;
-			userDetails.thisEditionRating = 0;
-			userDetails.thisEditionAddedBy = 0;
-			userDetails.fiveRatings = 0;
-			userDetails.fourRatings = 0;
-			userDetails.threeRatings = 0;
-			userDetails.twoRatings = 0;
-			userDetails.oneRatings = 0;
-			userDetails.addedBy = 0;
-			userDetails.toReads = 0;
-			const bookQuery = await database.collection('books').doc(bookId).get();
-			const rootBook = bookQuery.data().rootBook;
-			const allEditionsQuery = await database
-				.collection('books')
-				.where('rootBook', '==', rootBook)
-				.get();
-			const allEditionsQueryBooks = allEditionsQuery.docs.map(
-				(document) => document.id
-			);
-			allBookInstancesQuery.docs.forEach((document) => {
-				if (allEditionsQueryBooks.includes(document.data().bookId)) {
-					if (document.data().bookId === bookId) {
-						userDetails.thisEditionRatings++;
-						userDetails.thisEditionRating += document.data().rating;
-						userDetails.thisEditionAddedBy++;
-					}
-					userDetails.addedBy++;
-					if (document.data().status === 'to-read') {
-						userDetails.toReads++;
-					}
-					switch (document.data().rating) {
-						case 5:
-							userDetails.fiveRatings++;
-							break;
-						case 4:
-							userDetails.fourRatings++;
-							break;
-						case 3:
-							userDetails.threeRatings++;
-							break;
-						case 2:
-							userDetails.twoRatings++;
-							break;
-						default:
-							userDetails.oneRatings++;
-					}
-				}
-			});
-			userDetails.thisEditionRating =
-				userDetails.thisEditionRating / userDetails.thisEditionRatings;
 		}
+		const allBookInstancesQuery = await database
+			.collection('userBooksInstances')
+			.get();
+		userDetails.thisEditionRatings = 0;
+		userDetails.thisEditionRating = 0;
+		userDetails.thisEditionAddedBy = 0;
+		userDetails.fiveRatings = 0;
+		userDetails.fourRatings = 0;
+		userDetails.threeRatings = 0;
+		userDetails.twoRatings = 0;
+		userDetails.oneRatings = 0;
+		userDetails.addedBy = 0;
+		userDetails.toReads = 0;
+		const bookQuery = await database.collection('books').doc(bookId).get();
+		const rootBook = bookQuery.data().rootBook;
+		const allEditionsQuery = await database
+			.collection('books')
+			.where('rootBook', '==', rootBook)
+			.get();
+		const allEditionsQueryBooks = allEditionsQuery.docs.map(
+			(document) => document.id
+		);
+		allBookInstancesQuery.docs.forEach((document) => {
+			if (allEditionsQueryBooks.includes(document.data().bookId)) {
+				if (document.data().bookId === bookId) {
+					userDetails.thisEditionRatings++;
+					userDetails.thisEditionRating += document.data().rating;
+					userDetails.thisEditionAddedBy++;
+				}
+				userDetails.addedBy++;
+				if (document.data().status === 'to-read') {
+					userDetails.toReads++;
+				}
+				switch (document.data().rating) {
+					case 5:
+						userDetails.fiveRatings++;
+						break;
+					case 4:
+						userDetails.fourRatings++;
+						break;
+					case 3:
+						userDetails.threeRatings++;
+						break;
+					case 2:
+						userDetails.twoRatings++;
+						break;
+					default:
+						userDetails.oneRatings++;
+				}
+			}
+		});
+		userDetails.thisEditionRating =
+			userDetails.thisEditionRating / userDetails.thisEditionRatings;
+		return userDetails;
 	};
 
 	const getReviewDetailsForBook = async (rootBook, title) => {
