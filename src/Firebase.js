@@ -482,8 +482,9 @@ const Firebase = (() => {
 			.where('authorId', '==', authorId)
 			.get();
 		return await Promise.all(
-			rootBooksByAuthorQuery.docs.map(async (document) => {
-				if (document.id !== rootBook) {
+			rootBooksByAuthorQuery.docs
+				.filter((document) => document.id !== rootBook)
+				.map(async (document) => {
 					const bookQuery = await database
 						.collection('books')
 						.where('rootBook', '==', document.id)
@@ -494,11 +495,10 @@ const Firebase = (() => {
 						cover: bookQuery.docs[0].data().cover,
 						page: Firebase.pageGenerator.generateBookPage(
 							bookQuery.docs[0].id,
-							bookQuery.docs[0].title
+							bookQuery.docs[0].data().title
 						),
 					};
-				}
-			})
+				})
 		);
 	};
 
@@ -576,8 +576,8 @@ const Firebase = (() => {
 			.get();
 		return {
 			quotesPage: pageGenerator.generateBookQuotesPage(
-				mainEditionQuery.documents[0].id,
-				mainEditionQuery.documents[0].data().title
+				mainEditionQuery.docs[0].id,
+				mainEditionQuery.docs[0].data().title
 			),
 		};
 	};

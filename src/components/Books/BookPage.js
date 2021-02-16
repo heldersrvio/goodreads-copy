@@ -268,7 +268,7 @@ const BookPage = ({ match }) => {
 	);
 
 	const bookPageListsWithBook =
-		bookInfo.lists !== undefined ? (
+		loaded && bookInfo.lists !== undefined ? (
 			<div className="book-page-lists-with-book">
 				<div className="book-page-lists-with-book-top">
 					<a className="lists-with-book-a" href={`/lists/book/${bookInfo.id}`}>
@@ -832,7 +832,7 @@ const BookPage = ({ match }) => {
 		</div>
 	) : null;
 
-	const bookPageEnlargingCover = (
+	const bookPageEnlargingCover = loaded ? (
 		<div
 			className={
 				enlargingCover ? 'cover-picture-box' : 'cover-picture-box hidden'
@@ -844,7 +844,7 @@ const BookPage = ({ match }) => {
 				className="book-info-book-cover-enlarged"
 			></img>
 		</div>
-	);
+	) : null;
 
 	return (
 		<div className="book-page">
