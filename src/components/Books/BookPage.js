@@ -7,6 +7,8 @@ import TopBar from '../Global/TopBar';
 //import HomePageFootBar from './HomePageFootBar';
 
 //Missing other editions
+//Reviews: missing 'more...' button, testing shelves and testing several reviews
+// Missing testing and styling for articles
 
 const BookPage = ({ match }) => {
 	const {
@@ -449,8 +451,8 @@ const BookPage = ({ match }) => {
 										)}
 									>
 										{review.userName}
-									</a>{' '}
-									rated it <div>{/* Stars go here */}</div>
+									</a>
+									<span>&nbsp;rated it</span> {/* Stars go here */}
 								</span>
 								<a
 									className="book-page-review-instance-date"
@@ -500,7 +502,9 @@ const BookPage = ({ match }) => {
 								>
 									{review.numberOfLikes} likes
 								</a>
+								<span className="black-dot">·</span>
 								<button className="book-page-review-like-button">Like</button>
+								<span className="black-dot">·</span>
 								<a
 									className="book-page-review-see-review"
 									href={Firebase.pageGenerator.generateReviewPage(review.id)}
@@ -532,9 +536,9 @@ const BookPage = ({ match }) => {
 				<div className="ratings-section-top">{bookPageRatingsArea}</div>
 				<div className="ratings-section-bottom">
 					<div className="ratings-section-bottom-left">
-						<a href="/">Filters</a>
+						<button>Filters</button>
 						<span>|</span>
-						<a href="/">Sort order</a>
+						<button>Sort order</button>
 					</div>
 					<div className="ratings-section-bottom-right">{/* Search box */}</div>
 				</div>
@@ -623,7 +627,12 @@ const BookPage = ({ match }) => {
 	const bookPageGenres = loaded ? (
 		<div className="book-page-genres">
 			<div className="book-page-genres-main">
-				<span className="book-page-genres-title">GENRES</span>
+				<a
+					className="book-page-genres-title-a"
+					href={Firebase.pageGenerator.generateBookTopShelvesPage(bookInfo.id)}
+				>
+					GENRES
+				</a>
 				<div className="book-page-genres-list">
 					{bookInfo.genres.map((genre, index) => {
 						return (
@@ -659,7 +668,7 @@ const BookPage = ({ match }) => {
 			<a
 				className="author-about-section-title-a"
 				href={bookInfo.authorPages[0]}
-			>{`ABOUT ${bookInfo.authorNames[0]}`}</a>
+			>{`ABOUT ${bookInfo.authorNames[0].toUpperCase()}`}</a>
 			<div className="author-about-section-preview">
 				<a href={bookInfo.authorPages[0]}>
 					<img

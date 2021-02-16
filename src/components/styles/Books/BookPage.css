@@ -12,10 +12,17 @@
 
 .book-page-main-content {
 	margin: 15px 155px;
+	display: flex;
+	flex-direction: row;
 }
 
 .book-page-main-content-left {
 	width: 70%;
+}
+
+.book-page-main-content-right {
+	width: 30%;
+	padding-left: 15px;
 }
 
 .book-page-book-info {
@@ -105,7 +112,11 @@ span.book-page-author-name a:hover,
 }
 
 .book-page-ratings-area button:hover,
-.book-page-ratings-area a:hover {
+.book-page-ratings-area a:hover,
+.book-page-genres-main .book-page-genres-title-a:hover,
+.author-about-section-title-a:hover,
+.book-page-books-by-author-a:hover,
+.book-page-quiz-question-a:hover {
 	background-color: transparent;
 	text-decoration: underline;
 }
@@ -169,14 +180,20 @@ span.book-page-ratings-dot {
 
 .book-page-get-a-copy span,
 .book-page-lists-with-book-top a.lists-with-book-a,
-.book-page-community-reviews-title {
+.book-page-community-reviews-title,
+.book-page-readers-also-enjoyed-main span,
+.book-page-genres-main .book-page-genres-title-a,
+.author-about-section-title-a,
+.book-page-books-by-author-a,
+.book-page-quiz-question-a {
 	font-family: 'Lato', Helvetica, Arial, sans-serif;
 	color: rgb(56, 33, 16);
 	font-size: 12px;
 	font-weight: 700;
 }
 
-.book-page-get-a-copy a {
+.book-page-get-a-copy a,
+.book-page-review-bottom button {
 	display: inline-block;
 	color: rgb(51, 51, 51);
 	padding: 10px;
@@ -238,7 +255,10 @@ span.book-page-ratings-dot {
 .book-page-book-info-bottom button.show-more-book-info-details-button:hover,
 .book-page-book-info-bottom a.book-page-book-info-edit-details:hover,
 .book-page-book-info-details-expanded-right a:hover,
-.book-page-lists-with-book-more a.more-lists-with-book-a:hover {
+.book-page-lists-with-book-more a.more-lists-with-book-a:hover,
+.book-page-review-instance-right-top-line
+	.book-page-review-instance-user-rated
+	a:hover {
 	text-decoration: underline;
 }
 
@@ -354,4 +374,209 @@ span.book-page-ratings-dot {
 	font-family: 'Lato', Helvetica, Arial, sans-serif;
 	font-size: 11px;
 	line-height: 14px;
+}
+
+.ratings-section {
+	padding-bottom: 10px;
+	border-bottom: 1px solid rgb(216, 216, 216);
+}
+
+.ratings-section-top a,
+.ratings-section-top button {
+	font-size: 14px;
+}
+
+.ratings-section-top a.book-page-ratings-count,
+.ratings-section-top a.book-page-reviews-count,
+.ratings-section-bottom-left span {
+	cursor: text;
+	color: rgb(153, 153, 153);
+}
+
+.ratings-section-top a.book-page-ratings-count:hover,
+.ratings-section-top a.book-page-reviews-count:hover {
+	text-decoration: none;
+}
+
+.ratings-section-bottom-left button {
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	color: rgb(0, 99, 93);
+	padding: 0;
+	font-size: 14px;
+	line-height: 18px;
+	height: 18px;
+}
+
+.ratings-section-bottom-left span {
+	height: 18px;
+	display: inline-flex;
+	align-items: center;
+}
+
+.ratings-section-bottom-left {
+	margin-top: 15px;
+	width: 17%;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.ratings-section-bottom-left button:hover {
+	background-color: transparent;
+	text-decoration: underline;
+}
+
+.book-page-community-reviews .reviews-section {
+	padding-top: 10px;
+}
+
+.book-page-community-reviews
+	.reviews-section
+	.book-page-reviews-section-review-list
+	.book-page-review-instance {
+	display: flex;
+	flex-direction: row;
+}
+
+.book-page-review-instance-profile-image {
+	width: 50px;
+	height: 66px;
+	margin-right: 10px;
+}
+
+.book-page-review-instance .book-page-review-instance-right {
+	width: 100%;
+}
+
+.book-page-review-instance
+	.book-page-review-instance-right
+	.book-page-review-instance-right-top-line {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.book-page-review-instance-right-top-line
+	.book-page-review-instance-user-rated {
+	display: flex;
+	flex-direction: row;
+}
+
+.book-page-review-instance-right-top-line
+	.book-page-review-instance-user-rated
+	a {
+	display: inline;
+	color: rgb(0, 99, 93);
+	float: right;
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 13px;
+	font-weight: 700;
+	line-height: 18px;
+	height: 18px;
+}
+
+.book-page-review-instance-right-top-line
+	.book-page-review-instance-user-rated
+	span {
+	display: inline;
+	color: rgb(24, 24, 24);
+	font-size: 14px;
+	line-height: 18px;
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+}
+
+.book-page-review-instance-right-top-line a.book-page-review-instance-date {
+	color: rgb(187, 187, 187);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	line-height: 18px;
+	height: 18px;
+}
+
+.book-page-review-instance-right-top-line
+	a.book-page-review-instance-date:hover {
+	text-decoration: underline;
+}
+
+.recommends-it-for,
+.book-page-review-instance-shelves {
+	color: rgb(153, 153, 153);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	line-height: 18px;
+}
+
+.recommends-it-for-answer {
+	color: rgb(24, 24, 24);
+}
+
+.book-page-review-bottom {
+	margin-top: 15px;
+	width: 30%;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.book-page-review-instance-shelves-answer a,
+.book-page-review-bottom a {
+	color: rgb(0, 99, 93);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	line-height: 18px;
+}
+
+.book-page-review-instance-shelves-answer a:hover,
+.book-page-review-bottom a:hover,
+.book-page-main-content-right-top a:hover,
+.book-page-main-content-right-top button:hover {
+	text-decoration: underline;
+	background-color: transparent;
+}
+
+.book-page-review-main-body {
+	margin-top: 15px;
+	color: rgb(24, 24, 24);
+	font-family: 'Merriweather', Georgia, serif;
+	font-size: 14px;
+	line-height: 21px;
+}
+
+.book-page-review-bottom button {
+	margin: 0;
+	font-size: 11px;
+	line-height: 11px;
+	padding: 4px 12px;
+	width: 46px;
+	height: 21px;
+}
+
+.book-page-review-bottom button:hover {
+	background-color: rgb(237, 230, 214);
+}
+
+.book-page-review-bottom .black-dot {
+	display: inline-flex;
+	align-items: center;
+}
+
+.book-page-main-content-right-top {
+	width: 40%;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	margin-bottom: 15px;
+}
+
+.book-page-main-content-right-top a,
+.book-page-main-content-right-top button,
+.book-page-main-content-right-top span {
+	padding: 0;
+	display: inline;
+	color: rgb(153, 153, 153);
+	width: auto;
+	height: auto;
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
 }
