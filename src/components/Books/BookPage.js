@@ -23,6 +23,10 @@ const BookPage = ({ match }) => {
 	);
 	const [synopsisShowMore, setSynopsisShowMore] = useState(false);
 	const [showMoreBookInfoDetails, setShowMoreBookInfoDetails] = useState(false);
+	const [
+		readersEnjoyedListTranslation,
+		setReadersEnjoyedListTranslation,
+	] = useState(0);
 
 	const user = useSelector((state) => state);
 
@@ -593,36 +597,93 @@ const BookPage = ({ match }) => {
 		</div>
 	) : null;
 
-	const bookPageReadersAlsoEnjoyedSection = loaded ? (
-		<div className="book-page-readers-also-enjoyed">
-			<div className="book-page-readers-also-enjoyed-main">
-				<span>READERS ALSO ENJOYED</span>
-				{bookInfo.alsoEnjoyedBooks.map((book, index) => {
-					return (
-						<a
-							key={index}
-							className="book-page-also-enjoyed-book-a"
-							href={Firebase.pageGenerator.generateBookPage(
-								book.id,
-								book.title
-							)}
-						>
-							<img src={book.cover} alt={book.title} />
-						</a>
-					);
-				})}
+	const bookPageReadersAlsoEnjoyedSection =
+		loaded && bookInfo.alsoEnjoyedBooks.length > 0 ? (
+			<div className="book-page-readers-also-enjoyed">
+				<div className="book-page-readers-also-enjoyed-main">
+					<span>READERS ALSO ENJOYED</span>
+					<div className="book-page-readers-also-enjoyed-selection">
+						<div className="book-page-readers-also-enjoyed-main-list">
+							<div
+								className="book-page-readers-also-enjoyed-main-list-contents"
+								style={{
+									transform: `translate(${readersEnjoyedListTranslation}px)`,
+								}}
+							>
+								{bookInfo.alsoEnjoyedBooks.map((book, index) => {
+									return (
+										<a
+											key={index}
+											className="book-page-also-enjoyed-book-a"
+											href={Firebase.pageGenerator.generateBookPage(
+												book.id,
+												book.title
+											)}
+										>
+											<img src={book.cover} alt={book.title} />
+										</a>
+									);
+								})}
+							</div>
+						</div>
+						<button
+							className={
+								readersEnjoyedListTranslation < 0
+									? 'book-page-readers-also-enjoyed-back-button'
+									: 'book-page-readers-also-enjoyed-back-button hidden'
+							}
+							onClick={(e) => {
+								setReadersEnjoyedListTranslation((previousValue) => {
+									const forwardButton = document.getElementsByClassName(
+										'book-page-readers-also-enjoyed-forward-button'
+									)[0];
+									if (previousValue < -250) {
+										forwardButton.classList.remove('hidden');
+										return previousValue + 250;
+									} else {
+										return 0;
+									}
+								});
+							}}
+						></button>
+						<button
+							className={'book-page-readers-also-enjoyed-forward-button'}
+							onClick={(e) => {
+								setReadersEnjoyedListTranslation((previousValue) => {
+									const forwardButton = document.getElementsByClassName(
+										'book-page-readers-also-enjoyed-forward-button'
+									)[0];
+									const mainListWidth = document.getElementsByClassName(
+										'book-page-readers-also-enjoyed-main-list'
+									)[0].offsetWidth;
+									const mainListContentsWidth = document.getElementsByClassName(
+										'book-page-readers-also-enjoyed-main-list-contents'
+									)[0].scrollWidth;
+									if (
+										previousValue === 0 ||
+										previousValue > -mainListContentsWidth + 250 + mainListWidth
+									) {
+										return previousValue - 250;
+									} else {
+										forwardButton.classList.add('hidden');
+										return -mainListContentsWidth + mainListWidth;
+									}
+								});
+							}}
+						></button>
+					</div>
+				</div>
+				<a
+					className="book-page-readers-also-enjoyed-similar-books-a"
+					href={Firebase.pageGenerator.generateSimilarBooksPage(
+						bookInfo.id,
+						bookInfo.title
+					)}
+				>
+					See similar books...
+				</a>
 			</div>
-			<a
-				className="book-page-readers-also-enjoyed-similar-books-a"
-				href={Firebase.pageGenerator.generateSimilarBooksPage(
-					bookInfo.id,
-					bookInfo.title
-				)}
-			>
-				See similar books...
-			</a>
-		</div>
-	) : null;
+		) : null;
 
 	const bookPageGenres = loaded ? (
 		<div className="book-page-genres">
