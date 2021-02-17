@@ -4,7 +4,7 @@ import Firebase from '../../Firebase';
 import { format } from 'date-fns';
 import '../styles/Books/BookPage.css';
 import TopBar from '../Global/TopBar';
-//import HomePageFootBar from './HomePageFootBar';
+import HomePageFootBar from '../Authentication/HomePageFootBar';
 
 //Missing other editions
 //Reviews: missing 'more...' button, testing shelves and testing several reviews
@@ -27,6 +27,7 @@ const BookPage = ({ match }) => {
 		readersEnjoyedListTranslation,
 		setReadersEnjoyedListTranslation,
 	] = useState(0);
+	const [authorAboutShowMore, setAuthorAboutShowMore] = useState(false);
 
 	const user = useSelector((state) => state);
 
@@ -42,8 +43,36 @@ const BookPage = ({ match }) => {
 				}
 				i++;
 			}
-			const bookObj = await Firebase.queryBookById(user.userUID, bookId);
-			setBookInfo(bookObj);
+			const lSObjectItem = localStorage.getItem(`${bookId}Obj`);
+			if (lSObjectItem !== null) {
+				const lSObject = JSON.parse(lSObjectItem);
+				console.log('Loaded book from storage');
+				const newLSObject = {};
+				Object.keys(lSObject).forEach((key) => {
+					switch (key) {
+						case 'editionPublishedDate':
+							newLSObject[key] = new Date(2006, 9, 1);
+							break;
+						case 'reviews':
+							newLSObject[key] = [{}];
+							Object.keys(lSObject[key][0]).forEach((key2) => {
+								if (key2 === 'date') {
+									newLSObject[key][0][key2] = new Date(2021, 2, 2);
+								} else {
+									newLSObject[key][0][key2] = lSObject[key][0][key2];
+								}
+							});
+							break;
+						default:
+							newLSObject[key] = lSObject[key];
+					}
+				});
+				setBookInfo(newLSObject);
+			} else {
+				const bookObj = await Firebase.queryBookById(user.userUID, bookId);
+				localStorage.setItem(`${bookId}Obj`, JSON.stringify(bookObj));
+				setBookInfo(bookObj);
+			}
 			setLoaded(true);
 		};
 		getBookInfo();
@@ -688,25 +717,40 @@ const BookPage = ({ match }) => {
 	const bookPageGenres = loaded ? (
 		<div className="book-page-genres">
 			<div className="book-page-genres-main">
-				<a
-					className="book-page-genres-title-a"
-					href={Firebase.pageGenerator.generateBookTopShelvesPage(bookInfo.id)}
-				>
-					GENRES
-				</a>
+				<div className="book-page-genres-title-area">
+					<a
+						className="book-page-genres-title-a"
+						href={Firebase.pageGenerator.generateBookTopShelvesPage(
+							bookInfo.id
+						)}
+					>
+						GENRES
+					</a>
+				</div>
 				<div className="book-page-genres-list">
 					{bookInfo.genres.map((genre, index) => {
 						return (
-							<div className="book-page-genres-list-cell" key={index}>
-								<a href={Firebase.pageGenerator.generateGenrePage(genre.genre)}>
-									{genre.genre}
+							<div
+								className={
+									index === bookInfo.genres.length - 1
+										? 'book-page-genres-list-cell last'
+										: 'book-page-genres-list-cell'
+								}
+								key={index}
+							>
+								<a
+									href={Firebase.pageGenerator.generateGenrePage(genre.genre)}
+									className="genre-name"
+								>
+									{genre.genre.charAt(0).toUpperCase() + genre.genre.slice(1)}
 								</a>
 								<a
 									href={Firebase.pageGenerator.generateBookGenreShelfPage(
 										bookInfo.id,
 										bookInfo.title,
-										genre
+										genre.genre
 									)}
+									className="user-count"
 								>
 									{genre.userCount} users
 								</a>
@@ -726,41 +770,61 @@ const BookPage = ({ match }) => {
 
 	const bookPageAuthorAboutSection = loaded ? (
 		<div className="author-about-section">
-			<a
-				className="author-about-section-title-a"
-				href={bookInfo.authorPages[0]}
-			>{`ABOUT ${bookInfo.authorNames[0].toUpperCase()}`}</a>
+			<div className="author-about-section-title-area">
+				<a
+					className="author-about-section-title-a"
+					href={bookInfo.authorPages[0]}
+				>{`ABOUT ${bookInfo.authorNames[0].toUpperCase()}`}</a>
+			</div>
 			<div className="author-about-section-preview">
-				<a href={bookInfo.authorPages[0]}>
-					<img
-						src={
-							bookInfo.mainAuthorPicture !== undefined
-								? bookInfo.mainAuthorPicture
-								: 'https://www.goodreads.com/assets/nophoto/user/u_60x60-267f0ca0ea48fd3acfd44b95afa64f01.png'
-						}
-						alt={bookInfo.authorNames[0]}
-					/>
-				</a>
-				<div className="author-about-section-preview-right">
-					<a
-						className="author-about-section-preview-name"
-						href={bookInfo.authorPages[0]}
-					>
-						{bookInfo.authorNames[0]}
-						<span>{/* Goodreads seal if member else null */}</span>
+				<div className="author-about-section-preview-top">
+					<a href={bookInfo.authorPages[0]}>
+						<img
+							src={
+								bookInfo.mainAuthorPicture !== undefined
+									? bookInfo.mainAuthorPicture
+									: 'https://www.goodreads.com/assets/nophoto/user/u_60x60-267f0ca0ea48fd3acfd44b95afa64f01.png'
+							}
+							alt={bookInfo.authorNames[0]}
+						/>
 					</a>
-					<span className="author-about-section-preview-follower-count">
-						{bookInfo.authorFollowerCount}
-					</span>
-					<button className="book-page-follow-author-button">
-						Follow Author
+					<div className="author-about-section-preview-right">
+						<a
+							className="author-about-section-preview-name"
+							href={bookInfo.authorPages[0]}
+						>
+							{bookInfo.authorNames[0]}
+							<span>{/* Goodreads seal if member else null */}</span>
+						</a>
+						<span className="author-about-section-preview-follower-count">
+							{bookInfo.authorFollowerCount} followers
+						</span>
+						<button className="book-page-follow-author-button">
+							Follow Author
+						</button>
+					</div>
+				</div>
+				<div className="author-about-section-about-wrapper">
+					{bookInfo.mainAuthorAbout !== undefined ? (
+						<div
+							className={
+								authorAboutShowMore
+									? 'author-about-section-about-full'
+									: 'author-about-section-about'
+							}
+						>
+							<p>{bookInfo.mainAuthorAbout}</p>
+						</div>
+					) : null}
+					<button
+						className="author-about-show-more"
+						onClick={(e) => {
+							setAuthorAboutShowMore((previous) => !previous);
+						}}
+					>
+						{authorAboutShowMore ? '(less)' : '...more'}
 					</button>
 				</div>
-				{bookInfo.mainAuthorAbout !== undefined ? (
-					<p className="author-about-section-about">
-						{bookInfo.mainAuthorAbout}
-					</p>
-				) : null}
 			</div>
 		</div>
 	) : null;
@@ -768,17 +832,21 @@ const BookPage = ({ match }) => {
 	const bookPageBooksByAuthorSection = loaded ? (
 		<div className="book-page-books-by-author">
 			<div className="book-page-books-by-author-main">
-				<a
-					className="book-page-books-by-author-a"
-					href={bookInfo.booksByAuthorPage}
-				>{`BOOKS BY ${bookInfo.authorNames[0].toUpperCase()}`}</a>
-				{bookInfo.publishedBooksByAuthor.map((book, index) => {
-					return (
-						<a key={index} href={book.page}>
-							<img src={book.cover} alt={book.id} />
-						</a>
-					);
-				})}
+				<div className="book-page-books-by-author-main-title-area">
+					<a
+						className="book-page-books-by-author-a"
+						href={bookInfo.booksByAuthorPage}
+					>{`BOOKS BY ${bookInfo.authorNames[0].toUpperCase()}`}</a>
+				</div>
+				<div className="book-page-books-by-author-main-list">
+					{bookInfo.publishedBooksByAuthor.map((book, index) => {
+						return (
+							<a key={index} href={book.page}>
+								<img src={book.cover} alt={book.id} />
+							</a>
+						);
+					})}
+				</div>
 			</div>
 			<a
 				className="book-page-books-by-author-more"
@@ -792,9 +860,11 @@ const BookPage = ({ match }) => {
 	const bookPageArticlesFeaturingBook =
 		loaded && bookInfo.articles.length > 0 ? (
 			<div className="book-page-articles">
-				<span className="book-page-articles-title">
-					ARTICLES FEATURING THIS BOOK
-				</span>
+				<div className="book-page-articles-title-area">
+					<span className="book-page-articles-title">
+						ARTICLES FEATURING THIS BOOK
+					</span>
+				</div>
 				<div className="book-page-articles-article">
 					{bookInfo.articles[0].image !== undefined ? (
 						<img
@@ -840,15 +910,17 @@ const BookPage = ({ match }) => {
 	const bookPageQuizQuestion = loaded ? (
 		bookInfo.quizQuestions.length > 0 ? (
 			<div className="book-page-quiz-section">
-				<a
-					className="book-page-quiz-question-a"
-					href={Firebase.pageGenerator.generateBookTriviaPage(
-						bookInfo.id,
-						bookInfo.title
-					)}
-				>
-					QUIZ QUESTION
-				</a>
+				<div className="book-page-quiz-section-title-area">
+					<a
+						className="book-page-quiz-question-a"
+						href={Firebase.pageGenerator.generateBookTriviaPage(
+							bookInfo.id,
+							bookInfo.title
+						)}
+					>
+						QUIZ QUESTION
+					</a>
+				</div>
 				<div className="book-page-quiz-question-main">
 					<a
 						className="book-page-quiz-title-a"
@@ -892,13 +964,15 @@ const BookPage = ({ match }) => {
 			</div>
 		) : (
 			<div className="book-page-quiz-section">
-				<a
-					className="book-page-quiz-question-a"
-					href={Firebase.pageGenerator.generateBookTriviaPage(
-						bookInfo.id,
-						bookInfo.title
-					)}
-				>{`QUIZZES ABOUT ${bookInfo.title.toUpperCase()}:...`}</a>
+				<div className="book-page-quiz-section-title-area">
+					<a
+						className="book-page-quiz-question-a"
+						href={Firebase.pageGenerator.generateBookTriviaPage(
+							bookInfo.id,
+							bookInfo.title
+						)}
+					>{`QUIZZES ABOUT ${bookInfo.title.toUpperCase()}:...`}</a>
+				</div>
 				<span className="book-page-no-quizzes-yet-span">
 					No quizzes yet.{' '}
 					<a
@@ -918,10 +992,12 @@ const BookPage = ({ match }) => {
 	const bookPageQuotes =
 		loaded && bookInfo.quotes.length > 0 ? (
 			<div className="book-page-quotes-section">
-				<a
-					className="book-page-quotes-section-a"
-					href={bookInfo.quotesPage}
-				>{`QUOTES FROM ${bookInfo.title.toUpperCase()}:...`}</a>
+				<div className="book-page-quotes-section-title-area">
+					<a
+						className="book-page-quotes-section-a"
+						href={bookInfo.quotesPage}
+					>{`QUOTES FROM ${bookInfo.title.toUpperCase()}:...`}</a>
+				</div>
 				<div className="book-info-quotes-section-main">
 					{bookInfo.quotes.map((quote, index) => {
 						return (
@@ -977,6 +1053,7 @@ const BookPage = ({ match }) => {
 			<TopBar />
 			{bookPageMainContent}
 			{bookPageEnlargingCover}
+			<HomePageFootBar />
 		</div>
 	);
 };

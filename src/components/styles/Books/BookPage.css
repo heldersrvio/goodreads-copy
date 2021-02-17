@@ -581,6 +581,10 @@ span.book-page-ratings-dot {
 	line-height: 18px;
 }
 
+.book-page-readers-also-enjoyed {
+	margin-bottom: 70px;
+}
+
 .book-page-readers-also-enjoyed-main a,
 .book-page-readers-also-enjoyed-main a img {
 	width: 87px;
@@ -630,4 +634,209 @@ span.book-page-ratings-dot {
 .book-page-readers-also-enjoyed-forward-button:hover,
 .book-page-readers-also-enjoyed-back-button:hover {
 	background-color: rgba(24, 24, 24, 0.7);
+}
+
+.book-page-readers-also-enjoyed-similar-books-a,
+.book-page-genres-see-top-shelves,
+.book-page-books-by-author-more {
+	color: rgb(0, 99, 93);
+	float: right;
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 13px;
+	font-weight: 700;
+	line-height: 18px;
+	margin-top: 15px;
+}
+
+.book-page-readers-also-enjoyed-similar-books-a:hover,
+.book-page-genres-see-top-shelves:hover,
+.book-page-books-by-author-more:hover {
+	color: rgb(0, 99, 93);
+	text-decoration: underline;
+}
+
+.book-page-genres-title-area,
+.author-about-section-title-area,
+.book-page-books-by-author-main-title-area,
+.book-page-articles-title-area,
+.book-page-quiz-section-title-area,
+.book-page-quotes-section-title-area {
+	height: 40px;
+	border-bottom: 1px solid rgb(216, 216, 216);
+}
+
+.book-page-genres-list {
+	padding-top: 10px;
+}
+
+.book-page-genres-list-cell {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	padding: 7px 5px;
+	border-bottom: 1px solid rgb(216, 216, 216);
+}
+
+.book-page-genres-list-cell.last {
+	border-bottom: none;
+}
+
+.book-page-genres-list-cell .genre-name,
+.book-page-genres-list-cell .user-count {
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	line-height: 21px;
+}
+
+.book-page-genres-list-cell .genre-name {
+	color: rgb(0, 99, 93);
+}
+
+.book-page-genres-list-cell .user-count {
+	color: rgb(153, 153, 153);
+}
+
+.book-page-genres-list-cell .genre-name:hover,
+.book-page-genres-list-cell .user-count:hover {
+	text-decoration: underline;
+}
+
+.author-about-section {
+	margin-top: 60px;
+}
+
+.author-about-section-title-a:hover,
+.book-page-books-by-author-a:hover,
+.book-page-quiz-question-a:hover {
+	color: rgb(56, 33, 16);
+}
+
+.author-about-section-preview-top {
+	padding-top: 15px;
+	display: flex;
+	flex-direction: row;
+	margin-bottom: 15px;
+}
+
+.author-about-section-preview-top > a {
+	display: block;
+	width: 75px;
+	height: 75px;
+	overflow: hidden;
+	border-radius: 50%;
+}
+
+.author-about-section-preview-top a img {
+	width: 75px;
+}
+
+.author-about-section-preview-right {
+	display: flex;
+	flex-direction: column;
+	margin-left: 10px;
+}
+
+.author-about-section-preview-name {
+	color: rgb(0, 0, 0);
+	font-family: 'Merriweather', Georgia, serif;
+	font-size: 16px;
+	line-height: 18px;
+	font-weight: 900;
+}
+
+.author-about-section-preview-name:hover {
+	text-decoration: underline;
+	color: rgb(0, 0, 0);
+}
+
+.author-about-section-preview-follower-count {
+	color: rgb(153, 153, 153);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+	margin-top: 3px;
+}
+
+.book-page-follow-author-button {
+	background-color: rgb(244, 241, 234);
+	border: 1px solid rgb(214, 208, 196);
+	border-radius: 3px;
+	padding: 8px 12px;
+	color: rgb(51, 51, 51);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	line-height: 14px;
+	height: 32px;
+	width: 140px;
+	margin-top: 10px;
+}
+
+.book-page-follow-author-button:hover {
+	background-color: rgb(237, 230, 214);
+	color: rgb(51, 51, 51);
+}
+
+.author-about-section-about,
+.author-about-section-about-full {
+	color: rgb(24, 24, 24);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	line-height: 18px;
+	overflow: hidden;
+}
+
+.author-about-section-about {
+	height: 162px;
+}
+
+button.author-about-show-more {
+	color: rgb(0, 99, 93);
+	padding: 0;
+	display: inline;
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	line-height: 18px;
+}
+
+button.author-about-show-more:hover {
+	background-color: transparent;
+	text-decoration: underline;
+}
+
+.book-page-books-by-author {
+	margin-top: 15px;
+}
+
+.book-page-books-by-author-main-list {
+	margin-top: 10px;
+	display: flex;
+	flex-direction: row;
+	width: 93.2%;
+	overflow: hidden;
+}
+
+.book-page-books-by-author-main-list a,
+.book-page-books-by-author-main-list a img {
+	width: 50px;
+	height: 81px;
+	margin-left: 3px;
+}
+
+.book-page-quiz-section {
+	margin-top: 50px;
+}
+
+.book-page-no-quizzes-yet-span {
+	color: rgba(24, 24, 24);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	line-height: 18px;
+}
+
+.book-page-no-quizzes-yet-span a {
+	color: rgb(0, 99, 93);
+}
+
+.book-page-no-quizzes-yet-span a:hover {
+	text-decoration: underline;
 }
