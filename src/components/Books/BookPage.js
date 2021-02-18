@@ -90,15 +90,6 @@ const BookPage = ({ match }) => {
 		}
 	};
 
-	const bookAddress = loaded
-		? Firebase.pageGenerator.generateBookPage(bookInfo.id, bookInfo.title)
-		: '';
-	const originalBookAddress = loaded
-		? Firebase.pageGenerator.generateBookPage(
-				bookInfo.originalId,
-				bookInfo.originalTitle
-		  )
-		: '';
 	const addToShelfButton =
 		loaded && bookInfo.userStatus === 'reading' ? (
 			<div className="book-page-reading-button">
@@ -117,52 +108,75 @@ const BookPage = ({ match }) => {
 				<span>Read</span>
 			</div>
 		) : (
-			<button
-				className="book-page-want-to-read-button"
-				onClick={async () => {
-					if (user.userUID !== null && user.userUID !== undefined) {
-						setSavingShelf(true);
-						await Firebase.addBookToShelf(user.userUID, bookInfo.id, 'to-read');
-						setSavingShelf(false);
-					}
-				}}
-			>
-				{savingShelf ? '...saving' : 'Want to Read'}
-			</button>
+			<div className="want-to-read-button-and-options">
+				<button
+					className="book-page-want-to-read-button"
+					onClick={async () => {
+						if (user.userUID !== null && user.userUID !== undefined) {
+							setSavingShelf(true);
+							await Firebase.addBookToShelf(
+								user.userUID,
+								bookInfo.id,
+								'to-read'
+							);
+							setSavingShelf(false);
+						}
+					}}
+				>
+					{savingShelf ? '...saving' : 'Want to Read'}
+				</button>
+				<div className="book-page-book-option-dropdown-trigger">
+					<div className="book-options-dropdown">
+						<div className="book-options-dropdown-top">
+							<button className="dropdown-read-button">Read</button>
+							<button className="dropdown-currently-reading-button">
+								Currently Reading
+							</button>
+							<button className="dropdown-want-to-read-button">
+								Want to Read
+							</button>
+						</div>
+						<div className="book-options-dropdown-bottom">
+							<button className="dropdown-add-shelf">Add Shelf</button>
+						</div>
+					</div>
+				</div>
+			</div>
 		);
 
 	const bookPageInfoLeft = loaded ? (
 		<div className="book-page-book-info-left">
 			<div className="book-page-book-info-cover-wrap">
-				<img
-					src={bookInfo.cover}
-					alt={bookInfo.title}
-					className="book-info-book-cover"
-				/>
 				<a
 					className="book-cover-page-anchor"
-					href={`/book/photo/${bookAddress}`}
+					href={Firebase.pageGenerator.generateBookCoverPage(
+						bookInfo.id,
+						bookInfo.title
+					)}
 				>
-					<span></span>
+					<img
+						src={bookInfo.cover}
+						alt={bookInfo.title}
+						className="book-info-book-cover"
+					/>
 				</a>
-				<a
-					className="book-other-editions-anchor"
-					href={`/work/editions/${originalBookAddress}`}
-				>
-					Other editions
-				</a>
-				<button
-					className="book-page-enlarge-cover"
-					onClick={() => setEnlargingCover(!enlargingCover)}
-				>
-					Enlarge cover
-				</button>
-				<a
-					className="book-cover-page-anchor"
-					href={`/book/photo/${bookAddress}`}
-				>
-					<span></span>
-				</a>
+				<div className="cover-options">
+					<a
+						className="book-other-editions-anchor"
+						href={Firebase.pageGenerator.generateBookEditionsPage(
+							bookInfo.originalId,
+							bookInfo.originalTitle
+						)}
+					>
+						Other editions
+					</a>
+					<button
+						className="book-page-enlarge-cover"
+						onClick={() => setEnlargingCover(!enlargingCover)}
+					>
+						Enlarge cover
+					</button>
+				</div>
 			</div>
 			<div className="book-page-user-shelf-section">
 				<div className="add-to-shelf-buttons">{addToShelfButton}</div>

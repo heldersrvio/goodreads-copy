@@ -34,10 +34,153 @@
 	margin-left: 20px;
 }
 
+.book-page-book-info-cover-wrap {
+	position: relative;
+	box-shadow: rgba(0, 0, 0, 0.5) 0px 3px 4px -2px;
+}
+
+.book-page-book-info-cover-wrap .cover-options {
+	position: absolute;
+	top: 33%;
+	right: calc(50% - 51.24px);
+	display: none;
+	height: 70px;
+	z-index: 1;
+}
+
+.book-page-book-info-cover-wrap:hover .cover-options {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	flex-grow: unset;
+}
+
+.cover-options .book-other-editions-anchor,
+.cover-options .book-page-enlarge-cover,
+.cover-options .book-other-editions-anchor:hover {
+	display: block;
+	color: rgb(255, 255, 255);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	background-color: rgba(51, 51, 51, 0.7);
+	font-size: 13px;
+	line-height: 18px;
+	height: auto;
+	padding: 4px 8px;
+	border: 1px solid rgb(24, 24, 24);
+	border-radius: 5px;
+	font-weight: bold;
+}
+
 .book-page-book-info-left .book-page-book-info-cover-wrap,
 .book-page-book-info-left .book-page-book-info-cover-wrap img {
 	width: 150px;
 	height: 226px;
+}
+
+.want-to-read-button-and-options {
+	margin-top: 20px;
+	margin-left: calc(50% - 68.5px);
+	display: flex;
+	flex-direction: row;
+}
+
+.book-page-book-option-dropdown-trigger {
+	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAICAQAAABaf7ccAAAAKUlEQVR4AX3KsQEAIAzDsJzez8MuoF6tdLo1icQdiBvilrglnw1xS9wHeq2Hge3+H0sAAAAASUVORK5CYII=');
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: 8px 4px;
+	height: 28px;
+	width: 17px;
+	padding: 0 5px;
+	border-radius: 0 3px 3px 0;
+	background-color: rgb(64, 157, 105);
+	position: relative;
+}
+
+.book-page-want-to-read-button {
+	padding: 6px 8px;
+	padding-right: 0;
+	background-color: rgb(64, 157, 105);
+	color: rgb(255, 255, 255);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 13px;
+	height: 28px;
+	width: 110px;
+	border-radius: 3px 0 0 3px;
+	line-height: normal;
+	font-weight: 500;
+	text-align: start;
+}
+
+.book-page-want-to-read-button:hover {
+	background-color: rgb(61, 147, 99);
+	color: rgb(255, 255, 255);
+}
+
+.book-options-dropdown {
+	display: none;
+	background-color: rgb(255, 255, 255);
+	width: 180px;
+	position: absolute;
+	top: 100%;
+	right: 0%;
+	z-index: 1;
+	border: 1px solid rgb(204, 204, 204);
+	border-radius: 3px;
+	box-shadow: rgba(0, 0, 0, 0.5) 0px 3px 4px -3px;
+}
+
+.book-options-dropdown .book-options-dropdown-top {
+	display: flex;
+	flex-direction: column;
+	border-bottom: 1px solid rgb(241, 241, 241);
+	width: 100%;
+}
+
+.book-options-dropdown .book-options-dropdown-top button {
+	height: 19px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+
+.book-options-dropdown .book-options-dropdown-bottom button {
+	padding: 7px 15px;
+}
+
+.book-options-dropdown .book-options-dropdown-top button,
+.book-options-dropdown .book-options-dropdown-bottom button {
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	color: rgb(24, 24, 24);
+	line-height: normal;
+	width: 100%;
+	text-align: start;
+}
+
+.book-options-dropdown .book-options-dropdown-top button:hover,
+.book-options-dropdown .book-options-dropdown-bottom button:hover {
+	background-color: rgb(241, 241, 241);
+}
+
+.book-page-book-option-dropdown-trigger:hover {
+	background-color: rgb(61, 147, 99);
+}
+
+.book-page-book-option-dropdown-trigger:hover .book-options-dropdown {
+	display: flex;
+	flex-direction: column;
+}
+
+div.book-page-rate-book {
+	margin-top: 3px;
+	text-align: center;
+}
+
+span.rate-this-book {
+	color: rgb(153, 153, 153);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 11px;
+	line-height: 14px;
 }
 
 .book-page-title-area {
@@ -611,6 +754,7 @@ span.book-page-ratings-dot {
 .book-page-readers-also-enjoyed-selection button {
 	position: absolute;
 	top: 0;
+	z-index: 1;
 }
 
 .book-page-readers-also-enjoyed-forward-button,

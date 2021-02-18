@@ -22,6 +22,19 @@ const Firebase = (() => {
 			return '/book/show/' + bookId + '.' + title.replace(/ /g, '_');
 		};
 
+		const generateBookCoverPage = (bookId, title) => {
+			return '/book/photo/' + bookId + '.' + title.replace(/ /g, '_');
+		};
+
+		const generateBookEditionsPage = (originalBookId, originalBookTitle) => {
+			return (
+				'/work/editions/' +
+				originalBookId +
+				'.' +
+				originalBookTitle.replace(/ /g, '_')
+			);
+		};
+
 		const generateSeriesPage = (seriesId, name) => {
 			return `/series/${seriesId}-${name.toLowerCase().replace(/ /g, '-')}`;
 		};
@@ -121,6 +134,8 @@ const Firebase = (() => {
 
 		return {
 			generateBookPage,
+			generateBookCoverPage,
+			generateBookEditionsPage,
 			generateSeriesPage,
 			generateAuthorPage,
 			generateListPage,
