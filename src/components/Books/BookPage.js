@@ -6,9 +6,11 @@ import '../styles/Books/BookPage.css';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 
-//Missing other editions
-//Reviews: missing 'more...' button, testing shelves and testing several reviews
+// Missing other editions
+// Reviews: missing 'more...' button, testing shelves and testing several reviews
 // Missing testing and styling for articles
+// Missing start your own review and capture of userInfo
+// Missing popup appear/disappear animation
 
 const BookPage = ({ match }) => {
 	const {
@@ -28,6 +30,11 @@ const BookPage = ({ match }) => {
 		setReadersEnjoyedListTranslation,
 	] = useState(0);
 	const [authorAboutShowMore, setAuthorAboutShowMore] = useState(false);
+	const [isShelfPopupHidden, setIsShelfPopupHidden] = useState(true);
+	const [isShelfPopupBottomHidden, setIsShelfPopupBottomHidden] = useState(
+		true
+	);
+	const [shelfPopupReadingInput, setShelfPopupReadingInput] = useState('');
 
 	const user = useSelector((state) => state);
 
@@ -67,6 +74,7 @@ const BookPage = ({ match }) => {
 							newLSObject[key] = lSObject[key];
 					}
 				});
+				newLSObject.userStatus = 'reading';
 				setBookInfo(newLSObject);
 			} else {
 				const bookObj = await Firebase.queryBookById(user.userUID, bookId);
@@ -92,57 +100,141 @@ const BookPage = ({ match }) => {
 
 	const addToShelfButton =
 		loaded && bookInfo.userStatus === 'reading' ? (
-			<div className="book-page-reading-button">
+			<div className="book-on-reading-shelf">
+				<div
+					className={
+						isShelfPopupHidden
+							? 'shelf-pop-up-wrapper'
+							: 'shelf-pop-up-wrapper always-visible'
+					}
+				>
+					<div className="shelf-pop-up reading">
+						<div className="shelf-pop-up-top">
+							<span>
+								<b>Update your reading progress:</b>
+							</span>
+							<span>
+								I'm on page{' '}
+								<input
+									type="text"
+									value={shelfPopupReadingInput}
+									className={
+										isShelfPopupBottomHidden
+											? 'page-progress-input'
+											: 'page-progress-input white-background'
+									}
+									onClick={(e) => {
+										setIsShelfPopupBottomHidden(false);
+										setIsShelfPopupHidden(false);
+									}}
+									onChange={(e) => setShelfPopupReadingInput(e.target.value)}
+								/>{' '}
+								of {bookInfo.pageCount}.{' '}
+								<a
+									href={Firebase.pageGenerator.generateUserShelfPage(
+										user.userUID,
+										'Helder',
+										'reading'
+									)}
+								>
+									View shelf
+								</a>
+							</span>
+						</div>
+						<div
+							className={
+								isShelfPopupBottomHidden
+									? 'shelf-pop-up-bottom hidden'
+									: 'shelf-pop-up-bottom'
+							}
+						>
+							<button
+								className="progress-submit-button"
+								onClick={(e) => {
+									setIsShelfPopupHidden(true);
+									setIsShelfPopupBottomHidden(true);
+								}}
+							>
+								Submit
+							</button>
+							<button
+								className="progress-cancel-button"
+								onClick={(e) => {
+									setIsShelfPopupHidden(true);
+									setIsShelfPopupBottomHidden(true);
+								}}
+							>
+								Cancel
+							</button>
+							<span>·</span>
+							<button
+								className="progress-finished-button"
+								onClick={(e) => {
+									setIsShelfPopupHidden(true);
+									setIsShelfPopupBottomHidden(true);
+								}}
+							>
+								Finished book
+							</button>
+						</div>
+					</div>
+					<div className="shelf-pop-up-arrow-grey">
+						<div className="shelf-pop-up-arrow"></div>
+					</div>
+				</div>
 				<button
-					className="remove-book-from-shelf-button-reading"
+					className="remove-book-from-shelf reading"
 					onClick={removeBookSafely}
-				/>
+				></button>
 				<span>Currently Reading</span>
 			</div>
 		) : loaded && bookInfo.userStatus === 'read' ? (
-			<div className="book-page-read-button">
+			<div className="book-on-read-shelf">
 				<button
-					className="remove-book-from-shelf-button-read"
+					className="remove-book-from-shelf read"
 					onClick={removeBookSafely}
-				/>
+				></button>
 				<span>Read</span>
 			</div>
-		) : (
-			<div className="want-to-read-button-and-options">
+		) : loaded && bookInfo.userStatus === 'to-read' ? (
+			<div className="book-on-to-read-shelf">
 				<button
-					className="book-page-want-to-read-button"
-					onClick={async () => {
-						if (user.userUID !== null && user.userUID !== undefined) {
-							setSavingShelf(true);
-							await Firebase.addBookToShelf(
-								user.userUID,
-								bookInfo.id,
-								'to-read'
-							);
-							setSavingShelf(false);
-						}
-					}}
-				>
-					{savingShelf ? '...saving' : 'Want to Read'}
-				</button>
-				<div className="book-page-book-option-dropdown-trigger">
-					<div className="book-options-dropdown">
-						<div className="book-options-dropdown-top">
-							<button className="dropdown-read-button">Read</button>
-							<button className="dropdown-currently-reading-button">
-								Currently Reading
-							</button>
-							<button className="dropdown-want-to-read-button">
-								Want to Read
-							</button>
-						</div>
-						<div className="book-options-dropdown-bottom">
-							<button className="dropdown-add-shelf">Add Shelf</button>
-						</div>
-					</div>
+					className="remove-book-from-shelf to-read"
+					onClick={removeBookSafely}
+				></button>
+				<span>Want to Read</span>
+			</div>
+		) : (
+			<button
+				className="book-page-want-to-read-button"
+				onClick={async () => {
+					if (user.userUID !== null && user.userUID !== undefined) {
+						setSavingShelf(true);
+						await Firebase.addBookToShelf(user.userUID, bookInfo.id, 'to-read');
+						setSavingShelf(false);
+					}
+				}}
+			>
+				{savingShelf ? '...saving' : 'Want to Read'}
+			</button>
+		);
+
+	const bookOptionsDropdown = (
+		<div className="book-page-book-option-dropdown-trigger">
+			<div className="book-options-dropdown">
+				<div className="book-options-dropdown-top">
+					<button className="dropdown-read-button">Read</button>
+					<button className="dropdown-currently-reading-button">
+						Currently Reading
+					</button>
+					<button className="dropdown-want-to-read-button">Want to Read</button>
+				</div>
+				<div className="book-options-dropdown-bottom">
+					<button className="dropdown-add-shelf">Add Shelf</button>
 				</div>
 			</div>
-		);
+		</div>
+	);
 
 	const bookPageInfoLeft = loaded ? (
 		<div className="book-page-book-info-left">
@@ -179,7 +271,12 @@ const BookPage = ({ match }) => {
 				</div>
 			</div>
 			<div className="book-page-user-shelf-section">
-				<div className="add-to-shelf-buttons">{addToShelfButton}</div>
+				<div className="add-to-shelf-buttons">
+					<div className="want-to-read-button-and-options">
+						{addToShelfButton}
+						{bookOptionsDropdown}
+					</div>
+				</div>
 			</div>
 			<div className="book-page-rate-book">
 				<span className="rate-this-book">Rate this book</span>
@@ -524,7 +621,7 @@ const BookPage = ({ match }) => {
 											return (
 												<span>
 													<a
-														href={Firebase.pageGenerator.generateReviewShelfPage(
+														href={Firebase.pageGenerator.generateUserShelfPage(
 															review.user,
 															review.userName.split(' ')[0],
 															shelf

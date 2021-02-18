@@ -108,13 +108,203 @@
 	width: 110px;
 	border-radius: 3px 0 0 3px;
 	line-height: normal;
-	font-weight: 500;
+	font-weight: 700;
 	text-align: start;
+}
+
+.want-to-read-button-and-options .book-on-reading-shelf,
+.want-to-read-button-and-options .book-on-read-shelf,
+.want-to-read-button-and-options .book-on-to-read-shelf {
+	padding-left: 8px;
+	padding-right: 0;
+	background-color: rgb(242, 242, 242);
+	color: rgb(24, 24, 24);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 13px;
+	height: 28px;
+	width: 110px;
+	border-radius: 3px 0 0 3px;
+	line-height: normal;
+	font-weight: 700;
+	text-align: start;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	position: relative;
+}
+
+.want-to-read-button-and-options .book-on-reading-shelf > span,
+.want-to-read-button-and-options .book-on-read-shelf > span,
+.want-to-read-button-and-options .book-on-to-read-shelf > span {
+	display: inline-block;
+	width: 100px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	margin-left: 4px;
+}
+
+button.remove-book-from-shelf {
+	width: 13px;
+	height: 11px;
+	padding: 0;
+}
+
+button.remove-book-from-shelf.reading {
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAALCAYAAACksgdhAAAARklEQVR42pXRywkAIBBDQVuyY4uxrydIwMNiNAs5Dvtrv8XsYwcigDIyIBQDIO8gdJZ8AaG65A04hANlPAMK8r%2FwqB7EoQWlO7lbfdtYaAAAAABJRU5ErkJggg%3D%3D);
+}
+
+button.remove-book-from-shelf:hover {
+	background-color: transparent;
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAALCAYAAACksgdhAAAAUUlEQVR42p2SwQ0AIAgD2X8KB2IEdqnpgxisftqkPqQXIhgAgsrMRYfo1JilefQl6AuUmkADnIBCn0C9gAEpqIBArUeH6rDdyXqTNT17T9aP2HKRaJQdLRvrAAAAAElFTkSuQmCC);
 }
 
 .book-page-want-to-read-button:hover {
 	background-color: rgb(61, 147, 99);
 	color: rgb(255, 255, 255);
+}
+
+.shelf-pop-up-wrapper {
+	display: none;
+	position: absolute;
+	z-index: 2;
+	bottom: 35px;
+	left: -40px;
+	height: auto;
+}
+
+.shelf-pop-up {
+	background-color: rgb(255, 255, 255);
+	-webkit-box-shadow: rgba(0, 0, 0, 0.5) 0px 3px 4px -3px;
+	box-shadow: rgba(0, 0, 0, 0.5) 0px 3px 4px -3px;
+	border: 1px solid rgb(204, 204, 204);
+	color: rgb(24, 24, 24);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	font-weight: normal;
+	width: 210px;
+	border-radius: 3px;
+	padding: 5px;
+}
+
+.shelf-pop-up b {
+	font-weight: bold;
+}
+
+.reading .shelf-pop-up-top {
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+}
+
+.reading .shelf-pop-up-top a {
+	color: rgb(0, 99, 93);
+}
+
+.reading .shelf-pop-up-top a:hover {
+	color: rgb(0, 99, 93);
+	text-decoration: underline;
+}
+
+.reading .shelf-pop-up-top input {
+	display: inline;
+	background-color: rgb(242, 242, 242);
+	width: 26px;
+	height: 21px;
+	padding: 2px 0;
+	border: 1px solid rgb(221, 221, 221);
+	border-radius: 2px;
+}
+
+.reading .shelf-pop-up-top input.white-background {
+	background-color: rgb(255, 255, 255);
+}
+
+.shelf-pop-up-bottom.hidden {
+	display: none;
+}
+
+.shelf-pop-up-bottom {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	width: 90%;
+	height: 35px;
+}
+
+.shelf-pop-up-bottom > span {
+	color: rgb(153, 153, 153);
+}
+
+.shelf-pop-up-bottom .progress-submit-button {
+	width: 63px;
+	height: 22px;
+	padding: 4px 12px;
+	background-color: rgb(244, 241, 234);
+	border: 1px solid rgb(214, 208, 196);
+	border-radius: 3px;
+	color: rgb(51, 51, 51);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 12px;
+}
+
+.shelf-pop-up-bottom .progress-submit-button:hover {
+	background-color: rgb(237, 230, 214);
+	color: rgb(51, 51, 51);
+}
+
+.shelf-pop-up-bottom .progress-cancel-button,
+.shelf-pop-up-bottom .progress-finished-button {
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	height: 80%;
+	color: rgb(0, 99, 93);
+}
+
+.shelf-pop-up-bottom .progress-cancel-button:hover,
+.shelf-pop-up-bottom .progress-finished-button:hover {
+	background-color: transparent;
+	color: rgb(0, 99, 93);
+}
+
+.shelf-pop-up-arrow-grey {
+	width: 0;
+	height: 0;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-top: 10px solid rgb(204, 204, 204);
+	position: absolute;
+	bottom: -10px;
+	left: 95px;
+}
+
+.shelf-pop-up-arrow {
+	width: 0;
+	height: 0;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-top: 10px solid rgb(255, 255, 255);
+	position: absolute;
+	bottom: 3px;
+	right: -10px;
+}
+
+.want-to-read-button-and-options
+	.book-on-reading-shelf:hover
+	.shelf-pop-up-wrapper,
+.want-to-read-button-and-options
+	.book-on-read-shelf:hover
+	.shelf-pop-up-wrapper,
+.want-to-read-button-and-options
+	.book-on-to-read-shelf:hover
+	.shelf-pop-up-wrapper,
+.always-visible,
+.shelf-pop-up-wrapper:hover {
+	display: block;
 }
 
 .book-options-dropdown {

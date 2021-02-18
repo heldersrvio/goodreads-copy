@@ -51,7 +51,7 @@ const Firebase = (() => {
 			return '/user/show/' + userId + '-' + firstName.toLowerCase();
 		};
 
-		const generateReviewShelfPage = (userId, firstName, shelf) => {
+		const generateUserShelfPage = (userId, firstName, shelf) => {
 			return (
 				'/review/list/' +
 				userId +
@@ -140,7 +140,7 @@ const Firebase = (() => {
 			generateAuthorPage,
 			generateListPage,
 			generateUserPage,
-			generateReviewShelfPage,
+			generateUserShelfPage,
 			generateReviewPage,
 			generateReviewLikesPage,
 			generateBookGenreShelfPage,
