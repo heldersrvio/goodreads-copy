@@ -11,6 +11,7 @@ import HomePageFootBar from '../Authentication/HomePageFootBar';
 // Missing testing and styling for articles
 // Missing start your own review and capture of userInfo
 // Missing popup appear/disappear animation
+// Fix dropdowns for each status
 
 const BookPage = ({ match }) => {
 	const {
@@ -35,6 +36,7 @@ const BookPage = ({ match }) => {
 		true
 	);
 	const [shelfPopupReadingInput, setShelfPopupReadingInput] = useState('');
+	const [shelfPopupToReadInput, setShelfPopupToReadInput] = useState('');
 
 	const user = useSelector((state) => state);
 
@@ -74,7 +76,6 @@ const BookPage = ({ match }) => {
 							newLSObject[key] = lSObject[key];
 					}
 				});
-				newLSObject.userStatus = 'reading';
 				setBookInfo(newLSObject);
 			} else {
 				const bookObj = await Firebase.queryBookById(user.userUID, bookId);
@@ -190,6 +191,32 @@ const BookPage = ({ match }) => {
 			</div>
 		) : loaded && bookInfo.userStatus === 'read' ? (
 			<div className="book-on-read-shelf">
+				<div className="shelf-pop-up-wrapper">
+					<div className="shelf-pop-up read">
+						<div className="shelf-pop-up-top">
+							<a
+								href={Firebase.pageGenerator.generateWriteReviewPageForBook(
+									bookInfo.id
+								)}
+							>
+								Write a review
+							</a>
+							<span>·</span>
+							<a
+								href={Firebase.pageGenerator.generateUserShelfPage(
+									user.userUID,
+									'Helder',
+									'to-read'
+								)}
+							>
+								View shelf
+							</a>
+						</div>
+					</div>
+					<div className="shelf-pop-up-arrow-grey">
+						<div className="shelf-pop-up-arrow"></div>
+					</div>
+				</div>
 				<button
 					className="remove-book-from-shelf read"
 					onClick={removeBookSafely}
@@ -198,6 +225,69 @@ const BookPage = ({ match }) => {
 			</div>
 		) : loaded && bookInfo.userStatus === 'to-read' ? (
 			<div className="book-on-to-read-shelf">
+				<div
+					className={
+						isShelfPopupHidden
+							? 'shelf-pop-up-wrapper'
+							: 'shelf-pop-up-wrapper always-visible'
+					}
+				>
+					<div className="shelf-pop-up to-read">
+						<div className="shelf-pop-up-top">
+							<span>
+								#
+								<input
+									type="text"
+									value={shelfPopupToReadInput}
+									className="shelf-pop-up-to-read-input"
+									onChange={(e) => setShelfPopupToReadInput(e.target.value)}
+									onClick={(e) => {
+										setIsShelfPopupHidden(false);
+										setIsShelfPopupBottomHidden(false);
+									}}
+								/>{' '}
+								on your <b>To Read</b> shelf.
+							</span>
+						</div>
+						{isShelfPopupBottomHidden ? (
+							<div className="shelf-pop-up-bottom">
+								<a
+									href={Firebase.pageGenerator.generateUserShelfPage(
+										user.userUID,
+										'Helder',
+										'to-read'
+									)}
+								>
+									View shelf
+								</a>
+							</div>
+						) : (
+							<div className="shelf-pop-up-bottom">
+								<button
+									className="progress-submit-button"
+									onClick={(e) => {
+										setIsShelfPopupHidden(true);
+										setIsShelfPopupBottomHidden(true);
+									}}
+								>
+									Save
+								</button>
+								<button
+									className="progress-cancel-button"
+									onClick={(e) => {
+										setIsShelfPopupHidden(true);
+										setIsShelfPopupBottomHidden(true);
+									}}
+								>
+									Cancel
+								</button>
+							</div>
+						)}
+					</div>
+					<div className="shelf-pop-up-arrow-grey">
+						<div className="shelf-pop-up-arrow"></div>
+					</div>
+				</div>
 				<button
 					className="remove-book-from-shelf to-read"
 					onClick={removeBookSafely}

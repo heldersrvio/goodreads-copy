@@ -132,6 +132,10 @@ const Firebase = (() => {
 			);
 		};
 
+		const generateWriteReviewPageForBook = (bookId) => {
+			return '/review/edit' + bookId;
+		};
+
 		return {
 			generateBookPage,
 			generateBookCoverPage,
@@ -154,6 +158,7 @@ const Firebase = (() => {
 			generateQuizPage,
 			generateBookQuotesPage,
 			generateQuotePage,
+			generateWriteReviewPageForBook,
 		};
 	})();
 
