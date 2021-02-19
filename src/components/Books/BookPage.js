@@ -6,12 +6,19 @@ import '../styles/Books/BookPage.css';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 
-// Missing other editions
-// Reviews: missing 'more...' button, testing shelves and testing several reviews
-// Missing testing and styling for articles
-// Missing start your own review and capture of userInfo
-// Missing popup appear/disappear animation
-// Fix dropdowns for each status
+/*
+TODO:
+- Stars below shelf button
+- Other editions
+- Removing 'Edit details'
+- Start your own review (all)
+- 'more...' for reviews
+- Shelves for reviews
+- Several reviews
+- Testing quiz question
+- Capture of userInfo
+- Functionality
+*/
 
 const BookPage = ({ match }) => {
 	const {
@@ -362,7 +369,11 @@ const BookPage = ({ match }) => {
 			</div>
 			<div className="book-page-user-shelf-section">
 				<div className="add-to-shelf-buttons">
-					<div className="want-to-read-button-and-options">
+					<div
+						className={`want-to-read-button-and-options ${
+							bookInfo.userStatus !== undefined ? bookInfo.userStatus : ''
+						}`}
+					>
 						{addToShelfButton}
 						{bookOptionsDropdown}
 					</div>
