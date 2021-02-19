@@ -8,7 +8,6 @@ import HomePageFootBar from '../Authentication/HomePageFootBar';
 
 /*
 TODO:
-- Rating details picture
 - Other editions
 - Removing 'Edit details'
 - Start your own review (all)
@@ -70,6 +69,21 @@ const BookPage = ({ match }) => {
 						case 'editionPublishedDate':
 							newLSObject[key] = new Date(2006, 9, 1);
 							break;
+						/*case 'oneRatings':
+							newLSObject[key] = 5;
+							break;
+						case 'twoRatings':
+							newLSObject[key] = 2;
+							break;
+						case 'threeRatings':
+							newLSObject[key] = 11;
+							break;
+						case 'fourRatings':
+							newLSObject[key] = 15;
+							break;
+						case 'fiveRatings':
+							newLSObject[key] = 20;
+							break;*/
 						case 'reviews':
 							newLSObject[key] = [{}];
 							Object.keys(lSObject[key][0]).forEach((key2) => {
@@ -101,6 +115,14 @@ const BookPage = ({ match }) => {
 		getBookInfo();
 	}, [bookPageId, user.userUID]);
 
+	const ratingCount = loaded
+		? bookInfo.fiveRatings +
+		  bookInfo.fourRatings +
+		  bookInfo.threeRatings +
+		  bookInfo.twoRatings +
+		  bookInfo.oneRatings
+		: 1;
+
 	const generalRating = loaded
 		? (
 				(bookInfo.fiveRatings * 5 +
@@ -108,7 +130,7 @@ const BookPage = ({ match }) => {
 					bookInfo.threeRatings * 3 +
 					bookInfo.twoRatings * 2 +
 					bookInfo.oneRatings) /
-				5
+				ratingCount
 		  ).toFixed(2)
 		: 0;
 
@@ -591,19 +613,49 @@ const BookPage = ({ match }) => {
 				<span>{generalRating}</span>
 			</div>
 			<span className="book-page-ratings-dot">·</span>
-			<button className="rating-details">Rating details</button>
+			<button className="rating-details">
+				<div className="svg-container">
+					<svg width="12" height="11">
+						<rect
+							width={(bookInfo.fiveRatings * 16) / ratingCount}
+							height="2"
+							y="0"
+							fill="rgb(33,86,37)"
+						></rect>
+						<rect
+							width={(bookInfo.fourRatings * 16) / ratingCount}
+							height="2"
+							y="3"
+							fill="rgb(33,86,37)"
+						></rect>
+						<rect
+							width={(bookInfo.threeRatings * 16) / ratingCount}
+							height="2"
+							y="6"
+							fill="rgb(33,86,37)"
+						></rect>
+						<rect
+							width={(bookInfo.twoRatings * 16) / ratingCount}
+							height="2"
+							y="9"
+							fill="rgb(33,86,37)"
+						></rect>
+						<rect
+							width={(bookInfo.oneRatings * 16) / ratingCount}
+							height="2"
+							y="12"
+							fill="rgb(33,86,37)"
+						></rect>
+					</svg>
+				</div>
+				<span>Rating details</span>
+			</button>
 			<span className="book-page-ratings-dot">·</span>
 			<a
 				className="book-page-ratings-count"
 				href={`${bookPageId}#other-reviews`}
 			>
-				{`${
-					bookInfo.fiveRatings +
-					bookInfo.fourRatings +
-					bookInfo.threeRatings +
-					bookInfo.twoRatings +
-					bookInfo.oneRatings
-				} ratings`}
+				{`${ratingCount} ratings`}
 			</a>
 			<span className="book-page-ratings-dot">·</span>
 			<a

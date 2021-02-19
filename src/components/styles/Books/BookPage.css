@@ -631,7 +631,12 @@ span.book-page-author-name a:hover,
 	padding: 0;
 	font-size: 12px;
 	line-height: 18px;
-	height: 18px;
+	height: 22px;
+}
+
+button.rating-details {
+	display: flex;
+	flex-direction: row;
 }
 
 .book-page-ratings-area button:hover,
@@ -642,6 +647,22 @@ span.book-page-author-name a:hover,
 .book-page-quiz-question-a:hover {
 	background-color: transparent;
 	text-decoration: underline;
+}
+
+.svg-container {
+	width: 16px;
+	height: 15px;
+	padding: 2px;
+	border: 1px solid rgb(221, 238, 221);
+	display: flex;
+	flex-direction: row;
+	align-items: flex-end;
+	margin-right: 3px;
+}
+
+.rating-details svg {
+	display: flex;
+	flex-direction: column;
 }
 
 span.book-page-ratings-dot {
