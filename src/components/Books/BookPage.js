@@ -8,7 +8,6 @@ import HomePageFootBar from '../Authentication/HomePageFootBar';
 
 /*
 TODO:
-- Fixed stars for rating
 - Rating details picture
 - Other editions
 - Removing 'Edit details'
@@ -101,6 +100,17 @@ const BookPage = ({ match }) => {
 		};
 		getBookInfo();
 	}, [bookPageId, user.userUID]);
+
+	const generalRating = loaded
+		? (
+				(bookInfo.fiveRatings * 5 +
+					bookInfo.fourRatings * 4 +
+					bookInfo.threeRatings * 3 +
+					bookInfo.twoRatings * 2 +
+					bookInfo.oneRatings) /
+				5
+		  ).toFixed(2)
+		: 0;
 
 	const displayRemoveBookConfirm = () => {
 		window.confirm(
@@ -394,7 +404,7 @@ const BookPage = ({ match }) => {
 				{bookInfo.userRating === undefined ? (
 					<span className="rate-this-book">Rate this book</span>
 				) : (
-					<span className="rate-this-book">My rating:</span>
+					<span className="rate-this-book my-rating">My rating:</span>
 				)}
 				<div className="book-page-rate-book-star-rating">
 					<div
@@ -521,7 +531,64 @@ const BookPage = ({ match }) => {
 	const bookPageRatingsArea = loaded ? (
 		<div className="book-page-ratings-area">
 			<div className="book-page-general-rating">
-				{/* Stars and general rating go here */}
+				<div className="book-page-general-rating-stars">
+					<div
+						className={
+							generalRating >= 1
+								? 'static-star small full'
+								: generalRating >= 0.5
+								? 'static-star small almost-full'
+								: generalRating > 0
+								? 'static-star small almost-empty'
+								: 'static-star small empty'
+						}
+					></div>
+					<div
+						className={
+							generalRating >= 2
+								? 'static-star small full'
+								: generalRating >= 1.5
+								? 'static-star small almost-full'
+								: generalRating > 1
+								? 'static-star small almost-empty'
+								: 'static-star small empty'
+						}
+					></div>
+					<div
+						className={
+							generalRating >= 3
+								? 'static-star small full'
+								: generalRating >= 2.5
+								? 'static-star small almost-full'
+								: generalRating > 2
+								? 'static-star small almost-empty'
+								: 'static-star small empty'
+						}
+					></div>
+					<div
+						className={
+							generalRating >= 4
+								? 'static-star small full'
+								: generalRating >= 3.5
+								? 'static-star small almost-full'
+								: generalRating > 3
+								? 'static-star small almost-empty'
+								: 'static-star small empty'
+						}
+					></div>
+					<div
+						className={
+							generalRating >= 5
+								? 'static-star small full'
+								: generalRating >= 4.5
+								? 'static-star small almost-full'
+								: generalRating > 4
+								? 'static-star small almost-empty'
+								: 'static-star small empty'
+						}
+					></div>
+				</div>
+				<span>{generalRating}</span>
 			</div>
 			<span className="book-page-ratings-dot">·</span>
 			<button className="rating-details">Rating details</button>
