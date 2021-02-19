@@ -8,7 +8,8 @@ import HomePageFootBar from '../Authentication/HomePageFootBar';
 
 /*
 TODO:
-- Stars below shelf button
+- Fixed stars for rating
+- Rating details picture
 - Other editions
 - Removing 'Edit details'
 - Start your own review (all)
@@ -44,6 +45,7 @@ const BookPage = ({ match }) => {
 	);
 	const [shelfPopupReadingInput, setShelfPopupReadingInput] = useState('');
 	const [shelfPopupToReadInput, setShelfPopupToReadInput] = useState('');
+	const [exhibitedStarRating, setExhibitedStarRating] = useState(0);
 
 	const user = useSelector((state) => state);
 
@@ -84,10 +86,16 @@ const BookPage = ({ match }) => {
 					}
 				});
 				setBookInfo(newLSObject);
+				if (newLSObject.userRating !== undefined) {
+					setExhibitedStarRating(newLSObject.userRating);
+				}
 			} else {
 				const bookObj = await Firebase.queryBookById(user.userUID, bookId);
 				localStorage.setItem(`${bookId}Obj`, JSON.stringify(bookObj));
 				setBookInfo(bookObj);
+				if (bookObj.userRating !== undefined) {
+					setExhibitedStarRating(bookObj.userRating);
+				}
 			}
 			setLoaded(true);
 		};
@@ -380,8 +388,86 @@ const BookPage = ({ match }) => {
 				</div>
 			</div>
 			<div className="book-page-rate-book">
-				<span className="rate-this-book">Rate this book</span>
-				{/* The stars go here */}
+				{bookInfo.userRating === undefined ? null : (
+					<button className="clear-rating-button">Clear rating</button>
+				)}
+				{bookInfo.userRating === undefined ? (
+					<span className="rate-this-book">Rate this book</span>
+				) : (
+					<span className="rate-this-book">My rating:</span>
+				)}
+				<div className="book-page-rate-book-star-rating">
+					<div
+						className={
+							exhibitedStarRating > 0
+								? 'interactive-star small on'
+								: 'interactive-star small'
+						}
+						title="did not like it"
+						onMouseOver={(e) => setExhibitedStarRating(1)}
+						onMouseLeave={(e) =>
+							setExhibitedStarRating(
+								bookInfo.userRating === undefined ? 0 : bookInfo.userRating
+							)
+						}
+					></div>
+					<div
+						className={
+							exhibitedStarRating > 1
+								? 'interactive-star small on'
+								: 'interactive-star small'
+						}
+						title="it was ok"
+						onMouseOver={(e) => setExhibitedStarRating(2)}
+						onMouseLeave={(e) =>
+							setExhibitedStarRating(
+								bookInfo.userRating === undefined ? 0 : bookInfo.userRating
+							)
+						}
+					></div>
+					<div
+						className={
+							exhibitedStarRating > 2
+								? 'interactive-star small on'
+								: 'interactive-star small'
+						}
+						title="liked it"
+						onMouseOver={(e) => setExhibitedStarRating(3)}
+						onMouseLeave={(e) =>
+							setExhibitedStarRating(
+								bookInfo.userRating === undefined ? 0 : bookInfo.userRating
+							)
+						}
+					></div>
+					<div
+						className={
+							exhibitedStarRating > 3
+								? 'interactive-star small on'
+								: 'interactive-star small'
+						}
+						title="really liked it"
+						onMouseOver={(e) => setExhibitedStarRating(4)}
+						onMouseLeave={(e) =>
+							setExhibitedStarRating(
+								bookInfo.userRating === undefined ? 0 : bookInfo.userRating
+							)
+						}
+					></div>
+					<div
+						className={
+							exhibitedStarRating > 4
+								? 'interactive-star small on'
+								: 'interactive-star small'
+						}
+						title="it was amazing"
+						onMouseOver={(e) => setExhibitedStarRating(5)}
+						onMouseLeave={(e) =>
+							setExhibitedStarRating(
+								bookInfo.userRating === undefined ? 0 : bookInfo.userRating
+							)
+						}
+					></div>
+				</div>
 			</div>
 		</div>
 	) : null;

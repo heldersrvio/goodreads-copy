@@ -277,7 +277,12 @@ const Firebase = (() => {
 			);
 			if (bookInstanceQueryResults.length > 0) {
 				userDetails.userStatus = bookInstanceQueryResults[0].status;
-				userDetails.userProgress = bookInstanceQueryResults[0].progress;
+				if (bookInstanceQueryResults[0].progress !== undefined) {
+					userDetails.userProgress = bookInstanceQueryResults[0].progress;
+				}
+				if (bookInstanceQueryResults[0].rating !== undefined) {
+					userDetails.userRating = bookInstanceQueryResults[0].rating;
+				}
 			}
 		}
 		const allBookInstancesQuery = await database
