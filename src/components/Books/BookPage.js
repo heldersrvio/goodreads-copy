@@ -8,10 +8,9 @@ import HomePageFootBar from '../Authentication/HomePageFootBar';
 
 /*
 TODO:
-- Other editions
-- Removing 'Edit details'
 - Start your own review (all)
 - 'more...' for reviews
+- Removal of 'more...' for short texts
 - Shelves for reviews
 - Several reviews
 - Testing quiz question
@@ -68,6 +67,26 @@ const BookPage = ({ match }) => {
 					switch (key) {
 						case 'editionPublishedDate':
 							newLSObject[key] = new Date(2006, 9, 1);
+							break;
+						case 'otherEditionsPages':
+							newLSObject[key] = [
+								'/book/show/6277040.the-dark-tower',
+								'book/show/408854.The_Dark_Tower',
+								'/book/show/11227306.the-dark-tower',
+								'/book/show/10091130.la-torre-nera',
+								'/book/show/17670090.5170336934',
+								'/book/show/6746616.la-torre-oscura',
+							];
+							break;
+						case 'otherEditionsCovers':
+							newLSObject[key] = [
+								'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1433530080l/6277040._SY475_.jpg',
+								'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1532335721l/408854.jpg',
+								'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1494166372l/11227306._SY475_.jpg',
+								'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1302708142l/10091130.jpg',
+								'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1364053865l/17670090.jpg',
+								'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1590518878l/6746616._SY475_.jpg',
+							];
 							break;
 						/*case 'oneRatings':
 							newLSObject[key] = 5;
@@ -610,7 +629,7 @@ const BookPage = ({ match }) => {
 						}
 					></div>
 				</div>
-				<span>{generalRating}</span>
+				<span>{!isNaN(generalRating) ? generalRating : ''}</span>
 			</div>
 			<span className="book-page-ratings-dot">·</span>
 			<button className="rating-details">
@@ -710,6 +729,12 @@ const BookPage = ({ match }) => {
 				{bookInfo.ISBN !== undefined ? <span>ISBN</span> : null}
 				<span>Edition Language</span>
 				{bookInfo.series !== undefined ? <span>Series</span> : null}
+				<a
+					href={Firebase.pageGenerator.generateBookEditionsPage(
+						bookInfo.rootBook,
+						bookInfo.originalTitle
+					)}
+				>{`Other Editions (${bookInfo.otherEditionsPages.length})`}</a>
 			</div>
 			<div className="book-page-book-info-details-expanded-right">
 				<span>{bookInfo.originalTitle}</span>
@@ -718,8 +743,45 @@ const BookPage = ({ match }) => {
 				{bookInfo.series !== undefined ? (
 					<a
 						href={bookInfo.series.page}
+						className="book-page-details-series-a"
 					>{`${bookInfo.series.name} #${bookInfo.seriesInstance}`}</a>
 				) : null}
+				<div className="book-page-details-editions">
+					<div className="book-page-details-other-editions">
+						{bookInfo.otherEditionsPages.length > 0 ? (
+							bookInfo.otherEditionsPages.map((page, index) => {
+								return (
+									<a
+										href={page}
+										key={index}
+										className="book-page-details-other-editions-a"
+									>
+										<img
+											src={bookInfo.otherEditionsCovers[index]}
+											alt={bookInfo.title}
+										/>
+									</a>
+								);
+							})
+						) : (
+							<span className="no-other-editions-found-span">None found</span>
+						)}
+					</div>
+					<div className="book-page-details-editions-bottom">
+						<a
+							href={Firebase.pageGenerator.generateBookEditionsPage(
+								bookInfo.rootBook,
+								bookInfo.originalTitle
+							)}
+						>
+							All Editions
+						</a>
+						<span>|</span>
+						<a href={Firebase.pageGenerator.generateAddBookPage()}>
+							Add a New Edition
+						</a>
+					</div>
+				</div>
 			</div>
 		</div>
 	) : null;
@@ -751,9 +813,6 @@ const BookPage = ({ match }) => {
 				>
 					{showMoreBookInfoDetails ? '...Less Detail' : 'More Details...'}
 				</button>
-				<a href="/" className="book-page-book-info-edit-details">
-					Edit Details
-				</a>
 			</div>
 		</div>
 	) : null;

@@ -802,7 +802,8 @@ span.book-page-ratings-dot {
 .book-page-lists-with-book-more a.more-lists-with-book-a:hover,
 .book-page-review-instance-right-top-line
 	.book-page-review-instance-user-rated
-	a:hover {
+	a:hover,
+.book-page-details-editions-bottom a:hover {
 	text-decoration: underline;
 }
 
@@ -827,7 +828,20 @@ span.book-page-ratings-dot {
 	padding-right: 15px;
 }
 
-.book-page-book-info-details-expanded-right a,
+.book-page-book-info-details-expanded-left a {
+	padding-top: 0;
+	padding-bottom: 0;
+	line-height: 18px;
+	height: auto;
+}
+
+.book-page-book-info-details-expanded-left a:hover {
+	color: rgb(56, 33, 16);
+	text-decoration: underline;
+}
+
+.book-page-book-info-details-expanded-right > a.book-page-details-series-a,
+.book-page-details-editions-bottom a,
 .book-page-lists-with-book-bottom a.book-page-lists-with-book-pv-title {
 	color: rgb(0, 99, 93);
 	background-color: transparent;
@@ -838,9 +852,39 @@ span.book-page-ratings-dot {
 	height: 18px;
 }
 
-.book-page-book-info-details-expanded-right a {
+.book-page-book-info-details-expanded-right > a.book-page-details-series-a {
 	display: block;
 	width: auto;
+}
+
+.book-page-book-info-details-expanded-right .book-page-details-other-editions {
+	display: flex;
+	flex-direction: row;
+	max-width: 195px;
+	overflow: hidden;
+}
+
+.book-page-details-editions-bottom {
+	padding-top: 10px;
+}
+
+.book-page-details-editions-bottom a,
+.book-page-details-editions-bottom span {
+	margin-left: 2px;
+}
+
+.book-page-details-editions-bottom span {
+	color: rgb(153, 153, 153);
+}
+
+.book-page-book-info-details-expanded-right .book-page-details-other-editions a,
+.book-page-book-info-details-expanded-right
+	.book-page-details-other-editions
+	img {
+	width: 37px;
+	height: 55px;
+	margin-right: 2px;
+	margin-top: 2px;
 }
 
 .book-page-lists-with-book {

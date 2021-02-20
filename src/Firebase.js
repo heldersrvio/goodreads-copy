@@ -22,6 +22,10 @@ const Firebase = (() => {
 			return '/book/show/' + bookId + '.' + title.replace(/ /g, '_');
 		};
 
+		const generateAddBookPage = () => {
+			return '/book/new';
+		};
+
 		const generateBookCoverPage = (bookId, title) => {
 			return '/book/photo/' + bookId + '.' + title.replace(/ /g, '_');
 		};
@@ -138,6 +142,7 @@ const Firebase = (() => {
 
 		return {
 			generateBookPage,
+			generateAddBookPage,
 			generateBookCoverPage,
 			generateBookEditionsPage,
 			generateSeriesPage,
@@ -304,6 +309,14 @@ const Firebase = (() => {
 			.collection('books')
 			.where('rootBook', '==', rootBook)
 			.get();
+		userDetails.otherEditionsCovers = allEditionsQuery.docs
+			.filter((document) => document.id !== bookId)
+			.map((document) => document.data().cover);
+		userDetails.otherEditionsPages = allEditionsQuery.docs
+			.filter((document) => document.id !== bookId)
+			.map((document) =>
+				pageGenerator.generateBookPage(document.id, document.data().title)
+			);
 		const allEditionsQueryBooks = allEditionsQuery.docs.map(
 			(document) => document.id
 		);
