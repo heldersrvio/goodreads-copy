@@ -1,11 +1,10 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import DashboardUpdates from './DashboardUpdates';
 import TopBar from '../Global/TopBar';
 import '../styles/Dashboard/Dashboard.css';
 
 const Dashboard = () => {
-	const user = useSelector((state) => state);
+	const user = JSON.parse(localStorage.getItem('userState'));
 
 	return (
 		<div id="user-home">

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import Firebase from '../../Firebase';
 import { format } from 'date-fns';
 import '../styles/Books/BookPage.css';
@@ -8,13 +7,8 @@ import HomePageFootBar from '../Authentication/HomePageFootBar';
 
 /*
 TODO:
-- Start your own review (all)
-- 'more...' for reviews
 - Removal of 'more...' for short texts
-- Shelves for reviews
-- Several reviews
 - Testing quiz question
-- Capture of userInfo
 - Functionality
 */
 
@@ -43,8 +37,10 @@ const BookPage = ({ match }) => {
 	const [shelfPopupReadingInput, setShelfPopupReadingInput] = useState('');
 	const [shelfPopupToReadInput, setShelfPopupToReadInput] = useState('');
 	const [exhibitedStarRating, setExhibitedStarRating] = useState(0);
+	const [reviewSearchInput, setReviewSearchInput] = useState('');
+	const [reviewsShowingMore, setReviewsShowingMore] = useState([]);
 
-	const user = useSelector((state) => state);
+	const user = JSON.parse(localStorage.getItem('userState'));
 
 	useEffect(() => {
 		const getBookInfo = async () => {
@@ -68,7 +64,7 @@ const BookPage = ({ match }) => {
 						case 'editionPublishedDate':
 							newLSObject[key] = new Date(2006, 9, 1);
 							break;
-						case 'otherEditionsPages':
+						/*case 'otherEditionsPages':
 							newLSObject[key] = [
 								'/book/show/6277040.the-dark-tower',
 								'book/show/408854.The_Dark_Tower',
@@ -88,7 +84,7 @@ const BookPage = ({ match }) => {
 								'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1590518878l/6746616._SY475_.jpg',
 							];
 							break;
-						/*case 'oneRatings':
+						case 'oneRatings':
 							newLSObject[key] = 5;
 							break;
 						case 'twoRatings':
@@ -104,7 +100,7 @@ const BookPage = ({ match }) => {
 							newLSObject[key] = 20;
 							break;*/
 						case 'reviews':
-							newLSObject[key] = [{}];
+							newLSObject[key] = [{}, {}];
 							Object.keys(lSObject[key][0]).forEach((key2) => {
 								if (key2 === 'date') {
 									newLSObject[key][0][key2] = new Date(2021, 2, 2);
@@ -112,11 +108,28 @@ const BookPage = ({ match }) => {
 									newLSObject[key][0][key2] = lSObject[key][0][key2];
 								}
 							});
+							Object.keys(lSObject[key][1]).forEach((key2) => {
+								if (key2 === 'date') {
+									newLSObject[key][1][key2] = new Date(2021, 2, 1);
+								} else {
+									newLSObject[key][1][key2] = lSObject[key][1][key2];
+								}
+							});
 							break;
 						default:
 							newLSObject[key] = lSObject[key];
 					}
 				});
+				newLSObject.reviews[0].shelves = [
+					'alt-universes',
+					'fantasy',
+					'magic',
+					'favorite',
+					'dark-tower-2011-western-vampires',
+					'time-travel',
+					'uncle-steview',
+				];
+				newLSObject.reviews[0].rating = 4;
 				setBookInfo(newLSObject);
 				if (newLSObject.userRating !== undefined) {
 					setExhibitedStarRating(newLSObject.userRating);
@@ -636,31 +649,47 @@ const BookPage = ({ match }) => {
 				<div className="svg-container">
 					<svg width="12" height="11">
 						<rect
-							width={(bookInfo.fiveRatings * 16) / ratingCount}
+							width={
+								ratingCount !== 0
+									? (bookInfo.fiveRatings * 16) / ratingCount
+									: 0
+							}
 							height="2"
 							y="0"
 							fill="rgb(33,86,37)"
 						></rect>
 						<rect
-							width={(bookInfo.fourRatings * 16) / ratingCount}
+							width={
+								ratingCount !== 0
+									? (bookInfo.fourRatings * 16) / ratingCount
+									: 0
+							}
 							height="2"
 							y="3"
 							fill="rgb(33,86,37)"
 						></rect>
 						<rect
-							width={(bookInfo.threeRatings * 16) / ratingCount}
+							width={
+								ratingCount !== 0
+									? (bookInfo.threeRatings * 16) / ratingCount
+									: 0
+							}
 							height="2"
 							y="6"
 							fill="rgb(33,86,37)"
 						></rect>
 						<rect
-							width={(bookInfo.twoRatings * 16) / ratingCount}
+							width={
+								ratingCount !== 0 ? (bookInfo.twoRatings * 16) / ratingCount : 0
+							}
 							height="2"
 							y="9"
 							fill="rgb(33,86,37)"
 						></rect>
 						<rect
-							width={(bookInfo.oneRatings * 16) / ratingCount}
+							width={
+								ratingCount !== 0 ? (bookInfo.oneRatings * 16) / ratingCount : 0
+							}
 							height="2"
 							y="12"
 							fill="rgb(33,86,37)"
@@ -925,13 +954,93 @@ const BookPage = ({ match }) => {
 						>
 							{user.userInfo.firstName},
 						</a>{' '}
-						start your review of {bookInfo.title}
+						{`start your review of ${bookInfo.title} ${
+							bookInfo.series !== undefined
+								? `(${bookInfo.series.name} #${bookInfo.seriesInstance})`
+								: null
+						}`}
 					</span>
 					<div className="start-your-review-section-right-stars-write">
-						<div className="start-your-review-section-right-starts">
-							{/* Stars go here */}
+						<div className="start-your-review-section-right-stars">
+							<div
+								className={
+									exhibitedStarRating > 0
+										? 'interactive-star big on'
+										: 'interactive-star big'
+								}
+								title="did not like it"
+								onMouseOver={(e) => setExhibitedStarRating(1)}
+								onMouseLeave={(e) =>
+									setExhibitedStarRating(
+										bookInfo.userRating === undefined ? 0 : bookInfo.userRating
+									)
+								}
+							></div>
+							<div
+								className={
+									exhibitedStarRating > 1
+										? 'interactive-star big on'
+										: 'interactive-star big'
+								}
+								title="it was ok"
+								onMouseOver={(e) => setExhibitedStarRating(2)}
+								onMouseLeave={(e) =>
+									setExhibitedStarRating(
+										bookInfo.userRating === undefined ? 0 : bookInfo.userRating
+									)
+								}
+							></div>
+							<div
+								className={
+									exhibitedStarRating > 2
+										? 'interactive-star big on'
+										: 'interactive-star big'
+								}
+								title="liked it"
+								onMouseOver={(e) => setExhibitedStarRating(3)}
+								onMouseLeave={(e) =>
+									setExhibitedStarRating(
+										bookInfo.userRating === undefined ? 0 : bookInfo.userRating
+									)
+								}
+							></div>
+							<div
+								className={
+									exhibitedStarRating > 3
+										? 'interactive-star big on'
+										: 'interactive-star big'
+								}
+								title="really liked it"
+								onMouseOver={(e) => setExhibitedStarRating(4)}
+								onMouseLeave={(e) =>
+									setExhibitedStarRating(
+										bookInfo.userRating === undefined ? 0 : bookInfo.userRating
+									)
+								}
+							></div>
+							<div
+								className={
+									exhibitedStarRating > 4
+										? 'interactive-star big on'
+										: 'interactive-star big'
+								}
+								title="it was amazing"
+								onMouseOver={(e) => setExhibitedStarRating(5)}
+								onMouseLeave={(e) =>
+									setExhibitedStarRating(
+										bookInfo.userRating === undefined ? 0 : bookInfo.userRating
+									)
+								}
+							></div>
 						</div>
-						<button className="write-review-button">Write a review</button>
+						<a
+							href={Firebase.pageGenerator.generateWriteReviewPageForBook(
+								bookInfo.id
+							)}
+							className="write-review-button"
+						>
+							Write a review
+						</a>
 					</div>
 				</div>
 			</div>
@@ -961,7 +1070,44 @@ const BookPage = ({ match }) => {
 									>
 										{review.userName}
 									</a>
-									<span>&nbsp;rated it</span> {/* Stars go here */}
+									<span>&nbsp;rated it</span>
+									<div className="review-instance-stars">
+										<div
+											className={
+												review.rating >= 1
+													? 'static-star small full'
+													: 'static-star small empty'
+											}
+										></div>
+										<div
+											className={
+												review.rating >= 2
+													? 'static-star small full'
+													: 'static-star small empty'
+											}
+										></div>
+										<div
+											className={
+												review.rating >= 3
+													? 'static-star small full'
+													: 'static-star small empty'
+											}
+										></div>
+										<div
+											className={
+												review.rating >= 4
+													? 'static-star small full'
+													: 'static-star small empty'
+											}
+										></div>
+										<div
+											className={
+												review.rating >= 5
+													? 'static-star small full'
+													: 'static-star small empty'
+											}
+										></div>
+									</div>
 								</span>
 								<a
 									className="book-page-review-instance-date"
@@ -984,7 +1130,7 @@ const BookPage = ({ match }) => {
 									<span className="book-page-review-instance-shelves-answer">
 										{review.shelves.map((shelf, index) => {
 											return (
-												<span>
+												<span key={index}>
 													<a
 														href={Firebase.pageGenerator.generateUserShelfPage(
 															review.user,
@@ -1001,17 +1147,45 @@ const BookPage = ({ match }) => {
 									</span>
 								</span>
 							) : null}
-							<p className="book-page-review-main-body">{review.text}</p>
-							<div className="book-page-review-bottom">
-								<a
-									className="book-page-review-likes"
-									href={Firebase.pageGenerator.generateReviewLikesPage(
-										review.id
-									)}
+							<div className="review-main-body-container">
+								<p
+									className={
+										reviewsShowingMore.includes(index)
+											? 'book-page-review-main-body full'
+											: 'book-page-review-main-body'
+									}
 								>
-									{review.numberOfLikes} likes
-								</a>
-								<span className="black-dot">·</span>
+									{review.text}
+								</p>
+								<button
+									className="review-show-more"
+									onClick={(e) => {
+										setReviewsShowingMore((previous) => {
+											if (previous.includes(index)) {
+												return previous.filter((item) => item !== index);
+											} else {
+												return previous.concat([index]);
+											}
+										});
+									}}
+								>
+									{reviewsShowingMore.includes(index) ? '(less)' : '...more'}
+								</button>
+							</div>
+							<div className="book-page-review-bottom">
+								{review.numberOfLikes > 0 ? (
+									<a
+										className="book-page-review-likes"
+										href={Firebase.pageGenerator.generateReviewLikesPage(
+											review.id
+										)}
+									>
+										{review.numberOfLikes} likes
+									</a>
+								) : null}
+								{review.numberOfLikes > 0 ? (
+									<span className="black-dot">·</span>
+								) : null}
 								<button className="book-page-review-like-button">Like</button>
 								<span className="black-dot">·</span>
 								<a
@@ -1049,7 +1223,16 @@ const BookPage = ({ match }) => {
 						<span>|</span>
 						<button>Sort order</button>
 					</div>
-					<div className="ratings-section-bottom-right">{/* Search box */}</div>
+					<div className="ratings-section-bottom-right">
+						<input
+							className="book-page-review-search-box"
+							type="text"
+							value={reviewSearchInput}
+							onChange={(e) => setReviewSearchInput(e.target.value)}
+							placeholder="Search review text"
+						></input>
+						<button className="review-search-box-magnifying-glass"></button>
+					</div>
 				</div>
 			</div>
 			<div className="reviews-section">

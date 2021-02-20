@@ -2,8 +2,16 @@ const reducer = (() => {
 	const userReducer = (state = {}, action) => {
 		switch (action.type) {
 			case 'LOGIN':
+				localStorage.setItem('userState', JSON.stringify({ ...action.data }));
 				return { ...action.data };
 			case 'SIGN_OUT':
+				localStorage.setItem(
+					'userState',
+					JSON.stringify({
+						userUID: null,
+						userInfo: {},
+					})
+				);
 				return {
 					userUID: null,
 					userInfo: {},

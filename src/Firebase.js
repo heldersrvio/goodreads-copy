@@ -354,7 +354,9 @@ const Firebase = (() => {
 		return userDetails;
 	};
 
-	const getReviewDetailsForBook = async (rootBook, title) => {
+	const getReviewDetailsForBook = async (bookId, title) => {
+		const bookQuery = await database.collection('books').doc(bookId).get();
+		const rootBook = bookQuery.data().rootBook;
 		const reviewQuery = await database.collection('reviews').get();
 		const bookReviews = [];
 		await Promise.all(
@@ -373,6 +375,16 @@ const Firebase = (() => {
 			bookReviews.map(async (document) => {
 				const review = {};
 				review.user = document.data().user;
+				const userBooksInstancesQuery = await database
+					.collection('userBooksInstances')
+					.where('bookId', '==', bookId)
+					.where('userId', '==', review.user)
+					.get();
+				if (userBooksInstancesQuery[0].rating !== undefined) {
+					review.rating = userBooksInstancesQuery[0].rating;
+				} else {
+					review.rating = 0;
+				}
 				const userQuery = await database
 					.collection('users')
 					.doc(review.user)
@@ -671,7 +683,7 @@ const Firebase = (() => {
 			const userDetails = await getUserDetailsForBook(userUID, bookObj.id);
 			Object.assign(bookObj, userDetails);
 			const reviewDetails = await getReviewDetailsForBook(
-				data.rootBook,
+				bookObj.id,
 				bookObj.title
 			);
 			Object.assign(bookObj, reviewDetails);
@@ -747,12 +759,13 @@ const Firebase = (() => {
 		if (userUID === null) {
 			return 0;
 		}
-		try {
-			const query = await database.collection('users').doc(userUID).get();
-			return query.data().newFriendsRequests.length;
-		} catch (error) {
+		//try {
+		//const query = await database.collection('users').doc(userUID).get();
+		//return query.data().newFriendsRequests.length;
+		return 0;
+		/*} catch (error) {
 			console.log(error);
-		}
+		}*/
 	};
 
 	const setNewNotificationsToSeen = async () => {
@@ -852,14 +865,18 @@ const Firebase = (() => {
 			if (bookInstanceData[i].status === 'to-read') {
 				wantToReadBooks.push(bookObj);
 			} else {
+				const rootBookQuery = await database
+					.collection('rootBooks')
+					.doc(bookQueryData.rootBook)
+					.get();
 				const authorQuery = await database
 					.collection('authors')
-					.doc(bookQueryData.authorId)
+					.doc(rootBookQuery.data().authorId)
 					.get();
 				const authorQueryData = authorQuery.data();
 				bookObj.author = authorQueryData.name;
 				bookObj.authorPage = pageGenerator.generateAuthorPage(
-					bookQueryData.authorId,
+					rootBookQuery.data().authorId,
 					authorQueryData.name
 				);
 				bookObj.authorHasBadge = authorQueryData.GRMember;
@@ -927,6 +944,7 @@ const Firebase = (() => {
 
 	const modifyUserInfo = async (userUID) => {
 		const newUserInfo = await queryUserInfo(userUID);
+		console.log(newUserInfo);
 		return newUserInfo;
 	};
 

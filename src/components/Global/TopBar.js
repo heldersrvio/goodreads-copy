@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import { formatDistance } from 'date-fns';
 import TopBarSearchBar from './TopBarSearchBar';
 import Firebase from '../../Firebase';
@@ -18,7 +17,7 @@ const TopBar = () => {
 	const notificationsRef = useRef(null);
 	const history = useHistory();
 
-	const user = useSelector((state) => state);
+	const user = JSON.parse(localStorage.getItem('userState'));
 
 	useEffect(() => {
 		const checkForNewNotifications = async () => {

@@ -514,10 +514,21 @@ span.rate-this-book {
 	background-repeat: no-repeat;
 }
 
-.book-page-rate-book-star-rating .interactive-star.small {
+.book-page .interactive-star.small {
 	background-size: 15px 15px;
 	width: 15px;
 	height: 15px;
+}
+
+.book-page .interactive-star.big {
+	background-size: 30px 30px;
+	width: 30px;
+	height: 30px;
+	background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxuczpza2V0Y2g9Imh0dHA6Ly93d3cuYm9oZW1pYW5jb2RpbmcuY29tL3NrZXRjaC9ucyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiBoZWlnaHQ9IjE1cHgiIHdpZHRoPSIxNXB4IiB2ZXJzaW9uPSIxLjEiIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2aWV3Qm94PSIwIDAgMTUgMTUiPjwhLS0gR2VuZXJhdG9yOiBTa2V0Y2ggMy40LjEgKDE1NjgxKSAtIGh0dHA6Ly93d3cuYm9oZW1pYW5jb2RpbmcuY29tL3NrZXRjaCAtLT4KIDx0aXRsZT5nci1zdGFyLWVtcHR5PC90aXRsZT4KIDxnIGlkPSJBc3NldHMiIGZpbGwtcnVsZT0iZXZlbm9kZCIgc2tldGNoOnR5cGU9Ik1TUGFnZSIgZmlsbD0ibm9uZSI+CiAgPHBvbHlnb24gaWQ9IlN0YXItMTAtQ29weS02IiBza2V0Y2g6dHlwZT0iTVNTaGFwZUdyb3VwIiBwb2ludHM9IjcuNSAxMS42MDkgMi44NjQ3IDE1IDQuNSA5LjMxNjcgNC4zNTY2ZS0xNiA1LjcyOTUgNS42NDU5IDUuNjA4NSA3LjUgMCA5LjM1NDEgNS42MDg1IDE1IDUuNzI5NSAxMC41IDkuMzE2NyAxMi4xMzUgMTUiIGZpbGw9IiNENkQ2RDYiLz4KIDwvZz4KPC9zdmc+Cg==');
+}
+
+.book-page .interactive-star.big.on {
+	background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxuczpza2V0Y2g9Imh0dHA6Ly93d3cuYm9oZW1pYW5jb2RpbmcuY29tL3NrZXRjaC9ucyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiBoZWlnaHQ9IjE1cHgiIHdpZHRoPSIxNXB4IiB2ZXJzaW9uPSIxLjEiIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2aWV3Qm94PSIwIDAgMTUgMTUiPjwhLS0gR2VuZXJhdG9yOiBTa2V0Y2ggMy40LjEgKDE1NjgxKSAtIGh0dHA6Ly93d3cuYm9oZW1pYW5jb2RpbmcuY29tL3NrZXRjaCAtLT4KIDx0aXRsZT5nci1zdGFyLXlvdXItcmF0aW5nPC90aXRsZT4KIDxnIGlkPSJBc3NldHMiIGZpbGwtcnVsZT0iZXZlbm9kZCIgc2tldGNoOnR5cGU9Ik1TUGFnZSIgZmlsbD0ibm9uZSI+CiAgPHBvbHlnb24gaWQ9IlN0YXItMTAtQ29weS03IiBza2V0Y2g6dHlwZT0iTVNTaGFwZUdyb3VwIiBwb2ludHM9IjcuNSAxMS42MDkgMi44NjQ3IDE1IDQuNSA5LjMxNjcgMS4xNjE4ZS0xNCA1LjcyOTUgNS42NDU5IDUuNjA4NSA3LjUgMCA5LjM1NDEgNS42MDg1IDE1IDUuNzI5NSAxMC41IDkuMzE2NyAxMi4xMzUgMTUiIGZpbGw9IiNGNkE2MjMiLz4KIDwvZz4KPC9zdmc+Cg==');
 }
 
 .book-page .interactive-star.on {
@@ -677,7 +688,8 @@ span.book-page-ratings-dot {
 	border-bottom: 1px solid rgb(216, 216, 216);
 }
 
-.book-page-synopsis-wrapper button {
+.book-page-synopsis-wrapper button,
+button.review-show-more {
 	color: rgb(0, 99, 93);
 	padding: 0;
 	display: inline;
@@ -687,7 +699,8 @@ span.book-page-ratings-dot {
 	font-weight: 400;
 }
 
-.book-page-synopsis-wrapper button:hover {
+.book-page-synopsis-wrapper button:hover,
+button.review-show-more:hover {
 	background-color: transparent;
 	text-decoration: underline;
 	color: rgb(0, 99, 93);
@@ -807,6 +820,12 @@ span.book-page-ratings-dot {
 	text-decoration: underline;
 }
 
+.review-instance-stars {
+	display: flex;
+	flex-direction: row;
+	margin-left: 3px;
+}
+
 .book-page-book-info-details-expanded {
 	display: flex;
 	flex-direction: row;
@@ -862,6 +881,10 @@ span.book-page-ratings-dot {
 	flex-direction: row;
 	max-width: 195px;
 	overflow: hidden;
+}
+
+.no-other-editions-found-span {
+	color: rgb(119, 119, 119);
 }
 
 .book-page-details-editions-bottom {
@@ -970,7 +993,8 @@ span.book-page-ratings-dot {
 }
 
 .ratings-section-top a,
-.ratings-section-top button {
+.ratings-section-top button,
+.ratings-section-top span {
 	font-size: 14px;
 }
 
@@ -984,6 +1008,14 @@ span.book-page-ratings-dot {
 .ratings-section-top a.book-page-ratings-count:hover,
 .ratings-section-top a.book-page-reviews-count:hover {
 	text-decoration: none;
+}
+
+.ratings-section-bottom {
+	margin-top: 15px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
 }
 
 .ratings-section-bottom-left button {
@@ -1002,7 +1034,6 @@ span.book-page-ratings-dot {
 }
 
 .ratings-section-bottom-left {
-	margin-top: 15px;
 	width: 17%;
 	display: flex;
 	flex-direction: row;
@@ -1014,8 +1045,110 @@ span.book-page-ratings-dot {
 	text-decoration: underline;
 }
 
+.ratings-section-bottom-right {
+	position: relative;
+}
+
+.book-page-review-search-box {
+	border: 1px solid rgb(220, 214, 204);
+	border-radius: 3px;
+	width: 172px;
+	height: 17px;
+	padding: 4px;
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	line-height: normal;
+}
+
+.book-page-review-search-box:focus {
+	border-color: rgb(185, 173, 153);
+	box-shadow: rgba(185, 173, 153, 0.5) 0px 0px 4px 0px;
+}
+
+.review-search-box-magnifying-glass {
+	background: url('https://s.gr-assets.com/assets/layout/header/icn_nav_search.svg')
+		no-repeat;
+	background-size: 18px 19px;
+	width: 18px;
+	height: 19px;
+	position: absolute;
+	top: 3px;
+	right: -8px;
+}
+
+.review-search-box-magnifying-glass:hover {
+	background-color: transparent;
+}
+
 .book-page-community-reviews .reviews-section {
 	padding-top: 10px;
+}
+
+.start-your-review-section {
+	display: flex;
+	flex-direction: row;
+	margin-bottom: 20px;
+}
+
+.start-your-review-profile-picture img {
+	width: 50px;
+	height: 66px;
+	margin-right: 10px;
+}
+
+.start-your-review-section-right {
+	width: 100%;
+}
+
+.start-your-review-section-right > span {
+	color: rgb(24, 24, 24);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+	line-height: 18px;
+}
+
+.start-your-review-section-right span a {
+	color: rgb(0, 99, 93);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+	line-height: 18px;
+}
+
+.start-your-review-section-right span a:hover {
+	color: rgb(0, 99, 93);
+	text-decoration: underline;
+}
+
+.start-your-review-section-right-stars-write {
+	display: flex;
+	flex-direction: row;
+	margin-top: 10px;
+}
+
+.start-your-review-section-right-stars-write > a {
+	background-color: rgb(244, 241, 234);
+	border: 1px solid rgb(214, 208, 196);
+	color: rgb(51, 51, 51);
+	padding: 8px 12px;
+	border-radius: 3px;
+	width: 91px;
+	height: 16px;
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-weight: normal;
+	font-size: 14px;
+	line-height: 14px;
+	margin-left: 15px;
+}
+
+.start-your-review-section-right-stars-write > a:hover {
+	background-color: rgb(237, 230, 214);
+}
+
+.start-your-review-section-right-stars {
+	display: flex;
+	flex-direction: row;
 }
 
 .book-page-community-reviews
@@ -1024,6 +1157,7 @@ span.book-page-ratings-dot {
 	.book-page-review-instance {
 	display: flex;
 	flex-direction: row;
+	margin-bottom: 15px;
 }
 
 .book-page-review-instance-profile-image {
@@ -1042,6 +1176,10 @@ span.book-page-ratings-dot {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
+}
+
+.book-page-review-instance-right > span {
+	display: block;
 }
 
 .book-page-review-instance-right-top-line
@@ -1128,6 +1266,12 @@ span.book-page-ratings-dot {
 	font-family: 'Merriweather', Georgia, serif;
 	font-size: 14px;
 	line-height: 21px;
+	max-height: 292px;
+	overflow: hidden;
+}
+
+.book-page-review-main-body.full {
+	max-height: none;
 }
 
 .book-page-review-bottom button {
