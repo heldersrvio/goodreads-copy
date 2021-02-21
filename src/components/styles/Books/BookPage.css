@@ -655,7 +655,8 @@ button.rating-details {
 .book-page-genres-main .book-page-genres-title-a:hover,
 .author-about-section-title-a:hover,
 .book-page-books-by-author-a:hover,
-.book-page-quiz-question-a:hover {
+.book-page-quiz-question-a:hover,
+.book-page-quotes-section-a:hover {
 	background-color: transparent;
 	text-decoration: underline;
 }
@@ -742,7 +743,8 @@ button.review-show-more:hover {
 .book-page-genres-main .book-page-genres-title-a,
 .author-about-section-title-a,
 .book-page-books-by-author-a,
-.book-page-quiz-question-a {
+.book-page-quiz-question-a,
+.book-page-quotes-section-a {
 	font-family: 'Lato', Helvetica, Arial, sans-serif;
 	color: rgb(56, 33, 16);
 	font-size: 12px;
@@ -1440,7 +1442,8 @@ button.review-show-more:hover {
 
 .author-about-section-title-a:hover,
 .book-page-books-by-author-a:hover,
-.book-page-quiz-question-a:hover {
+.book-page-quiz-question-a:hover,
+.book-page-quotes-section-a:hover {
 	color: rgb(56, 33, 16);
 }
 
@@ -1571,5 +1574,103 @@ button.author-about-show-more:hover {
 }
 
 .book-page-no-quizzes-yet-span a:hover {
+	text-decoration: underline;
+}
+
+.book-page-quiz-question-main {
+	padding-top: 10px;
+}
+
+.book-page-quiz-title-a {
+	color: rgb(0, 99, 93);
+	font-family: 'Merriweather', Georgia, serif;
+	font-size: 18px;
+	line-height: 21px;
+	display: block;
+}
+
+.book-page-quiz-title-a:hover {
+	color: rgb(0, 99, 93);
+	text-decoration: underline;
+}
+
+.book-page-quiz-description {
+	color: rgb(119, 119, 119);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	line-height: 18px;
+	display: block;
+	margin-bottom: 15px;
+}
+
+.book-page-quiz-question-main-actual-question span,
+.book-page-quiz-question-main-actual-question label {
+	color: rgb(0, 0, 0);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.book-page-quiz-question-main-actual-question label {
+	margin-left: 7px;
+}
+
+.book-page-quiz-question-main-actual-question input {
+	height: 12px;
+	width: 12px;
+}
+
+a.book-page-quiz-question-take,
+a.book-info-quotes-more-quotes {
+	color: rgb(0, 99, 93);
+	float: right;
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 13px;
+	font-weight: 700;
+	line-height: 18px;
+	margin-top: 15px;
+}
+
+a.book-page-quiz-question-take:hover,
+a.book-info-quotes-more-quotes:hover {
+	text-decoration: underline;
+}
+
+.book-page-quotes-section {
+	margin-top: 60px;
+}
+
+.book-page-quotes-section-title-area {
+	position: relative;
+}
+
+a.book-page-quotes-section-a {
+	line-height: 18px;
+	height: auto;
+	position: absolute;
+	bottom: 0;
+	margin-bottom: 7px;
+}
+
+.book-info-quotes-section-main {
+	padding-top: 7px;
+}
+
+.book-page-quotes-section-quote {
+	margin-bottom: 10px;
+	color: rgb(24, 24, 24);
+	font-family: 'Merriweather', Georgia, serif;
+	font-size: 14px;
+	line-height: 21px;
+}
+
+.book-page-quotes-section-quote a {
+	color: rgb(0, 99, 93);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.book-page-quotes-section-quote a:hover {
 	text-decoration: underline;
 }

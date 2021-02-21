@@ -8,7 +8,6 @@ import HomePageFootBar from '../Authentication/HomePageFootBar';
 /*
 TODO:
 - Removal of 'more...' for short texts
-- Testing quiz question
 - Functionality
 */
 

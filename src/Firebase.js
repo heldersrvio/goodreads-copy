@@ -380,8 +380,8 @@ const Firebase = (() => {
 					.where('bookId', '==', bookId)
 					.where('userId', '==', review.user)
 					.get();
-				if (userBooksInstancesQuery[0].rating !== undefined) {
-					review.rating = userBooksInstancesQuery[0].rating;
+				if (userBooksInstancesQuery.docs[0].data().rating !== undefined) {
+					review.rating = userBooksInstancesQuery.docs[0].data().rating;
 				} else {
 					review.rating = 0;
 				}
@@ -588,7 +588,7 @@ const Firebase = (() => {
 				const questionObject = {
 					quizId: document.id,
 					quizTitle: document.data().title,
-					quizDescription: document.data().title,
+					quizDescription: document.data().description,
 					quizPage: pageGenerator.generateQuizPage(
 						document.id,
 						document.data().title
