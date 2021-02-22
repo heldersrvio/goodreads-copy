@@ -10,11 +10,7 @@ TODO:
 - Functionality：
 	- Update progress
 	- Update book shelf position
-	- Add or change book's shelf
 	- Add book to new shelf
-	- Rate book
-	- Clear rating
-	- Rate book for review
 	- Filter reviews by stars and editions
 	- Sort reviews by newest/oldest/default
 	- Search review text
@@ -163,6 +159,14 @@ const BookPage = ({ match }) => {
 		getBookInfo();
 	}, [bookPageId, user.userUID]);
 
+	useEffect(() => {
+		if (bookInfo.userRating !== undefined) {
+			setExhibitedStarRating(bookInfo.userRating);
+		} else {
+			setExhibitedStarRating(0);
+		}
+	}, [bookInfo]);
+
 	useLayoutEffect(() => {
 		if (authorAboutP.current !== undefined) {
 			console.log(authorAboutP.current.scrollHeight);
@@ -223,6 +227,40 @@ const BookPage = ({ match }) => {
 					userStatus: undefined,
 					userProgress: undefined,
 					userRating: undefined,
+				};
+			});
+		}
+	};
+
+	const changeBookShelf = async (shelf) => {
+		if (
+			user.userUID !== null &&
+			user.userUID !== undefined &&
+			bookInfo.id !== undefined
+		) {
+			setSavingShelf(true);
+			await Firebase.addBookToShelf(user.userUID, bookInfo.id, shelf);
+			setBookInfo((previous) => {
+				return {
+					...previous,
+					userStatus: shelf,
+				};
+			});
+			setSavingShelf(false);
+		}
+	};
+
+	const rateBook = async (rating) => {
+		if (
+			user.userUID !== null &&
+			user.userUID !== undefined &&
+			bookInfo.id !== undefined
+		) {
+			await Firebase.rateBook(user.userUID, bookInfo.id, rating);
+			setBookInfo((previous) => {
+				return {
+					...previous,
+					userRating: rating,
 				};
 			});
 		}
@@ -426,19 +464,7 @@ const BookPage = ({ match }) => {
 		) : (
 			<button
 				className="book-page-want-to-read-button"
-				onClick={async () => {
-					if (user.userUID !== null && user.userUID !== undefined) {
-						setSavingShelf(true);
-						await Firebase.addBookToShelf(user.userUID, bookInfo.id, 'to-read');
-						setBookInfo((previous) => {
-							return {
-								...previous,
-								userStatus: 'to-read',
-							};
-						});
-						setSavingShelf(false);
-					}
-				}}
+				onClick={() => changeBookShelf('to-read')}
 			>
 				{savingShelf ? '...saving' : 'Want to Read'}
 			</button>
@@ -448,11 +474,24 @@ const BookPage = ({ match }) => {
 		<div className="book-page-book-option-dropdown-trigger">
 			<div className="book-options-dropdown">
 				<div className="book-options-dropdown-top">
-					<button className="dropdown-read-button">Read</button>
-					<button className="dropdown-currently-reading-button">
+					<button
+						className="dropdown-read-button"
+						onClick={() => changeBookShelf('read')}
+					>
+						Read
+					</button>
+					<button
+						className="dropdown-currently-reading-button"
+						onClick={() => changeBookShelf('reading')}
+					>
 						Currently Reading
 					</button>
-					<button className="dropdown-want-to-read-button">Want to Read</button>
+					<button
+						className="dropdown-want-to-read-button"
+						onClick={() => changeBookShelf('to-read')}
+					>
+						Want to Read
+					</button>
 				</div>
 				<div className="book-options-dropdown-bottom">
 					<button className="dropdown-add-shelf">Add Shelf</button>
@@ -509,7 +548,12 @@ const BookPage = ({ match }) => {
 			</div>
 			<div className="book-page-rate-book">
 				{bookInfo.userRating === undefined ? null : (
-					<button className="clear-rating-button">Clear rating</button>
+					<button
+						className="clear-rating-button"
+						onClick={() => rateBook(undefined)}
+					>
+						Clear rating
+					</button>
 				)}
 				{bookInfo.userRating === undefined ? (
 					<span className="rate-this-book">Rate this book</span>
@@ -530,6 +574,7 @@ const BookPage = ({ match }) => {
 								bookInfo.userRating === undefined ? 0 : bookInfo.userRating
 							)
 						}
+						onClick={() => rateBook(1)}
 					></div>
 					<div
 						className={
@@ -544,6 +589,7 @@ const BookPage = ({ match }) => {
 								bookInfo.userRating === undefined ? 0 : bookInfo.userRating
 							)
 						}
+						onClick={() => rateBook(2)}
 					></div>
 					<div
 						className={
@@ -558,6 +604,7 @@ const BookPage = ({ match }) => {
 								bookInfo.userRating === undefined ? 0 : bookInfo.userRating
 							)
 						}
+						onClick={() => rateBook(3)}
 					></div>
 					<div
 						className={
@@ -572,6 +619,7 @@ const BookPage = ({ match }) => {
 								bookInfo.userRating === undefined ? 0 : bookInfo.userRating
 							)
 						}
+						onClick={() => rateBook(4)}
 					></div>
 					<div
 						className={
@@ -586,6 +634,7 @@ const BookPage = ({ match }) => {
 								bookInfo.userRating === undefined ? 0 : bookInfo.userRating
 							)
 						}
+						onClick={() => rateBook(5)}
 					></div>
 				</div>
 			</div>
@@ -1035,6 +1084,7 @@ const BookPage = ({ match }) => {
 										bookInfo.userRating === undefined ? 0 : bookInfo.userRating
 									)
 								}
+								onClick={() => rateBook(1)}
 							></div>
 							<div
 								className={
@@ -1049,6 +1099,7 @@ const BookPage = ({ match }) => {
 										bookInfo.userRating === undefined ? 0 : bookInfo.userRating
 									)
 								}
+								onClick={() => rateBook(2)}
 							></div>
 							<div
 								className={
@@ -1063,6 +1114,7 @@ const BookPage = ({ match }) => {
 										bookInfo.userRating === undefined ? 0 : bookInfo.userRating
 									)
 								}
+								onClick={() => rateBook(3)}
 							></div>
 							<div
 								className={
@@ -1077,6 +1129,7 @@ const BookPage = ({ match }) => {
 										bookInfo.userRating === undefined ? 0 : bookInfo.userRating
 									)
 								}
+								onClick={() => rateBook(4)}
 							></div>
 							<div
 								className={
@@ -1091,6 +1144,7 @@ const BookPage = ({ match }) => {
 										bookInfo.userRating === undefined ? 0 : bookInfo.userRating
 									)
 								}
+								onClick={() => rateBook(5)}
 							></div>
 						</div>
 						<a
@@ -1299,18 +1353,8 @@ const BookPage = ({ match }) => {
 			</div>
 			<div className="reviews-section">
 				{bookInfo.reviews.filter((review) => {
-					if (user.userInfo !== undefined) {
-						if (
-							user.userInfo.firstName !== undefined &&
-							user.userInfo.lastName !== undefined
-						) {
-							return (
-								review.userName ===
-								user.userInfo.firstName + user.userInfo.lastName
-							);
-						} else if (user.userInfo.firstName !== undefined) {
-							return review.userName === user.userInfo.firstName;
-						}
+					if (user.UID !== undefined) {
+						return review.user === user.UID;
 					}
 					return false;
 				}).length > 0

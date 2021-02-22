@@ -958,7 +958,7 @@ const Firebase = (() => {
 			await database
 				.collection('userBooksInstances')
 				.doc(userInstanceQuery.docs[0].id)
-				.set({ status }, { merg: true });
+				.set({ status }, { merge: true });
 		} else {
 			await database
 				.collection('userBooksInstances')
@@ -988,6 +988,31 @@ const Firebase = (() => {
 		}
 	};
 
+	const rateBook = async (userUID, bookId, rating) => {
+		const userInstanceQuery = await database
+			.collection('userBooksInstances')
+			.where('userId', '==', userUID)
+			.where('bookId', '==', bookId)
+			.get();
+		if (userInstanceQuery.docs.length > 0) {
+			if (rating !== undefined) {
+				await database
+					.collection('userBooksInstances')
+					.doc(userInstanceQuery.docs[0].id)
+					.set({ rating }, { merge: true });
+			} else {
+				await database
+					.collection('userBooksInstances')
+					.doc(userInstanceQuery.docs[0].id)
+					.update({ rating: firebase.firestore.FieldValue.delete() });
+			}
+		} else {
+			await database
+				.collection('userBooksInstances')
+				.add({ bookId, userId: userUID, status: 'read', rating });
+		}
+	};
+
 	const updateBookInShelf = async (userUID, bookId, progress) => {};
 
 	return {
@@ -1008,6 +1033,7 @@ const Firebase = (() => {
 		modifyUserInfo,
 		addBookToShelf,
 		removeBookFromShelf,
+		rateBook,
 		updateBookInShelf,
 	};
 })();
