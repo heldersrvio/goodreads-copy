@@ -7,7 +7,20 @@ import HomePageFootBar from '../Authentication/HomePageFootBar';
 
 /*
 TODO:
-- Functionality
+- Functionality：
+	- Update progress
+	- Update book shelf position
+	- Add or change book's shelf
+	- Add book to new shelf
+	- Rate book
+	- Clear rating
+	- Rate book for review
+	- Filter reviews by stars and editions
+	- Sort reviews by newest/oldest/default
+	- Search review text
+	- Like review
+	- Follow author
+	- Recommend book to friend window
 */
 
 const BookPage = ({ match }) => {
@@ -57,7 +70,7 @@ const BookPage = ({ match }) => {
 				}
 				i++;
 			}
-			const lSObjectItem = localStorage.getItem(`${bookId}Obj`);
+			/*const lSObjectItem = localStorage.getItem(`${bookId}Obj`);
 			if (lSObjectItem !== null) {
 				const lSObject = JSON.parse(lSObjectItem);
 				console.log('Loaded book from storage');
@@ -67,7 +80,7 @@ const BookPage = ({ match }) => {
 						case 'editionPublishedDate':
 							newLSObject[key] = new Date(2006, 9, 1);
 							break;
-						/*case 'otherEditionsPages':
+						/case 'otherEditionsPages':
 							newLSObject[key] = [
 								'/book/show/6277040.the-dark-tower',
 								'book/show/408854.The_Dark_Tower',
@@ -101,12 +114,12 @@ const BookPage = ({ match }) => {
 							break;
 						case 'fiveRatings':
 							newLSObject[key] = 20;
-							break;*/
+							break;/
 						case 'reviews':
-							newLSObject[key] = [{}, {}];
+							newLSObject[key] = [{}];
 							Object.keys(lSObject[key][0]).forEach((key2) => {
 								if (key2 === 'date') {
-									newLSObject[key][0][key2] = new Date(2021, 2, 2);
+									newLSObject[key][0][key2] = new Date(2021, 2, 1);
 								} else {
 									newLSObject[key][0][key2] = lSObject[key][0][key2];
 								}
@@ -137,14 +150,14 @@ const BookPage = ({ match }) => {
 				if (newLSObject.userRating !== undefined) {
 					setExhibitedStarRating(newLSObject.userRating);
 				}
-			} else {
-				const bookObj = await Firebase.queryBookById(user.userUID, bookId);
-				localStorage.setItem(`${bookId}Obj`, JSON.stringify(bookObj));
-				setBookInfo(bookObj);
-				if (bookObj.userRating !== undefined) {
-					setExhibitedStarRating(bookObj.userRating);
-				}
+			} else {*/
+			const bookObj = await Firebase.queryBookById(user.userUID, bookId);
+			localStorage.setItem(`${bookId}Obj`, JSON.stringify(bookObj));
+			setBookInfo(bookObj);
+			if (bookObj.userRating !== undefined) {
+				setExhibitedStarRating(bookObj.userRating);
 			}
+			//}
 			setLoaded(true);
 		};
 		getBookInfo();
@@ -195,14 +208,23 @@ const BookPage = ({ match }) => {
 		: 0;
 
 	const displayRemoveBookConfirm = () => {
-		window.confirm(
+		return window.confirm(
 			'Removing a book deletes your rating, review, etc. Remove this book from all your shelves?'
 		);
 	};
 
 	const removeBookSafely = () => {
 		if (displayRemoveBookConfirm()) {
+			console.log('Confirmed. Now removing book...');
 			Firebase.removeBookFromShelf(user.userUID, bookInfo.id);
+			setBookInfo((previous) => {
+				return {
+					...previous,
+					userStatus: undefined,
+					userProgress: undefined,
+					userRating: undefined,
+				};
+			});
 		}
 	};
 
@@ -408,6 +430,12 @@ const BookPage = ({ match }) => {
 					if (user.userUID !== null && user.userUID !== undefined) {
 						setSavingShelf(true);
 						await Firebase.addBookToShelf(user.userUID, bookInfo.id, 'to-read');
+						setBookInfo((previous) => {
+							return {
+								...previous,
+								userStatus: 'to-read',
+							};
+						});
 						setSavingShelf(false);
 					}
 				}}

@@ -948,9 +948,45 @@ const Firebase = (() => {
 		return newUserInfo;
 	};
 
-	const addBookToShelf = async (userUID, bookId, status) => {};
+	const addBookToShelf = async (userUID, bookId, status) => {
+		const userInstanceQuery = await database
+			.collection('userBooksInstances')
+			.where('userId', '==', userUID)
+			.where('bookId', '==', bookId)
+			.get();
+		if (userInstanceQuery.docs.length > 0) {
+			await database
+				.collection('userBooksInstances')
+				.doc(userInstanceQuery.docs[0].id)
+				.set({ status }, { merg: true });
+		} else {
+			await database
+				.collection('userBooksInstances')
+				.add({ bookId, userId: userUID, status });
+		}
+	};
 
-	const removeBookFromShelf = async (userUID, bookId) => {};
+	const removeBookFromShelf = async (userUID, bookId) => {
+		const userInstanceQuery = await database
+			.collection('userBooksInstances')
+			.where('userId', '==', userUID)
+			.where('bookId', '==', bookId)
+			.get();
+		if (userInstanceQuery.docs.length > 0) {
+			await database
+				.collection('userBooksInstances')
+				.doc(userInstanceQuery.docs[0].id)
+				.delete();
+		}
+		const reviewQuery = await database
+			.collection('reviews')
+			.where('user', '==', userUID)
+			.where('bookEdition', '==', bookId)
+			.get();
+		if (reviewQuery.docs.length > 0) {
+			await database.collection('reviews').doc(reviewQuery.docs[0].id).delete();
+		}
+	};
 
 	const updateBookInShelf = async (userUID, bookId, progress) => {};
 
