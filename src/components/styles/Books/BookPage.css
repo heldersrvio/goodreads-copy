@@ -1454,6 +1454,14 @@ button.review-show-more:hover {
 	margin-bottom: 15px;
 }
 
+.author-about-section-preview-right .goodreads-seal {
+	background-image: url('https://s.gr-assets.com/assets/icons/gr-author-badge_20x21.png');
+	width: 25px;
+	height: 21px;
+	background-position: 0px 0px;
+	background-repeat: no-repeat;
+}
+
 .author-about-section-preview-top > a {
 	display: block;
 	width: 75px;
@@ -1472,12 +1480,22 @@ button.review-show-more:hover {
 	margin-left: 10px;
 }
 
-.author-about-section-preview-name {
+.author-about-section-preview-name a {
 	color: rgb(0, 0, 0);
 	font-family: 'Merriweather', Georgia, serif;
 	font-size: 16px;
 	line-height: 18px;
 	font-weight: 900;
+}
+
+.author-about-section-preview-name {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.author-about-section-preview-name span {
+	width: auto;
 }
 
 .author-about-section-preview-name:hover {

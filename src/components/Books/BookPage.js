@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useLayoutEffect } from 'react';
 import Firebase from '../../Firebase';
 import { format } from 'date-fns';
 import '../styles/Books/BookPage.css';
@@ -7,7 +7,6 @@ import HomePageFootBar from '../Authentication/HomePageFootBar';
 
 /*
 TODO:
-- Removal of 'more...' for short texts
 - Functionality
 */
 
@@ -15,6 +14,10 @@ const BookPage = ({ match }) => {
 	const {
 		params: { bookPageId },
 	} = match;
+	const authorAboutP = useRef();
+	const synopsisP = useRef();
+	const [synopsisHeight, setSynopsisHeight] = useState(0);
+	const [authorAboutHeight, setAuthorAboutHeight] = useState(0);
 	const [bookInfo, setBookInfo] = useState({ title: '', cover: '' });
 	const [loaded, setLoaded] = useState(false);
 	const [enlargingCover, setEnlargingCover] = useState(false);
@@ -38,6 +41,7 @@ const BookPage = ({ match }) => {
 	const [exhibitedStarRating, setExhibitedStarRating] = useState(0);
 	const [reviewSearchInput, setReviewSearchInput] = useState('');
 	const [reviewsShowingMore, setReviewsShowingMore] = useState([]);
+	const [reviewsHaveButton, setReviewsHaveButton] = useState([]);
 
 	const user = JSON.parse(localStorage.getItem('userState'));
 
@@ -145,6 +149,31 @@ const BookPage = ({ match }) => {
 		};
 		getBookInfo();
 	}, [bookPageId, user.userUID]);
+
+	useLayoutEffect(() => {
+		if (authorAboutP.current !== undefined) {
+			console.log(authorAboutP.current.scrollHeight);
+			setAuthorAboutHeight(authorAboutP.current.scrollHeight);
+		}
+		if (synopsisP.current !== undefined) {
+			setSynopsisHeight(synopsisP.current.scrollHeight);
+		}
+
+		const reviews = document.getElementsByClassName(
+			'book-page-review-main-body'
+		);
+		if (reviews.length > 0) {
+			const haveButtons = [];
+			Array.from(reviews).forEach((review) => {
+				if (review.scrollHeight <= 292) {
+					haveButtons.push(false);
+				} else {
+					haveButtons.push(true);
+				}
+			});
+			setReviewsHaveButton(haveButtons);
+		}
+	}, [loaded]);
 
 	const ratingCount = loaded
 		? bookInfo.fiveRatings +
@@ -730,16 +759,20 @@ const BookPage = ({ match }) => {
 						<b>{bookInfo.preSynopsis}</b>
 					</p>
 				) : null}
-				<p className="synopsis">{bookInfo.synopsis}</p>
+				<p className="synopsis" ref={synopsisP}>
+					{bookInfo.synopsis}
+				</p>
 			</div>
-			<button
-				className="synopsis-show-more"
-				onClick={(e) => {
-					setSynopsisShowMore((previous) => !previous);
-				}}
-			>
-				{synopsisShowMore ? '(less)' : '...more'}
-			</button>
+			{synopsisHeight > 105 ? (
+				<button
+					className="synopsis-show-more"
+					onClick={(e) => {
+						setSynopsisShowMore((previous) => !previous);
+					}}
+				>
+					{synopsisShowMore ? '(less)' : '...more'}
+				</button>
+			) : null}
 		</div>
 	) : null;
 
@@ -1156,20 +1189,22 @@ const BookPage = ({ match }) => {
 								>
 									{review.text}
 								</p>
-								<button
-									className="review-show-more"
-									onClick={(e) => {
-										setReviewsShowingMore((previous) => {
-											if (previous.includes(index)) {
-												return previous.filter((item) => item !== index);
-											} else {
-												return previous.concat([index]);
-											}
-										});
-									}}
-								>
-									{reviewsShowingMore.includes(index) ? '(less)' : '...more'}
-								</button>
+								{reviewsHaveButton[index] ? (
+									<button
+										className="review-show-more"
+										onClick={(e) => {
+											setReviewsShowingMore((previous) => {
+												if (previous.includes(index)) {
+													return previous.filter((item) => item !== index);
+												} else {
+													return previous.concat([index]);
+												}
+											});
+										}}
+									>
+										{reviewsShowingMore.includes(index) ? '(less)' : '...more'}
+									</button>
+								) : null}
 							</div>
 							<div className="book-page-review-bottom">
 								{review.numberOfLikes > 0 ? (
@@ -1447,13 +1482,12 @@ const BookPage = ({ match }) => {
 						/>
 					</a>
 					<div className="author-about-section-preview-right">
-						<a
-							className="author-about-section-preview-name"
-							href={bookInfo.authorPages[0]}
-						>
-							{bookInfo.authorNames[0]}
-							<span>{/* Goodreads seal if member else null */}</span>
-						</a>
+						<div className="author-about-section-preview-name">
+							<a href={bookInfo.authorPages[0]}>{bookInfo.authorNames[0]}</a>
+							{bookInfo.authorIsMember ? (
+								<div className="goodreads-seal"></div>
+							) : null}
+						</div>
 						<span className="author-about-section-preview-follower-count">
 							{bookInfo.authorFollowerCount} followers
 						</span>
@@ -1471,17 +1505,21 @@ const BookPage = ({ match }) => {
 									: 'author-about-section-about'
 							}
 						>
-							<p>{bookInfo.mainAuthorAbout}</p>
+							<p className="main-author-about-p" ref={authorAboutP}>
+								{bookInfo.mainAuthorAbout}
+							</p>
 						</div>
 					) : null}
-					<button
-						className="author-about-show-more"
-						onClick={(e) => {
-							setAuthorAboutShowMore((previous) => !previous);
-						}}
-					>
-						{authorAboutShowMore ? '(less)' : '...more'}
-					</button>
+					{authorAboutHeight > 162 ? (
+						<button
+							className="author-about-show-more"
+							onClick={(e) => {
+								setAuthorAboutShowMore((previous) => !previous);
+							}}
+						>
+							{authorAboutShowMore ? '(less)' : '...more'}
+						</button>
+					) : null}
 				</div>
 			</div>
 		</div>
