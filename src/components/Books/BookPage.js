@@ -44,6 +44,11 @@ const BookPage = ({ match }) => {
 	const [isShelfPopupBottomHidden, setIsShelfPopupBottomHidden] = useState(
 		true
 	);
+	const [
+		isAddShelfInputSectionHidden,
+		setIsAddShelfInputSectionHidden,
+	] = useState(true);
+	const [addShelfInput, setAddShelfInput] = useState('');
 	const [shelfPopupReadingInput, setShelfPopupReadingInput] = useState('');
 	const [shelfPopupToReadInput, setShelfPopupToReadInput] = useState('');
 	const [exhibitedStarRating, setExhibitedStarRating] = useState(0);
@@ -65,7 +70,7 @@ const BookPage = ({ match }) => {
 				}
 				i++;
 			}
-			/*const lSObjectItem = localStorage.getItem(`${bookId}Obj`);
+			const lSObjectItem = localStorage.getItem(`${bookId}Obj`);
 			if (lSObjectItem !== null) {
 				const lSObject = JSON.parse(lSObjectItem);
 				console.log('Loaded book from storage');
@@ -75,7 +80,7 @@ const BookPage = ({ match }) => {
 						case 'editionPublishedDate':
 							newLSObject[key] = new Date(2006, 9, 1);
 							break;
-						/case 'otherEditionsPages':
+						/*case 'otherEditionsPages':
 							newLSObject[key] = [
 								'/book/show/6277040.the-dark-tower',
 								'book/show/408854.The_Dark_Tower',
@@ -109,7 +114,7 @@ const BookPage = ({ match }) => {
 							break;
 						case 'fiveRatings':
 							newLSObject[key] = 20;
-							break;/
+							break;*/
 						case 'reviews':
 							newLSObject[key] = [{}];
 							Object.keys(lSObject[key][0]).forEach((key2) => {
@@ -117,13 +122,6 @@ const BookPage = ({ match }) => {
 									newLSObject[key][0][key2] = new Date(2021, 2, 1);
 								} else {
 									newLSObject[key][0][key2] = lSObject[key][0][key2];
-								}
-							});
-							Object.keys(lSObject[key][1]).forEach((key2) => {
-								if (key2 === 'date') {
-									newLSObject[key][1][key2] = new Date(2021, 2, 1);
-								} else {
-									newLSObject[key][1][key2] = lSObject[key][1][key2];
 								}
 							});
 							break;
@@ -141,18 +139,19 @@ const BookPage = ({ match }) => {
 					'uncle-steview',
 				];
 				newLSObject.reviews[0].rating = 4;
+				newLSObject.rootBook = 'KiX9EuoW7aRFd296zeDn';
 				setBookInfo(newLSObject);
 				if (newLSObject.userRating !== undefined) {
 					setExhibitedStarRating(newLSObject.userRating);
 				}
-			} else {*/
-			const bookObj = await Firebase.queryBookById(user.userUID, bookId);
-			localStorage.setItem(`${bookId}Obj`, JSON.stringify(bookObj));
-			setBookInfo(bookObj);
-			if (bookObj.userRating !== undefined) {
-				setExhibitedStarRating(bookObj.userRating);
+			} else {
+				const bookObj = await Firebase.queryBookById(user.userUID, bookId);
+				localStorage.setItem(`${bookId}Obj`, JSON.stringify(bookObj));
+				setBookInfo(bookObj);
+				if (bookObj.userRating !== undefined) {
+					setExhibitedStarRating(bookObj.userRating);
+				}
 			}
-			//}
 			setLoaded(true);
 		};
 		getBookInfo();
@@ -227,7 +226,6 @@ const BookPage = ({ match }) => {
 
 	const removeBookSafely = () => {
 		if (displayRemoveBookConfirm()) {
-			console.log('Confirmed. Now removing book...');
 			Firebase.removeBookFromShelf(user.userUID, bookInfo.id);
 			setBookInfo((previous) => {
 				return {
@@ -536,7 +534,41 @@ const BookPage = ({ match }) => {
 					</button>
 				</div>
 				<div className="book-options-dropdown-bottom">
-					<button className="dropdown-add-shelf">Add Shelf</button>
+					<button
+						className="dropdown-add-shelf"
+						onClick={(e) => setIsAddShelfInputSectionHidden(false)}
+					>
+						Add Shelf
+					</button>
+					<div
+						className={
+							isAddShelfInputSectionHidden
+								? 'dropdown-add-shelf-input-section hidden'
+								: 'dropdown-add-shelf-input-section'
+						}
+					>
+						<input
+							className="dropdown-add-shelf-input"
+							type="text"
+							value={addShelfInput}
+							onChange={(e) => setAddShelfInput(e.target.value)}
+						></input>
+						<button
+							className="dropdown-add-shelf-add-button"
+							onClick={async (e) => {
+								if (addShelfInput.length > 0) {
+									await Firebase.addBookToUserShelf(
+										user.userUID,
+										bookInfo.rootBook,
+										addShelfInput
+									);
+									setIsAddShelfInputSectionHidden(true);
+								}
+							}}
+						>
+							Add
+						</button>
+					</div>
 				</div>
 			</div>
 		</div>

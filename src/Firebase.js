@@ -666,6 +666,7 @@ const Firebase = (() => {
 			bookObj.id = bookQueryDocument.id;
 			bookObj.title = data.title;
 			bookObj.cover = data.cover;
+			bookObj.rootBook = data.rootBook;
 			Object.assign(bookObj, getMiscDetailsForBook(data));
 			const seriesDetails = await getSeriesDetailsForBook(
 				data.rootBook,
@@ -1118,6 +1119,31 @@ const Firebase = (() => {
 		}
 	};
 
+	const addBookToUserShelf = async (userUID, rootBook, shelf, genre = null) => {
+		const shelfQuery = await database
+			.collection('shelves')
+			.where('user', '==', userUID)
+			.where('shelf', '==', shelf)
+			.get();
+		if (shelfQuery.docs.length === 0) {
+			await database
+				.collection('shelves')
+				.add({ user: userUID, rootBooks: [rootBook], genre, name: shelf });
+		} else {
+			if (!shelfQuery.docs[0].data().rootBooks.includes(rootBook)) {
+				await database
+					.collection('shelves')
+					.doc(shelfQuery.docs[0].id)
+					.set(
+						{
+							rootBooks: shelfQuery.docs[0].data().rootBooks.concat([rootBook]),
+						},
+						{ merge: true }
+					);
+			}
+		}
+	};
+
 	return {
 		pageGenerator,
 		queryBookById,
@@ -1139,6 +1165,7 @@ const Firebase = (() => {
 		rateBook,
 		updateBookInShelf,
 		changeBookPosition,
+		addBookToUserShelf,
 	};
 })();
 
