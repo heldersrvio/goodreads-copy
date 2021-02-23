@@ -288,6 +288,9 @@ const Firebase = (() => {
 				if (bookInstanceQueryResults[0].rating !== undefined) {
 					userDetails.userRating = bookInstanceQueryResults[0].rating;
 				}
+				if (bookInstanceQueryResults[0].position !== undefined) {
+					userDetails.toReadBookPosition = bookInstanceQueryResults[0].position;
+				}
 			}
 		}
 		const allBookInstancesQuery = await database
@@ -955,14 +958,49 @@ const Firebase = (() => {
 			.where('bookId', '==', bookId)
 			.get();
 		if (userInstanceQuery.docs.length > 0) {
-			await database
-				.collection('userBooksInstances')
-				.doc(userInstanceQuery.docs[0].id)
-				.set({ status }, { merge: true });
+			if (userInstanceQuery.docs[0].data().status === 'to-read') {
+				await changeBookPosition(userUID, bookId, 10000);
+			}
+			if (status === 'to-read') {
+				const lowestPositionQuery = await database
+					.collection('userBooksInstances')
+					.where('userId', '==', userUID)
+					.orderBy('position', 'desc')
+					.limit(1)
+					.get();
+				if (lowestPositionQuery.docs.length > 0) {
+					await database
+						.collection('userBooksInstances')
+						.doc(userInstanceQuery.docs[0].id)
+						.set(
+							{
+								status,
+								position: lowestPositionQuery.docs[0].data().position + 1,
+							},
+							{ merge: true }
+						);
+				} else {
+					await database
+						.collection('userBooksInstances')
+						.doc(userInstanceQuery.docs[0].id)
+						.set({ status, position: 1 }, { merge: true });
+				}
+			} else {
+				await database
+					.collection('userBooksInstances')
+					.doc(userInstanceQuery.docs[0].id)
+					.set({ status }, { merge: true });
+			}
 		} else {
-			await database
-				.collection('userBooksInstances')
-				.add({ bookId, userId: userUID, status });
+			if (status === 'to-read') {
+				await database
+					.collection('userBooksInstances')
+					.add({ bookId, userId: userUID, status, position: 1 });
+			} else {
+				await database
+					.collection('userBooksInstances')
+					.add({ bookId, userId: userUID, status });
+			}
 		}
 	};
 
@@ -973,6 +1011,9 @@ const Firebase = (() => {
 			.where('bookId', '==', bookId)
 			.get();
 		if (userInstanceQuery.docs.length > 0) {
+			if (userInstanceQuery.docs[0].data().status === 'to-read') {
+				await changeBookPosition(userUID, bookId, 10000);
+			}
 			await database
 				.collection('userBooksInstances')
 				.doc(userInstanceQuery.docs[0].id)
@@ -1013,7 +1054,69 @@ const Firebase = (() => {
 		}
 	};
 
-	const updateBookInShelf = async (userUID, bookId, progress) => {};
+	const updateBookInShelf = async (userUID, bookId, progress) => {
+		const userInstanceQuery = await database
+			.collection('userBooksInstances')
+			.where('userId', '==', userUID)
+			.where('bookId', '==', bookId)
+			.get();
+		if (userInstanceQuery.docs.length > 0) {
+			await database
+				.collection('userBooksInstances')
+				.doc(userInstanceQuery.docs[0].id)
+				.set({ progress }, { merge: true });
+		}
+	};
+
+	const changeBookPosition = async (userUID, bookId, newPosition) => {
+		const userInstanceQuery = await database
+			.collection('userBooksInstances')
+			.where('userId', '==', userUID)
+			.where('bookId', '==', bookId)
+			.get();
+		if (
+			userInstanceQuery.docs.length > 0 &&
+			userInstanceQuery.docs[0].data().status === 'to-read'
+		) {
+			const oldPosition = userInstanceQuery.docs[0].data().position;
+			if (newPosition < oldPosition) {
+				const higherPositionQuery = await database
+					.collection('userBooksInstances')
+					.where('userId', '==', userUID)
+					.where('position', '>=', newPosition)
+					.where('position', '<', oldPosition)
+					.get();
+				await Promise.all(
+					higherPositionQuery.docs.map(async (document) => {
+						await database
+							.collection('userBooksInstances')
+							.doc(document.id)
+							.set({ position: document.data().position + 1 }, { merge: true });
+					})
+				);
+			}
+			if (newPosition > oldPosition) {
+				const lowerPositionQuery = await database
+					.collection('userBooksInstances')
+					.where('userId', '==', userUID)
+					.where('position', '<=', newPosition)
+					.where('position', '>', oldPosition)
+					.get();
+				await Promise.all(
+					lowerPositionQuery.docs.map(async (document) => {
+						await database
+							.collection('userBooksInstances')
+							.doc(document.id)
+							.set({ position: document.data().position - 1 }, { merge: true });
+					})
+				);
+			}
+			await database
+				.collection('userBooksInstances')
+				.doc(userInstanceQuery.docs[0].id)
+				.set({ position: newPosition }, { merge: true });
+		}
+	};
 
 	return {
 		pageGenerator,
@@ -1035,6 +1138,7 @@ const Firebase = (() => {
 		removeBookFromShelf,
 		rateBook,
 		updateBookInShelf,
+		changeBookPosition,
 	};
 })();
 

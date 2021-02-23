@@ -8,14 +8,13 @@ import HomePageFootBar from '../Authentication/HomePageFootBar';
 /*
 TODO:
 - Functionality：
-	- Update progress
-	- Update book shelf position
 	- Add book to new shelf
 	- Filter reviews by stars and editions
 	- Sort reviews by newest/oldest/default
 	- Search review text
 	- Like review
 	- Follow author
+	- Enlarge cover window
 	- Recommend book to friend window
 */
 
@@ -165,11 +164,20 @@ const BookPage = ({ match }) => {
 		} else {
 			setExhibitedStarRating(0);
 		}
+		if (bookInfo.userProgress !== undefined) {
+			setShelfPopupReadingInput(`${bookInfo.userProgress}`);
+		} else {
+			setShelfPopupReadingInput('');
+		}
+		if (bookInfo.toReadBookPosition !== undefined) {
+			setShelfPopupToReadInput(`${bookInfo.toReadBookPosition}`);
+		} else {
+			setShelfPopupToReadInput('');
+		}
 	}, [bookInfo]);
 
 	useLayoutEffect(() => {
 		if (authorAboutP.current !== undefined) {
-			console.log(authorAboutP.current.scrollHeight);
 			setAuthorAboutHeight(authorAboutP.current.scrollHeight);
 		}
 		if (synopsisP.current !== undefined) {
@@ -266,6 +274,27 @@ const BookPage = ({ match }) => {
 		}
 	};
 
+	const updateProgress = async (pages) => {
+		if (
+			user.userUID !== null &&
+			user.userUID !== undefined &&
+			bookInfo.id !== undefined &&
+			pages.length > 0
+		) {
+			await Firebase.updateBookInShelf(
+				user.userUID,
+				bookInfo.id,
+				parseInt(pages)
+			);
+			setBookInfo((previous) => {
+				return {
+					...previous,
+					userProgress: parseInt(pages),
+				};
+			});
+		}
+	};
+
 	const addToShelfButton =
 		loaded && bookInfo.userStatus === 'reading' ? (
 			<div className="book-on-reading-shelf">
@@ -319,6 +348,7 @@ const BookPage = ({ match }) => {
 							<button
 								className="progress-submit-button"
 								onClick={(e) => {
+									updateProgress(shelfPopupReadingInput);
 									setIsShelfPopupHidden(true);
 									setIsShelfPopupBottomHidden(true);
 								}}
@@ -338,6 +368,7 @@ const BookPage = ({ match }) => {
 							<button
 								className="progress-finished-button"
 								onClick={(e) => {
+									changeBookShelf('read');
 									setIsShelfPopupHidden(true);
 									setIsShelfPopupBottomHidden(true);
 								}}
@@ -433,6 +464,17 @@ const BookPage = ({ match }) => {
 								<button
 									className="progress-submit-button"
 									onClick={(e) => {
+										Firebase.changeBookPosition(
+											user.userUID,
+											bookInfo.id,
+											parseInt(shelfPopupToReadInput)
+										);
+										setBookInfo((previous) => {
+											return {
+												...previous,
+												toReadBookPosition: parseInt(shelfPopupToReadInput),
+											};
+										});
 										setIsShelfPopupHidden(true);
 										setIsShelfPopupBottomHidden(true);
 									}}
