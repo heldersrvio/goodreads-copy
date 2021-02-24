@@ -8,7 +8,6 @@ import HomePageFootBar from '../Authentication/HomePageFootBar';
 /*
 TODO:
 - Functionality：
-	- Add book to new shelf
 	- Filter reviews by stars and editions
 	- Sort reviews by newest/oldest/default
 	- Search review text
@@ -16,6 +15,7 @@ TODO:
 	- Follow author
 	- Enlarge cover window
 	- Recommend book to friend window
+	- Rating details
 */
 
 const BookPage = ({ match }) => {
@@ -55,6 +55,14 @@ const BookPage = ({ match }) => {
 	const [reviewSearchInput, setReviewSearchInput] = useState('');
 	const [reviewsShowingMore, setReviewsShowingMore] = useState([]);
 	const [reviewsHaveButton, setReviewsHaveButton] = useState([]);
+	const [showFiltersDialogBox, setShowFiltersDialogBox] = useState(false);
+	const [showSortOrderDialogBox, setShowSortOrderDialogBox] = useState(false);
+	const [reviewStars, setReviewStars] = useState(0);
+	const [showAllEditionsForReviews, setShowAllEditionsForReviews] = useState(
+		true
+	);
+	const [sortOrder, setSortOrder] = useState('default');
+	const [searchReviewFilter, setSearchReviewFilter] = useState('');
 
 	const user = JSON.parse(localStorage.getItem('userState'));
 
@@ -1235,160 +1243,180 @@ const BookPage = ({ match }) => {
 		) : null;
 
 	const reviewList = loaded
-		? bookInfo.reviews.map((review, index) => {
-				return (
-					<div className="book-page-review-instance" key={index}>
-						<img
-							className="book-page-review-instance-profile-image"
-							src={
-								review.profileImage !== undefined
-									? review.profileImage
-									: 'https://www.goodreads.com/assets/nophoto/user/u_60x60-267f0ca0ea48fd3acfd44b95afa64f01.png'
-							}
-							alt={review.userName}
-						/>
-						<div className="book-page-review-instance-right">
-							<div className="book-page-review-instance-right-top-line">
-								<span className="book-page-review-instance-user-rated">
-									<a
-										href={Firebase.pageGenerator.generateUserPage(
-											review.user,
-											review.userName.split(' ')[0]
-										)}
-									>
-										{review.userName}
-									</a>
-									<span>&nbsp;rated it</span>
-									<div className="review-instance-stars">
-										<div
-											className={
-												review.rating >= 1
-													? 'static-star small full'
-													: 'static-star small empty'
-											}
-										></div>
-										<div
-											className={
-												review.rating >= 2
-													? 'static-star small full'
-													: 'static-star small empty'
-											}
-										></div>
-										<div
-											className={
-												review.rating >= 3
-													? 'static-star small full'
-													: 'static-star small empty'
-											}
-										></div>
-										<div
-											className={
-												review.rating >= 4
-													? 'static-star small full'
-													: 'static-star small empty'
-											}
-										></div>
-										<div
-											className={
-												review.rating >= 5
-													? 'static-star small full'
-													: 'static-star small empty'
-											}
-										></div>
-									</div>
-								</span>
-								<a
-									className="book-page-review-instance-date"
-									href={Firebase.pageGenerator.generateReviewPage(review.id)}
-								>
-									{format(review.date, 'MMM dd, yyyy')}
-								</a>
-							</div>
-							{review.recommendsItFor !== undefined ? (
-								<span className="recommends-it-for">
-									Recommends it for:{' '}
-									<span className="recommends-it-for-answer">
-										{review.recommendsItFor}
-									</span>
-								</span>
-							) : null}
-							{review.shelves !== undefined ? (
-								<span className="book-page-review-instance-shelves">
-									Shelves:{' '}
-									<span className="book-page-review-instance-shelves-answer">
-										{review.shelves.map((shelf, index) => {
-											return (
-												<span key={index}>
-													<a
-														href={Firebase.pageGenerator.generateUserShelfPage(
-															review.user,
-															review.userName.split(' ')[0],
-															shelf
-														)}
-													>
-														{shelf}
-													</a>
-													{index !== review.shelves.length - 1 ? ', ' : null}
-												</span>
-											);
-										})}
-									</span>
-								</span>
-							) : null}
-							<div className="review-main-body-container">
-								<p
-									className={
-										reviewsShowingMore.includes(index)
-											? 'book-page-review-main-body full'
-											: 'book-page-review-main-body'
-									}
-								>
-									{review.text}
-								</p>
-								{reviewsHaveButton[index] ? (
-									<button
-										className="review-show-more"
-										onClick={(e) => {
-											setReviewsShowingMore((previous) => {
-												if (previous.includes(index)) {
-													return previous.filter((item) => item !== index);
-												} else {
-													return previous.concat([index]);
+		? bookInfo.reviews
+				.filter((review) => {
+					if (reviewStars !== 0) {
+						return review.rating === reviewStars;
+					}
+					if (!showAllEditionsForReviews) {
+						return review.edition === bookInfo.id;
+					}
+					return true;
+				})
+				.sort((first, second) => {
+					if (sortOrder === 'oldest') {
+						return first.date - second.date;
+					} else if (sortOrder === 'newest') {
+						return second.date - first.date;
+					}
+					return 0;
+				})
+				.map((review, index) => {
+					return (
+						<div className="book-page-review-instance" key={index}>
+							<img
+								className="book-page-review-instance-profile-image"
+								src={
+									review.profileImage !== undefined
+										? review.profileImage
+										: 'https://www.goodreads.com/assets/nophoto/user/u_60x60-267f0ca0ea48fd3acfd44b95afa64f01.png'
+								}
+								alt={review.userName}
+							/>
+							<div className="book-page-review-instance-right">
+								<div className="book-page-review-instance-right-top-line">
+									<span className="book-page-review-instance-user-rated">
+										<a
+											href={Firebase.pageGenerator.generateUserPage(
+												review.user,
+												review.userName.split(' ')[0]
+											)}
+										>
+											{review.userName}
+										</a>
+										<span>&nbsp;rated it</span>
+										<div className="review-instance-stars">
+											<div
+												className={
+													review.rating >= 1
+														? 'static-star small full'
+														: 'static-star small empty'
 												}
-											});
-										}}
-									>
-										{reviewsShowingMore.includes(index) ? '(less)' : '...more'}
-									</button>
-								) : null}
-							</div>
-							<div className="book-page-review-bottom">
-								{review.numberOfLikes > 0 ? (
+											></div>
+											<div
+												className={
+													review.rating >= 2
+														? 'static-star small full'
+														: 'static-star small empty'
+												}
+											></div>
+											<div
+												className={
+													review.rating >= 3
+														? 'static-star small full'
+														: 'static-star small empty'
+												}
+											></div>
+											<div
+												className={
+													review.rating >= 4
+														? 'static-star small full'
+														: 'static-star small empty'
+												}
+											></div>
+											<div
+												className={
+													review.rating >= 5
+														? 'static-star small full'
+														: 'static-star small empty'
+												}
+											></div>
+										</div>
+									</span>
 									<a
-										className="book-page-review-likes"
-										href={Firebase.pageGenerator.generateReviewLikesPage(
-											review.id
-										)}
+										className="book-page-review-instance-date"
+										href={Firebase.pageGenerator.generateReviewPage(review.id)}
 									>
-										{review.numberOfLikes} likes
+										{format(review.date, 'MMM dd, yyyy')}
 									</a>
+								</div>
+								{review.recommendsItFor !== undefined ? (
+									<span className="recommends-it-for">
+										Recommends it for:{' '}
+										<span className="recommends-it-for-answer">
+											{review.recommendsItFor}
+										</span>
+									</span>
 								) : null}
-								{review.numberOfLikes > 0 ? (
+								{review.shelves !== undefined ? (
+									<span className="book-page-review-instance-shelves">
+										Shelves:{' '}
+										<span className="book-page-review-instance-shelves-answer">
+											{review.shelves.map((shelf, index) => {
+												return (
+													<span key={index}>
+														<a
+															href={Firebase.pageGenerator.generateUserShelfPage(
+																review.user,
+																review.userName.split(' ')[0],
+																shelf
+															)}
+														>
+															{shelf}
+														</a>
+														{index !== review.shelves.length - 1 ? ', ' : null}
+													</span>
+												);
+											})}
+										</span>
+									</span>
+								) : null}
+								<div className="review-main-body-container">
+									<p
+										className={
+											reviewsShowingMore.includes(index)
+												? 'book-page-review-main-body full'
+												: 'book-page-review-main-body'
+										}
+									>
+										{review.text}
+									</p>
+									{reviewsHaveButton[index] ? (
+										<button
+											className="review-show-more"
+											onClick={(e) => {
+												setReviewsShowingMore((previous) => {
+													if (previous.includes(index)) {
+														return previous.filter((item) => item !== index);
+													} else {
+														return previous.concat([index]);
+													}
+												});
+											}}
+										>
+											{reviewsShowingMore.includes(index)
+												? '(less)'
+												: '...more'}
+										</button>
+									) : null}
+								</div>
+								<div className="book-page-review-bottom">
+									{review.numberOfLikes > 0 ? (
+										<a
+											className="book-page-review-likes"
+											href={Firebase.pageGenerator.generateReviewLikesPage(
+												review.id
+											)}
+										>
+											{review.numberOfLikes} likes
+										</a>
+									) : null}
+									{review.numberOfLikes > 0 ? (
+										<span className="black-dot">·</span>
+									) : null}
+									<button className="book-page-review-like-button">Like</button>
 									<span className="black-dot">·</span>
-								) : null}
-								<button className="book-page-review-like-button">Like</button>
-								<span className="black-dot">·</span>
-								<a
-									className="book-page-review-see-review"
-									href={Firebase.pageGenerator.generateReviewPage(review.id)}
-								>
-									see review
-								</a>
+									<a
+										className="book-page-review-see-review"
+										href={Firebase.pageGenerator.generateReviewPage(review.id)}
+									>
+										see review
+									</a>
+								</div>
 							</div>
 						</div>
-					</div>
-				);
-		  })
+					);
+				})
 		: null;
 
 	const bookPageCommunityReviews = loaded ? (
@@ -1409,9 +1437,146 @@ const BookPage = ({ match }) => {
 				<div className="ratings-section-top">{bookPageRatingsArea}</div>
 				<div className="ratings-section-bottom">
 					<div className="ratings-section-bottom-left">
-						<button>Filters</button>
-						<span>|</span>
-						<button>Sort order</button>
+						<div
+							onMouseOver={(e) => setShowFiltersDialogBox(true)}
+							onMouseLeave={(e) => setShowFiltersDialogBox(false)}
+						>
+							<span className="ratings-section-bottom-left-filters-title">
+								Filters
+							</span>
+							<div
+								className={
+									showFiltersDialogBox
+										? 'reviews-filter-dialog-box'
+										: 'reviews-filter-dialog-box hidden'
+								}
+							>
+								<div className="rating-filters">
+									<button
+										className="all-filter"
+										onClick={(e) => setReviewStars(0)}
+									>{`all (${bookInfo.reviews.length})`}</button>
+									<span className="filter-separator">|</span>
+									<button
+										className="five-star-filter"
+										onClick={(e) => setReviewStars(5)}
+									>
+										<span>
+											<span className="filter-button-stars">5 stars </span>
+											<span className="filter-button-amount">{`(${
+												bookInfo.reviews.filter((review) => review.rating === 5)
+													.length
+											})`}</span>
+										</span>
+									</button>
+									<span className="filter-separator">|</span>
+									<button
+										className="four-star-filter"
+										onClick={(e) => setReviewStars(4)}
+									>
+										<span>
+											<span className="filter-button-stars">4 stars </span>
+											<span className="filter-button-amount">{`(${
+												bookInfo.reviews.filter((review) => review.rating === 4)
+													.length
+											})`}</span>
+										</span>
+									</button>
+									<span className="filter-separator">|</span>
+									<button
+										className="three-star-filter"
+										onClick={(e) => setReviewStars(3)}
+									>
+										<span>
+											<span className="filter-button-stars">3 stars </span>
+											<span className="filter-button-amount">{`(${
+												bookInfo.reviews.filter((review) => review.rating === 3)
+													.length
+											})`}</span>
+										</span>
+									</button>
+									<span className="filter-separator">|</span>
+									<button
+										className="two-star-filter"
+										onClick={(e) => setReviewStars(2)}
+									>
+										<span>
+											<span className="filter-button-stars">2 stars </span>
+											<span className="filter-button-amount">{`(${
+												bookInfo.reviews.filter((review) => review.rating === 2)
+													.length
+											})`}</span>
+										</span>
+									</button>
+									<span className="filter-separator">|</span>
+									<button
+										className="one-star-filter"
+										onClick={(e) => setReviewStars(1)}
+									>
+										<span>
+											<span className="filter-button-stars">1 star </span>
+											<span className="filter-button-amount">{`(${
+												bookInfo.reviews.filter((review) => review.rating === 1)
+													.length
+											})`}</span>
+										</span>
+									</button>
+								</div>
+								<div className="edition-filters">
+									<span>editions:</span>
+									<button
+										className="all-editions-filter"
+										onClick={(e) => setShowAllEditionsForReviews(true)}
+									>
+										all
+									</button>
+									<span className="filter-separator">|</span>
+									<button
+										className="this-edition-filter"
+										onClick={(e) => setShowAllEditionsForReviews(false)}
+									>
+										this edition
+									</button>
+								</div>
+							</div>
+						</div>
+						<span className="separator">|</span>
+						<div
+							onMouseOver={(e) => setShowSortOrderDialogBox(true)}
+							onMouseLeave={(e) => setShowSortOrderDialogBox(false)}
+						>
+							<span className="ratings-section-bottom-left-sort-title">
+								Sort order
+							</span>
+							<div
+								className={
+									showSortOrderDialogBox
+										? 'reviews-sort-dialog-box'
+										: 'reviews-sort-dialog-box hidden'
+								}
+							>
+								<button
+									className="sort-review-default-button"
+									onClick={(e) => setSortOrder('default')}
+								>
+									Default
+								</button>
+								<span className="filter-separator">|</span>
+								<button
+									className="sort-review-newest-button"
+									onClick={(e) => setSortOrder('newest')}
+								>
+									Newest
+								</button>
+								<span className="filter-separator">|</span>
+								<button
+									className="sort-review-older-button"
+									onClick={(e) => setSortOrder('oldest')}
+								>
+									Oldest
+								</button>
+							</div>
+						</div>
 					</div>
 					<div className="ratings-section-bottom-right">
 						<input
@@ -1420,8 +1585,21 @@ const BookPage = ({ match }) => {
 							value={reviewSearchInput}
 							onChange={(e) => setReviewSearchInput(e.target.value)}
 							placeholder="Search review text"
+							disabled={reviewStars > 0 || !showAllEditionsForReviews}
+							onKeyPress={(e) => {
+								if (e.keyCode === 13 && reviewSearchInput.length > 0) {
+									setSearchReviewFilter(reviewSearchInput);
+								}
+							}}
 						></input>
-						<button className="review-search-box-magnifying-glass"></button>
+						<button
+							className="review-search-box-magnifying-glass"
+							onClick={(e) => {
+								if (reviewSearchInput.length > 0) {
+									setSearchReviewFilter(reviewSearchInput);
+								}
+							}}
+						></button>
 					</div>
 				</div>
 			</div>
@@ -1435,7 +1613,106 @@ const BookPage = ({ match }) => {
 					? null
 					: startYourReviewSection}
 				<div className="book-page-reviews-section-review-list">
-					{reviewList}
+					{reviewStars > 0 ||
+					!showAllEditionsForReviews ||
+					searchReviewFilter.length > 0 ? (
+						reviewStars > 0 && reviewList.length === 0 ? (
+							<span className="review-filter-message">
+								There are 0 reviews rated <b>{reviewStars} stars</b>.{' '}
+								<button
+									className="clear-review-filters-button"
+									onClick={(e) => {
+										setReviewStars(0);
+										setShowAllEditionsForReviews(true);
+										setSearchReviewFilter('');
+									}}
+								>
+									Clear filters
+								</button>
+							</span>
+						) : reviewStars > 0 ? (
+							<span className="review-filter-message">
+								Displaying 1-{reviewList.length >= 30 ? 30 : reviewList.length}{' '}
+								of {reviewList.length} reviews rated <b>{reviewStars} stars</b>.{' '}
+								<button
+									className="clear-review-filters-button"
+									onClick={(e) => {
+										setReviewStars(0);
+										setShowAllEditionsForReviews(true);
+										setSearchReviewFilter('');
+									}}
+								>
+									Clear filters
+								</button>
+							</span>
+						) : !showAllEditionsForReviews && reviewList.length === 0 ? (
+							<span className="review-filter-message">
+								There are 0 reviews for <b>this edition</b>.{' '}
+								<button
+									className="clear-review-filters-button"
+									onClick={(e) => {
+										setReviewStars(0);
+										setShowAllEditionsForReviews(true);
+										setSearchReviewFilter('');
+									}}
+								>
+									Clear filters
+								</button>
+							</span>
+						) : !showAllEditionsForReviews ? (
+							<span className="review-filter-message">
+								Displaying 1-{reviewList.length >= 30 ? 30 : reviewList.length}{' '}
+								of {reviewList.length} reviews for <b>this edition</b>.{' '}
+								<button
+									className="clear-review-filters-button"
+									onClick={(e) => {
+										setReviewStars(0);
+										setShowAllEditionsForReviews(true);
+										setSearchReviewFilter('');
+									}}
+								>
+									Clear filters
+								</button>
+							</span>
+						) : searchReviewFilter.length > 0 && reviewList.length === 0 ? (
+							<span className="review-filter-message">
+								There are 0 reviews that mention <b>"{searchReviewFilter}"</b>.{' '}
+								<button
+									className="clear-review-filters-button"
+									onClick={(e) => {
+										setReviewStars(0);
+										setShowAllEditionsForReviews(true);
+										setSearchReviewFilter('');
+									}}
+								>
+									Clear filters
+								</button>
+							</span>
+						) : (
+							<span className="review-filter-message">
+								Displaying 1-{reviewList.length >= 30 ? 30 : reviewList.length}{' '}
+								of {reviewList.length} reviews that mention{' '}
+								<b>"{searchReviewFilter}"</b>.{' '}
+								<button
+									className="clear-review-filters-button"
+									onClick={(e) => {
+										setReviewStars(0);
+										setShowAllEditionsForReviews(true);
+										setSearchReviewFilter('');
+									}}
+								>
+									Clear filters
+								</button>
+							</span>
+						)
+					) : null}
+					{reviewList.length > 0 ? (
+						reviewList
+					) : (
+						<div className="no-matching-reviews">
+							<span>No matching reviews.</span>
+						</div>
+					)}
 				</div>
 			</div>
 		</div>
