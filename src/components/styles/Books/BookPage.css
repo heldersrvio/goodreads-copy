@@ -1081,6 +1081,11 @@ button.review-show-more:hover {
 	font-size: 14px;
 	line-height: 18px;
 	height: 18px;
+	margin-right: 5px;
+}
+
+.ratings-section-bottom-left > span {
+	margin-right: 5px;
 }
 
 .ratings-section-bottom-left-filters-title,
@@ -1095,7 +1100,7 @@ button.review-show-more:hover {
 }
 
 .ratings-section-bottom-left {
-	width: 17%;
+	width: 19%;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
@@ -1106,25 +1111,48 @@ button.review-show-more:hover {
 	text-decoration: underline;
 }
 
-.reviews-filter-dialog-box {
+.reviews-filter-dialog-box,
+.reviews-sort-dialog-box {
 	position: absolute;
-	width: 381px;
-	height: 42px;
+	top: 25px;
+	left: 20px;
 	padding: 5px;
 	background-color: rgb(255, 255, 255);
 	border: 6px solid rgb(215, 210, 197);
 	border-radius: 3px;
 }
 
-.reviews-filter-dialog-box.hidden {
+.reviews-filter-dialog-box {
+	width: 381px;
+	height: 32px;
+}
+
+.reviews-sort-dialog-box {
+	width: 148px;
+	height: 18px;
+}
+
+.reviews-filter-dialog-box.hidden,
+.reviews-sort-dialog-box.hidden {
 	display: none;
+}
+
+.dialog-box-tip {
+	display: block;
+	position: absolute;
+	top: -17px;
+	width: 0;
+	height: 0;
+	border-right: 15px solid transparent;
+	border-bottom: 15px solid rgb(215, 210, 197);
 }
 
 .one-star-filter > span:hover,
 .two-star-filter > span:hover,
 .three-star-filter > span:hover,
 .four-star-filter > span:hover,
-.five-star-filter:hover {
+.five-star-filter:hover,
+.this-edition-filter:hover {
 	color: rgb(0, 99, 93);
 	text-decoration: underline;
 }
@@ -1141,16 +1169,77 @@ span.filter-button-amount {
 	color: rgb(153, 153, 153);
 }
 
+.edition-filters-title {
+	font-size: 12px;
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	color: rgb(102, 102, 102);
+	line-height: 18px;
+}
+
+.all-editions-filter {
+	color: rgb(0, 0, 0);
+	font-size: 12px;
+	line-height: 18px;
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+}
+
+.all-editions-filter:hover {
+	color: rgb(0, 0, 0);
+}
+
+.all-editions-filter:hover,
+.this-edition-filter:hover {
+	text-decoration: underline;
+}
+
+.this-edition-filter {
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	color: rgb(0, 99, 93);
+	padding: 0;
+	font-size: 12px;
+	line-height: 18px;
+	height: 18px;
+}
+
 .reviews-filter-dialog-box .rating-filters,
-.reviews-filter-dialog-box .edition-filters {
+.reviews-filter-dialog-box .edition-filters,
+.reviews-sort-dialog-box {
 	display: flex;
 	flex-direction: row;
+}
+
+.reviews-sort-dialog-box button,
+.reviews-sort-dialog-box span {
+	display: inline;
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+	height: auto;
+	width: auto;
+	padding: 0;
+	margin-right: 5px;
+}
+
+.reviews-sort-dialog-box button:hover {
+	text-decoration: underline;
+	background-color: transparent;
+}
+
+.sort-review-default-button,
+.sort-review-default-button:hover {
+	color: rgb(153, 153, 153);
+}
+
+.sort-review-newest-button,
+.sort-review-newest-button:hover,
+.sort-review-oldest-button,
+.sort-review-oldest-button:hover {
+	color: rgb(0, 99, 93);
 }
 
 .reviews-filter-dialog-box button {
 	display: inline;
 	font-family: 'Lato', Helvetica, Arial, sans-serif;
-	font-size: 11px;
 	line-height: 14px;
 	height: auto;
 	width: auto;
@@ -1162,8 +1251,14 @@ span.filter-button-amount {
 }
 
 .reviews-filter-dialog-box .rating-filters > button,
-.reviews-filter-dialog-box .rating-filters > span {
+.reviews-filter-dialog-box .rating-filters > span,
+.edition-filters > button,
+.edition-filters > span {
 	margin-right: 5px;
+}
+
+.rating-filters button {
+	font-size: 11px;
 }
 
 .rating-filters .all-filter {
@@ -1292,6 +1387,48 @@ span.filter-button-amount {
 	display: flex;
 	flex-direction: row;
 	margin-bottom: 15px;
+}
+
+.book-page-reviews-section-review-list .review-filter-message {
+	color: rgb(24, 24, 24);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	line-height: 18px;
+	margin-bottom: 15px;
+	display: block;
+}
+
+.book-page-reviews-section-review-list .review-filter-message b {
+	font-weight: bold;
+}
+
+.book-page-reviews-section-review-list .clear-review-filters-button,
+.book-page-reviews-section-review-list .clear-review-filters-button:hover {
+	padding: 0;
+	height: auto;
+	color: rgb(0, 99, 93);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	line-height: 18px;
+	display: inline;
+	margin-left: 5px;
+}
+
+.book-page-reviews-section-review-list .clear-review-filters-button:hover {
+	text-decoration: underline;
+	background-color: transparent;
+}
+.no-matching-reviews {
+	width: 529px;
+	height: 18px;
+	text-align: center;
+	padding: 48px;
+	background-color: rgb(244, 241, 234);
+	color: rgb(153, 153, 153);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	line-height: 18px;
+	margin-top: 10px;
 }
 
 .book-page-review-instance-profile-image {

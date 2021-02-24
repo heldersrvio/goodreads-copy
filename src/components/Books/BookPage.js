@@ -8,8 +8,6 @@ import HomePageFootBar from '../Authentication/HomePageFootBar';
 /*
 TODO:
 - Functionality：
-	- Filter reviews by stars and editions
-	- Sort reviews by newest/oldest/default
 	- Search review text
 	- Like review
 	- Follow author
@@ -1438,8 +1436,31 @@ const BookPage = ({ match }) => {
 				<div className="ratings-section-bottom">
 					<div className="ratings-section-bottom-left">
 						<div
-							onMouseOver={(e) => setShowFiltersDialogBox(true)}
-							onMouseLeave={(e) => setShowFiltersDialogBox(false)}
+							className="ratings-section-bottom-left-wrapper"
+							onMouseOver={(e) => {
+								setShowFiltersDialogBox(true);
+								setShowSortOrderDialogBox(false);
+							}}
+							onMouseLeave={(e) => {
+								if (
+									e.clientX >
+										document
+											.getElementsByClassName(
+												'ratings-section-bottom-left-wrapper'
+											)[0]
+											.getBoundingClientRect().left +
+											400 ||
+									e.clientY >
+										document
+											.getElementsByClassName(
+												'ratings-section-bottom-left-wrapper'
+											)[0]
+											.getBoundingClientRect().bottom +
+											15
+								) {
+									setShowFiltersDialogBox(false);
+								}
+							}}
 						>
 							<span className="ratings-section-bottom-left-filters-title">
 								Filters
@@ -1451,6 +1472,7 @@ const BookPage = ({ match }) => {
 										: 'reviews-filter-dialog-box hidden'
 								}
 							>
+								<div className="dialog-box-tip"></div>
 								<div className="rating-filters">
 									<button
 										className="all-filter"
@@ -1523,7 +1545,7 @@ const BookPage = ({ match }) => {
 									</button>
 								</div>
 								<div className="edition-filters">
-									<span>editions:</span>
+									<span className="edition-filters-title">editions:</span>
 									<button
 										className="all-editions-filter"
 										onClick={(e) => setShowAllEditionsForReviews(true)}
@@ -1542,8 +1564,31 @@ const BookPage = ({ match }) => {
 						</div>
 						<span className="separator">|</span>
 						<div
-							onMouseOver={(e) => setShowSortOrderDialogBox(true)}
-							onMouseLeave={(e) => setShowSortOrderDialogBox(false)}
+							onMouseOver={(e) => {
+								setShowSortOrderDialogBox(true);
+								setShowFiltersDialogBox(false);
+							}}
+							onMouseLeave={(e) => {
+								if (
+									e.clientX >
+										document
+											.getElementsByClassName(
+												'ratings-section-bottom-left-wrapper-two'
+											)[0]
+											.getBoundingClientRect().right +
+											10 ||
+									e.clientY >
+										document
+											.getElementsByClassName(
+												'ratings-section-bottom-left-wrapper'
+											)[0]
+											.getBoundingClientRect().bottom +
+											10
+								) {
+									setShowSortOrderDialogBox(false);
+								}
+							}}
+							className="ratings-section-bottom-left-wrapper-two"
 						>
 							<span className="ratings-section-bottom-left-sort-title">
 								Sort order
@@ -1555,6 +1600,7 @@ const BookPage = ({ match }) => {
 										: 'reviews-sort-dialog-box hidden'
 								}
 							>
+								<div className="dialog-box-tip"></div>
 								<button
 									className="sort-review-default-button"
 									onClick={(e) => setSortOrder('default')}
@@ -1570,7 +1616,7 @@ const BookPage = ({ match }) => {
 								</button>
 								<span className="filter-separator">|</span>
 								<button
-									className="sort-review-older-button"
+									className="sort-review-oldest-button"
 									onClick={(e) => setSortOrder('oldest')}
 								>
 									Oldest
@@ -1618,7 +1664,9 @@ const BookPage = ({ match }) => {
 					searchReviewFilter.length > 0 ? (
 						reviewStars > 0 && reviewList.length === 0 ? (
 							<span className="review-filter-message">
-								There are 0 reviews rated <b>{reviewStars} stars</b>.{' '}
+								<span>
+									There are 0 reviews rated <b>{reviewStars} stars</b>.{' '}
+								</span>
 								<button
 									className="clear-review-filters-button"
 									onClick={(e) => {
@@ -1632,8 +1680,16 @@ const BookPage = ({ match }) => {
 							</span>
 						) : reviewStars > 0 ? (
 							<span className="review-filter-message">
-								Displaying 1-{reviewList.length >= 30 ? 30 : reviewList.length}{' '}
-								of {reviewList.length} reviews rated <b>{reviewStars} stars</b>.{' '}
+								<span>
+									Displaying 1-
+									{reviewList.length >= 30 ? 30 : reviewList.length} of{' '}
+									{reviewList.length} reviews rated <b>{reviewStars} stars</b>,
+									sorted by{' '}
+									<b>
+										{sortOrder.charAt(0).toUpperCase() + sortOrder.slice(1)}
+									</b>
+									.{' '}
+								</span>
 								<button
 									className="clear-review-filters-button"
 									onClick={(e) => {
@@ -1647,7 +1703,9 @@ const BookPage = ({ match }) => {
 							</span>
 						) : !showAllEditionsForReviews && reviewList.length === 0 ? (
 							<span className="review-filter-message">
-								There are 0 reviews for <b>this edition</b>.{' '}
+								<span>
+									There are 0 reviews for <b>this edition</b>.{' '}
+								</span>
 								<button
 									className="clear-review-filters-button"
 									onClick={(e) => {
@@ -1661,8 +1719,15 @@ const BookPage = ({ match }) => {
 							</span>
 						) : !showAllEditionsForReviews ? (
 							<span className="review-filter-message">
-								Displaying 1-{reviewList.length >= 30 ? 30 : reviewList.length}{' '}
-								of {reviewList.length} reviews for <b>this edition</b>.{' '}
+								<span>
+									Displaying 1-
+									{reviewList.length >= 30 ? 30 : reviewList.length} of{' '}
+									{reviewList.length} reviews for <b>this edition</b>, sorted by{' '}
+									<b>
+										{sortOrder.charAt(0).toUpperCase() + sortOrder.slice(1)}
+									</b>
+									.{' '}
+								</span>
 								<button
 									className="clear-review-filters-button"
 									onClick={(e) => {
@@ -1676,7 +1741,10 @@ const BookPage = ({ match }) => {
 							</span>
 						) : searchReviewFilter.length > 0 && reviewList.length === 0 ? (
 							<span className="review-filter-message">
-								There are 0 reviews that mention <b>"{searchReviewFilter}"</b>.{' '}
+								<span>
+									There are 0 reviews that mention <b>"{searchReviewFilter}"</b>
+									.{' '}
+								</span>
 								<button
 									className="clear-review-filters-button"
 									onClick={(e) => {
@@ -1690,9 +1758,13 @@ const BookPage = ({ match }) => {
 							</span>
 						) : (
 							<span className="review-filter-message">
-								Displaying 1-{reviewList.length >= 30 ? 30 : reviewList.length}{' '}
-								of {reviewList.length} reviews that mention{' '}
-								<b>"{searchReviewFilter}"</b>.{' '}
+								<span>
+									Displaying 1-
+									{reviewList.length >= 30 ? 30 : reviewList.length} of{' '}
+									{reviewList.length} reviews that mention{' '}
+								</span>
+								<b>"{searchReviewFilter}"</b>, sorted by{' '}
+								<b>{sortOrder.charAt(0).toUpperCase() + sortOrder.slice(1)}</b>.{' '}
 								<button
 									className="clear-review-filters-button"
 									onClick={(e) => {
