@@ -199,7 +199,7 @@ const Firebase = (() => {
 		return seriesInfo;
 	};
 
-	const getMainAuthorDetailsForBook = async (rootBook) => {
+	const getMainAuthorDetailsForBook = async (rootBook, userUID) => {
 		const rootBookQuery = await database
 			.collection('rootBooks')
 			.doc(rootBook)
@@ -209,6 +209,7 @@ const Firebase = (() => {
 			.doc(rootBookQuery.data().authorId)
 			.get();
 		const authorDetails = {};
+		authorDetails.mainAuthorId = rootBookQuery.data().authorId;
 		authorDetails.authorNames = [];
 		authorDetails.authorPages = [];
 		authorDetails.authorNames.push(mainAuthorQuery.data().name);
@@ -223,6 +224,10 @@ const Firebase = (() => {
 			mainAuthorQuery.data().followersIds !== undefined
 				? mainAuthorQuery.data().followersIds.length
 				: 0;
+		authorDetails.userIsFollowingAuthor =
+			mainAuthorQuery.data().followersIds !== undefined
+				? mainAuthorQuery.data().followersIds.includes(userUID)
+				: false;
 		authorDetails.booksByAuthorPage = pageGenerator.generateBooksByAuthorPage(
 			rootBookQuery.data().authorId,
 			mainAuthorQuery.data().name
@@ -357,7 +362,7 @@ const Firebase = (() => {
 		return userDetails;
 	};
 
-	const getReviewDetailsForBook = async (bookId, title) => {
+	const getReviewDetailsForBook = async (bookId, title, userUID) => {
 		const bookQuery = await database.collection('books').doc(bookId).get();
 		const rootBook = bookQuery.data().rootBook;
 		const reviewQuery = await database.collection('reviews').get();
@@ -411,6 +416,7 @@ const Firebase = (() => {
 				);
 				review.text = document.data().text;
 				review.numberOfLikes = document.data().usersWhoLiked.length;
+				review.likedByUser = document.data().usersWhoLiked.includes(userUID);
 				if (document.data().recommendsItFor !== undefined) {
 					review.recommendsItFor = document.data().recommendsItFor;
 				}
@@ -688,7 +694,8 @@ const Firebase = (() => {
 			Object.assign(bookObj, userDetails);
 			const reviewDetails = await getReviewDetailsForBook(
 				bookObj.id,
-				bookObj.title
+				bookObj.title,
+				userUID
 			);
 			Object.assign(bookObj, reviewDetails);
 			const firstEditionInfo = await getFirstEditionInfoForBook(data.rootBook);
@@ -1144,6 +1151,46 @@ const Firebase = (() => {
 		}
 	};
 
+	const likeUnlikeReview = async (userUID, reviewId) => {
+		const reviewRef = database.collection('reviews').doc(reviewId);
+		const reviewQuery = await reviewRef.get();
+		if (!reviewQuery.data().usersWhoLiked.includes(userUID)) {
+			await reviewRef.set(
+				{ usersWhoLiked: reviewQuery.data().usersWhoLiked.concat([userUID]) },
+				{ merge: true }
+			);
+		} else {
+			await reviewRef.set(
+				{
+					usersWhoLiked: reviewQuery
+						.data()
+						.usersWhoLiked.filter((userId) => userId !== userUID),
+				},
+				{ merge: true }
+			);
+		}
+	};
+
+	const followUnfollowAuthor = async (userUID, authorId) => {
+		const authorRef = database.collection('authors').doc(authorId);
+		const authorQuery = await authorRef.get();
+		if (!authorQuery.data().followerIds.includes(userUID)) {
+			await authorRef.set(
+				{ followerIds: authorQuery.data().followerIds.concat([userUID]) },
+				{ merge: true }
+			);
+		} else {
+			await authorRef.set(
+				{
+					followerIds: authorQuery
+						.data()
+						.followerIds.filter((userId) => userId !== userUID),
+				},
+				{ merge: true }
+			);
+		}
+	};
+
 	return {
 		pageGenerator,
 		queryBookById,
@@ -1166,6 +1213,8 @@ const Firebase = (() => {
 		updateBookInShelf,
 		changeBookPosition,
 		addBookToUserShelf,
+		likeUnlikeReview,
+		followUnfollowAuthor,
 	};
 })();
 

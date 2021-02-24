@@ -1294,6 +1294,10 @@ span.filter-button-amount {
 	box-shadow: rgba(185, 173, 153, 0.5) 0px 0px 4px 0px;
 }
 
+.book-page-review-search-box:disabled {
+	background-color: rgba(155, 155, 155, 0.1);
+}
+
 .review-search-box-magnifying-glass {
 	background: url('https://s.gr-assets.com/assets/layout/header/icn_nav_search.svg')
 		no-repeat;
@@ -1550,8 +1554,12 @@ span.filter-button-amount {
 	font-size: 11px;
 	line-height: 11px;
 	padding: 4px 12px;
-	width: 46px;
+	width: 55px;
 	height: 21px;
+}
+
+.book-page-follow-author-button.loading {
+	background-color: rgb(243, 243, 243);
 }
 
 .book-page-review-bottom button:hover {

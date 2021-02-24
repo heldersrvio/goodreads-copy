@@ -7,10 +7,7 @@ import HomePageFootBar from '../Authentication/HomePageFootBar';
 
 /*
 TODO:
-- Functionality：
-	- Search review text
-	- Like review
-	- Follow author
+- Functionality:
 	- Enlarge cover window
 	- Recommend book to friend window
 	- Rating details
@@ -61,6 +58,7 @@ const BookPage = ({ match }) => {
 	);
 	const [sortOrder, setSortOrder] = useState('default');
 	const [searchReviewFilter, setSearchReviewFilter] = useState('');
+	const [loadingFollowAuthor, setLoadingFollowAuthor] = useState(false);
 
 	const user = JSON.parse(localStorage.getItem('userState'));
 
@@ -145,7 +143,10 @@ const BookPage = ({ match }) => {
 					'uncle-steview',
 				];
 				newLSObject.reviews[0].rating = 4;
+				newLSObject.reviews[0].likedByUser = false;
 				newLSObject.rootBook = 'KiX9EuoW7aRFd296zeDn';
+				newLSObject.userIsFollowingAuthor = false;
+				newLSObject.mainAuthorId = 'abc';
 				setBookInfo(newLSObject);
 				if (newLSObject.userRating !== undefined) {
 					setExhibitedStarRating(newLSObject.userRating);
@@ -1249,6 +1250,9 @@ const BookPage = ({ match }) => {
 					if (!showAllEditionsForReviews) {
 						return review.edition === bookInfo.id;
 					}
+					if (searchReviewFilter.length > 0) {
+						return review.text.includes(searchReviewFilter);
+					}
 					return true;
 				})
 				.sort((first, second) => {
@@ -1402,7 +1406,29 @@ const BookPage = ({ match }) => {
 									{review.numberOfLikes > 0 ? (
 										<span className="black-dot">·</span>
 									) : null}
-									<button className="book-page-review-like-button">Like</button>
+									<button
+										className="book-page-review-like-button"
+										onClick={async (e) => {
+											await Firebase.likeUnlikeReview(user.userUID, review.id);
+											setBookInfo((previous) => {
+												return {
+													...previous,
+													reviews: previous.reviews.map((r) => {
+														if (r.id !== review.id) {
+															return r;
+														} else {
+															return {
+																...r,
+																likedByUser: !r.likedByUser,
+															};
+														}
+													}),
+												};
+											});
+										}}
+									>
+										{review.likedByUser ? 'Unlike' : 'Like'}
+									</button>
 									<span className="black-dot">·</span>
 									<a
 										className="book-page-review-see-review"
@@ -1632,7 +1658,7 @@ const BookPage = ({ match }) => {
 							onChange={(e) => setReviewSearchInput(e.target.value)}
 							placeholder="Search review text"
 							disabled={reviewStars > 0 || !showAllEditionsForReviews}
-							onKeyPress={(e) => {
+							onKeyDown={(e) => {
 								if (e.keyCode === 13 && reviewSearchInput.length > 0) {
 									setSearchReviewFilter(reviewSearchInput);
 								}
@@ -1986,8 +2012,42 @@ const BookPage = ({ match }) => {
 						<span className="author-about-section-preview-follower-count">
 							{bookInfo.authorFollowerCount} followers
 						</span>
-						<button className="book-page-follow-author-button">
-							Follow Author
+						<button
+							className={
+								loadingFollowAuthor
+									? 'book-page-follow-author-button loading'
+									: 'book-page-follow-author-button'
+							}
+							onMouseOver={(e) => {
+								if (bookInfo.userIsFollowingAuthor) {
+									document.getElementsByClassName(
+										'book-page-follow-author-button'
+									)[0].innerHTML = 'Unfollow';
+								}
+							}}
+							onMouseOut={(e) => {
+								if (bookInfo.userIsFollowingAuthor) {
+									document.getElementsByClassName(
+										'book-page-follow-author-button'
+									)[0].innerHTML = 'Following';
+								}
+							}}
+							onClick={async (e) => {
+								setLoadingFollowAuthor(true);
+								await Firebase.followUnfollowAuthor(
+									user.userUID,
+									bookInfo.mainAuthorId
+								);
+								setLoadingFollowAuthor(false);
+								setBookInfo((previous) => {
+									return {
+										...previous,
+										userIsFollowingAuthor: !previous.userIsFollowingAuthor,
+									};
+								});
+							}}
+						>
+							{bookInfo.userIsFollowingAuthor ? 'Following' : 'Follow Author'}
 						</button>
 					</div>
 				</div>

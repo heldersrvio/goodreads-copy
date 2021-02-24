@@ -21,10 +21,10 @@ const TopBar = () => {
 
 	useEffect(() => {
 		const checkForNewNotifications = async () => {
-			const query = await Firebase.queryNotifications();
+			/*const query = await Firebase.queryNotifications();
 			setNewNotifications(
 				query.filter((notification) => notification.new === true).length
-			);
+			);*/
 		};
 
 		const checkForNewFriends = async () => {
