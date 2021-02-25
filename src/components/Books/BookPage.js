@@ -19,11 +19,14 @@ const BookPage = ({ match }) => {
 	} = match;
 	const authorAboutP = useRef();
 	const synopsisP = useRef();
+	const enlargeCoverWindow = useRef();
+	const enlargeCoverButton = useRef();
+	const recommendWindow = useRef();
+	const recommendItButton = useRef();
 	const [synopsisHeight, setSynopsisHeight] = useState(0);
 	const [authorAboutHeight, setAuthorAboutHeight] = useState(0);
 	const [bookInfo, setBookInfo] = useState({ title: '', cover: '' });
 	const [loaded, setLoaded] = useState(false);
-	const [enlargingCover, setEnlargingCover] = useState(false);
 	const [savingShelf, setSavingShelf] = useState(false);
 	const [quizQuestionOptionSelected, setQuizQuestionOptionSelected] = useState(
 		-1
@@ -59,6 +62,16 @@ const BookPage = ({ match }) => {
 	const [sortOrder, setSortOrder] = useState('default');
 	const [searchReviewFilter, setSearchReviewFilter] = useState('');
 	const [loadingFollowAuthor, setLoadingFollowAuthor] = useState(false);
+	const [showEnlargeCoverWindow, setShowEnlargeCoverWindow] = useState(false);
+	const [showRecommendWindow, setShowRecommendWindow] = useState(false);
+	const [recommendWindowSearchBox, setRecommendWindowSearchBox] = useState('');
+	const [loadingFriends, setLoadingFriends] = useState(false);
+	const [friendsInfo, setFriendsInfo] = useState([]);
+	const [
+		recommendWindowAddingMessages,
+		setRecommendWindowAddingMessages,
+	] = useState([]);
+	const [recommendWindowMessages, setRecommendWindowMessages] = useState([]);
 
 	const user = JSON.parse(localStorage.getItem('userState'));
 
@@ -165,6 +178,38 @@ const BookPage = ({ match }) => {
 	}, [bookPageId, user.userUID]);
 
 	useEffect(() => {
+		document.addEventListener('click', (e) => {
+			if (
+				enlargeCoverWindow.current !== undefined &&
+				enlargeCoverWindow.current !== null
+			) {
+				if (
+					showEnlargeCoverWindow &&
+					!enlargeCoverWindow.current.contains(e.target) &&
+					!enlargeCoverButton.current.contains(e.target)
+				) {
+					setShowEnlargeCoverWindow(false);
+				}
+			}
+		});
+
+		document.addEventListener('click', (e) => {
+			if (
+				recommendWindow.current !== undefined &&
+				recommendWindow.current !== null
+			) {
+				if (
+					showRecommendWindow &&
+					!recommendWindow.current.contains(e.target) &&
+					!recommendItButton.current.contains(e.target)
+				) {
+					setShowRecommendWindow(false);
+				}
+			}
+		});
+	});
+
+	useEffect(() => {
 		if (bookInfo.userRating !== undefined) {
 			setExhibitedStarRating(bookInfo.userRating);
 		} else {
@@ -181,6 +226,23 @@ const BookPage = ({ match }) => {
 			setShelfPopupToReadInput('');
 		}
 	}, [bookInfo]);
+
+	useEffect(() => {
+		const queryFriends = async () => {
+			if (user.userUID !== undefined && user.userUID !== null) {
+				const newFriendsInfo = await Firebase.getFriendsInfo(user.userUID);
+				setFriendsInfo(newFriendsInfo);
+				setRecommendWindowAddingMessages(
+					newFriendsInfo.map((_friend) => false)
+				);
+				setRecommendWindowMessages(newFriendsInfo.map((_friend) => ''));
+			}
+		};
+
+		if (loadingFriends) {
+			queryFriends();
+		}
+	}, [loadingFriends, user.userUID]);
 
 	useLayoutEffect(() => {
 		if (authorAboutP.current !== undefined) {
@@ -325,7 +387,7 @@ const BookPage = ({ match }) => {
 											? 'page-progress-input'
 											: 'page-progress-input white-background'
 									}
-									onClick={(e) => {
+									onClick={(_e) => {
 										setIsShelfPopupBottomHidden(false);
 										setIsShelfPopupHidden(false);
 									}}
@@ -352,7 +414,7 @@ const BookPage = ({ match }) => {
 						>
 							<button
 								className="progress-submit-button"
-								onClick={(e) => {
+								onClick={(_e) => {
 									updateProgress(shelfPopupReadingInput);
 									setIsShelfPopupHidden(true);
 									setIsShelfPopupBottomHidden(true);
@@ -362,7 +424,7 @@ const BookPage = ({ match }) => {
 							</button>
 							<button
 								className="progress-cancel-button"
-								onClick={(e) => {
+								onClick={(_e) => {
 									setIsShelfPopupHidden(true);
 									setIsShelfPopupBottomHidden(true);
 								}}
@@ -372,7 +434,7 @@ const BookPage = ({ match }) => {
 							<span>·</span>
 							<button
 								className="progress-finished-button"
-								onClick={(e) => {
+								onClick={(_e) => {
 									changeBookShelf('read');
 									setIsShelfPopupHidden(true);
 									setIsShelfPopupBottomHidden(true);
@@ -444,7 +506,7 @@ const BookPage = ({ match }) => {
 									value={shelfPopupToReadInput}
 									className="shelf-pop-up-to-read-input"
 									onChange={(e) => setShelfPopupToReadInput(e.target.value)}
-									onClick={(e) => {
+									onClick={(_e) => {
 										setIsShelfPopupHidden(false);
 										setIsShelfPopupBottomHidden(false);
 									}}
@@ -468,7 +530,7 @@ const BookPage = ({ match }) => {
 							<div className="shelf-pop-up-bottom">
 								<button
 									className="progress-submit-button"
-									onClick={(e) => {
+									onClick={(_e) => {
 										Firebase.changeBookPosition(
 											user.userUID,
 											bookInfo.id,
@@ -488,7 +550,7 @@ const BookPage = ({ match }) => {
 								</button>
 								<button
 									className="progress-cancel-button"
-									onClick={(e) => {
+									onClick={(_e) => {
 										setIsShelfPopupHidden(true);
 										setIsShelfPopupBottomHidden(true);
 									}}
@@ -543,7 +605,7 @@ const BookPage = ({ match }) => {
 				<div className="book-options-dropdown-bottom">
 					<button
 						className="dropdown-add-shelf"
-						onClick={(e) => setIsAddShelfInputSectionHidden(false)}
+						onClick={(_e) => setIsAddShelfInputSectionHidden(false)}
 					>
 						Add Shelf
 					</button>
@@ -562,7 +624,7 @@ const BookPage = ({ match }) => {
 						></input>
 						<button
 							className="dropdown-add-shelf-add-button"
-							onClick={async (e) => {
+							onClick={async (_e) => {
 								if (addShelfInput.length > 0) {
 									await Firebase.addBookToUserShelf(
 										user.userUID,
@@ -609,7 +671,8 @@ const BookPage = ({ match }) => {
 					</a>
 					<button
 						className="book-page-enlarge-cover"
-						onClick={() => setEnlargingCover(!enlargingCover)}
+						onClick={() => setShowEnlargeCoverWindow((previous) => !previous)}
+						ref={enlargeCoverButton}
 					>
 						Enlarge cover
 					</button>
@@ -649,8 +712,8 @@ const BookPage = ({ match }) => {
 								: 'interactive-star small'
 						}
 						title="did not like it"
-						onMouseOver={(e) => setExhibitedStarRating(1)}
-						onMouseLeave={(e) =>
+						onMouseOver={(_e) => setExhibitedStarRating(1)}
+						onMouseLeave={(_e) =>
 							setExhibitedStarRating(
 								bookInfo.userRating === undefined ? 0 : bookInfo.userRating
 							)
@@ -664,8 +727,8 @@ const BookPage = ({ match }) => {
 								: 'interactive-star small'
 						}
 						title="it was ok"
-						onMouseOver={(e) => setExhibitedStarRating(2)}
-						onMouseLeave={(e) =>
+						onMouseOver={(_e) => setExhibitedStarRating(2)}
+						onMouseLeave={(_e) =>
 							setExhibitedStarRating(
 								bookInfo.userRating === undefined ? 0 : bookInfo.userRating
 							)
@@ -679,8 +742,8 @@ const BookPage = ({ match }) => {
 								: 'interactive-star small'
 						}
 						title="liked it"
-						onMouseOver={(e) => setExhibitedStarRating(3)}
-						onMouseLeave={(e) =>
+						onMouseOver={(_e) => setExhibitedStarRating(3)}
+						onMouseLeave={(_e) =>
 							setExhibitedStarRating(
 								bookInfo.userRating === undefined ? 0 : bookInfo.userRating
 							)
@@ -694,8 +757,8 @@ const BookPage = ({ match }) => {
 								: 'interactive-star small'
 						}
 						title="really liked it"
-						onMouseOver={(e) => setExhibitedStarRating(4)}
-						onMouseLeave={(e) =>
+						onMouseOver={(_e) => setExhibitedStarRating(4)}
+						onMouseLeave={(_e) =>
 							setExhibitedStarRating(
 								bookInfo.userRating === undefined ? 0 : bookInfo.userRating
 							)
@@ -709,8 +772,8 @@ const BookPage = ({ match }) => {
 								: 'interactive-star small'
 						}
 						title="it was amazing"
-						onMouseOver={(e) => setExhibitedStarRating(5)}
-						onMouseLeave={(e) =>
+						onMouseOver={(_e) => setExhibitedStarRating(5)}
+						onMouseLeave={(_e) =>
 							setExhibitedStarRating(
 								bookInfo.userRating === undefined ? 0 : bookInfo.userRating
 							)
@@ -924,7 +987,7 @@ const BookPage = ({ match }) => {
 			{synopsisHeight > 105 ? (
 				<button
 					className="synopsis-show-more"
-					onClick={(e) => {
+					onClick={(_e) => {
 						setSynopsisShowMore((previous) => !previous);
 					}}
 				>
@@ -1026,7 +1089,7 @@ const BookPage = ({ match }) => {
 			<div className="book-page-book-info-bottom">
 				<button
 					className="show-more-book-info-details-button"
-					onClick={(e) => {
+					onClick={(_e) => {
 						setShowMoreBookInfoDetails((previous) => !previous);
 					}}
 				>
@@ -1065,7 +1128,7 @@ const BookPage = ({ match }) => {
 					{bookInfo.lists.map((list) => (
 						<div className="book-page-lists-with-book-pv" key={list.id}>
 							<div className="book-page-lists-with-book-pv-top">
-								{list.bookIds.map((bookId, index) => (
+								{list.bookIds.map((_bookId, index) => (
 									<a
 										className="book-page-lists-book-pv"
 										href={Firebase.pageGenerator.generateListPage(
@@ -1159,8 +1222,8 @@ const BookPage = ({ match }) => {
 										: 'interactive-star big'
 								}
 								title="did not like it"
-								onMouseOver={(e) => setExhibitedStarRating(1)}
-								onMouseLeave={(e) =>
+								onMouseOver={(_e) => setExhibitedStarRating(1)}
+								onMouseLeave={(_e) =>
 									setExhibitedStarRating(
 										bookInfo.userRating === undefined ? 0 : bookInfo.userRating
 									)
@@ -1174,8 +1237,8 @@ const BookPage = ({ match }) => {
 										: 'interactive-star big'
 								}
 								title="it was ok"
-								onMouseOver={(e) => setExhibitedStarRating(2)}
-								onMouseLeave={(e) =>
+								onMouseOver={(_e) => setExhibitedStarRating(2)}
+								onMouseLeave={(_e) =>
 									setExhibitedStarRating(
 										bookInfo.userRating === undefined ? 0 : bookInfo.userRating
 									)
@@ -1189,8 +1252,8 @@ const BookPage = ({ match }) => {
 										: 'interactive-star big'
 								}
 								title="liked it"
-								onMouseOver={(e) => setExhibitedStarRating(3)}
-								onMouseLeave={(e) =>
+								onMouseOver={(_e) => setExhibitedStarRating(3)}
+								onMouseLeave={(_e) =>
 									setExhibitedStarRating(
 										bookInfo.userRating === undefined ? 0 : bookInfo.userRating
 									)
@@ -1204,8 +1267,8 @@ const BookPage = ({ match }) => {
 										: 'interactive-star big'
 								}
 								title="really liked it"
-								onMouseOver={(e) => setExhibitedStarRating(4)}
-								onMouseLeave={(e) =>
+								onMouseOver={(_e) => setExhibitedStarRating(4)}
+								onMouseLeave={(_e) =>
 									setExhibitedStarRating(
 										bookInfo.userRating === undefined ? 0 : bookInfo.userRating
 									)
@@ -1219,8 +1282,8 @@ const BookPage = ({ match }) => {
 										: 'interactive-star big'
 								}
 								title="it was amazing"
-								onMouseOver={(e) => setExhibitedStarRating(5)}
-								onMouseLeave={(e) =>
+								onMouseOver={(_e) => setExhibitedStarRating(5)}
+								onMouseLeave={(_e) =>
 									setExhibitedStarRating(
 										bookInfo.userRating === undefined ? 0 : bookInfo.userRating
 									)
@@ -1376,7 +1439,7 @@ const BookPage = ({ match }) => {
 									{reviewsHaveButton[index] ? (
 										<button
 											className="review-show-more"
-											onClick={(e) => {
+											onClick={(_e) => {
 												setReviewsShowingMore((previous) => {
 													if (previous.includes(index)) {
 														return previous.filter((item) => item !== index);
@@ -1408,7 +1471,7 @@ const BookPage = ({ match }) => {
 									) : null}
 									<button
 										className="book-page-review-like-button"
-										onClick={async (e) => {
+										onClick={async (_e) => {
 											await Firebase.likeUnlikeReview(user.userUID, review.id);
 											setBookInfo((previous) => {
 												return {
@@ -1463,7 +1526,7 @@ const BookPage = ({ match }) => {
 					<div className="ratings-section-bottom-left">
 						<div
 							className="ratings-section-bottom-left-wrapper"
-							onMouseOver={(e) => {
+							onMouseOver={(_e) => {
 								setShowFiltersDialogBox(true);
 								setShowSortOrderDialogBox(false);
 							}}
@@ -1502,12 +1565,12 @@ const BookPage = ({ match }) => {
 								<div className="rating-filters">
 									<button
 										className="all-filter"
-										onClick={(e) => setReviewStars(0)}
+										onClick={(_e) => setReviewStars(0)}
 									>{`all (${bookInfo.reviews.length})`}</button>
 									<span className="filter-separator">|</span>
 									<button
 										className="five-star-filter"
-										onClick={(e) => setReviewStars(5)}
+										onClick={(_e) => setReviewStars(5)}
 									>
 										<span>
 											<span className="filter-button-stars">5 stars </span>
@@ -1520,7 +1583,7 @@ const BookPage = ({ match }) => {
 									<span className="filter-separator">|</span>
 									<button
 										className="four-star-filter"
-										onClick={(e) => setReviewStars(4)}
+										onClick={(_e) => setReviewStars(4)}
 									>
 										<span>
 											<span className="filter-button-stars">4 stars </span>
@@ -1533,7 +1596,7 @@ const BookPage = ({ match }) => {
 									<span className="filter-separator">|</span>
 									<button
 										className="three-star-filter"
-										onClick={(e) => setReviewStars(3)}
+										onClick={(_e) => setReviewStars(3)}
 									>
 										<span>
 											<span className="filter-button-stars">3 stars </span>
@@ -1546,7 +1609,7 @@ const BookPage = ({ match }) => {
 									<span className="filter-separator">|</span>
 									<button
 										className="two-star-filter"
-										onClick={(e) => setReviewStars(2)}
+										onClick={(_e) => setReviewStars(2)}
 									>
 										<span>
 											<span className="filter-button-stars">2 stars </span>
@@ -1559,7 +1622,7 @@ const BookPage = ({ match }) => {
 									<span className="filter-separator">|</span>
 									<button
 										className="one-star-filter"
-										onClick={(e) => setReviewStars(1)}
+										onClick={(_e) => setReviewStars(1)}
 									>
 										<span>
 											<span className="filter-button-stars">1 star </span>
@@ -1574,14 +1637,14 @@ const BookPage = ({ match }) => {
 									<span className="edition-filters-title">editions:</span>
 									<button
 										className="all-editions-filter"
-										onClick={(e) => setShowAllEditionsForReviews(true)}
+										onClick={(_e) => setShowAllEditionsForReviews(true)}
 									>
 										all
 									</button>
 									<span className="filter-separator">|</span>
 									<button
 										className="this-edition-filter"
-										onClick={(e) => setShowAllEditionsForReviews(false)}
+										onClick={(_e) => setShowAllEditionsForReviews(false)}
 									>
 										this edition
 									</button>
@@ -1590,7 +1653,7 @@ const BookPage = ({ match }) => {
 						</div>
 						<span className="separator">|</span>
 						<div
-							onMouseOver={(e) => {
+							onMouseOver={(_e) => {
 								setShowSortOrderDialogBox(true);
 								setShowFiltersDialogBox(false);
 							}}
@@ -1629,21 +1692,21 @@ const BookPage = ({ match }) => {
 								<div className="dialog-box-tip"></div>
 								<button
 									className="sort-review-default-button"
-									onClick={(e) => setSortOrder('default')}
+									onClick={(_e) => setSortOrder('default')}
 								>
 									Default
 								</button>
 								<span className="filter-separator">|</span>
 								<button
 									className="sort-review-newest-button"
-									onClick={(e) => setSortOrder('newest')}
+									onClick={(_e) => setSortOrder('newest')}
 								>
 									Newest
 								</button>
 								<span className="filter-separator">|</span>
 								<button
 									className="sort-review-oldest-button"
-									onClick={(e) => setSortOrder('oldest')}
+									onClick={(_e) => setSortOrder('oldest')}
 								>
 									Oldest
 								</button>
@@ -1666,7 +1729,7 @@ const BookPage = ({ match }) => {
 						></input>
 						<button
 							className="review-search-box-magnifying-glass"
-							onClick={(e) => {
+							onClick={(_e) => {
 								if (reviewSearchInput.length > 0) {
 									setSearchReviewFilter(reviewSearchInput);
 								}
@@ -1695,7 +1758,7 @@ const BookPage = ({ match }) => {
 								</span>
 								<button
 									className="clear-review-filters-button"
-									onClick={(e) => {
+									onClick={(_e) => {
 										setReviewStars(0);
 										setShowAllEditionsForReviews(true);
 										setSearchReviewFilter('');
@@ -1718,7 +1781,7 @@ const BookPage = ({ match }) => {
 								</span>
 								<button
 									className="clear-review-filters-button"
-									onClick={(e) => {
+									onClick={(_e) => {
 										setReviewStars(0);
 										setShowAllEditionsForReviews(true);
 										setSearchReviewFilter('');
@@ -1734,7 +1797,7 @@ const BookPage = ({ match }) => {
 								</span>
 								<button
 									className="clear-review-filters-button"
-									onClick={(e) => {
+									onClick={(_e) => {
 										setReviewStars(0);
 										setShowAllEditionsForReviews(true);
 										setSearchReviewFilter('');
@@ -1756,7 +1819,7 @@ const BookPage = ({ match }) => {
 								</span>
 								<button
 									className="clear-review-filters-button"
-									onClick={(e) => {
+									onClick={(_e) => {
 										setReviewStars(0);
 										setShowAllEditionsForReviews(true);
 										setSearchReviewFilter('');
@@ -1773,7 +1836,7 @@ const BookPage = ({ match }) => {
 								</span>
 								<button
 									className="clear-review-filters-button"
-									onClick={(e) => {
+									onClick={(_e) => {
 										setReviewStars(0);
 										setShowAllEditionsForReviews(true);
 										setSearchReviewFilter('');
@@ -1793,7 +1856,7 @@ const BookPage = ({ match }) => {
 								<b>{sortOrder.charAt(0).toUpperCase() + sortOrder.slice(1)}</b>.{' '}
 								<button
 									className="clear-review-filters-button"
-									onClick={(e) => {
+									onClick={(_e) => {
 										setReviewStars(0);
 										setShowAllEditionsForReviews(true);
 										setSearchReviewFilter('');
@@ -1826,7 +1889,16 @@ const BookPage = ({ match }) => {
 
 	const bookPageMainContentRightTop = loaded ? (
 		<div className="book-page-main-content-right-top">
-			<button className="recommend-book-button">Recommend it</button>
+			<button
+				className="recommend-book-button"
+				onClick={(_e) => {
+					setLoadingFriends(true);
+					setShowRecommendWindow(true);
+				}}
+				ref={recommendItButton}
+			>
+				Recommend it
+			</button>
 			<span className="book-page-main-content-right-top-separator">|</span>
 			<a
 				href={Firebase.pageGenerator.generateBookStatsPage(
@@ -1875,7 +1947,7 @@ const BookPage = ({ match }) => {
 									? 'book-page-readers-also-enjoyed-back-button'
 									: 'book-page-readers-also-enjoyed-back-button hidden'
 							}
-							onClick={(e) => {
+							onClick={(_e) => {
 								setReadersEnjoyedListTranslation((previousValue) => {
 									const forwardButton = document.getElementsByClassName(
 										'book-page-readers-also-enjoyed-forward-button'
@@ -1891,7 +1963,7 @@ const BookPage = ({ match }) => {
 						></button>
 						<button
 							className={'book-page-readers-also-enjoyed-forward-button'}
-							onClick={(e) => {
+							onClick={(_e) => {
 								setReadersEnjoyedListTranslation((previousValue) => {
 									const forwardButton = document.getElementsByClassName(
 										'book-page-readers-also-enjoyed-forward-button'
@@ -2018,21 +2090,21 @@ const BookPage = ({ match }) => {
 									? 'book-page-follow-author-button loading'
 									: 'book-page-follow-author-button'
 							}
-							onMouseOver={(e) => {
+							onMouseOver={(_e) => {
 								if (bookInfo.userIsFollowingAuthor) {
 									document.getElementsByClassName(
 										'book-page-follow-author-button'
 									)[0].innerHTML = 'Unfollow';
 								}
 							}}
-							onMouseOut={(e) => {
+							onMouseOut={(_e) => {
 								if (bookInfo.userIsFollowingAuthor) {
 									document.getElementsByClassName(
 										'book-page-follow-author-button'
 									)[0].innerHTML = 'Following';
 								}
 							}}
-							onClick={async (e) => {
+							onClick={async (_e) => {
 								setLoadingFollowAuthor(true);
 								await Firebase.followUnfollowAuthor(
 									user.userUID,
@@ -2068,7 +2140,7 @@ const BookPage = ({ match }) => {
 					{authorAboutHeight > 162 ? (
 						<button
 							className="author-about-show-more"
-							onClick={(e) => {
+							onClick={(_e) => {
 								setAuthorAboutShowMore((previous) => !previous);
 							}}
 						>
@@ -2195,7 +2267,7 @@ const BookPage = ({ match }) => {
 											type="radio"
 											checked={quizQuestionOptionSelected === index}
 											value={option}
-											onChange={(e) => {
+											onChange={(_e) => {
 												setQuizQuestionOptionSelected(index);
 											}}
 										/>
@@ -2288,9 +2360,16 @@ const BookPage = ({ match }) => {
 	const bookPageEnlargingCover = loaded ? (
 		<div
 			className={
-				enlargingCover ? 'cover-picture-box' : 'cover-picture-box hidden'
+				showEnlargeCoverWindow
+					? 'cover-picture-box'
+					: 'cover-picture-box hidden'
 			}
+			ref={enlargeCoverWindow}
 		>
+			<button
+				className="window-close-button"
+				onClick={(_e) => setShowEnlargeCoverWindow(false)}
+			></button>
 			<img
 				src={bookInfo.cover}
 				alt={bookInfo.title}
@@ -2299,12 +2378,135 @@ const BookPage = ({ match }) => {
 		</div>
 	) : null;
 
+	const bookPageRecommendToFriends = loaded ? (
+		<div
+			className={
+				showRecommendWindow ? 'recommend-window' : 'recommend-window hidden'
+			}
+			ref={recommendWindow}
+		>
+			<button
+				className="window-close-button"
+				onClick={(_e) => setShowRecommendWindow(false)}
+			></button>
+			<div className="content">
+				<div className="recommend-window-top-area">
+					<div className="recommend-window-top-area-left">
+						<span>
+							Recommend <i>{bookInfo.title}</i> to your friends
+						</span>
+						<div className="searchbox-area">
+							<input
+								type="text"
+								placeholder="Search by name"
+								value={recommendWindowSearchBox}
+								onChange={(e) => setRecommendWindowSearchBox(e.target.value)}
+							></input>
+							<button
+								className={
+									recommendWindowSearchBox.length > 0
+										? 'clear-button'
+										: 'clear-button hidden'
+								}
+							></button>
+						</div>
+					</div>
+					<div className="recommend-window-top-area-right">
+						<img src={bookInfo.cover} alt={bookInfo.title} />
+					</div>
+				</div>
+				<div className="recommend-window-bottom-area">
+					{!loadingFriends ? (
+						friendsInfo
+							.filter((friendInfo) =>
+								friendInfo.firstName.includes(recommendWindowSearchBox)
+							)
+							.map((friend, index) => {
+								return (
+									<div className="recommend-window-friend-info">
+										<div className="recommend-window-friend-info-left">
+											<img
+												src={
+													friend.profileImage !== undefined
+														? friend.profileImage
+														: 'https://www.goodreads.com/assets/nophoto/user/u_60x60-267f0ca0ea48fd3acfd44b95afa64f01.png'
+												}
+												alt={friend.firstName}
+											/>
+										</div>
+										<div className="recommend-window-friend-info-right">
+											<div className="recommend-window-friend-info-right-top">
+												{!recommendWindowAddingMessages[index] ? (
+													<span className="friend-name-span">
+														{friend.firstName}
+													</span>
+												) : (
+													<input
+														type="text"
+														className="friend-recommend-message-input"
+														placeholder={`${friend.firstName} would like this book because...`}
+														value={recommendWindowMessages[index]}
+														onChange={(e) =>
+															setRecommendWindowMessages((previous) =>
+																previous.map((message, i) => {
+																	if (i === index) {
+																		return e.target.value;
+																	} else {
+																		return message;
+																	}
+																})
+															)
+														}
+													></input>
+												)}
+											</div>
+											<div className="recommend-window-friend-info-right-bottom">
+												<button className="recommend-to-friend-button">
+													Recommend
+												</button>
+												<button
+													className="clear-message-button"
+													onClick={(_e) =>
+														setRecommendWindowAddingMessages((previous) =>
+															previous.map((value, i) => {
+																if (i === index) {
+																	return false;
+																} else {
+																	return value;
+																}
+															})
+														)
+													}
+												>
+													clear message
+												</button>
+											</div>
+										</div>
+									</div>
+								);
+							})
+					) : (
+						<div className="loading-spinner"></div>
+					)}
+				</div>
+			</div>
+		</div>
+	) : null;
+
 	return (
 		<div className="book-page">
 			<TopBar />
 			{bookPageMainContent}
 			{bookPageEnlargingCover}
+			{bookPageRecommendToFriends}
 			<HomePageFootBar />
+			<div
+				className={
+					showEnlargeCoverWindow || showRecommendWindow
+						? 'page-mask'
+						: 'page-mask hidden'
+				}
+			></div>
 		</div>
 	);
 };

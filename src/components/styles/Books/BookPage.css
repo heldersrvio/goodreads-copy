@@ -1969,3 +1969,52 @@ a.book-page-quotes-section-a {
 .book-page-quotes-section-quote a:hover {
 	text-decoration: underline;
 }
+
+.page-mask.hidden {
+	display: none;
+}
+
+.page-mask {
+	position: fixed;
+	top: 0;
+	right: 0;
+	left: 0;
+	bottom: 0;
+	background-color: rgba(0, 0, 0, 0.6);
+	z-index: 11;
+}
+
+.cover-picture-box.hidden {
+	display: none;
+}
+
+.cover-picture-box {
+	position: absolute;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	left: calc(50% - 170.5px);
+	right: calc(50% - 170.5px);
+	top: 20%;
+	background-color: rgb(255, 255, 255);
+	width: 341px;
+	height: 512px;
+	border-radius: 3px;
+	border: 1px solid rgb(0, 0, 0);
+	z-index: 12;
+}
+
+.window-close-button {
+	width: 10px;
+	height: 10px;
+	padding: 0;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAASUlEQVQYlWOYOXNmBRB/BOJgBjQAEoPKVYA4/5FwEJKiIGQ5kEAEmmI3KEYWi8CqG5ctMMUOWBQ5oLubOIVEWU20Z0gJHqICHACTYMERyAfjXgAAAABJRU5ErkJggg==');
+}
+
+.window-close-button:hover {
+	background-color: transparent;
+}

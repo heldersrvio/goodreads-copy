@@ -779,6 +779,33 @@ const Firebase = (() => {
 		}*/
 	};
 
+	const getFriendsInfo = async (userUID) => {
+		try {
+			const friendsQuery = await database
+				.collection('users')
+				.doc(userUID)
+				.get();
+			if (friendsQuery.data().friends === undefined) {
+				return [];
+			}
+			return await Promise.all(
+				friendsQuery.data().friends.map(async (friend) => {
+					const userQuery = await database
+						.collection('users')
+						.doc(friend)
+						.get();
+					return {
+						id: friend,
+						firstName: userQuery.data().firstName,
+						profileImage: userQuery.data().profileImage,
+					};
+				})
+			);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	const setNewNotificationsToSeen = async () => {
 		try {
 			const query = await database.collection('heldersrvioNotifications').get();
@@ -1197,6 +1224,7 @@ const Firebase = (() => {
 		queryBooks,
 		queryNotifications,
 		getNumberOfNewFriends,
+		getFriendsInfo,
 		setNewNotificationsToSeen,
 		setNewFriendsToZero,
 		signOut,
