@@ -806,6 +806,24 @@ const Firebase = (() => {
 		}
 	};
 
+	const queryBookRecommendedToFriendsStatus = async (
+		userUID,
+		bookId,
+		friendIds
+	) => {
+		return await Promise.all(
+			friendIds.map(async (id) => {
+				const recommendationQuery = await database
+					.collection('recommendations')
+					.where('sender', '==', userUID)
+					.where('bookId', '==', bookId)
+					.where('receiver', '==', id)
+					.get();
+				return recommendationQuery.docs.length > 0;
+			})
+		);
+	};
+
 	const setNewNotificationsToSeen = async () => {
 		try {
 			const query = await database.collection('heldersrvioNotifications').get();
@@ -1219,7 +1237,7 @@ const Firebase = (() => {
 	};
 
 	const recommendBook = async (sender, receiver, bookId, message) => {
-		const newRec = await Firebase.collection('recommendations').add({
+		const newRec = await database.collection('recommendations').add({
 			sender,
 			receiver,
 			bookId,
@@ -1236,6 +1254,7 @@ const Firebase = (() => {
 		queryNotifications,
 		getNumberOfNewFriends,
 		getFriendsInfo,
+		queryBookRecommendedToFriendsStatus,
 		setNewNotificationsToSeen,
 		setNewFriendsToZero,
 		signOut,

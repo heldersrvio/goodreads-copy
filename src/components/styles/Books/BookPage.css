@@ -2009,15 +2009,21 @@ a.book-page-quotes-section-a {
 .recommend-window {
 	position: absolute;
 	top: 0;
-	left: calc(50% - 358.5px);
-	right: calc(50% - 358.5px);
+	left: calc(50% - 332.5px);
+	right: calc(50% - 332.5px);
 	z-index: 12;
 	background-color: rgb(255, 255, 255);
 	border-radius: 3px;
 	border: 1px solid rgb(0, 0, 0);
-	width: 717px;
+	width: 665px;
 	height: 479px;
 	padding: 25px;
+}
+
+.recommend-window .loading-spinner {
+	position: absolute;
+	top: calc(50% - 16px);
+	right: calc(50% - 16px);
 }
 
 .recommend-window .content {
@@ -2090,13 +2096,18 @@ a.book-page-quotes-section-a {
 .content .recommend-window-bottom-area {
 	padding-top: 5px;
 	border-bottom: 1px solid rgb(204, 204, 204);
-	height: 310px;
+	height: 350px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	flex-wrap: wrap;
 }
 
 .content .recommend-window-bottom-area .recommend-window-friend-info {
 	display: flex;
 	flex-direction: row;
 	width: 330px;
+	height: 100px;
 }
 
 .content .recommend-window-bottom-area .recommend-window-friend-info textarea {
@@ -2190,6 +2201,26 @@ a.book-page-quotes-section-a {
 .content .recommend-window-bottom-area .recommend-window-friend-info-left img {
 	width: 97px;
 	height: 100px;
+}
+
+.recommended-message-area {
+	display: flex;
+	flex-direction: row;
+	margin-top: 3px;
+}
+
+.recommended-message-area .check-banner {
+	background-image: url('https://s.gr-assets.com/assets/checkedBox.png');
+	width: 14px;
+	height: 12px;
+	background-repeat: no-repeat;
+}
+
+.recommended-message-area span {
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	color: rgb(24, 24, 24);
+	padding-left: 5px;
 }
 
 .window-close-button {

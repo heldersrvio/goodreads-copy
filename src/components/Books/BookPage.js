@@ -8,7 +8,6 @@ import HomePageFootBar from '../Authentication/HomePageFootBar';
 /*
 TODO:
 - Functionality:
-	- Recommend book to friend window
 	- Rating details
 	- Redirect to sign in page
 */
@@ -72,6 +71,10 @@ const BookPage = ({ match }) => {
 		setRecommendWindowAddingMessages,
 	] = useState([]);
 	const [recommendWindowMessages, setRecommendWindowMessages] = useState([]);
+	const [
+		recommendWindowSentStatuses,
+		setRecommendWindowSentStatuses,
+	] = useState([]);
 
 	const user = JSON.parse(localStorage.getItem('userState'));
 
@@ -236,6 +239,12 @@ const BookPage = ({ match }) => {
 					newFriendsInfo.map((_friend) => false)
 				);
 				setRecommendWindowMessages(newFriendsInfo.map((_friend) => ''));
+				const recommendedToFriendsStatus = await Firebase.queryBookRecommendedToFriendsStatus(
+					user.userUID,
+					bookInfo.id,
+					newFriendsInfo.map((friend) => friend.id)
+				);
+				setRecommendWindowSentStatuses(recommendedToFriendsStatus);
 			}
 			setLoadingFriends(false);
 		};
@@ -243,7 +252,7 @@ const BookPage = ({ match }) => {
 		if (loadingFriends) {
 			queryFriends();
 		}
-	}, [loadingFriends, user.userUID]);
+	}, [loadingFriends, user.userUID, bookInfo.id]);
 
 	useLayoutEffect(() => {
 		if (authorAboutP.current !== undefined) {
@@ -2440,58 +2449,93 @@ const BookPage = ({ match }) => {
 										</div>
 										<div className="recommend-window-friend-info-right">
 											<div className="recommend-window-friend-info-right-top">
-												{!recommendWindowAddingMessages[index] ? (
+												{!recommendWindowAddingMessages[index] ||
+												recommendWindowSentStatuses[index] ? (
 													<span className="friend-name-span">
 														{friend.firstName}
 													</span>
 												) : (
 													<textarea
+														type="text"
 														className="friend-recommend-message-input"
 														placeholder={`${friend.firstName} would like this book because...`}
 														value={recommendWindowMessages[index]}
-														onChange={(e) =>
-															setRecommendWindowMessages((previous) =>
-																previous.map((message, i) => {
+														onChange={(event) => {
+															const newValue = event.target.value;
+															setRecommendWindowMessages((previous) => {
+																return previous.map((message, i) => {
 																	if (i === index) {
-																		return e.target.value;
+																		return newValue;
 																	} else {
 																		return message;
 																	}
-																})
-															)
-														}
+																});
+															});
+														}}
 													></textarea>
 												)}
 											</div>
 											<div className="recommend-window-friend-info-right-bottom">
-												<button className="recommend-to-friend-button">
+												<button
+													className="recommend-to-friend-button"
+													onClick={async (_e) => {
+														if (!recommendWindowSentStatuses[index]) {
+															await Firebase.recommendBook(
+																user.userUID,
+																friend.id,
+																bookInfo.id,
+																recommendWindowMessages[index]
+															);
+															setRecommendWindowSentStatuses((previous) => {
+																return previous.map((status, i) => {
+																	if (i === index) {
+																		return !status;
+																	}
+																	return status;
+																});
+															});
+														}
+													}}
+												>
 													Recommend
 												</button>
-												<button
-													className="clear-message-button"
-													onClick={(_e) =>
-														setRecommendWindowAddingMessages((previous) =>
-															previous.map((value, i) => {
-																if (i === index) {
-																	return !value;
-																} else {
-																	return value;
-																}
-															})
-														)
-													}
-												>
-													{recommendWindowAddingMessages[index]
-														? 'clear message'
-														: 'add message'}
-												</button>
+												{!recommendWindowSentStatuses[index] ? (
+													<button
+														className="clear-message-button"
+														onClick={(_e) =>
+															setRecommendWindowAddingMessages((previous) =>
+																previous.map((value, i) => {
+																	if (i === index) {
+																		return !value;
+																	} else {
+																		return value;
+																	}
+																})
+															)
+														}
+													>
+														{recommendWindowAddingMessages[index]
+															? 'clear message'
+															: 'add message'}
+													</button>
+												) : null}
 											</div>
+											{recommendWindowSentStatuses[index] ? (
+												<div className="recommended-message-area">
+													<div className="check-banner"></div>
+													<span>Recommended</span>
+												</div>
+											) : null}
 										</div>
 									</div>
 								);
 							})
 					) : (
-						<div className="loading-spinner"></div>
+						<img
+							className="loading-spinner"
+							src={'https://s.gr-assets.com/assets/spinner.gif'}
+							alt="Loading"
+						></img>
 					)}
 				</div>
 			</div>
