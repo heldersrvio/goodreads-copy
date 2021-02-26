@@ -8,9 +8,9 @@ import HomePageFootBar from '../Authentication/HomePageFootBar';
 /*
 TODO:
 - Functionality:
-	- Enlarge cover window
 	- Recommend book to friend window
 	- Rating details
+	- Redirect to sign in page
 */
 
 const BookPage = ({ match }) => {
@@ -159,7 +159,7 @@ const BookPage = ({ match }) => {
 				newLSObject.reviews[0].likedByUser = false;
 				newLSObject.rootBook = 'KiX9EuoW7aRFd296zeDn';
 				newLSObject.userIsFollowingAuthor = false;
-				newLSObject.mainAuthorId = 'abc';
+				newLSObject.mainAuthorId = 'eIqpFmjgPfIO6VU3FH8x';
 				setBookInfo(newLSObject);
 				if (newLSObject.userRating !== undefined) {
 					setExhibitedStarRating(newLSObject.userRating);
@@ -237,6 +237,7 @@ const BookPage = ({ match }) => {
 				);
 				setRecommendWindowMessages(newFriendsInfo.map((_friend) => ''));
 			}
+			setLoadingFriends(false);
 		};
 
 		if (loadingFriends) {
@@ -2397,7 +2398,7 @@ const BookPage = ({ match }) => {
 						</span>
 						<div className="searchbox-area">
 							<input
-								type="text"
+								type="search"
 								placeholder="Search by name"
 								value={recommendWindowSearchBox}
 								onChange={(e) => setRecommendWindowSearchBox(e.target.value)}
@@ -2408,6 +2409,9 @@ const BookPage = ({ match }) => {
 										? 'clear-button'
 										: 'clear-button hidden'
 								}
+								onClick={(e) => {
+									setRecommendWindowSearchBox('');
+								}}
 							></button>
 						</div>
 					</div>
@@ -2423,7 +2427,7 @@ const BookPage = ({ match }) => {
 							)
 							.map((friend, index) => {
 								return (
-									<div className="recommend-window-friend-info">
+									<div className="recommend-window-friend-info" key={index}>
 										<div className="recommend-window-friend-info-left">
 											<img
 												src={
@@ -2441,8 +2445,7 @@ const BookPage = ({ match }) => {
 														{friend.firstName}
 													</span>
 												) : (
-													<input
-														type="text"
+													<textarea
 														className="friend-recommend-message-input"
 														placeholder={`${friend.firstName} would like this book because...`}
 														value={recommendWindowMessages[index]}
@@ -2457,7 +2460,7 @@ const BookPage = ({ match }) => {
 																})
 															)
 														}
-													></input>
+													></textarea>
 												)}
 											</div>
 											<div className="recommend-window-friend-info-right-bottom">
@@ -2470,7 +2473,7 @@ const BookPage = ({ match }) => {
 														setRecommendWindowAddingMessages((previous) =>
 															previous.map((value, i) => {
 																if (i === index) {
-																	return false;
+																	return !value;
 																} else {
 																	return value;
 																}
@@ -2478,7 +2481,9 @@ const BookPage = ({ match }) => {
 														)
 													}
 												>
-													clear message
+													{recommendWindowAddingMessages[index]
+														? 'clear message'
+														: 'add message'}
 												</button>
 											</div>
 										</div>

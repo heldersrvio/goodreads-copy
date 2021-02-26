@@ -1984,7 +1984,8 @@ a.book-page-quotes-section-a {
 	z-index: 11;
 }
 
-.cover-picture-box.hidden {
+.cover-picture-box.hidden,
+.recommend-window.hidden {
 	display: none;
 }
 
@@ -2003,6 +2004,192 @@ a.book-page-quotes-section-a {
 	border-radius: 3px;
 	border: 1px solid rgb(0, 0, 0);
 	z-index: 12;
+}
+
+.recommend-window {
+	position: absolute;
+	top: 0;
+	left: calc(50% - 358.5px);
+	right: calc(50% - 358.5px);
+	z-index: 12;
+	background-color: rgb(255, 255, 255);
+	border-radius: 3px;
+	border: 1px solid rgb(0, 0, 0);
+	width: 717px;
+	height: 479px;
+	padding: 25px;
+}
+
+.recommend-window .content {
+	display: flex;
+	flex-direction: column;
+}
+
+.content .recommend-window-top-area {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	padding-bottom: 15px;
+	border-bottom: 1px solid rgb(204, 204, 204);
+}
+
+.content .recommend-window-top-area-left > span {
+	color: rgb(24, 24, 24);
+	font-family: 'Merriweather', Georgia, serif;
+	font-size: 21px;
+}
+
+.content .recommend-window-top-area-left .searchbox-area {
+	position: relative;
+}
+
+.content .recommend-window-top-area-left .searchbox-area input {
+	width: 326px;
+	height: 23px;
+	padding: 1px;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 20px;
+	color: rgb(51, 51, 51);
+	border: 1px solid rgb(220, 214, 204);
+	border-radius: 3px;
+	font-weight: 400px;
+	margin-top: 20px;
+}
+
+.content .recommend-window-top-area-left .searchbox-area input:focus {
+	border-color: rgb(185, 173, 153);
+	box-shadow: rgba(185, 173, 153, 0.5) 0px 0px 4px 0px;
+}
+
+.content
+	.recommend-window-top-area-left
+	.searchbox-area
+	input::-webkit-search-decoration {
+	-webkit-appearance: searchfield-results-decoration;
+	width: 11px;
+	height: 21px;
+}
+
+.content
+	.recommend-window-top-area-left
+	.searchbox-area
+	input::-webkit-search-cancel-button {
+	position: relative;
+	right: 5px;
+	width: 11px;
+	height: 11px;
+	background: url(https://pro.fontawesome.com/releases/v5.10.0/svgs/solid/times-circle.svg)
+		no-repeat 50% 50%;
+}
+
+.content .recommend-window-top-area-right img {
+	width: 50px;
+	height: 75px;
+}
+
+.content .recommend-window-bottom-area {
+	padding-top: 5px;
+	border-bottom: 1px solid rgb(204, 204, 204);
+	height: 310px;
+}
+
+.content .recommend-window-bottom-area .recommend-window-friend-info {
+	display: flex;
+	flex-direction: row;
+	width: 330px;
+}
+
+.content .recommend-window-bottom-area .recommend-window-friend-info textarea {
+	padding: 5px;
+	width: 201px;
+	height: 43px;
+	border: 1px solid rgb(153, 153, 153);
+	border-radius: 3px;
+	color: rgb(51, 51, 51);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	resize: none;
+	margin-top: 5px;
+	margin-bottom: 10px;
+}
+
+.content
+	.recommend-window-bottom-area
+	.recommend-window-friend-info
+	.friend-name-span {
+	color: rgb(24, 24, 24);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 18px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	display: block;
+}
+
+.content .recommend-window-bottom-area .recommend-window-friend-info-right {
+	display: flex;
+	flex-direction: column;
+	padding-left: 10px;
+	padding-right: 10px;
+	width: 213px;
+}
+
+.content .recommend-window-bottom-area .recommend-window-friend-info:hover {
+	background-color: rgb(236, 245, 229);
+	cursor: pointer;
+}
+
+.content
+	.recommend-window-bottom-area
+	.recommend-window-friend-info-right
+	.recommend-to-friend-button {
+	background-color: rgb(244, 241, 234);
+	border: 1px solid rgb(214, 208, 196);
+	border-radius: 3px;
+	color: rgb(51, 51, 51);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 11px;
+	line-height: 11px;
+	height: 21px;
+	padding: 4px 12px;
+}
+
+.content
+	.recommend-window-bottom-area
+	.recommend-window-friend-info-right
+	.recommend-to-friend-button:hover {
+	background-color: rgb(237, 230, 214);
+}
+
+.content
+	.recommend-window-bottom-area
+	.recommend-window-friend-info-right
+	.clear-message-button {
+	color: rgb(153, 153, 153);
+	padding: 0;
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.content
+	.recommend-window-bottom-area
+	.recommend-window-friend-info-right
+	.clear-message-button:hover {
+	background-color: transparent;
+	text-decoration: underline;
+}
+
+.content .recommend-window-friend-info-right-bottom {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	width: 80%;
+	align-items: center;
+}
+
+.content .recommend-window-bottom-area .recommend-window-friend-info-left img {
+	width: 97px;
+	height: 100px;
 }
 
 .window-close-button {

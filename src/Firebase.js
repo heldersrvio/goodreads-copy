@@ -1218,6 +1218,17 @@ const Firebase = (() => {
 		}
 	};
 
+	const recommendBook = async (sender, receiver, bookId, message) => {
+		const newRec = await Firebase.collection('recommendations').add({
+			sender,
+			receiver,
+			bookId,
+		});
+		if (message.length > 0) {
+			newRec.set({ message }, { merge: true });
+		}
+	};
+
 	return {
 		pageGenerator,
 		queryBookById,
@@ -1243,6 +1254,7 @@ const Firebase = (() => {
 		addBookToUserShelf,
 		likeUnlikeReview,
 		followUnfollowAuthor,
+		recommendBook,
 	};
 })();
 
