@@ -779,7 +779,7 @@ const Firebase = (() => {
 		}*/
 	};
 
-	const getFriendsInfo = async (userUID) => {
+	const getFriendsInfo = async (userUID, history) => {
 		try {
 			const friendsQuery = await database
 				.collection('users')
@@ -802,26 +802,38 @@ const Firebase = (() => {
 				})
 			);
 		} catch (error) {
-			console.log(error);
+			history.push({
+				pathname: '/user/sign_in',
+				state: { error: error.message },
+			});
+			return [];
 		}
 	};
 
 	const queryBookRecommendedToFriendsStatus = async (
 		userUID,
 		bookId,
-		friendIds
+		friendIds,
+		history
 	) => {
-		return await Promise.all(
-			friendIds.map(async (id) => {
-				const recommendationQuery = await database
-					.collection('recommendations')
-					.where('sender', '==', userUID)
-					.where('bookId', '==', bookId)
-					.where('receiver', '==', id)
-					.get();
-				return recommendationQuery.docs.length > 0;
-			})
-		);
+		try {
+			return await Promise.all(
+				friendIds.map(async (id) => {
+					const recommendationQuery = await database
+						.collection('recommendations')
+						.where('sender', '==', userUID)
+						.where('bookId', '==', bookId)
+						.where('receiver', '==', id)
+						.get();
+					return recommendationQuery.docs.length > 0;
+				})
+			);
+		} catch (error) {
+			history.push({
+				pathname: '/user/sign_in',
+				state: { error: error.message },
+			});
+		}
 	};
 
 	const setNewNotificationsToSeen = async () => {
@@ -1004,55 +1016,62 @@ const Firebase = (() => {
 		return newUserInfo;
 	};
 
-	const addBookToShelf = async (userUID, bookId, status) => {
-		const userInstanceQuery = await database
-			.collection('userBooksInstances')
-			.where('userId', '==', userUID)
-			.where('bookId', '==', bookId)
-			.get();
-		if (userInstanceQuery.docs.length > 0) {
-			if (userInstanceQuery.docs[0].data().status === 'to-read') {
-				await changeBookPosition(userUID, bookId, 10000);
-			}
-			if (status === 'to-read') {
-				const lowestPositionQuery = await database
-					.collection('userBooksInstances')
-					.where('userId', '==', userUID)
-					.orderBy('position', 'desc')
-					.limit(1)
-					.get();
-				if (lowestPositionQuery.docs.length > 0) {
-					await database
+	const addBookToShelf = async (userUID, bookId, status, history) => {
+		if (userUID === undefined || userUID === null) {
+			history.push({
+				pathname: '/user/sign_in',
+				state: { error: 'User not logged in' },
+			});
+		} else {
+			const userInstanceQuery = await database
+				.collection('userBooksInstances')
+				.where('userId', '==', userUID)
+				.where('bookId', '==', bookId)
+				.get();
+			if (userInstanceQuery.docs.length > 0) {
+				if (userInstanceQuery.docs[0].data().status === 'to-read') {
+					await changeBookPosition(userUID, bookId, 10000);
+				}
+				if (status === 'to-read') {
+					const lowestPositionQuery = await database
 						.collection('userBooksInstances')
-						.doc(userInstanceQuery.docs[0].id)
-						.set(
-							{
-								status,
-								position: lowestPositionQuery.docs[0].data().position + 1,
-							},
-							{ merge: true }
-						);
+						.where('userId', '==', userUID)
+						.orderBy('position', 'desc')
+						.limit(1)
+						.get();
+					if (lowestPositionQuery.docs.length > 0) {
+						await database
+							.collection('userBooksInstances')
+							.doc(userInstanceQuery.docs[0].id)
+							.set(
+								{
+									status,
+									position: lowestPositionQuery.docs[0].data().position + 1,
+								},
+								{ merge: true }
+							);
+					} else {
+						await database
+							.collection('userBooksInstances')
+							.doc(userInstanceQuery.docs[0].id)
+							.set({ status, position: 1 }, { merge: true });
+					}
 				} else {
 					await database
 						.collection('userBooksInstances')
 						.doc(userInstanceQuery.docs[0].id)
-						.set({ status, position: 1 }, { merge: true });
+						.set({ status }, { merge: true });
 				}
 			} else {
-				await database
-					.collection('userBooksInstances')
-					.doc(userInstanceQuery.docs[0].id)
-					.set({ status }, { merge: true });
-			}
-		} else {
-			if (status === 'to-read') {
-				await database
-					.collection('userBooksInstances')
-					.add({ bookId, userId: userUID, status, position: 1 });
-			} else {
-				await database
-					.collection('userBooksInstances')
-					.add({ bookId, userId: userUID, status });
+				if (status === 'to-read') {
+					await database
+						.collection('userBooksInstances')
+						.add({ bookId, userId: userUID, status, position: 1 });
+				} else {
+					await database
+						.collection('userBooksInstances')
+						.add({ bookId, userId: userUID, status });
+				}
 			}
 		}
 	};
@@ -1082,28 +1101,35 @@ const Firebase = (() => {
 		}
 	};
 
-	const rateBook = async (userUID, bookId, rating) => {
-		const userInstanceQuery = await database
-			.collection('userBooksInstances')
-			.where('userId', '==', userUID)
-			.where('bookId', '==', bookId)
-			.get();
-		if (userInstanceQuery.docs.length > 0) {
-			if (rating !== undefined) {
-				await database
-					.collection('userBooksInstances')
-					.doc(userInstanceQuery.docs[0].id)
-					.set({ rating }, { merge: true });
+	const rateBook = async (userUID, bookId, rating, history) => {
+		if (userUID === undefined || userUID === null) {
+			history.push({
+				pathname: '/user/sign_in',
+				state: { error: 'User not logged in' },
+			});
+		} else {
+			const userInstanceQuery = await database
+				.collection('userBooksInstances')
+				.where('userId', '==', userUID)
+				.where('bookId', '==', bookId)
+				.get();
+			if (userInstanceQuery.docs.length > 0) {
+				if (rating !== undefined) {
+					await database
+						.collection('userBooksInstances')
+						.doc(userInstanceQuery.docs[0].id)
+						.set({ rating }, { merge: true });
+				} else {
+					await database
+						.collection('userBooksInstances')
+						.doc(userInstanceQuery.docs[0].id)
+						.update({ rating: firebase.firestore.FieldValue.delete() });
+				}
 			} else {
 				await database
 					.collection('userBooksInstances')
-					.doc(userInstanceQuery.docs[0].id)
-					.update({ rating: firebase.firestore.FieldValue.delete() });
+					.add({ bookId, userId: userUID, status: 'read', rating });
 			}
-		} else {
-			await database
-				.collection('userBooksInstances')
-				.add({ bookId, userId: userUID, status: 'read', rating });
 		}
 	};
 
@@ -1171,68 +1197,97 @@ const Firebase = (() => {
 		}
 	};
 
-	const addBookToUserShelf = async (userUID, rootBook, shelf, genre = null) => {
-		const shelfQuery = await database
-			.collection('shelves')
-			.where('user', '==', userUID)
-			.where('shelf', '==', shelf)
-			.get();
-		if (shelfQuery.docs.length === 0) {
-			await database
-				.collection('shelves')
-				.add({ user: userUID, rootBooks: [rootBook], genre, name: shelf });
+	const addBookToUserShelf = async (
+		userUID,
+		rootBook,
+		shelf,
+		genre = null,
+		history
+	) => {
+		if (userUID === undefined || userUID === null) {
+			history.push({
+				pathname: '/user/sign_in',
+				state: { error: 'User not logged in' },
+			});
 		} else {
-			if (!shelfQuery.docs[0].data().rootBooks.includes(rootBook)) {
+			const shelfQuery = await database
+				.collection('shelves')
+				.where('user', '==', userUID)
+				.where('shelf', '==', shelf)
+				.get();
+			if (shelfQuery.docs.length === 0) {
 				await database
 					.collection('shelves')
-					.doc(shelfQuery.docs[0].id)
-					.set(
-						{
-							rootBooks: shelfQuery.docs[0].data().rootBooks.concat([rootBook]),
-						},
-						{ merge: true }
-					);
+					.add({ user: userUID, rootBooks: [rootBook], genre, name: shelf });
+			} else {
+				if (!shelfQuery.docs[0].data().rootBooks.includes(rootBook)) {
+					await database
+						.collection('shelves')
+						.doc(shelfQuery.docs[0].id)
+						.set(
+							{
+								rootBooks: shelfQuery.docs[0]
+									.data()
+									.rootBooks.concat([rootBook]),
+							},
+							{ merge: true }
+						);
+				}
 			}
 		}
 	};
 
-	const likeUnlikeReview = async (userUID, reviewId) => {
-		const reviewRef = database.collection('reviews').doc(reviewId);
-		const reviewQuery = await reviewRef.get();
-		if (!reviewQuery.data().usersWhoLiked.includes(userUID)) {
-			await reviewRef.set(
-				{ usersWhoLiked: reviewQuery.data().usersWhoLiked.concat([userUID]) },
-				{ merge: true }
-			);
+	const likeUnlikeReview = async (userUID, reviewId, history) => {
+		if (userUID === undefined || userUID === null) {
+			history.push({
+				pathname: '/user/sign_in',
+				state: { error: 'User not logged in' },
+			});
 		} else {
-			await reviewRef.set(
-				{
-					usersWhoLiked: reviewQuery
-						.data()
-						.usersWhoLiked.filter((userId) => userId !== userUID),
-				},
-				{ merge: true }
-			);
+			const reviewRef = database.collection('reviews').doc(reviewId);
+			const reviewQuery = await reviewRef.get();
+			if (!reviewQuery.data().usersWhoLiked.includes(userUID)) {
+				await reviewRef.set(
+					{ usersWhoLiked: reviewQuery.data().usersWhoLiked.concat([userUID]) },
+					{ merge: true }
+				);
+			} else {
+				await reviewRef.set(
+					{
+						usersWhoLiked: reviewQuery
+							.data()
+							.usersWhoLiked.filter((userId) => userId !== userUID),
+					},
+					{ merge: true }
+				);
+			}
 		}
 	};
 
-	const followUnfollowAuthor = async (userUID, authorId) => {
-		const authorRef = database.collection('authors').doc(authorId);
-		const authorQuery = await authorRef.get();
-		if (!authorQuery.data().followerIds.includes(userUID)) {
-			await authorRef.set(
-				{ followerIds: authorQuery.data().followerIds.concat([userUID]) },
-				{ merge: true }
-			);
+	const followUnfollowAuthor = async (userUID, authorId, history) => {
+		if (userUID === undefined || userUID === null) {
+			history.push({
+				pathname: '/user/sign_in',
+				state: { error: 'User not logged in' },
+			});
 		} else {
-			await authorRef.set(
-				{
-					followerIds: authorQuery
-						.data()
-						.followerIds.filter((userId) => userId !== userUID),
-				},
-				{ merge: true }
-			);
+			const authorRef = database.collection('authors').doc(authorId);
+			const authorQuery = await authorRef.get();
+			if (!authorQuery.data().followerIds.includes(userUID)) {
+				await authorRef.set(
+					{ followerIds: authorQuery.data().followerIds.concat([userUID]) },
+					{ merge: true }
+				);
+			} else {
+				await authorRef.set(
+					{
+						followerIds: authorQuery
+							.data()
+							.followerIds.filter((userId) => userId !== userUID),
+					},
+					{ merge: true }
+				);
+			}
 		}
 	};
 

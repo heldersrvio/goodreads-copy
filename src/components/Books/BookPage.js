@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef, useLayoutEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import Firebase from '../../Firebase';
 import { format } from 'date-fns';
 import '../styles/Books/BookPage.css';
@@ -9,10 +10,10 @@ import HomePageFootBar from '../Authentication/HomePageFootBar';
 TODO:
 - Functionality:
 	- Rating details
-	- Redirect to sign in page
 */
 
 const BookPage = ({ match }) => {
+	const history = useHistory();
 	const {
 		params: { bookPageId },
 	} = match;
@@ -232,27 +233,27 @@ const BookPage = ({ match }) => {
 
 	useEffect(() => {
 		const queryFriends = async () => {
-			if (user.userUID !== undefined && user.userUID !== null) {
-				const newFriendsInfo = await Firebase.getFriendsInfo(user.userUID);
-				setFriendsInfo(newFriendsInfo);
-				setRecommendWindowAddingMessages(
-					newFriendsInfo.map((_friend) => false)
-				);
-				setRecommendWindowMessages(newFriendsInfo.map((_friend) => ''));
-				const recommendedToFriendsStatus = await Firebase.queryBookRecommendedToFriendsStatus(
-					user.userUID,
-					bookInfo.id,
-					newFriendsInfo.map((friend) => friend.id)
-				);
-				setRecommendWindowSentStatuses(recommendedToFriendsStatus);
-			}
-			setLoadingFriends(false);
+			const newFriendsInfo = await Firebase.getFriendsInfo(
+				user.userUID,
+				history
+			);
+			setFriendsInfo(newFriendsInfo);
+			setRecommendWindowAddingMessages(newFriendsInfo.map((_friend) => false));
+			setRecommendWindowMessages(newFriendsInfo.map((_friend) => ''));
+			const recommendedToFriendsStatus = await Firebase.queryBookRecommendedToFriendsStatus(
+				user.userUID,
+				bookInfo.id,
+				newFriendsInfo.map((friend) => friend.id),
+				history
+			);
+			setRecommendWindowSentStatuses(recommendedToFriendsStatus);
 		};
+		setLoadingFriends(false);
 
 		if (loadingFriends) {
 			queryFriends();
 		}
-	}, [loadingFriends, user.userUID, bookInfo.id]);
+	}, [loadingFriends, user.userUID, bookInfo.id, history]);
 
 	useLayoutEffect(() => {
 		if (authorAboutP.current !== undefined) {
@@ -318,13 +319,9 @@ const BookPage = ({ match }) => {
 	};
 
 	const changeBookShelf = async (shelf) => {
-		if (
-			user.userUID !== null &&
-			user.userUID !== undefined &&
-			bookInfo.id !== undefined
-		) {
+		if (bookInfo.id !== undefined) {
 			setSavingShelf(true);
-			await Firebase.addBookToShelf(user.userUID, bookInfo.id, shelf);
+			await Firebase.addBookToShelf(user.userUID, bookInfo.id, shelf, history);
 			setBookInfo((previous) => {
 				return {
 					...previous,
@@ -336,12 +333,8 @@ const BookPage = ({ match }) => {
 	};
 
 	const rateBook = async (rating) => {
-		if (
-			user.userUID !== null &&
-			user.userUID !== undefined &&
-			bookInfo.id !== undefined
-		) {
-			await Firebase.rateBook(user.userUID, bookInfo.id, rating);
+		if (bookInfo.id !== undefined) {
+			await Firebase.rateBook(user.userUID, bookInfo.id, rating, history);
 			setBookInfo((previous) => {
 				return {
 					...previous,
@@ -405,11 +398,15 @@ const BookPage = ({ match }) => {
 								/>{' '}
 								of {bookInfo.pageCount}.{' '}
 								<a
-									href={Firebase.pageGenerator.generateUserShelfPage(
-										user.userUID,
-										'Helder',
-										'reading'
-									)}
+									href={
+										user.userUID !== undefined && user.userUID !== null
+											? Firebase.pageGenerator.generateUserShelfPage(
+													user.userUID,
+													user.userInfo.firstName,
+													'reading'
+											  )
+											: '/user/sign_in'
+									}
 								>
 									View shelf
 								</a>
@@ -478,11 +475,15 @@ const BookPage = ({ match }) => {
 							</a>
 							<span>·</span>
 							<a
-								href={Firebase.pageGenerator.generateUserShelfPage(
-									user.userUID,
-									'Helder',
-									'to-read'
-								)}
+								href={
+									user.userUID !== undefined && user.userUID !== null
+										? Firebase.pageGenerator.generateUserShelfPage(
+												user.userUID,
+												user.userInfo.firstName,
+												'to-read'
+										  )
+										: '/user/sign_in'
+								}
 							>
 								View shelf
 							</a>
@@ -527,11 +528,15 @@ const BookPage = ({ match }) => {
 						{isShelfPopupBottomHidden ? (
 							<div className="shelf-pop-up-bottom">
 								<a
-									href={Firebase.pageGenerator.generateUserShelfPage(
-										user.userUID,
-										'Helder',
-										'to-read'
-									)}
+									href={
+										user.userUID !== undefined && user.userUID !== null
+											? Firebase.pageGenerator.generateUserShelfPage(
+													user.userUID,
+													user.userInfo.firstName,
+													'to-read'
+											  )
+											: '/user/sign_in'
+									}
 								>
 									View shelf
 								</a>
@@ -639,7 +644,9 @@ const BookPage = ({ match }) => {
 									await Firebase.addBookToUserShelf(
 										user.userUID,
 										bookInfo.rootBook,
-										addShelfInput
+										addShelfInput,
+										null,
+										history
 									);
 									setIsAddShelfInputSectionHidden(true);
 								}
@@ -1208,21 +1215,33 @@ const BookPage = ({ match }) => {
 					></img>
 				</div>
 				<div className="start-your-review-section-right">
-					<span>
-						<a
-							href={Firebase.pageGenerator.generateUserPage(
-								user.userUID,
-								user.userInfo.firstName
-							)}
-						>
-							{user.userInfo.firstName},
-						</a>{' '}
-						{`start your review of ${bookInfo.title} ${
+					{user.userUID !== undefined && user.userUID !== null ? (
+						<span>
+							<a
+								href={
+									user.userUID !== undefined && user.userUID !== null
+										? Firebase.pageGenerator.generateUserPage(
+												user.userUID,
+												user.userInfo.firstName
+										  )
+										: '/user/sign_in'
+								}
+							>
+								{user.userInfo.firstName},
+							</a>{' '}
+							{`start your review of ${bookInfo.title} ${
+								bookInfo.series !== undefined
+									? `(${bookInfo.series.name} #${bookInfo.seriesInstance})`
+									: null
+							}`}
+						</span>
+					) : (
+						<span>{`Start your review of ${bookInfo.title} ${
 							bookInfo.series !== undefined
 								? `(${bookInfo.series.name} #${bookInfo.seriesInstance})`
 								: null
-						}`}
-					</span>
+						}`}</span>
+					)}
 					<div className="start-your-review-section-right-stars-write">
 						<div className="start-your-review-section-right-stars">
 							<div
@@ -1302,9 +1321,13 @@ const BookPage = ({ match }) => {
 							></div>
 						</div>
 						<a
-							href={Firebase.pageGenerator.generateWriteReviewPageForBook(
-								bookInfo.id
-							)}
+							href={
+								user.userUID !== undefined && user.userUID !== null
+									? Firebase.pageGenerator.generateWriteReviewPageForBook(
+											bookInfo.id
+									  )
+									: '/user/sign_in'
+							}
 							className="write-review-button"
 						>
 							Write a review
@@ -1482,7 +1505,11 @@ const BookPage = ({ match }) => {
 									<button
 										className="book-page-review-like-button"
 										onClick={async (_e) => {
-											await Firebase.likeUnlikeReview(user.userUID, review.id);
+											await Firebase.likeUnlikeReview(
+												user.userUID,
+												review.id,
+												history
+											);
 											setBookInfo((previous) => {
 												return {
 													...previous,
@@ -2118,7 +2145,8 @@ const BookPage = ({ match }) => {
 								setLoadingFollowAuthor(true);
 								await Firebase.followUnfollowAuthor(
 									user.userUID,
-									bookInfo.mainAuthorId
+									bookInfo.mainAuthorId,
+									history
 								);
 								setLoadingFollowAuthor(false);
 								setBookInfo((previous) => {
