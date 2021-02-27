@@ -80,7 +80,10 @@ const BookPage = ({ match }) => {
 		topRatingDetailsPopupHidden,
 		setTopRatingDetailsPopupHidden,
 	] = useState(true);
-	//const [bottomRatingDetailsPopupHidden, setBottomRatingDetailsPopupHidden] = useState(true);
+	const [
+		bottomRatingDetailsPopupHidden,
+		setBottomRatingDetailsPopupHidden,
+	] = useState(true);
 
 	const user = JSON.parse(localStorage.getItem('userState'));
 
@@ -96,7 +99,7 @@ const BookPage = ({ match }) => {
 				}
 				i++;
 			}
-			const lSObjectItem = localStorage.getItem(`${bookId}Obj`);
+			/*const lSObjectItem = localStorage.getItem(`${bookId}Obj`);
 			if (lSObjectItem !== null) {
 				const lSObject = JSON.parse(lSObjectItem);
 				console.log('Loaded book from storage');
@@ -106,7 +109,7 @@ const BookPage = ({ match }) => {
 						case 'editionPublishedDate':
 							newLSObject[key] = new Date(2006, 9, 1);
 							break;
-						/*case 'otherEditionsPages':
+						/case 'otherEditionsPages':
 							newLSObject[key] = [
 								'/book/show/6277040.the-dark-tower',
 								'book/show/408854.The_Dark_Tower',
@@ -140,7 +143,7 @@ const BookPage = ({ match }) => {
 							break;
 						case 'fiveRatings':
 							newLSObject[key] = 20;
-							break;*/
+							break;/
 						case 'reviews':
 							newLSObject[key] = [{}];
 							Object.keys(lSObject[key][0]).forEach((key2) => {
@@ -150,6 +153,10 @@ const BookPage = ({ match }) => {
 									newLSObject[key][0][key2] = lSObject[key][0][key2];
 								}
 							});
+							break;
+						case 'thisEditionRating':
+							console.log(lSObject[key]);
+							newLSObject[key] = lSObject[key];
 							break;
 						default:
 							newLSObject[key] = lSObject[key];
@@ -173,14 +180,14 @@ const BookPage = ({ match }) => {
 				if (newLSObject.userRating !== undefined) {
 					setExhibitedStarRating(newLSObject.userRating);
 				}
-			} else {
-				const bookObj = await Firebase.queryBookById(user.userUID, bookId);
-				localStorage.setItem(`${bookId}Obj`, JSON.stringify(bookObj));
-				setBookInfo(bookObj);
-				if (bookObj.userRating !== undefined) {
-					setExhibitedStarRating(bookObj.userRating);
-				}
+			} else {*/
+			const bookObj = await Firebase.queryBookById(user.userUID, bookId);
+			localStorage.setItem(`${bookId}Obj`, JSON.stringify(bookObj));
+			setBookInfo(bookObj);
+			if (bookObj.userRating !== undefined) {
+				setExhibitedStarRating(bookObj.userRating);
 			}
+			//}
 			setLoaded(true);
 		};
 		getBookInfo();
@@ -863,303 +870,356 @@ const BookPage = ({ match }) => {
 		</div>
 	) : null;
 
-	const bookPageRatingsArea = loaded ? (
-		<div className="book-page-ratings-area">
-			<div className="book-page-general-rating">
-				<div className="book-page-general-rating-stars">
-					<div
-						className={
-							generalRating >= 1
-								? 'static-star small full'
-								: generalRating >= 0.5
-								? 'static-star small almost-full'
-								: generalRating > 0
-								? 'static-star small almost-empty'
-								: 'static-star small empty'
-						}
-					></div>
-					<div
-						className={
-							generalRating >= 2
-								? 'static-star small full'
-								: generalRating >= 1.5
-								? 'static-star small almost-full'
-								: generalRating > 1
-								? 'static-star small almost-empty'
-								: 'static-star small empty'
-						}
-					></div>
-					<div
-						className={
-							generalRating >= 3
-								? 'static-star small full'
-								: generalRating >= 2.5
-								? 'static-star small almost-full'
-								: generalRating > 2
-								? 'static-star small almost-empty'
-								: 'static-star small empty'
-						}
-					></div>
-					<div
-						className={
-							generalRating >= 4
-								? 'static-star small full'
-								: generalRating >= 3.5
-								? 'static-star small almost-full'
-								: generalRating > 3
-								? 'static-star small almost-empty'
-								: 'static-star small empty'
-						}
-					></div>
-					<div
-						className={
-							generalRating >= 5
-								? 'static-star small full'
-								: generalRating >= 4.5
-								? 'static-star small almost-full'
-								: generalRating > 4
-								? 'static-star small almost-empty'
-								: 'static-star small empty'
-						}
-					></div>
-				</div>
-				<span>{!isNaN(generalRating) ? generalRating : ''}</span>
-			</div>
-			<span className="book-page-ratings-dot">·</span>
-			<button
-				className="rating-details"
-				onClick={(_e) =>
-					setTopRatingDetailsPopupHidden((previous) => !previous)
+	const generateBookPageRatingsArea = (isTop) => {
+		return loaded ? (
+			<div
+				className={
+					isTop ? 'book-page-ratings-area top' : 'book-page-ratings-area bottom'
 				}
 			>
-				<div className="svg-container">
-					<svg width="12" height="11">
-						<rect
-							width={
-								ratingCount !== 0
-									? (bookInfo.fiveRatings * 16) / ratingCount
-									: 0
+				<div className="book-page-general-rating">
+					<div className="book-page-general-rating-stars">
+						<div
+							className={
+								generalRating >= 1
+									? 'static-star small full'
+									: generalRating >= 0.5
+									? 'static-star small almost-full'
+									: generalRating > 0
+									? 'static-star small almost-empty'
+									: 'static-star small empty'
 							}
-							height="2"
-							y="0"
-							fill="rgb(33,86,37)"
-						></rect>
-						<rect
-							width={
-								ratingCount !== 0
-									? (bookInfo.fourRatings * 16) / ratingCount
-									: 0
+						></div>
+						<div
+							className={
+								generalRating >= 2
+									? 'static-star small full'
+									: generalRating >= 1.5
+									? 'static-star small almost-full'
+									: generalRating > 1
+									? 'static-star small almost-empty'
+									: 'static-star small empty'
 							}
-							height="2"
-							y="3"
-							fill="rgb(33,86,37)"
-						></rect>
-						<rect
-							width={
-								ratingCount !== 0
-									? (bookInfo.threeRatings * 16) / ratingCount
-									: 0
+						></div>
+						<div
+							className={
+								generalRating >= 3
+									? 'static-star small full'
+									: generalRating >= 2.5
+									? 'static-star small almost-full'
+									: generalRating > 2
+									? 'static-star small almost-empty'
+									: 'static-star small empty'
 							}
-							height="2"
-							y="6"
-							fill="rgb(33,86,37)"
-						></rect>
-						<rect
-							width={
-								ratingCount !== 0 ? (bookInfo.twoRatings * 16) / ratingCount : 0
+						></div>
+						<div
+							className={
+								generalRating >= 4
+									? 'static-star small full'
+									: generalRating >= 3.5
+									? 'static-star small almost-full'
+									: generalRating > 3
+									? 'static-star small almost-empty'
+									: 'static-star small empty'
 							}
-							height="2"
-							y="9"
-							fill="rgb(33,86,37)"
-						></rect>
-						<rect
-							width={
-								ratingCount !== 0 ? (bookInfo.oneRatings * 16) / ratingCount : 0
+						></div>
+						<div
+							className={
+								generalRating >= 5
+									? 'static-star small full'
+									: generalRating >= 4.5
+									? 'static-star small almost-full'
+									: generalRating > 4
+									? 'static-star small almost-empty'
+									: 'static-star small empty'
 							}
-							height="2"
-							y="12"
-							fill="rgb(33,86,37)"
-						></rect>
-					</svg>
+						></div>
+					</div>
+					<span>{!isNaN(generalRating) ? generalRating : ''}</span>
 				</div>
-				<span>Rating details</span>
+				<span className="book-page-ratings-dot">·</span>
 				<div
-					className={
-						topRatingDetailsPopupHidden
-							? 'rating-details-popup hidden'
-							: 'rating-details-popup'
-					}
+					className="rating-details"
+					onMouseOver={(_e) => {
+						if (!isTop) {
+							setBottomRatingDetailsPopupHidden(false);
+						}
+					}}
+					onMouseLeave={(e) => {
+						if (
+							!isTop &&
+							(e.clientX > 974 ||
+								e.clientX < 375 ||
+								e.clientY > 308 ||
+								e.clientY < 80)
+						) {
+							setBottomRatingDetailsPopupHidden(true);
+						}
+					}}
 				>
-					<span className="rating-details-top-title">Rating details</span>
-					<button
-						className="rating-details-top-close-button"
-						onClick={(_e) => setTopRatingDetailsPopupHidden(true)}
-					></button>
-					<table className="rating-distribution">
-						<tbody>
-							<tr>
-								<th width="25" className="rating-and-star">
-									5<div className="static-star small full"></div>
-								</th>
-								<td
-									width={
-										ratingCount !== 0
-											? (bookInfo.fiveRatings * 350) / mostFrequentRating
-											: 0
-									}
-								>
-									<div className="green-bar"></div>
-								</td>
-								<td width="90">
-									{`${
-										ratingCount !== 0
-											? Math.round((bookInfo.fiveRatings * 100) / ratingCount)
-											: 0
-									}% (${bookInfo.fiveRatings})`}
-								</td>
-							</tr>
-							<tr>
-								<th width="25" className="rating-and-star">
-									4<div className="static-star small full"></div>
-								</th>
-								<td
-									width={
-										ratingCount !== 0
-											? (bookInfo.fourRatings * 350) / mostFrequentRating
-											: 0
-									}
-								>
-									<div className="green-bar"></div>
-								</td>
-								<td width="90">
-									{`${
-										ratingCount !== 0
-											? Math.round((bookInfo.fourRatings * 100) / ratingCount)
-											: 0
-									}% (${bookInfo.fourRatings})`}
-								</td>
-							</tr>
-							<tr>
-								<th width="25" className="rating-and-star">
-									3<div className="static-star small full"></div>
-								</th>
-								<td
-									width={
-										ratingCount !== 0
-											? (bookInfo.threeRatings * 350) / mostFrequentRating
-											: 0
-									}
-								>
-									<div className="green-bar"></div>
-								</td>
-								<td width="90">
-									{`${
-										ratingCount !== 0
-											? Math.round((bookInfo.threeRatings * 100) / ratingCount)
-											: 0
-									}% (${bookInfo.threeRatings})`}
-								</td>
-							</tr>
-							<tr>
-								<th width="25" className="rating-and-star">
-									2<div className="static-star small full"></div>
-								</th>
-								<td
-									width={
-										ratingCount !== 0
-											? (bookInfo.threeRatings * 350) / mostFrequentRating
-											: 0
-									}
-								>
-									<div className="green-bar"></div>
-								</td>
-								<td width="90">
-									{`${
-										ratingCount !== 0
-											? Math.round((bookInfo.threeRatings * 100) / ratingCount)
-											: 0
-									}% (${bookInfo.threeRatings})`}
-								</td>
-							</tr>
-							<tr>
-								<th width="25" className="rating-and-star">
-									1<div className="static-star small full"></div>
-								</th>
-								<td
-									width={
-										ratingCount !== 0
-											? (bookInfo.oneRatings * 350) / mostFrequentRating
-											: 0
-									}
-								>
-									<div className="green-bar"></div>
-								</td>
-								<td width="90">
-									{`${
-										ratingCount !== 0
-											? Math.round((bookInfo.oneRatings * 100) / ratingCount)
-											: 0
-									}% (${bookInfo.oneRatings})`}
-								</td>
-							</tr>
-						</tbody>
-					</table>
-					<span className="percent-of-people-who-liked">
-						<span className="number">
-							{ratingCount !== 0
-								? ((bookInfo.fiveRatings +
-										bookInfo.fourRatings +
-										bookInfo.threeRatings) *
-										100) /
-								  ratingCount
-								: 0}
-						</span>
-						% of people liked it
-					</span>
-					<span className="all-editions-info">
-						<span className="title">All editions: </span>
-						<span className="number">{generalRating}</span> average rating,{' '}
-						<span className="number">{ratingCount}</span> ratings,{' '}
-						<span className="number">{bookInfo.reviews.length}</span> reviews,
-						added by <span className="number">{bookInfo.addedBy}</span> people,{' '}
-						<span className="number">{bookInfo.toReads}</span> to-reads
-					</span>
-					<span className="this-edition-info">
-						<span className="title">This edition: </span>
-						<span className="number">{bookInfo.thisEditionRating}</span> average
-						rating,{' '}
-						<span className="number">{bookInfo.thisEditionRatings}</span>{' '}
-						ratings,{' '}
-						<span className="number">
-							{
-								bookInfo.reviews.filter(
-									(review) => review.edition === bookInfo.id
-								).length
+					<div className="svg-container">
+						<svg width="12" height="11">
+							<rect
+								width={
+									ratingCount !== 0
+										? (bookInfo.fiveRatings * 16) / ratingCount
+										: 0
+								}
+								height="2"
+								y="0"
+								fill="rgb(33,86,37)"
+							></rect>
+							<rect
+								width={
+									ratingCount !== 0
+										? (bookInfo.fourRatings * 16) / ratingCount
+										: 0
+								}
+								height="2"
+								y="3"
+								fill="rgb(33,86,37)"
+							></rect>
+							<rect
+								width={
+									ratingCount !== 0
+										? (bookInfo.threeRatings * 16) / ratingCount
+										: 0
+								}
+								height="2"
+								y="6"
+								fill="rgb(33,86,37)"
+							></rect>
+							<rect
+								width={
+									ratingCount !== 0
+										? (bookInfo.twoRatings * 16) / ratingCount
+										: 0
+								}
+								height="2"
+								y="9"
+								fill="rgb(33,86,37)"
+							></rect>
+							<rect
+								width={
+									ratingCount !== 0
+										? (bookInfo.oneRatings * 16) / ratingCount
+										: 0
+								}
+								height="2"
+								y="12"
+								fill="rgb(33,86,37)"
+							></rect>
+						</svg>
+					</div>
+					<span
+						onClick={(_e) => {
+							if (isTop) {
+								setTopRatingDetailsPopupHidden(false);
 							}
-						</span>{' '}
-						reviews, added by{' '}
-						<span className="number">{bookInfo.thisEditionAddedBy}</span> people
+						}}
+					>
+						Rating details
 					</span>
+					<div
+						className={
+							(isTop && !topRatingDetailsPopupHidden) ||
+							(!isTop && !bottomRatingDetailsPopupHidden)
+								? 'rating-details-popup'
+								: 'rating-details-popup hidden'
+						}
+					>
+						<div className="rating-details-popup-tip"></div>
+						<span className="rating-details-top-title">
+							{isTop ? 'Rating details' : 'book data'}
+						</span>
+						{isTop ? (
+							<button
+								className="rating-details-top-close-button"
+								onClick={(_e) => setTopRatingDetailsPopupHidden(true)}
+							></button>
+						) : null}
+						<table className="rating-distribution">
+							<tbody>
+								<tr>
+									<th width="25" className="rating-and-star">
+										5<div className="static-star small full"></div>
+									</th>
+									<td className="green-bar-container">
+										<div
+											className="green-bar"
+											style={{
+												width:
+													ratingCount !== 0
+														? (bookInfo.fiveRatings * 350) / mostFrequentRating
+														: 0,
+											}}
+										></div>
+									</td>
+									<td width="90" className="rating-percentage-and-absolute">
+										{`${
+											ratingCount !== 0
+												? Math.round((bookInfo.fiveRatings * 100) / ratingCount)
+												: 0
+										}% (${bookInfo.fiveRatings})`}
+									</td>
+								</tr>
+								<tr>
+									<th width="25" className="rating-and-star">
+										4<div className="static-star small full"></div>
+									</th>
+									<td className="green-bar-container">
+										<div
+											className="green-bar"
+											style={{
+												width:
+													ratingCount !== 0
+														? (bookInfo.fourRatings * 350) / mostFrequentRating
+														: 0,
+											}}
+										></div>
+									</td>
+									<td width="90" className="rating-percentage-and-absolute">
+										{`${
+											ratingCount !== 0
+												? Math.round((bookInfo.fourRatings * 100) / ratingCount)
+												: 0
+										}% (${bookInfo.fourRatings})`}
+									</td>
+								</tr>
+								<tr>
+									<th width="25" className="rating-and-star">
+										3<div className="static-star small full"></div>
+									</th>
+									<td className="green-bar-container">
+										<div
+											className="green-bar"
+											style={{
+												width:
+													ratingCount !== 0
+														? (bookInfo.threeRatings * 350) / mostFrequentRating
+														: 0,
+											}}
+										></div>
+									</td>
+									<td width="90" className="rating-percentage-and-absolute">
+										{`${
+											ratingCount !== 0
+												? Math.round(
+														(bookInfo.threeRatings * 100) / ratingCount
+												  )
+												: 0
+										}% (${bookInfo.threeRatings})`}
+									</td>
+								</tr>
+								<tr>
+									<th width="25" className="rating-and-star">
+										2<div className="static-star small full"></div>
+									</th>
+									<td className="green-bar-container">
+										<div
+											className="green-bar"
+											style={{
+												width:
+													ratingCount !== 0
+														? (bookInfo.twoRatings * 350) / mostFrequentRating
+														: 0,
+											}}
+										></div>
+									</td>
+									<td width="90" className="rating-percentage-and-absolute">
+										{`${
+											ratingCount !== 0
+												? Math.round((bookInfo.twoRatings * 100) / ratingCount)
+												: 0
+										}% (${bookInfo.threeRatings})`}
+									</td>
+								</tr>
+								<tr>
+									<th width="25" className="rating-and-star">
+										1<div className="static-star small full"></div>
+									</th>
+									<td className="green-bar-container">
+										<div
+											className="green-bar"
+											style={{
+												width:
+													ratingCount !== 0
+														? (bookInfo.oneRatings * 350) / mostFrequentRating
+														: 0,
+											}}
+										></div>
+									</td>
+									<td width="90" className="rating-percentage-and-absolute">
+										{`${
+											ratingCount !== 0
+												? Math.round((bookInfo.oneRatings * 100) / ratingCount)
+												: 0
+										}% (${bookInfo.oneRatings})`}
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<span className="percent-of-people-who-liked">
+							<span className="number">
+								{ratingCount !== 0
+									? Math.round(
+											((bookInfo.fiveRatings +
+												bookInfo.fourRatings +
+												bookInfo.threeRatings) *
+												100) /
+												ratingCount
+									  )
+									: 0}
+							</span>
+							% of people liked it
+						</span>
+						<span className="all-editions-info">
+							<span className="title">All editions: </span>
+							<span className="number">{generalRating}</span> average rating,{' '}
+							<span className="number">{ratingCount}</span> ratings,{' '}
+							<span className="number">{bookInfo.reviews.length}</span> reviews,
+							added by <span className="number">{bookInfo.addedBy}</span>{' '}
+							people, <span className="number">{bookInfo.toReads}</span>{' '}
+							to-reads
+						</span>
+						<span className="this-edition-info">
+							<span className="title">This edition: </span>
+							<span className="number">{bookInfo.thisEditionRating}</span>{' '}
+							average rating,{' '}
+							<span className="number">{bookInfo.thisEditionRatings}</span>{' '}
+							ratings,{' '}
+							<span className="number">
+								{
+									bookInfo.reviews.filter(
+										(review) => review.edition === bookInfo.id
+									).length
+								}
+							</span>{' '}
+							reviews, added by{' '}
+							<span className="number">{bookInfo.thisEditionAddedBy}</span>{' '}
+							people
+						</span>
+					</div>
 				</div>
-			</button>
-			<span className="book-page-ratings-dot">·</span>
-			<a
-				className="book-page-ratings-count"
-				href={`${bookPageId}#other-reviews`}
-			>
-				{`${ratingCount} ratings`}
-			</a>
-			<span className="book-page-ratings-dot">·</span>
-			<a
-				className="book-page-reviews-count"
-				href={`${bookPageId}#other-reviews`}
-			>
-				{`${bookInfo.reviews.length} ${
-					bookInfo.reviews.length === 1 ? 'review' : 'reviews'
-				}`}
-			</a>
-		</div>
-	) : null;
+				<span className="book-page-ratings-dot">·</span>
+				<a
+					className="book-page-ratings-count"
+					href={`${bookPageId}#other-reviews`}
+				>
+					{`${ratingCount} ratings`}
+				</a>
+				<span className="book-page-ratings-dot">·</span>
+				<a
+					className="book-page-reviews-count"
+					href={`${bookPageId}#other-reviews`}
+				>
+					{`${bookInfo.reviews.length} ${
+						bookInfo.reviews.length === 1 ? 'review' : 'reviews'
+					}`}
+				</a>
+			</div>
+		) : null;
+	};
 
 	const bookPageSynopsisArea = loaded ? (
 		<div className="book-page-synopsis-wrapper">
@@ -1297,7 +1357,7 @@ const BookPage = ({ match }) => {
 	const bookPageInfoRight = (
 		<div className="book-page-book-info-right">
 			{bookPageTitleArea}
-			{bookPageRatingsArea}
+			{generateBookPageRatingsArea(true)}
 			{bookPageSynopsisArea}
 			{bookPageGetACopy}
 			{bookPageBookInfoDetails}
@@ -1736,7 +1796,9 @@ const BookPage = ({ match }) => {
 				</span>
 			</div>
 			<div className="ratings-section">
-				<div className="ratings-section-top">{bookPageRatingsArea}</div>
+				<div className="ratings-section-top">
+					{generateBookPageRatingsArea(false)}
+				</div>
 				<div className="ratings-section-bottom">
 					<div className="ratings-section-bottom-left">
 						<div

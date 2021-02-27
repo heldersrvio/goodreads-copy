@@ -330,9 +330,14 @@ const Firebase = (() => {
 		);
 		allBookInstancesQuery.docs.forEach((document) => {
 			if (allEditionsQueryBooks.includes(document.data().bookId)) {
-				if (document.data().bookId === bookId) {
+				if (
+					document.data().bookId === bookId &&
+					document.data().rating !== undefined
+				) {
 					userDetails.thisEditionRatings++;
 					userDetails.thisEditionRating += document.data().rating;
+					userDetails.thisEditionAddedBy++;
+				} else if (document.data().bookId === bookId) {
 					userDetails.thisEditionAddedBy++;
 				}
 				userDetails.addedBy++;
@@ -352,13 +357,18 @@ const Firebase = (() => {
 					case 2:
 						userDetails.twoRatings++;
 						break;
-					default:
+					case 1:
 						userDetails.oneRatings++;
+						break;
+					default:
+						break;
 				}
 			}
 		});
 		userDetails.thisEditionRating =
-			userDetails.thisEditionRating / userDetails.thisEditionRatings;
+			userDetails.thisEditionRatings !== 0
+				? userDetails.thisEditionRating / userDetails.thisEditionRatings
+				: 0;
 		return userDetails;
 	};
 

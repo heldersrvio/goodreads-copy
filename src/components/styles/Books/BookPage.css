@@ -680,7 +680,9 @@ span.book-page-author-name a:hover,
 }
 
 .book-page-ratings-area button,
-.book-page-ratings-area a {
+.book-page-ratings-area a,
+div.rating-details {
+	cursor: pointer;
 	font-family: 'Lato', Helvetica, Arial, sans-serif;
 	color: rgb(0, 99, 93);
 	padding: 0;
@@ -689,9 +691,14 @@ span.book-page-author-name a:hover,
 	height: 22px;
 }
 
-button.rating-details {
+div.rating-details > span:hover {
+	text-decoration: underline;
+}
+
+div.rating-details {
 	display: flex;
 	flex-direction: row;
+	position: relative;
 }
 
 .book-page-ratings-area button:hover,
@@ -1112,10 +1119,9 @@ button.review-show-more:hover {
 }
 
 .reviews-filter-dialog-box,
-.reviews-sort-dialog-box {
+.reviews-sort-dialog-box,
+.rating-details-popup {
 	position: absolute;
-	top: 25px;
-	left: 20px;
 	padding: 5px;
 	background-color: rgb(255, 255, 255);
 	border: 6px solid rgb(215, 210, 197);
@@ -1123,13 +1129,51 @@ button.review-show-more:hover {
 }
 
 .reviews-filter-dialog-box {
+	top: 25px;
+	left: 20px;
 	width: 381px;
 	height: 32px;
 }
 
 .reviews-sort-dialog-box {
+	top: 25px;
+	left: 20px;
 	width: 148px;
 	height: 18px;
+}
+
+.top .rating-details-popup {
+	top: 30px;
+	left: -250px;
+	cursor: default;
+	width: 579px;
+	height: 218px;
+	text-align: left;
+	z-index: 10;
+}
+
+.bottom .rating-details-popup {
+	top: 25px;
+	left: 20px;
+	cursor: default;
+	width: 579px;
+	height: 218px;
+	text-align: left;
+	z-index: 10;
+}
+
+.rating-details-popup span {
+	cursor: text;
+}
+
+.rating-details-top-close-button {
+	background-image: url('https://s.gr-assets.com/assets/prototip/styles/goodreads/close.png');
+	width: 19px;
+	height: 15px;
+	background-repeat: no-repeat;
+	position: absolute;
+	top: 5px;
+	right: 5px;
 }
 
 .reviews-filter-dialog-box.hidden,
@@ -1145,6 +1189,106 @@ button.review-show-more:hover {
 	height: 0;
 	border-right: 15px solid transparent;
 	border-bottom: 15px solid rgb(215, 210, 197);
+}
+
+.rating-details-top-title {
+	color: rgb(56, 33, 16);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	display: block;
+	margin-bottom: 15px;
+}
+
+.top .rating-details-popup-tip {
+	display: block;
+	position: absolute;
+	top: -13px;
+	left: 275px;
+	width: 0;
+	height: 0;
+	border-right: 13px solid transparent;
+	border-left: 13px solid transparent;
+	border-bottom: 13px solid rgb(215, 210, 197);
+}
+
+.bottom .rating-details-popup-tip {
+	display: block;
+	position: absolute;
+	top: -15px;
+	left: 0;
+	width: 0;
+	height: 0;
+	border-right: 13px solid transparent;
+	border-bottom: 13px solid rgb(215, 210, 197);
+}
+
+.bottom .rating-details-popup span {
+	font-size: 12px;
+}
+
+table.rating-distribution {
+	width: 100%;
+}
+
+table.rating-distribution tr {
+	display: flex;
+	flex-direction: row;
+	margin-bottom: 5px;
+	justify-content: space-between;
+	width: 84%;
+}
+
+table.rating-distribution td.green-bar-container {
+	width: 355px;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+}
+
+th.rating-and-star {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	color: rgb(56, 33, 16);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	margin-left: 5px;
+}
+
+.green-bar {
+	display: block;
+	margin-left: 5px;
+	background-color: rgb(33, 86, 37);
+	height: 18px;
+}
+
+.rating-percentage-and-absolute {
+	color: rgb(102, 102, 102);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+}
+
+.rating-details-popup .percent-of-people-who-liked,
+.rating-details-popup .all-editions-info,
+.rating-details-popup .this-edition-info {
+	display: block;
+	color: rgb(102, 102, 102);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	margin-bottom: 3px;
+}
+
+.rating-details-popup .percent-of-people-who-liked .number,
+.rating-details-popup .all-editions-info .number,
+.rating-details-popup .this-edition-info .number {
+	color: rgb(0, 0, 0);
+}
+
+.rating-details-popup .all-editions-info .title,
+.rating-details-popup .this-edition-info .title {
+	font-weight: bold;
 }
 
 .one-star-filter > span:hover,
