@@ -76,6 +76,11 @@ const BookPage = ({ match }) => {
 		recommendWindowSentStatuses,
 		setRecommendWindowSentStatuses,
 	] = useState([]);
+	const [
+		topRatingDetailsPopupHidden,
+		setTopRatingDetailsPopupHidden,
+	] = useState(true);
+	//const [bottomRatingDetailsPopupHidden, setBottomRatingDetailsPopupHidden] = useState(true);
 
 	const user = JSON.parse(localStorage.getItem('userState'));
 
@@ -296,6 +301,16 @@ const BookPage = ({ match }) => {
 					bookInfo.oneRatings) /
 				ratingCount
 		  ).toFixed(2)
+		: 0;
+
+	const mostFrequentRating = loaded
+		? Math.max(
+				bookInfo.fiveRatings,
+				bookInfo.fourRatings,
+				bookInfo.threeRatings,
+				bookInfo.twoRatings,
+				bookInfo.oneRatings
+		  )
 		: 0;
 
 	const displayRemoveBookConfirm = () => {
@@ -911,7 +926,12 @@ const BookPage = ({ match }) => {
 				<span>{!isNaN(generalRating) ? generalRating : ''}</span>
 			</div>
 			<span className="book-page-ratings-dot">·</span>
-			<button className="rating-details">
+			<button
+				className="rating-details"
+				onClick={(_e) =>
+					setTopRatingDetailsPopupHidden((previous) => !previous)
+				}
+			>
 				<div className="svg-container">
 					<svg width="12" height="11">
 						<rect
@@ -963,6 +983,164 @@ const BookPage = ({ match }) => {
 					</svg>
 				</div>
 				<span>Rating details</span>
+				<div
+					className={
+						topRatingDetailsPopupHidden
+							? 'rating-details-popup hidden'
+							: 'rating-details-popup'
+					}
+				>
+					<span className="rating-details-top-title">Rating details</span>
+					<button
+						className="rating-details-top-close-button"
+						onClick={(_e) => setTopRatingDetailsPopupHidden(true)}
+					></button>
+					<table className="rating-distribution">
+						<tbody>
+							<tr>
+								<th width="25" className="rating-and-star">
+									5<div className="static-star small full"></div>
+								</th>
+								<td
+									width={
+										ratingCount !== 0
+											? (bookInfo.fiveRatings * 350) / mostFrequentRating
+											: 0
+									}
+								>
+									<div className="green-bar"></div>
+								</td>
+								<td width="90">
+									{`${
+										ratingCount !== 0
+											? Math.round((bookInfo.fiveRatings * 100) / ratingCount)
+											: 0
+									}% (${bookInfo.fiveRatings})`}
+								</td>
+							</tr>
+							<tr>
+								<th width="25" className="rating-and-star">
+									4<div className="static-star small full"></div>
+								</th>
+								<td
+									width={
+										ratingCount !== 0
+											? (bookInfo.fourRatings * 350) / mostFrequentRating
+											: 0
+									}
+								>
+									<div className="green-bar"></div>
+								</td>
+								<td width="90">
+									{`${
+										ratingCount !== 0
+											? Math.round((bookInfo.fourRatings * 100) / ratingCount)
+											: 0
+									}% (${bookInfo.fourRatings})`}
+								</td>
+							</tr>
+							<tr>
+								<th width="25" className="rating-and-star">
+									3<div className="static-star small full"></div>
+								</th>
+								<td
+									width={
+										ratingCount !== 0
+											? (bookInfo.threeRatings * 350) / mostFrequentRating
+											: 0
+									}
+								>
+									<div className="green-bar"></div>
+								</td>
+								<td width="90">
+									{`${
+										ratingCount !== 0
+											? Math.round((bookInfo.threeRatings * 100) / ratingCount)
+											: 0
+									}% (${bookInfo.threeRatings})`}
+								</td>
+							</tr>
+							<tr>
+								<th width="25" className="rating-and-star">
+									2<div className="static-star small full"></div>
+								</th>
+								<td
+									width={
+										ratingCount !== 0
+											? (bookInfo.threeRatings * 350) / mostFrequentRating
+											: 0
+									}
+								>
+									<div className="green-bar"></div>
+								</td>
+								<td width="90">
+									{`${
+										ratingCount !== 0
+											? Math.round((bookInfo.threeRatings * 100) / ratingCount)
+											: 0
+									}% (${bookInfo.threeRatings})`}
+								</td>
+							</tr>
+							<tr>
+								<th width="25" className="rating-and-star">
+									1<div className="static-star small full"></div>
+								</th>
+								<td
+									width={
+										ratingCount !== 0
+											? (bookInfo.oneRatings * 350) / mostFrequentRating
+											: 0
+									}
+								>
+									<div className="green-bar"></div>
+								</td>
+								<td width="90">
+									{`${
+										ratingCount !== 0
+											? Math.round((bookInfo.oneRatings * 100) / ratingCount)
+											: 0
+									}% (${bookInfo.oneRatings})`}
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<span className="percent-of-people-who-liked">
+						<span className="number">
+							{ratingCount !== 0
+								? ((bookInfo.fiveRatings +
+										bookInfo.fourRatings +
+										bookInfo.threeRatings) *
+										100) /
+								  ratingCount
+								: 0}
+						</span>
+						% of people liked it
+					</span>
+					<span className="all-editions-info">
+						<span className="title">All editions: </span>
+						<span className="number">{generalRating}</span> average rating,{' '}
+						<span className="number">{ratingCount}</span> ratings,{' '}
+						<span className="number">{bookInfo.reviews.length}</span> reviews,
+						added by <span className="number">{bookInfo.addedBy}</span> people,{' '}
+						<span className="number">{bookInfo.toReads}</span> to-reads
+					</span>
+					<span className="this-edition-info">
+						<span className="title">This edition: </span>
+						<span className="number">{bookInfo.thisEditionRating}</span> average
+						rating,{' '}
+						<span className="number">{bookInfo.thisEditionRatings}</span>{' '}
+						ratings,{' '}
+						<span className="number">
+							{
+								bookInfo.reviews.filter(
+									(review) => review.edition === bookInfo.id
+								).length
+							}
+						</span>{' '}
+						reviews, added by{' '}
+						<span className="number">{bookInfo.thisEditionAddedBy}</span> people
+					</span>
+				</div>
 			</button>
 			<span className="book-page-ratings-dot">·</span>
 			<a
