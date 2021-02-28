@@ -6,12 +6,6 @@ import '../styles/Books/BookPage.css';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 
-/*
-TODO:
-- Functionality:
-	- Rating details
-*/
-
 const BookPage = ({ match }) => {
 	const history = useHistory();
 	const {

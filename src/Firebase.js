@@ -84,6 +84,15 @@ const Firebase = (() => {
 		const generateBookStatsPage = (bookId, title) => {
 			return '/book/stats?id=' + bookId + '.' + title.replace(/ /g, '_');
 		};
+		const generateBookStatsPageForEdition = (bookId, title) => {
+			return (
+				'/book/stats?id=' +
+				bookId +
+				'.' +
+				title.replace(/ /g, '_') +
+				'&just_this_edition=yep'
+			);
+		};
 
 		const generateReviewPage = (reviewId) => {
 			return '/review/show/' + reviewId;
@@ -155,6 +164,7 @@ const Firebase = (() => {
 			generateBookGenreShelfPage,
 			generateBookTopShelvesPage,
 			generateBookStatsPage,
+			generateBookStatsPageForEdition,
 			generateSimilarBooksPage,
 			generateGenrePage,
 			generateBooksByAuthorPage,
@@ -317,6 +327,12 @@ const Firebase = (() => {
 			.collection('books')
 			.where('rootBook', '==', rootBook)
 			.get();
+		userDetails.otherEditionsTitles = allEditionsQuery.docs
+			.filter((document) => document.id !== bookId)
+			.map((document) => document.data().title);
+		userDetails.otherEditionsISBNs = allEditionsQuery.docs
+			.filter((document) => document.id !== bookId)
+			.map((document) => document.data().ISBN);
 		userDetails.otherEditionsCovers = allEditionsQuery.docs
 			.filter((document) => document.id !== bookId)
 			.map((document) => document.data().cover);
