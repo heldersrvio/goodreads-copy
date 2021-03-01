@@ -3,11 +3,9 @@ import Firebase from '../../Firebase';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 
-const BookStatsForEditionPage = ({ match }) => {
-	const {
-		params: { bookId },
-	} = match;
+const BookStatsForEditionPage = ({ bookId }) => {
 	const [bookInfo, setBookInfo] = useState({ title: '', cover: '' });
+	const [statusUpdates, setStatusUpdates] = useState([]);
 	const [loaded, setLoaded] = useState(false);
 	const [chartType, setChartType] = useState('LineChart');
 
@@ -15,18 +13,10 @@ const BookStatsForEditionPage = ({ match }) => {
 
 	useEffect(() => {
 		const getBookInfo = async () => {
-			let bookId = '';
-			let i = 0;
-			while (i < bookId.length) {
-				if (bookId[i] !== '.') {
-					bookId += bookId[i];
-				} else {
-					break;
-				}
-				i++;
-			}
-			const bookObj = await Firebase.queryBookById(user.userUID, bookId);
-			localStorage.setItem(`${bookId}Obj`, JSON.stringify(bookObj));
+			//const bookObj = await Firebase.queryBookById(user.userUID, bookId);
+			const statusUpdateObjs = await Firebase.queryStatusUpdatesForBook(bookId);
+			setStatusUpdates(statusUpdateObjs);
+			const bookObj = JSON.parse(localStorage.getItem(`${bookId}Obj`));
 			setBookInfo(bookObj);
 			setLoaded(true);
 		};
@@ -54,7 +44,7 @@ const BookStatsForEditionPage = ({ match }) => {
 				)}
 			>{`All ${bookInfo.otherEditionsPages.length + 1} Editions`}</a>
 			<span className="just-this-edition-page-span">{`Just This Editon ${
-				bookInfo.ISBN !== undefined ? `ISBN ${bookInfo.ISBN}` : null
+				bookInfo.ISBN !== undefined ? `ISBN ${bookInfo.ISBN}` : ''
 			}`}</span>
 		</div>
 	) : null;
@@ -65,9 +55,9 @@ const BookStatsForEditionPage = ({ match }) => {
 			<span>{`Stats for: ${bookInfo.title}${
 				bookInfo.series !== undefined
 					? ` (${bookInfo.series.name}, #${bookInfo.seriesInstance})`
-					: null
-			}${bookInfo.type !== undefined ? ` (${bookInfo.type})` : null}${
-				bookInfo.ISBN !== undefined ? ` - ${bookInfo.ISBN}` : null
+					: ''
+			}${bookInfo.type !== undefined ? ` (${bookInfo.type})` : ''}${
+				bookInfo.ISBN !== undefined ? ` - ${bookInfo.ISBN}` : ''
 			}`}</span>
 		</div>
 	) : null;
@@ -140,17 +130,16 @@ const BookStatsForEditionPage = ({ match }) => {
 								<a href={editionPage}>{`${bookInfo.otherEditionsTitles[index]}${
 									bookInfo.series !== undefined
 										? ` (${bookInfo.series.name}, #${bookInfo.seriesInstance})`
-										: null
+										: ''
 								}`}</a>
 								<span>{`ISBN: ${
 									bookInfo.otherEditionsISBNs[index] !== undefined
 										? bookInfo.otherEditionsISBNs[index]
-										: null
+										: ''
 								}`}</span>
 							</div>
 							<div className="right-section">
-								<span>{`${bookInfo.addedBy} people added`}</span>
-								{/* Wrong */}
+								<span>{`${bookInfo.otherEditionsAddedBy[index]} people added`}</span>
 							</div>
 						</div>
 					);

@@ -327,6 +327,9 @@ const Firebase = (() => {
 			.collection('books')
 			.where('rootBook', '==', rootBook)
 			.get();
+		const otherEditionsIds = allEditionsQuery.docs
+			.filter((document) => document.id !== bookId)
+			.map((document) => document.id);
 		userDetails.otherEditionsTitles = allEditionsQuery.docs
 			.filter((document) => document.id !== bookId)
 			.map((document) => document.data().title);
@@ -341,6 +344,9 @@ const Firebase = (() => {
 			.map((document) =>
 				pageGenerator.generateBookPage(document.id, document.data().title)
 			);
+		userDetails.otherEditionsAddedBy = allEditionsQuery.docs
+			.filter((document) => document.id !== bookId)
+			.map((_document) => 0);
 		const allEditionsQueryBooks = allEditionsQuery.docs.map(
 			(document) => document.id
 		);
@@ -355,6 +361,10 @@ const Firebase = (() => {
 					userDetails.thisEditionAddedBy++;
 				} else if (document.data().bookId === bookId) {
 					userDetails.thisEditionAddedBy++;
+				} else {
+					userDetails.otherEditionsAddedBy[
+						otherEditionsIds.indexOf(document.data().bookId)
+					]++;
 				}
 				userDetails.addedBy++;
 				if (document.data().status === 'to-read') {
@@ -862,6 +872,14 @@ const Firebase = (() => {
 		}
 	};
 
+	const queryStatusUpdatesForBook = async (bookId) => {
+		const updatesQuery = await database
+			.collection('userBooksUpdates')
+			.where('book', '==', bookId)
+			.get();
+		return updatesQuery.docs.map((document) => document.data());
+	};
+
 	const setNewNotificationsToSeen = async () => {
 		try {
 			const query = await database.collection('heldersrvioNotifications').get();
@@ -1099,6 +1117,15 @@ const Firebase = (() => {
 						.add({ bookId, userId: userUID, status });
 				}
 			}
+			await database
+				.collection('userBooksUpdates')
+				.add({
+					user: userUID,
+					book: bookId,
+					shelf: status,
+					action: 'add-book',
+					date: firebase.firestore.Timestamp.fromDate(new Date()),
+				});
 		}
 	};
 
@@ -1156,6 +1183,15 @@ const Firebase = (() => {
 					.collection('userBooksInstances')
 					.add({ bookId, userId: userUID, status: 'read', rating });
 			}
+			await database
+				.collection('userBooksUpdates')
+				.add({
+					user: userUID,
+					book: bookId,
+					action: 'rate-book',
+					rating,
+					date: firebase.firestore.Timestamp.fromDate(new Date()),
+				});
 		}
 	};
 
@@ -1171,6 +1207,15 @@ const Firebase = (() => {
 				.doc(userInstanceQuery.docs[0].id)
 				.set({ progress }, { merge: true });
 		}
+		await database
+			.collection('userBooksUpdates')
+			.add({
+				user: userUID,
+				book: bookId,
+				action: 'progress-book',
+				progress,
+				date: firebase.firestore.Timestamp.fromDate(new Date()),
+			});
 	};
 
 	const changeBookPosition = async (userUID, bookId, newPosition) => {
@@ -1336,6 +1381,7 @@ const Firebase = (() => {
 		getNumberOfNewFriends,
 		getFriendsInfo,
 		queryBookRecommendedToFriendsStatus,
+		queryStatusUpdatesForBook,
 		setNewNotificationsToSeen,
 		setNewFriendsToZero,
 		signOut,
