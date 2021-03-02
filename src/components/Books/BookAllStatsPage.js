@@ -491,7 +491,20 @@ const BookAllStatsPage = ({ bookId }) => {
 							const newToolTip = (
 								<g class="chart-tooltip">
 									<path
-										d="M278.5,166.5A1,1,0,0,1,277.5,165.5L277.5,121.5A1,1,0,0,1,278.5,120.5L358.5,120.5A1,1,0,0,1,359.5,121.5L359.5,165.5A1,1,0,0,1,358.5,166.5L331.5,166.5L305.60526315789474,179.98L318.5,166.5Z"
+										d={`
+											M ${coordinates[0][0] - 27.87}, ${coordinates[0][1] - 13.5}
+											A 1, 1, 0, 0, 1, ${coordinates[0][0] - 28.87}, ${coordinates[0][1] - 14.5}
+											L ${coordinates[0][0] - 28.87}, ${coordinates[0][1] - 58.5}
+											A 1, 1, 0, 0, 1, ${coordinates[0][0] - 27.87}, ${coordinates[0][1] - 59.5}
+											L ${coordinates[0][0] + 53.13}, ${coordinates[0][1] - 59.5}
+											A 1, 1, 0, 0, 1, ${coordinates[0][0] + 54.13}, ${coordinates[0][1] - 58.5}
+											L ${coordinates[0][0] + 54.13}, ${coordinates[0][1] - 14.5}
+											A 1, 1, 0, 0, 1, ${coordinates[0][0] + 53.13}, ${coordinates[0][1] - 13.5}
+											L ${coordinates[0][0] + 25.13}, ${coordinates[0][1] - 13.5}
+											L ${coordinates[0][0]}, ${coordinates[0][1]}
+											L ${coordinates[0][0] + 12.13}, ${coordinates[0][1] - 13.5}
+											Z
+										`}
 										stroke="#cccccc"
 										strokeWidth="1"
 										fill="#ffffff"
@@ -500,8 +513,8 @@ const BookAllStatsPage = ({ bookId }) => {
 									<g>
 										<text
 											textAnchor="start"
-											x="285"
-											y="139.05"
+											x={coordinates[0][0] - 21.37}
+											y={coordinates[0][1] - 40.95}
 											fontFamily="Arial"
 											fontSize="13"
 											fontWeight="bold"
@@ -515,8 +528,8 @@ const BookAllStatsPage = ({ bookId }) => {
 									<g>
 										<text
 											textAnchor="start"
-											x="285"
-											y="156.05"
+											x={coordinates[0][0] - 21.37}
+											y={coordinates[0][1] - 23.95}
 											fontFamily="Arial"
 											fontSize="13"
 											stroke="none"
@@ -527,8 +540,8 @@ const BookAllStatsPage = ({ bookId }) => {
 										</text>
 										<text
 											textAnchor="start"
-											x="332"
-											y="156.05"
+											x={coordinates[0][0] + 27.63}
+											y={coordinates[0][1] - 23.95}
 											fontFamily="Arial"
 											fontSize="13"
 											fontWeight="bold"
