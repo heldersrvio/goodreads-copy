@@ -1,7 +1,7 @@
 import firebase from 'firebase/app';
 import React, { useEffect, useState } from 'react';
 import Firebase from '../../Firebase';
-import { format, eachDayOfInterval, isSameDay } from 'date-fns';
+import { format, eachDayOfInterval, isSameDay, subDays } from 'date-fns';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 
@@ -10,188 +10,193 @@ const BookAllStatsPage = ({ bookId }) => {
 	const [statusUpdates, setStatusUpdates] = useState([]);
 	const [loaded, setLoaded] = useState(false);
 	const [chartType, setChartType] = useState('LineChart');
+	const [clickCircle, setClickCircle] = useState(null);
+	const [hoverCircle, setHoverCircle] = useState(null);
+	const [toolTip, setToolTip] = useState(null);
 
 	const user = JSON.parse(localStorage.getItem('userState'));
+
+	// TODO: Set up tooltips properly, fix table position, styling
 
 	useEffect(() => {
 		const getBookInfo = async () => {
 			//const bookObj = await Firebase.queryBookById(user.userUID, bookId);
-			//const statusUpdateObjs = await Firebase.queryStatusUpdatesForBook(bookId);
+			//const statusUpdateObjs = await Firebase.queryStatusUpdatesForRootBook(bookId);
 			const statusUpdateObjs = [
 				{
 					action: 'add-book',
 					shelf: 'read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 10, 11)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 11)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'to-read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 10, 11)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 11)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 10, 11)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 11)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'to-read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 10, 11)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 11)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 10, 12)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 12)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 10, 12)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 12)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'to-read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 10, 12)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 12)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 10, 12)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 12)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'to-read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 10, 12)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 12)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 10, 12)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 12)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'to-read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 10, 12)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 12)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 10, 12)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 12)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'to-read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 10, 13)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 13)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 10, 13)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 13)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'to-read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 10, 13)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 13)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 10, 13)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 13)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 10, 13)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 13)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'to-read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 10, 13)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 13)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 10, 13)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 13)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'to-read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 10, 13)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 13)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 10, 13)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 13)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'to-read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 10, 13)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 13)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 10, 13)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 13)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'to-read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 10, 14)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 14)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 10, 14)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 14)),
 				},
 			];
 			setStatusUpdates(statusUpdateObjs);
@@ -202,7 +207,7 @@ const BookAllStatsPage = ({ bookId }) => {
 		getBookInfo();
 	}, [bookId, user.userUID]);
 
-	const interval = { start: new Date(2020, 9, 11), end: new Date() };
+	const interval = { start: subDays(new Date(), 170), end: new Date() };
 	const addedUpdatesNumbers = loaded
 		? eachDayOfInterval(interval).map(
 				(date) =>
@@ -213,6 +218,7 @@ const BookAllStatsPage = ({ bookId }) => {
 					).length
 		  )
 		: [];
+
 	const ratingsUpdatesNumbers = loaded
 		? eachDayOfInterval(interval).map(
 				(date) =>
@@ -374,7 +380,248 @@ const BookAllStatsPage = ({ bookId }) => {
 	const chart = loaded ? (
 		<div className="chart">
 			<div className="chart-table">
-				<svg width="620" height="400">
+				<svg
+					width="620"
+					height="400"
+					onMouseOver={(e) => {
+						const point = document.querySelector('svg').createSVGPoint();
+						point.x = e.clientX;
+						point.y = e.clientY;
+						const location = point.matrixTransform(
+							document.querySelector('svg').getScreenCTM().inverse()
+						);
+						const matchingAddedPathCoordinates = addedPathDefinitionCoordinates.filter(
+							(coordinates) =>
+								Math.abs(coordinates[0] - location.x) <= 5 &&
+								Math.abs(coordinates[1] - location.y) <= 5
+						);
+						const matchingRatingsPathCoordinates = ratingsPathDefinitionCoordinates.filter(
+							(coordinates) =>
+								Math.abs(coordinates[0] - location.x) <= 5 &&
+								Math.abs(coordinates[1] - location.y) <= 5
+						);
+						const matchingReviewsPathCoordinates = reviewsPathDefinitionCoordinates.filter(
+							(coordinates) =>
+								Math.abs(coordinates[0] - location.x) <= 5 &&
+								Math.abs(coordinates[1] - location.y) <= 5
+						);
+						const matchingToReadPathCoordinates = toReadPathDefinitionCoordinates.filter(
+							(coordinates) =>
+								Math.abs(coordinates[0] - location.x) <= 5 &&
+								Math.abs(coordinates[1] - location.y) <= 5
+						);
+						if (
+							!(
+								clickCircle !== null &&
+								Math.abs(
+									document
+										.getElementsByClassName('click-circle-inside')[0]
+										.getAttribute('cx') - location.x
+								) <= 5 &&
+								Math.abs(
+									document
+										.getElementsByClassName('click-circle-inside')[0]
+										.getAttribute('cy') - location.y
+								)
+							) &&
+							(matchingAddedPathCoordinates.length > 0 ||
+								matchingRatingsPathCoordinates.length > 0 ||
+								matchingReviewsPathCoordinates.length > 0 ||
+								matchingToReadPathCoordinates.length > 0)
+						) {
+							const color =
+								matchingAddedPathCoordinates.length > 0
+									? '#3366cc'
+									: matchingRatingsPathCoordinates.length > 0
+									? '#dc3912'
+									: matchingReviewsPathCoordinates.length > 0
+									? '#ff9900'
+									: '#109618';
+							const coordinates =
+								matchingAddedPathCoordinates.length > 0
+									? matchingAddedPathCoordinates
+									: matchingRatingsPathCoordinates.length > 0
+									? matchingRatingsPathCoordinates
+									: matchingReviewsPathCoordinates.length > 0
+									? matchingReviewsPathCoordinates
+									: matchingToReadPathCoordinates;
+							const newHoverCircle = (
+								<g>
+									<circle
+										cx={coordinates[0][0]}
+										cy={coordinates[0][1]}
+										r="4.5"
+										stroke="#000000"
+										strokeWidth="1"
+										strokeOpacity="0.25"
+										fillOpacity="1"
+										fill="none"
+									></circle>
+									<circle
+										cx={coordinates[0][0]}
+										cy={coordinates[0][1]}
+										r="5.5"
+										stroke="#000000"
+										strokeWidth="1"
+										strokeOpacity="0.1"
+										fillOpacity="1"
+										fill="none"
+									></circle>
+									<circle
+										cx={coordinates[0][0]}
+										cy={coordinates[0][1]}
+										r="6.5"
+										stroke="#000000"
+										strokeWidth="1"
+										strokeOpacity="0.05"
+										fillOpacity="1"
+										fill="none"
+									></circle>
+									<circle
+										cx={coordinates[0][0]}
+										cy={coordinates[0][1]}
+										r="4"
+										stroke="none"
+										strokeWidth="0"
+										fill={color}
+									></circle>
+								</g>
+							);
+							setHoverCircle(newHoverCircle);
+							const newToolTip = (
+								<g class="chart-tooltip">
+									<path
+										d="M278.5,166.5A1,1,0,0,1,277.5,165.5L277.5,121.5A1,1,0,0,1,278.5,120.5L358.5,120.5A1,1,0,0,1,359.5,121.5L359.5,165.5A1,1,0,0,1,358.5,166.5L331.5,166.5L305.60526315789474,179.98L318.5,166.5Z"
+										stroke="#cccccc"
+										strokeWidth="1"
+										fill="#ffffff"
+										filter={`url(/book/stats?id=${bookId}#abstract-renderer-id-2`}
+									></path>
+									<g>
+										<text
+											textAnchor="start"
+											x="285"
+											y="139.05"
+											fontFamily="Arial"
+											fontSize="13"
+											fontWeight="bold"
+											stroke="none"
+											strokeWidth="0"
+											fill="#000000"
+										>
+											2020-11-27
+										</text>
+									</g>
+									<g>
+										<text
+											textAnchor="start"
+											x="285"
+											y="156.05"
+											fontFamily="Arial"
+											fontSize="13"
+											stroke="none"
+											strokeWidth="0"
+											fill="#000000"
+										>
+											ratings:
+										</text>
+										<text
+											textAnchor="start"
+											x="332"
+											y="156.05"
+											fontFamily="Arial"
+											fontSize="13"
+											fontWeight="bold"
+											stroke="none"
+											stroke-width="0"
+											fill="#000000"
+										>
+											95
+										</text>
+									</g>
+								</g>
+							);
+							setToolTip(newToolTip);
+						} else {
+							setHoverCircle(null);
+							setToolTip(null);
+						}
+					}}
+					onClick={(e) => {
+						const point = document.querySelector('svg').createSVGPoint();
+						point.x = e.clientX;
+						point.y = e.clientY;
+						const location = point.matrixTransform(
+							document.querySelector('svg').getScreenCTM().inverse()
+						);
+						const matchingAddedPathCoordinates = addedPathDefinitionCoordinates.filter(
+							(coordinates) =>
+								Math.abs(coordinates[0] - location.x) <= 5 &&
+								Math.abs(coordinates[1] - location.y) <= 5
+						);
+						const matchingRatingsPathCoordinates = ratingsPathDefinitionCoordinates.filter(
+							(coordinates) =>
+								Math.abs(coordinates[0] - location.x) <= 5 &&
+								Math.abs(coordinates[1] - location.y) <= 5
+						);
+						const matchingReviewsPathCoordinates = reviewsPathDefinitionCoordinates.filter(
+							(coordinates) =>
+								Math.abs(coordinates[0] - location.x) <= 5 &&
+								Math.abs(coordinates[1] - location.y) <= 5
+						);
+						const matchingToReadPathCoordinates = toReadPathDefinitionCoordinates.filter(
+							(coordinates) =>
+								Math.abs(coordinates[0] - location.x) <= 5 &&
+								Math.abs(coordinates[1] - location.y) <= 5
+						);
+						if (
+							matchingAddedPathCoordinates.length > 0 ||
+							matchingRatingsPathCoordinates.length > 0 ||
+							matchingReviewsPathCoordinates.length > 0 ||
+							matchingToReadPathCoordinates.length > 0
+						) {
+							const color =
+								matchingAddedPathCoordinates.length > 0
+									? '#3366cc'
+									: matchingRatingsPathCoordinates.length > 0
+									? '#dc3912'
+									: matchingReviewsPathCoordinates.length > 0
+									? '#ff9900'
+									: '#109618';
+							const coordinates =
+								matchingAddedPathCoordinates.length > 0
+									? matchingAddedPathCoordinates
+									: matchingRatingsPathCoordinates.length > 0
+									? matchingRatingsPathCoordinates
+									: matchingReviewsPathCoordinates.length > 0
+									? matchingReviewsPathCoordinates
+									: matchingToReadPathCoordinates;
+							const newClickCircle = (
+								<g>
+									<circle
+										cx={coordinates[0][0]}
+										cy={coordinates[0][1]}
+										r="6.5"
+										stroke={color}
+										strokeWidth="1"
+										fill="#ffffff"
+									></circle>
+									<circle
+										className="click-circle-inside"
+										cx={coordinates[0][0]}
+										cy={coordinates[0][1]}
+										r="4"
+										stroke="none"
+										strokeWidth="0"
+										fill={color}
+									></circle>
+								</g>
+							);
+							setHoverCircle(null);
+							setClickCircle(newClickCircle);
+						}
+					}}
+				>
 					<defs id="abstract-renderer-id-0">
 						<clipPath id="abstract-renderer-id-1">
 							<rect x="55" y="10" width="550" height="280"></rect>
@@ -704,27 +951,32 @@ const BookAllStatsPage = ({ bookId }) => {
 								></path>
 							</g>
 						</g>
-						<g></g>
 						<g>
-							{eachDayOfInterval(interval).map((date, index) => {
-								return (
-									<g key={index}>
-										<text
-											textAnchor="end"
-											x={59.38 + 32.1 * index}
-											y="308.44"
-											fontFamily="Arial"
-											fontSize="13"
-											transform={`rotate(-30 ${59.38 + 32.1 * index} 308.44)`}
-											stroke="none"
-											strokeWidth="0"
-											fill="#222222"
-										>
-											{format(date, 'yyyy-MM-dd')}
-										</text>
-									</g>
-								);
-							})}
+							{clickCircle}
+							{hoverCircle}
+						</g>
+						<g>
+							{eachDayOfInterval(interval)
+								.filter((date, index) => index % 10 === 0)
+								.map((date, index) => {
+									return (
+										<g key={index}>
+											<text
+												textAnchor="end"
+												x={59.38 + 32.1 * index}
+												y="308.44"
+												fontFamily="Arial"
+												fontSize="13"
+												transform={`rotate(-30 ${59.38 + 32.1 * index} 308.44)`}
+												stroke="none"
+												strokeWidth="0"
+												fill="#222222"
+											>
+												{format(date, 'yyyy-MM-dd')}
+											</text>
+										</g>
+									);
+								})}
 							<g>
 								<text
 									textAnchor="end"
@@ -819,7 +1071,7 @@ const BookAllStatsPage = ({ bookId }) => {
 							</g>
 						</g>
 					</g>
-					<g></g>
+					<g>{toolTip}</g>
 				</svg>
 				<table>
 					<thead>

@@ -872,6 +872,21 @@ const Firebase = (() => {
 		}
 	};
 
+	const queryStatusUpdatesForRootBook = async (bookId) => {
+		const bookQuery = await database.collection('books').doc(bookId).get();
+		const rootBook = bookQuery.data().rootBook;
+		const allbooksQuery = await database
+			.collection('books')
+			.where('rootBook', '==', rootBook)
+			.get();
+		const allbooksIds = allbooksQuery.docs.map((document) => document.id);
+		const updatesQuery = await database
+			.collection('userBooksUpdates')
+			.where('book', 'in', allbooksIds)
+			.get();
+		return updatesQuery.docs.map((document) => document.data());
+	};
+
 	const queryStatusUpdatesForBook = async (bookId) => {
 		const updatesQuery = await database
 			.collection('userBooksUpdates')
@@ -1117,15 +1132,13 @@ const Firebase = (() => {
 						.add({ bookId, userId: userUID, status });
 				}
 			}
-			await database
-				.collection('userBooksUpdates')
-				.add({
-					user: userUID,
-					book: bookId,
-					shelf: status,
-					action: 'add-book',
-					date: firebase.firestore.Timestamp.fromDate(new Date()),
-				});
+			await database.collection('userBooksUpdates').add({
+				user: userUID,
+				book: bookId,
+				shelf: status,
+				action: 'add-book',
+				date: firebase.firestore.Timestamp.fromDate(new Date()),
+			});
 		}
 	};
 
@@ -1183,15 +1196,13 @@ const Firebase = (() => {
 					.collection('userBooksInstances')
 					.add({ bookId, userId: userUID, status: 'read', rating });
 			}
-			await database
-				.collection('userBooksUpdates')
-				.add({
-					user: userUID,
-					book: bookId,
-					action: 'rate-book',
-					rating,
-					date: firebase.firestore.Timestamp.fromDate(new Date()),
-				});
+			await database.collection('userBooksUpdates').add({
+				user: userUID,
+				book: bookId,
+				action: 'rate-book',
+				rating,
+				date: firebase.firestore.Timestamp.fromDate(new Date()),
+			});
 		}
 	};
 
@@ -1207,15 +1218,13 @@ const Firebase = (() => {
 				.doc(userInstanceQuery.docs[0].id)
 				.set({ progress }, { merge: true });
 		}
-		await database
-			.collection('userBooksUpdates')
-			.add({
-				user: userUID,
-				book: bookId,
-				action: 'progress-book',
-				progress,
-				date: firebase.firestore.Timestamp.fromDate(new Date()),
-			});
+		await database.collection('userBooksUpdates').add({
+			user: userUID,
+			book: bookId,
+			action: 'progress-book',
+			progress,
+			date: firebase.firestore.Timestamp.fromDate(new Date()),
+		});
 	};
 
 	const changeBookPosition = async (userUID, bookId, newPosition) => {
@@ -1381,6 +1390,7 @@ const Firebase = (() => {
 		getNumberOfNewFriends,
 		getFriendsInfo,
 		queryBookRecommendedToFriendsStatus,
+		queryStatusUpdatesForRootBook,
 		queryStatusUpdatesForBook,
 		setNewNotificationsToSeen,
 		setNewFriendsToZero,
