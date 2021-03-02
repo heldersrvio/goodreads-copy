@@ -16,7 +16,7 @@ const BookAllStatsPage = ({ bookId }) => {
 
 	const user = JSON.parse(localStorage.getItem('userState'));
 
-	// TODO: Set up tooltips properly, fix table position, styling
+	// TODO: Set up tooltips properly, work on different chart styles, fix table position, styling
 
 	useEffect(() => {
 		const getBookInfo = async () => {
@@ -28,161 +28,161 @@ const BookAllStatsPage = ({ bookId }) => {
 					shelf: 'read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 11)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 1, 28)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'to-read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 11)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 1, 28)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 11)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 1, 28)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'to-read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 11)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 1, 28)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 12)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 1)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 12)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 1)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'to-read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 12)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 1)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 12)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 1)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'to-read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 12)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 1)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 12)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 1)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'to-read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 12)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 1)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 12)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 1)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'to-read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 13)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 2)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 13)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 2)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'to-read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 13)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 2)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 13)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 2)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 13)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 2)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'to-read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 13)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 2)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 13)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 2)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'to-read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 13)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 2)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 13)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 2)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'to-read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 13)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 2)),
 				},
 				{
 					action: 'add-book',
 					shelf: 'read',
 					user: 'abc',
 					book: bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 13)),
+					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 2)),
 				},
 				{
 					action: 'add-book',
@@ -489,9 +489,12 @@ const BookAllStatsPage = ({ bookId }) => {
 							);
 							setHoverCircle(newHoverCircle);
 							const newToolTip = (
-								<g class="chart-tooltip">
+								<g className="chart-tooltip">
 									<path
-										d={`
+										d={
+											coordinates[0][0] + 54.13 < 606 &&
+											coordinates[0][1] - 59.5 > 9
+												? `
 											M ${coordinates[0][0] - 27.87}, ${coordinates[0][1] - 13.5}
 											A 1, 1, 0, 0, 1, ${coordinates[0][0] - 28.87}, ${coordinates[0][1] - 14.5}
 											L ${coordinates[0][0] - 28.87}, ${coordinates[0][1] - 58.5}
@@ -504,7 +507,52 @@ const BookAllStatsPage = ({ bookId }) => {
 											L ${coordinates[0][0]}, ${coordinates[0][1]}
 											L ${coordinates[0][0] + 12.13}, ${coordinates[0][1] - 13.5}
 											Z
-										`}
+										`
+												: coordinates[0][0] + 54.13 < 606
+												? `
+											M ${coordinates[0][0] - 32.26}, ${coordinates[0][1] + 85.73}
+											A 1, 1, 0, 0, 1, ${coordinates[0][0] - 33.26}, ${coordinates[0][1] + 84.73}
+											L ${coordinates[0][0] - 33.26}, ${coordinates[0][1] + 40.73}
+											A 1, 1, 0, 0, 1, ${coordinates[0][0] - 32.26}, ${coordinates[0][1] + 39.73}
+											L ${coordinates[0][0] + 12.74}, ${coordinates[0][1] + 39.73}
+											L ${coordinates[0][0]}, ${coordinates[0][1]}
+											L ${coordinates[0][0] + 25.74}, ${coordinates[0][1] + 39.73}
+											L ${coordinates[0][0] + 58.74}, ${coordinates[0][1] + 39.73}
+											A 1, 1, 0, 0, 1, ${coordinates[0][0] + 59.74}, ${coordinates[0][1] + 40.73}
+											L ${coordinates[0][0] + 59.74}, ${coordinates[0][1] + 84.73}
+											A 1, 1, 0, 0, 1, ${coordinates[0][0] + 58.74}, ${coordinates[0][1] + 85.73}
+											Z	
+										`
+												: coordinates[0][1] - 59.5 > 9
+												? `
+											M ${coordinates[0][0] - 62.612}, ${coordinates[0][1] - 13.5}
+											A 1, 1, 0, 0, 1, ${coordinates[0][0] - 63.612}, ${coordinates[0][1] - 14.5}
+											L ${coordinates[0][0] - 63.612}, ${coordinates[0][1] - 58.5}
+											A 1, 1, 0, 0, 1, ${coordinates[0][0] - 62.612}, ${coordinates[0][1] - 59.5}
+											L ${coordinates[0][0] + 18.388}, ${coordinates[0][1] - 59.5}
+											A 1, 1, 0, 0, 1, ${coordinates[0][0] + 19.388}, ${coordinates[0][1] - 58.5}
+											L ${coordinates[0][0] + 19.388}, ${coordinates[0][1] - 14.5}
+											A 1, 1, 0, 0, 1, ${coordinates[0][0] + 18.388}, ${coordinates[0][1] - 13.5}
+											L ${coordinates[0][0] - 26.312}, ${coordinates[0][1] - 13.5}
+											L ${coordinates[0][0]}, ${coordinates[0][1]}
+											L ${coordinates[0][0] - 13.742}, ${coordinates[0][1] - 13.5}
+											Z
+										`
+												: `
+											M ${coordinates[0][0] - 53.34}, ${coordinates[0][1] + 58.5}
+											A 1, 1, 0, 0, 1, ${coordinates[0][0] - 54.34}, ${coordinates[0][1] + 57.5}
+											L ${coordinates[0][0] - 54.34}, ${coordinates[0][1] + 13.5}
+											A 1, 1, 0, 0, 1, ${coordinates[0][0] - 53.34}, ${coordinates[0][1] + 12.5}
+											L ${coordinates[0][0] - 26.34}, ${coordinates[0][1] + 12.5}
+											L ${coordinates[0][0]}, ${coordinates[0][1]}
+											L ${coordinates[0][0] - 13.34}, ${coordinates[0][1] + 12.5}
+											L ${coordinates[0][0] + 27.66}, ${coordinates[0][1] + 12.5}
+											A 1, 1, 0, 0, 1, ${coordinates[0][0] + 28.66}, ${coordinates[0][1] + 13.5}
+											L ${coordinates[0][0] + 28.66}, ${coordinates[0][1] + 57.5}
+											A 1, 1, 0, 0, 1, ${coordinates[0][0] + 27.66}, ${coordinates[0][1] + 58.5}
+											Z
+										`
+										}
 										stroke="#cccccc"
 										strokeWidth="1"
 										fill="#ffffff"
@@ -513,8 +561,22 @@ const BookAllStatsPage = ({ bookId }) => {
 									<g>
 										<text
 											textAnchor="start"
-											x={coordinates[0][0] - 21.37}
-											y={coordinates[0][1] - 40.95}
+											x={
+												coordinates[0][0] + 54.13 < 606 &&
+												coordinates[0][1] - 59.5 > 9
+													? coordinates[0][0] - 21.37
+													: coordinates[0][1] - 59.5 > 9
+													? coordinates[0][0] - 56.612
+													: coordinates[0][0] - 46.84
+											}
+											y={
+												coordinates[0][0] + 54.13 < 606 &&
+												coordinates[0][1] - 59.5 > 9
+													? coordinates[0][1] - 40.95
+													: coordinates[0][0] + 54.13 < 606
+													? coordinates[0][1] + 58.73
+													: coordinates[0][1] + 31.05
+											}
 											fontFamily="Arial"
 											fontSize="13"
 											fontWeight="bold"
@@ -528,8 +590,22 @@ const BookAllStatsPage = ({ bookId }) => {
 									<g>
 										<text
 											textAnchor="start"
-											x={coordinates[0][0] - 21.37}
-											y={coordinates[0][1] - 23.95}
+											x={
+												coordinates[0][0] + 54.13 < 606 &&
+												coordinates[0][1] - 59.5 > 9
+													? coordinates[0][0] - 21.37
+													: coordinates[0][1] - 59.5 > 9
+													? coordinates[0][0] - 56.612
+													: coordinates[0][0] - 46.84
+											}
+											y={
+												coordinates[0][0] + 54.13 < 606 &&
+												coordinates[0][1] - 59.5 > 9
+													? coordinates[0][1] - 23.95
+													: coordinates[0][0] + 54.13 < 606
+													? coordinates[0][1] + 75.73
+													: coordinates[0][1] + 48.05
+											}
 											fontFamily="Arial"
 											fontSize="13"
 											stroke="none"
@@ -540,13 +616,27 @@ const BookAllStatsPage = ({ bookId }) => {
 										</text>
 										<text
 											textAnchor="start"
-											x={coordinates[0][0] + 27.63}
-											y={coordinates[0][1] - 23.95}
+											x={
+												coordinates[0][0] + 54.13 < 606 &&
+												coordinates[0][1] - 59.5 > 9
+													? coordinates[0][0] + 27.63
+													: coordinates[0][1] - 59.5 > 9
+													? coordinates[0][0] - 7.112
+													: coordinates[0][0] + 3.34
+											}
+											y={
+												coordinates[0][0] + 54.13 < 606 &&
+												coordinates[0][1] - 59.5 > 9
+													? coordinates[0][1] - 23.95
+													: coordinates[0][0] + 54.13 < 606
+													? coordinates[0][1] + 75.73
+													: coordinates[0][1] + 48.05
+											}
 											fontFamily="Arial"
 											fontSize="13"
 											fontWeight="bold"
 											stroke="none"
-											stroke-width="0"
+											strokeWidth="0"
 											fill="#000000"
 										>
 											95
@@ -940,6 +1030,7 @@ const BookAllStatsPage = ({ bookId }) => {
 									strokeWidth="2"
 									fillOpacity="1"
 									fill="none"
+									className="added-path"
 								></path>
 								<path
 									d={ratingsPathDefinition}
@@ -947,6 +1038,7 @@ const BookAllStatsPage = ({ bookId }) => {
 									strokeWidth="2"
 									fillOpacity="1"
 									fill="none"
+									className="ratings-path"
 								></path>
 								<path
 									d={reviewsPathDefinition}
@@ -954,6 +1046,7 @@ const BookAllStatsPage = ({ bookId }) => {
 									strokeWidth="2"
 									fillOpacity="1"
 									fill="none"
+									className="reviews-path"
 								></path>
 								<path
 									d={toReadPathDefinition}
@@ -961,6 +1054,7 @@ const BookAllStatsPage = ({ bookId }) => {
 									strokeWidth="2"
 									fillOpacity="1"
 									fill="none"
+									className="to-read-path"
 								></path>
 							</g>
 						</g>
