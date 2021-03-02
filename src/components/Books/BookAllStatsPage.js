@@ -562,15 +562,13 @@ const BookAllStatsPage = ({ bookId }) => {
 										<text
 											textAnchor="start"
 											x={
-												coordinates[0][0] + 54.13 < 606 &&
-												coordinates[0][1] - 59.5 > 9
+												coordinates[0][0] + 54.13 < 606
 													? coordinates[0][0] - 21.37
 													: coordinates[0][1] - 59.5 > 9
 													? coordinates[0][0] - 56.612
 													: coordinates[0][0] - 46.84
 											}
 											y={
-												coordinates[0][0] + 54.13 < 606 &&
 												coordinates[0][1] - 59.5 > 9
 													? coordinates[0][1] - 40.95
 													: coordinates[0][0] + 54.13 < 606
@@ -591,15 +589,13 @@ const BookAllStatsPage = ({ bookId }) => {
 										<text
 											textAnchor="start"
 											x={
-												coordinates[0][0] + 54.13 < 606 &&
-												coordinates[0][1] - 59.5 > 9
+												coordinates[0][0] + 54.13 < 606
 													? coordinates[0][0] - 21.37
 													: coordinates[0][1] - 59.5 > 9
 													? coordinates[0][0] - 56.612
 													: coordinates[0][0] - 46.84
 											}
 											y={
-												coordinates[0][0] + 54.13 < 606 &&
 												coordinates[0][1] - 59.5 > 9
 													? coordinates[0][1] - 23.95
 													: coordinates[0][0] + 54.13 < 606
@@ -617,15 +613,13 @@ const BookAllStatsPage = ({ bookId }) => {
 										<text
 											textAnchor="start"
 											x={
-												coordinates[0][0] + 54.13 < 606 &&
-												coordinates[0][1] - 59.5 > 9
+												coordinates[0][0] + 54.13 < 606
 													? coordinates[0][0] + 27.63
 													: coordinates[0][1] - 59.5 > 9
 													? coordinates[0][0] - 7.112
 													: coordinates[0][0] + 3.34
 											}
 											y={
-												coordinates[0][0] + 54.13 < 606 &&
 												coordinates[0][1] - 59.5 > 9
 													? coordinates[0][1] - 23.95
 													: coordinates[0][0] + 54.13 < 606
