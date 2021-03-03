@@ -5,6 +5,7 @@ import ColumnChart from './ColumnChart';
 import AreaChart from './AreaChart';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
+import BarChart from './BarChart';
 
 const BookAllStatsPage = ({ bookId }) => {
 	const [bookInfo, setBookInfo] = useState({ title: '', cover: '' });
@@ -75,6 +76,8 @@ const BookAllStatsPage = ({ bookId }) => {
 				<ColumnChart bookId={bookId} />
 			) : chartType === 'AreaChart' ? (
 				<AreaChart bookId={bookId} />
+			) : chartType === 'BarChart' ? (
+				<BarChart bookId={bookId} />
 			) : (
 				<LinearChart bookId={bookId} />
 			)}
