@@ -16,7 +16,7 @@ const BookAllStatsPage = ({ bookId }) => {
 
 	const user = JSON.parse(localStorage.getItem('userState'));
 
-	// TODO: Set up tooltips properly, work on different chart styles, fix table position, styling
+	// TODO: Work on different chart styles, fix table position, styling
 
 	useEffect(() => {
 		const getBookInfo = async () => {
@@ -229,7 +229,7 @@ const BookAllStatsPage = ({ bookId }) => {
 					).length
 		  )
 		: [];
-	const reviewsUpdateNumbers = loaded
+	const reviewsUpdatesNumbers = loaded
 		? eachDayOfInterval(interval).map(
 				(date) =>
 					statusUpdates.filter(
@@ -254,7 +254,7 @@ const BookAllStatsPage = ({ bookId }) => {
 		? Math.max(
 				Math.max(...addedUpdatesNumbers),
 				Math.max(...ratingsUpdatesNumbers),
-				Math.max(...reviewsUpdateNumbers),
+				Math.max(...reviewsUpdatesNumbers),
 				Math.max(...toReadUpdatesNumbers)
 		  )
 		: 0;
@@ -429,6 +429,14 @@ const BookAllStatsPage = ({ bookId }) => {
 								matchingReviewsPathCoordinates.length > 0 ||
 								matchingToReadPathCoordinates.length > 0)
 						) {
+							const action =
+								matchingAddedPathCoordinates.length > 0
+									? 'added'
+									: matchingRatingsPathCoordinates.length > 0
+									? 'ratings'
+									: matchingReviewsPathCoordinates.length > 0
+									? 'reviews'
+									: 'to-read';
 							const color =
 								matchingAddedPathCoordinates.length > 0
 									? '#3366cc'
@@ -445,6 +453,25 @@ const BookAllStatsPage = ({ bookId }) => {
 									: matchingReviewsPathCoordinates.length > 0
 									? matchingReviewsPathCoordinates
 									: matchingToReadPathCoordinates;
+							const date = eachDayOfInterval(interval)[
+								Math.round((coordinates[0][0] - 57.1) / 3.2)
+							];
+							const valueForDate =
+								matchingAddedPathCoordinates.length > 0
+									? addedUpdatesNumbers[
+											Math.round((coordinates[0][0] - 57.1) / 3.2)
+									  ]
+									: matchingRatingsPathCoordinates.length > 0
+									? ratingsUpdatesNumbers[
+											Math.round((coordinates[0][0] - 57.1) / 3.2)
+									  ]
+									: matchingReviewsPathCoordinates.length > 0
+									? reviewsUpdatesNumbers[
+											Math.round((coordinates[0][0] - 57.1) / 3.2)
+									  ]
+									: toReadUpdatesNumbers[
+											Math.round((coordinates[0][0] - 57.1) / 3.2)
+									  ];
 							const newHoverCircle = (
 								<g>
 									<circle
@@ -582,7 +609,7 @@ const BookAllStatsPage = ({ bookId }) => {
 											strokeWidth="0"
 											fill="#000000"
 										>
-											2020-11-27
+											{format(date, 'yyyy-MM-dd')}
 										</text>
 									</g>
 									<g>
@@ -608,7 +635,7 @@ const BookAllStatsPage = ({ bookId }) => {
 											strokeWidth="0"
 											fill="#000000"
 										>
-											ratings:
+											{`${action}:`}
 										</text>
 										<text
 											textAnchor="start"
@@ -633,7 +660,7 @@ const BookAllStatsPage = ({ bookId }) => {
 											strokeWidth="0"
 											fill="#000000"
 										>
-											95
+											{valueForDate}
 										</text>
 									</g>
 								</g>
@@ -1193,7 +1220,8 @@ const BookAllStatsPage = ({ bookId }) => {
 										{
 											statusUpdates.filter(
 												(update) =>
-													update.date === date && update.action === 'add-book'
+													isSameDay(update.date.toDate(), date) &&
+													update.action === 'add-book'
 											).length
 										}
 									</td>
@@ -1201,7 +1229,8 @@ const BookAllStatsPage = ({ bookId }) => {
 										{
 											statusUpdates.filter(
 												(update) =>
-													update.date === date && update.action === 'rate-book'
+													isSameDay(update.date.toDate(), date) &&
+													update.action === 'rate-book'
 											).length
 										}
 									</td>
@@ -1209,7 +1238,8 @@ const BookAllStatsPage = ({ bookId }) => {
 										{
 											statusUpdates.filter(
 												(update) =>
-													update.date === date && update.action === 'add-review'
+													isSameDay(update.date.toDate(), date) &&
+													update.action === 'add-review'
 											).length
 										}
 									</td>
@@ -1217,7 +1247,7 @@ const BookAllStatsPage = ({ bookId }) => {
 										{
 											statusUpdates.filter(
 												(update) =>
-													update.date === date &&
+													isSameDay(update.date.toDate(), date) &&
 													update.action === 'add-book' &&
 													update.shelf === 'to-read'
 											).length
