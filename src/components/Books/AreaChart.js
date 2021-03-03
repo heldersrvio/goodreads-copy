@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { format, eachDayOfInterval, isSameDay, subDays } from 'date-fns';
 
-const LinearChart = (props) => {
+const AreaChart = (props) => {
 	const [statusUpdates, setStatusUpdates] = useState([]);
 	const [loaded, setLoaded] = useState(false);
 	const [clickCircle, setClickCircle] = useState(null);
@@ -768,6 +768,16 @@ const LinearChart = (props) => {
 							added
 						</text>
 					</g>
+					<rect
+						x="156"
+						y="371.5"
+						width="26"
+						height="6.5"
+						stroke="none"
+						strokeWidth="0"
+						fill-opacity="0.3"
+						fill="#3366cc"
+					></rect>
 					<path
 						d="M156,371.5L182,371.5"
 						stroke="#3366cc"
@@ -804,6 +814,16 @@ const LinearChart = (props) => {
 							ratings
 						</text>
 					</g>
+					<rect
+						x="244"
+						y="371.5"
+						width="26"
+						height="6.5"
+						stroke="none"
+						strokeWidth="0"
+						fill-opacity="0.3"
+						fill="#dc3912"
+					></rect>
 					<path
 						d="M244,371.5L270,371.5"
 						stroke="#dc3912"
@@ -840,6 +860,16 @@ const LinearChart = (props) => {
 							reviews
 						</text>
 					</g>
+					<rect
+						x="335"
+						y="371.5"
+						width="26"
+						height="6.5"
+						stroke="none"
+						strokeWidth="0"
+						fill-opacity="0.3"
+						fill="#ff9900"
+					></rect>
 					<path
 						d="M335,371.5L361,371.5"
 						stroke="#ff9900"
@@ -876,6 +906,16 @@ const LinearChart = (props) => {
 							to-read
 						</text>
 					</g>
+					<rect
+						x="431"
+						y="371.5"
+						width="26"
+						height="6.5"
+						stroke="none"
+						strokeWidth="0"
+						fill-opacity="0.3"
+						fill="#109618"
+					></rect>
 					<path
 						d="M431,371.5L457,371.5"
 						stroke="#109618"
@@ -998,17 +1038,6 @@ const LinearChart = (props) => {
 							stroke="none"
 							strokeWidth="0"
 							fill="#ebebeb"
-						></rect>
-					</g>
-					<g>
-						<rect
-							x="55"
-							y="289"
-							width="550"
-							height="1"
-							stroke="none"
-							strokeWidth="0"
-							fill="#333333"
 						></rect>
 					</g>
 					<g>
@@ -1160,6 +1189,51 @@ const LinearChart = (props) => {
 								className="to-read-path"
 							></path>
 						)}
+					</g>
+					<g>
+						<rect
+							x="55"
+							y="289"
+							width="550"
+							height="1"
+							stroke="none"
+							strokeWidth="0"
+							fill="#333333"
+						></rect>
+					</g>
+					<g>
+						<path
+							d={addedPathDefinition}
+							stroke="none"
+							strokeWidth="0"
+							fillOpacity="0.3"
+							fill="#3366cc"
+							className="added-path"
+						></path>
+						<path
+							d={ratingsPathDefinition}
+							stroke="none"
+							strokeWidth="0"
+							fillOpacity="0.3"
+							fill="#dc3912"
+							className="ratings-path"
+						></path>
+						<path
+							d={reviewsPathDefinition}
+							stroke="none"
+							strokeWidth="0"
+							fillOpacity="0.3"
+							fill="ff9900"
+							className="reviews-path"
+						></path>
+						<path
+							d={toReadPathDefinition}
+							stroke="none"
+							strokeWidth="0"
+							fillOpacity="0.3"
+							fill="#109618"
+							className="to-read-path"
+						></path>
 					</g>
 				</g>
 				<g>
@@ -1356,8 +1430,8 @@ const LinearChart = (props) => {
 	) : null;
 };
 
-LinearChart.propTypes = {
+AreaChart.propTypes = {
 	bookId: PropTypes.string,
 };
 
-export default LinearChart;
+export default AreaChart;

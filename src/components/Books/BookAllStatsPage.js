@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Firebase from '../../Firebase';
 import LinearChart from './LinearChart';
+import ColumnChart from './ColumnChart';
+import AreaChart from './AreaChart';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
-import ColumnChart from './ColumnChart';
 
 const BookAllStatsPage = ({ bookId }) => {
 	const [bookInfo, setBookInfo] = useState({ title: '', cover: '' });
@@ -72,6 +73,8 @@ const BookAllStatsPage = ({ bookId }) => {
 			</form>
 			{chartType === 'ColumnChart' ? (
 				<ColumnChart bookId={bookId} />
+			) : chartType === 'AreaChart' ? (
+				<AreaChart bookId={bookId} />
 			) : (
 				<LinearChart bookId={bookId} />
 			)}
