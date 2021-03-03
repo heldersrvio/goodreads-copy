@@ -19,6 +19,7 @@ const ColumnChart = (props) => {
 	const [hoveredToReadColumns, setHoveredToReadColumns] = useState(
 		Array(171).fill(false)
 	);
+	const [tableVisible, setTableVisible] = useState(false);
 
 	const interval = { start: subDays(new Date(), 170), end: new Date() };
 
@@ -1357,12 +1358,26 @@ const ColumnChart = (props) => {
 		</table>
 	);
 
+	const bottomSection = loaded ? (
+		<div className="book-all-stats-page-bottom-section">
+			<button
+				className="stats-breakdown-button"
+				onClick={(_e) => setTableVisible((previous) => !previous)}
+			>
+				Click here for breakdown
+			</button>
+			<div className="chart-table">{tableVisible ? table : null}</div>
+			<span>
+				Note: This data corresponds to the date users most recently updated this
+				book in their shelves.
+			</span>
+		</div>
+	) : null;
+
 	return loaded ? (
 		<div className="chart">
-			<div className="chart-table">
-				{svg}
-				{table}
-			</div>
+			{svg}
+			{bottomSection}
 		</div>
 	) : null;
 };

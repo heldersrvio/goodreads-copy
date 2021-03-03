@@ -3,9 +3,9 @@ import Firebase from '../../Firebase';
 import LinearChart from './LinearChart';
 import ColumnChart from './ColumnChart';
 import AreaChart from './AreaChart';
+import BarChart from './BarChart';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
-import BarChart from './BarChart';
 
 const BookAllStatsPage = ({ bookId }) => {
 	const [bookInfo, setBookInfo] = useState({ title: '', cover: '' });
@@ -13,8 +13,6 @@ const BookAllStatsPage = ({ bookId }) => {
 	const [chartType, setChartType] = useState('LineChart');
 
 	const user = JSON.parse(localStorage.getItem('userState'));
-
-	// TODO: Work on different chart styles, fix table position, styling
 
 	useEffect(() => {
 		const getBookInfo = async () => {
@@ -84,25 +82,12 @@ const BookAllStatsPage = ({ bookId }) => {
 		</div>
 	) : null;
 
-	const bottomSection = loaded ? (
-		<div className="book-all-stats-page-bottom-section">
-			<button className="stats-breakdown-button">
-				Click here for breakdown
-			</button>
-			<span>
-				Note: This data corresponds to the date users most recently updated this
-				book in their shelves.
-			</span>
-		</div>
-	) : null;
-
 	return (
 		<div className="book-all-stats-page">
 			<TopBar />
 			{title}
 			{pageSelectionArea}
 			{chartArea}
-			{bottomSection}
 			<HomePageFootBar />
 		</div>
 	);

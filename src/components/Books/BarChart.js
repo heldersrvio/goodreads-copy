@@ -19,6 +19,7 @@ const BarChart = (props) => {
 	const [hoveredToReadBars, setHoveredToReadBars] = useState(
 		Array(171).fill(false)
 	);
+	const [tableVisible, setTableVisible] = useState(false);
 
 	const interval = { start: subDays(new Date(), 170), end: new Date() };
 
@@ -986,7 +987,7 @@ const BarChart = (props) => {
 									>
 										<rect
 											x="56"
-											y={10.5 + 2 * quantity}
+											y={10.5 + 2 * index}
 											width={quantity * chartUnit}
 											height="0.5"
 											stroke="none"
@@ -995,7 +996,7 @@ const BarChart = (props) => {
 										></rect>
 										<rect
 											x="55.5"
-											y={10 + 2 * quantity}
+											y={10 + 2 * index}
 											width={quantity * chartUnit + 1}
 											height="1.5"
 											stroke="#000000"
@@ -1006,7 +1007,7 @@ const BarChart = (props) => {
 										></rect>
 										<rect
 											x="54.5"
-											y={9 + 2 * quantity}
+											y={9 + 2 * index}
 											width={quantity * chartUnit + 3}
 											height="3.5"
 											stroke="#000000"
@@ -1017,7 +1018,7 @@ const BarChart = (props) => {
 										></rect>
 										<rect
 											x="53.5"
-											y={8 + 2 * quantity}
+											y={8 + 2 * index}
 											width={quantity * chartUnit + 5}
 											height="5.5"
 											stroke="#000000"
@@ -1037,7 +1038,7 @@ const BarChart = (props) => {
 										)
 									}
 									x="56"
-									y={10.5 + 2 * quantity}
+									y={10.5 + 2 * index}
 									width={quantity * chartUnit}
 									height="0.5"
 									stroke="none"
@@ -1062,7 +1063,7 @@ const BarChart = (props) => {
 									>
 										<rect
 											x="56"
-											y={11.5 + 2 * quantity}
+											y={11.5 + 2 * index}
 											width={quantity * chartUnit}
 											height="0.5"
 											stroke="none"
@@ -1071,7 +1072,7 @@ const BarChart = (props) => {
 										></rect>
 										<rect
 											x="55.5"
-											y={11 + 2 * quantity}
+											y={11 + 2 * index}
 											width={quantity * chartUnit + 1}
 											height="1.5"
 											stroke="#000000"
@@ -1082,7 +1083,7 @@ const BarChart = (props) => {
 										></rect>
 										<rect
 											x="54.5"
-											y={10 + 2 * quantity}
+											y={10 + 2 * index}
 											width={quantity * chartUnit + 3}
 											height="3.5"
 											stroke="#000000"
@@ -1093,7 +1094,7 @@ const BarChart = (props) => {
 										></rect>
 										<rect
 											x="53.5"
-											y={9 + 2 * quantity}
+											y={9 + 2 * index}
 											width={quantity * chartUnit + 5}
 											height="5.5"
 											stroke="#000000"
@@ -1113,7 +1114,7 @@ const BarChart = (props) => {
 										)
 									}
 									x="56"
-									y={11.5 + 2 * quantity}
+									y={11.5 + 2 * index}
 									width={quantity * chartUnit}
 									height="0.5"
 									stroke="none"
@@ -1138,7 +1139,7 @@ const BarChart = (props) => {
 									>
 										<rect
 											x="56"
-											y={12.5 + 2 * quantity}
+											y={12.5 + 2 * index}
 											width={quantity * chartUnit}
 											height="0.5"
 											stroke="none"
@@ -1147,7 +1148,7 @@ const BarChart = (props) => {
 										></rect>
 										<rect
 											x="55.5"
-											y={12 + 2 * quantity}
+											y={12 + 2 * index}
 											width={quantity * chartUnit + 1}
 											height="1.5"
 											stroke="#000000"
@@ -1158,7 +1159,7 @@ const BarChart = (props) => {
 										></rect>
 										<rect
 											x="54.5"
-											y={11 + 2 * quantity}
+											y={11 + 2 * index}
 											width={quantity * chartUnit + 3}
 											height="3.5"
 											stroke="#000000"
@@ -1169,7 +1170,7 @@ const BarChart = (props) => {
 										></rect>
 										<rect
 											x="53.5"
-											y={10 + 2 * quantity}
+											y={10 + 2 * index}
 											width={quantity * chartUnit + 5}
 											height="5.5"
 											stroke="#000000"
@@ -1189,7 +1190,7 @@ const BarChart = (props) => {
 										)
 									}
 									x="56"
-									y={12.5 + 2 * quantity}
+									y={12.5 + 2 * index}
 									width={quantity * chartUnit}
 									height="0.5"
 									stroke="none"
@@ -1214,7 +1215,7 @@ const BarChart = (props) => {
 									>
 										<rect
 											x="56"
-											y={13.5 + 2 * quantity}
+											y={13.5 + 2 * index}
 											width={quantity * chartUnit}
 											height="0.5"
 											stroke="none"
@@ -1223,7 +1224,7 @@ const BarChart = (props) => {
 										></rect>
 										<rect
 											x="55.5"
-											y={13 + 2 * quantity}
+											y={13 + 2 * index}
 											width={quantity * chartUnit + 1}
 											height="1.5"
 											stroke="#000000"
@@ -1234,7 +1235,7 @@ const BarChart = (props) => {
 										></rect>
 										<rect
 											x="54.5"
-											y={12 + 2 * quantity}
+											y={12 + 2 * index}
 											width={quantity * chartUnit + 3}
 											height="3.5"
 											stroke="#000000"
@@ -1245,7 +1246,7 @@ const BarChart = (props) => {
 										></rect>
 										<rect
 											x="53.5"
-											y={11 + 2 * quantity}
+											y={11 + 2 * index}
 											width={quantity * chartUnit + 5}
 											height="5.5"
 											stroke="#000000"
@@ -1265,7 +1266,7 @@ const BarChart = (props) => {
 										)
 									}
 									x="56"
-									y={13.5 + 2 * quantity}
+									y={13.5 + 2 * index}
 									width={quantity * chartUnit}
 									height="0.5"
 									stroke="none"
@@ -1290,32 +1291,11 @@ const BarChart = (props) => {
 				</g>
 				<g></g>
 				<g>
-					{eachDayOfInterval(interval)
-						.filter((date, index) => index % 10 === 0)
-						.map((date, index) => {
-							return (
-								<g key={index}>
-									<text
-										textAnchor="end"
-										x={59.38 + 32.1 * index}
-										y="308.44"
-										fontFamily="Arial"
-										fontSize="13"
-										transform={`rotate(-30 ${59.38 + 32.1 * index} 308.44)`}
-										stroke="none"
-										strokeWidth="0"
-										fill="#222222"
-									>
-										{format(date, 'yyyy-MM-dd')}
-									</text>
-								</g>
-							);
-						})}
 					<g>
 						<text
-							textAnchor="end"
-							x="42"
-							y="294.05"
+							textAnchor="middle"
+							x="55.5"
+							y="309.05"
 							fontFamily="Arial"
 							fontSize="13"
 							stroke="none"
@@ -1327,9 +1307,9 @@ const BarChart = (props) => {
 					</g>
 					<g>
 						<text
-							textAnchor="end"
-							x="42"
-							y="238.25"
+							textAnchor="middle"
+							x="147"
+							y="309.05"
 							fontFamily="Arial"
 							fontSize="13"
 							stroke="none"
@@ -1337,15 +1317,15 @@ const BarChart = (props) => {
 							fill="#444444"
 						>
 							{maximumDailyUpdates !== 1
-								? Math.round(maximumDailyUpdates / 5)
-								: Math.round(maximumDailyUpdates / 5, 1)}
+								? Math.round(maximumDailyUpdates / 6)
+								: Math.round(maximumDailyUpdates / 6, 1)}
 						</text>
 					</g>
 					<g>
 						<text
-							textAnchor="end"
-							x="42"
-							y="182.45"
+							textAnchor="middle"
+							x="238.5"
+							y="309.05"
 							fontFamily="Arial"
 							fontSize="13"
 							stroke="none"
@@ -1353,15 +1333,15 @@ const BarChart = (props) => {
 							fill="#444444"
 						>
 							{maximumDailyUpdates !== 1
-								? Math.round((maximumDailyUpdates * 2) / 5)
-								: Math.round((maximumDailyUpdates * 2) / 5, 1)}
+								? Math.round((maximumDailyUpdates * 2) / 6)
+								: Math.round((maximumDailyUpdates * 2) / 6, 1)}
 						</text>
 					</g>
 					<g>
 						<text
-							textAnchor="end"
-							x="42"
-							y="126.65"
+							textAnchor="middle"
+							x="330"
+							y="309.05"
 							fontFamily="Arial"
 							fontSize="13"
 							stroke="none"
@@ -1369,15 +1349,15 @@ const BarChart = (props) => {
 							fill="#444444"
 						>
 							{maximumDailyUpdates !== 1
-								? Math.round((maximumDailyUpdates * 3) / 5)
-								: Math.round((maximumDailyUpdates * 3) / 5, 1)}
+								? Math.round((maximumDailyUpdates * 3) / 6)
+								: Math.round((maximumDailyUpdates * 3) / 6, 1)}
 						</text>
 					</g>
 					<g>
 						<text
-							textAnchor="end"
-							x="42"
-							y="70.85"
+							textAnchor="middle"
+							x="421.5"
+							y="309.05"
 							fontFamily="Arial"
 							fontSize="13"
 							stroke="none"
@@ -1385,15 +1365,31 @@ const BarChart = (props) => {
 							fill="#444444"
 						>
 							{maximumDailyUpdates !== 1
-								? Math.round((maximumDailyUpdates * 4) / 5)
-								: Math.round((maximumDailyUpdates * 4) / 5, 1)}
+								? Math.round((maximumDailyUpdates * 4) / 6)
+								: Math.round((maximumDailyUpdates * 4) / 6, 1)}
 						</text>
 					</g>
 					<g>
 						<text
-							textAnchor="end"
-							x="42"
-							y="15.05"
+							textAnchor="middle"
+							x="513"
+							y="309.05"
+							fontFamily="Arial"
+							fontSize="13"
+							stroke="none"
+							strokeWidth="0"
+							fill="#444444"
+						>
+							{maximumDailyUpdates !== 1
+								? Math.round((maximumDailyUpdates * 5) / 6)
+								: Math.round((maximumDailyUpdates * 5) / 6, 1)}
+						</text>
+					</g>
+					<g>
+						<text
+							textAnchor="middle"
+							x="604.5"
+							y="309.05"
 							fontFamily="Arial"
 							fontSize="13"
 							stroke="none"
@@ -1469,12 +1465,26 @@ const BarChart = (props) => {
 		</table>
 	);
 
+	const bottomSection = loaded ? (
+		<div className="book-all-stats-page-bottom-section">
+			<button
+				className="stats-breakdown-button"
+				onClick={(_e) => setTableVisible((previous) => !previous)}
+			>
+				Click here for breakdown
+			</button>
+			<div className="chart-table">{tableVisible ? table : null}</div>
+			<span>
+				Note: This data corresponds to the date users most recently updated this
+				book in their shelves.
+			</span>
+		</div>
+	) : null;
+
 	return loaded ? (
 		<div className="chart">
-			<div className="chart-table">
-				{svg}
-				{table}
-			</div>
+			{svg}
+			{bottomSection}
 		</div>
 	) : null;
 };

@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import Firebase from '../../Firebase';
+import LinearChart from './LinearChart';
+import ColumnChart from './ColumnChart';
+import AreaChart from './AreaChart';
+import BarChart from './BarChart';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 
 const BookStatsForEditionPage = ({ bookId }) => {
 	const [bookInfo, setBookInfo] = useState({ title: '', cover: '' });
-	const [statusUpdates, setStatusUpdates] = useState([]);
 	const [loaded, setLoaded] = useState(false);
 	const [chartType, setChartType] = useState('LineChart');
 
@@ -14,8 +17,6 @@ const BookStatsForEditionPage = ({ bookId }) => {
 	useEffect(() => {
 		const getBookInfo = async () => {
 			//const bookObj = await Firebase.queryBookById(user.userUID, bookId);
-			const statusUpdateObjs = await Firebase.queryStatusUpdatesForBook(bookId);
-			setStatusUpdates(statusUpdateObjs);
 			const bookObj = JSON.parse(localStorage.getItem(`${bookId}Obj`));
 			setBookInfo(bookObj);
 			setLoaded(true);
@@ -87,19 +88,15 @@ const BookStatsForEditionPage = ({ bookId }) => {
 					</option>
 				</select>
 			</form>
-			{/* Chart goes here */}
-		</div>
-	) : null;
-
-	const bottomSection = loaded ? (
-		<div className="book-stats-for-edition-page-bottom-section">
-			<button className="stats-breakdown-button">
-				Click here for breakdown
-			</button>
-			<span>
-				Note: This data corresponds to the date users most recently updated this
-				book in their shelves.
-			</span>
+			{chartType === 'ColumnChart' ? (
+				<ColumnChart bookId={bookId} />
+			) : chartType === 'AreaChart' ? (
+				<AreaChart bookId={bookId} />
+			) : chartType === 'BarChart' ? (
+				<BarChart bookId={bookId} />
+			) : (
+				<LinearChart bookId={bookId} />
+			)}
 		</div>
 	) : null;
 
@@ -109,7 +106,6 @@ const BookStatsForEditionPage = ({ bookId }) => {
 			{pageSelectionArea}
 			{editionDescriptionArea}
 			{chartArea}
-			{bottomSection}
 		</div>
 	);
 
