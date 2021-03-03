@@ -1365,6 +1365,9 @@ const AreaChart = (props) => {
 		<table>
 			<thead>
 				<tr>
+					<th colSpan="2">books added</th>
+				</tr>
+				<tr>
 					<th>date</th>
 					<th>added</th>
 					<th>ratings</th>
@@ -1422,7 +1425,7 @@ const AreaChart = (props) => {
 	);
 
 	const bottomSection = loaded ? (
-		<div className="book-all-stats-page-bottom-section">
+		<div className="book-stats-page-bottom-section">
 			<button
 				className="stats-breakdown-button"
 				onClick={(_e) => setTableVisible((previous) => !previous)}

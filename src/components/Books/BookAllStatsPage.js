@@ -6,6 +6,7 @@ import AreaChart from './AreaChart';
 import BarChart from './BarChart';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
+import '../styles/Books/BookAllStatsPage.css';
 
 const BookAllStatsPage = ({ bookId }) => {
 	const [bookInfo, setBookInfo] = useState({ title: '', cover: '' });
@@ -85,9 +86,11 @@ const BookAllStatsPage = ({ bookId }) => {
 	return (
 		<div className="book-all-stats-page">
 			<TopBar />
-			{title}
-			{pageSelectionArea}
-			{chartArea}
+			<div className="book-all-stats-page-main-content">
+				{title}
+				{pageSelectionArea}
+				{chartArea}
+			</div>
 			<HomePageFootBar />
 		</div>
 	);

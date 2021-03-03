@@ -1,0 +1,113 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+
+.book-all-stats-page-main-content {
+	padding: 0 155px;
+	padding-bottom: 30px;
+	width: 625px;
+}
+
+.book-all-stats-page-title {
+	font-family: 'Merriweather', Georgia, serif;
+	font-size: 20px;
+	font-weight: 700;
+	line-height: 24px;
+	color: rgb(56, 33, 16);
+}
+
+.book-all-stats-page-title a {
+	display: inline;
+	padding: 0;
+	color: rgb(0, 99, 93);
+}
+
+.book-all-stats-page-title a:hover {
+	text-decoration: underline;
+	background-color: transparent;
+}
+
+.page-selection-area {
+	margin-top: 15px;
+	border-bottom: 1px solid rgb(216, 216, 216);
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+}
+
+.page-selection-area .all-editions-page-span,
+.page-selection-area .just-this-edition-page-a {
+	display: block;
+	color: rgb(56, 33, 16);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	line-height: 18px;
+	padding: 5px 10px;
+	margin-left: 10px;
+}
+
+.page-selection-area .all-editions-page-span,
+.page-selection-area .just-this-edition-page-a:hover {
+	border-bottom: 2px solid rgb(0, 0, 0);
+	background-color: transparent;
+}
+
+.chart-type-form {
+	float: right;
+	margin-top: 15px;
+	margin-bottom: 10px;
+}
+
+.chart-type-form,
+.chart-type-form label {
+	color: rgb(24, 24, 24);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.chart-type-select {
+	margin-left: 5px;
+}
+
+.stats-breakdown-button {
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 11px;
+	line-height: 14px;
+	color: rgb(0, 99, 93);
+	margin-bottom: 5px;
+	padding: 0;
+}
+
+.stats-breakdown-button:hover {
+	background-color: transparent;
+	text-decoration: underline;
+	color: rgb(0, 99, 93);
+}
+
+.book-stats-page-bottom-section > span {
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+	color: rgb(153, 153, 153);
+}
+
+.book-stats-page-bottom-section table {
+	border-spacing: 3px;
+	border-collapse: separate;
+}
+
+.book-stats-page-bottom-section table thead {
+	color: rgb(56, 33, 16);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+	font-weight: bold;
+	text-align: left;
+}
+
+.book-stats-page-bottom-section table tbody {
+	color: rgb(24, 24, 24);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+}
