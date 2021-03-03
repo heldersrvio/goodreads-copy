@@ -7,12 +7,20 @@ const ColumnChart = (props) => {
 	const [statusUpdates, setStatusUpdates] = useState([]);
 	const [loaded, setLoaded] = useState(false);
 	const [toolTip, setToolTip] = useState(null);
-	const [hoveredAddedColumns, setHoveredAddedColumns] = useState([]);
-	const [hoveredRatingsColumns, setHoveredRatingsColumns] = useState([]);
-	const [hoveredReviewsColumns, setHoveredReviewsColumns] = useState([]);
-	const [hoveredToReadColumns, setHoveredToReadColumns] = useState([]);
+	const [hoveredAddedColumns, setHoveredAddedColumns] = useState(
+		Array(171).fill(false)
+	);
+	const [hoveredRatingsColumns, setHoveredRatingsColumns] = useState(
+		Array(171).fill(false)
+	);
+	const [hoveredReviewsColumns, setHoveredReviewsColumns] = useState(
+		Array(171).fill(false)
+	);
+	const [hoveredToReadColumns, setHoveredToReadColumns] = useState(
+		Array(171).fill(false)
+	);
 
-	// TODO: fix tooltips positions
+	const interval = { start: subDays(new Date(), 170), end: new Date() };
 
 	useEffect(() => {
 		const getStatusInfo = async () => {
@@ -195,32 +203,11 @@ const ColumnChart = (props) => {
 				},
 			];
 			setStatusUpdates(statusUpdateObjs);
-			setHoveredAddedColumns(
-				statusUpdateObjs
-					.filter((obj) => obj.action === 'add-book')
-					.map((_obj) => false)
-			);
-			setHoveredRatingsColumns(
-				statusUpdateObjs
-					.filter((obj) => obj.action === 'rate-book')
-					.map((_obj) => false)
-			);
-			setHoveredReviewsColumns(
-				statusUpdateObjs
-					.filter((obj) => obj.action === 'review-book')
-					.map((_obj) => false)
-			);
-			setHoveredToReadColumns(
-				statusUpdateObjs
-					.filter((obj) => obj.action === 'add-book' && obj.shelf === 'to-read')
-					.map((_obj) => false)
-			);
 			setLoaded(true);
 		};
 		getStatusInfo();
 	}, [props.bookId]);
 
-	const interval = { start: subDays(new Date(), 170), end: new Date() };
 	const addedUpdatesNumbers = loaded
 		? eachDayOfInterval(interval).map(
 				(date) =>
@@ -291,7 +278,7 @@ const ColumnChart = (props) => {
 						update.action === 'rate-book' &&
 						isSameDay(update.date.toDate(), date)
 				).length;
-				return [57.1 + 3.2 * index, 289.5 - chartUnit * updatesNumber];
+				return [58.1 + 3.2 * index, 289.5 - chartUnit * updatesNumber];
 		  })
 		: [];
 
@@ -302,7 +289,7 @@ const ColumnChart = (props) => {
 						update.action === 'review-book' &&
 						isSameDay(update.date.toDate(), date)
 				).length;
-				return [57.1 + 3.2 * index, 289.5 - chartUnit * updatesNumber];
+				return [59.1 + 3.2 * index, 289.5 - chartUnit * updatesNumber];
 		  })
 		: [];
 
@@ -314,7 +301,7 @@ const ColumnChart = (props) => {
 						update.shelf === 'to-read' &&
 						isSameDay(update.date.toDate(), date)
 				).length;
-				return [57.1 + 3.2 * index, 289.5 - chartUnit * updatesNumber];
+				return [60.1 + 3.2 * index, 289.5 - chartUnit * updatesNumber];
 		  })
 		: [];
 
