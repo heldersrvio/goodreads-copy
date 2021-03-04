@@ -1,0 +1,155 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+
+.similar-books-page-main-content {
+	margin: 0 70px;
+	padding: 0 15px;
+}
+
+.similar-books-page-main-content a {
+	padding: 0;
+	line-height: normal;
+}
+
+.similar-books-page-main-content a:hover {
+	background-color: transparent;
+}
+
+.similar-books-page-main-content .similar-books-page-page-indicator {
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	color: rgb(51, 51, 51);
+	line-height: 18px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	width: 29%;
+	margin: 25px 0;
+}
+
+.similar-books-page-main-content .similar-books-page-page-indicator a {
+	color: rgb(0, 99, 93);
+}
+
+.similar-books-page-main-content .similar-books-page-page-indicator a:hover {
+	color: rgb(0, 99, 93);
+	text-decoration: underline;
+}
+
+.similar-books-page-page-indicator-arrow {
+	background-image: url('https://s.gr-assets.com/assets/gr/icons/icon_caret_right.svg');
+	background-size: 10px 10px;
+	background-repeat: no-repeat;
+	width: 10px;
+	height: 10px;
+}
+
+.similar-books-page-main-content h1 {
+	color: rgb(51, 51, 51);
+	font-family: 'Merriweather', Georgia, serif;
+	font-size: 24px;
+	font-weight: bold;
+	margin-bottom: 30px;
+}
+
+.similar-books-page-book-card {
+	display: flex;
+	flex-direction: row;
+	width: 730px;
+}
+
+.similar-books-page-book-card-left-section {
+	margin-right: 10px;
+}
+
+.similar-books-page-book-card-left-section > a,
+.similar-books-page-book-card-left-section > a img {
+	width: 95px;
+	height: 147px;
+}
+
+.similar-books-page-book-card-right-section .book-card-book-title-a {
+	color: rgb(51, 51, 51);
+	font-family: 'Merriweather', Georgia, serif;
+	font-size: 18px;
+	line-height: 20px;
+	height: auto;
+	font-weight: bold;
+}
+
+.similar-books-page-book-card-right-section .book-card-book-title-a:hover {
+	text-decoration: underline;
+}
+
+.similar-books-page-book-card-right-section .author-span {
+	color: rgb(0, 0, 0);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+}
+
+.similar-books-page-book-card-right-section .author-span a {
+	display: inline;
+	color: rgb(0, 0, 0);
+}
+
+.similar-books-page-book-card-right-section .author-span a:hover {
+	text-decoration: underline;
+}
+
+.goodreads-seal {
+	background-image: url('https://s.gr-assets.com/assets/layout/gr_author_badge.svg');
+	width: 14px;
+	height: 14px;
+	background-position: 0px 0px;
+	background-repeat: no-repeat;
+	display: inline-block;
+	margin-left: 5px;
+	vertical-align: middle;
+}
+
+.similar-books-page-book-card-right-section .book-page-general-rating {
+	margin-top: 5px;
+}
+
+.similar-books-page-book-card-right-section .static-star.small {
+	width: 14px;
+	height: 14px;
+}
+
+.similar-books-page-book-card-right-section .book-page-synopsis-area {
+	width: 604px;
+	max-height: 36px;
+}
+
+.similar-books-page-book-card-right-section .book-page-synopsis-area-full {
+	display: block;
+	max-height: none;
+	width: 604px;
+}
+
+.similar-books-page-book-card-right-section .synopsis {
+	color: rgb(0, 0, 0);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	line-height: 18px;
+	overflow: hidden;
+}
+
+.similar-books-page-book-card-right-section .pre-synopsis {
+	color: rgb(0, 0, 0);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	line-height: 18px;
+}
+
+.similar-books-page-book-card-right-section .pre-synopsis b {
+	font-weight: bold;
+}
+
+.similar-books-page-book-card-right-section button.synopsis-show-more {
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	display: inline;
+	font-size: 14px;
+	color: rgb(0, 99, 93);
+}
