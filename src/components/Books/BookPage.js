@@ -2172,10 +2172,7 @@ const BookPage = ({ match }) => {
 			</button>
 			<span className="book-page-main-content-right-top-separator">|</span>
 			<a
-				href={Firebase.pageGenerator.generateBookStatsPage(
-					bookInfo.id,
-					bookInfo.title
-				)}
+				href={Firebase.pageGenerator.generateBookStatsPage(bookInfo.id)}
 				className="book-page-book-stats-a"
 			>
 				Stats

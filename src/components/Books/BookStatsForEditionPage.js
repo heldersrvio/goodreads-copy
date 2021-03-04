@@ -6,6 +6,7 @@ import AreaChart from './AreaChart';
 import BarChart from './BarChart';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
+import '../styles/Books/BookStatsForEditionPage.css';
 
 const BookStatsForEditionPage = ({ bookId }) => {
 	const [bookInfo, setBookInfo] = useState({ title: '', cover: '' });
@@ -16,8 +17,7 @@ const BookStatsForEditionPage = ({ bookId }) => {
 
 	useEffect(() => {
 		const getBookInfo = async () => {
-			//const bookObj = await Firebase.queryBookById(user.userUID, bookId);
-			const bookObj = JSON.parse(localStorage.getItem(`${bookId}Obj`));
+			const bookObj = await Firebase.queryBookById(user.userUID, bookId);
 			setBookInfo(bookObj);
 			setLoaded(true);
 		};
@@ -39,10 +39,7 @@ const BookStatsForEditionPage = ({ bookId }) => {
 		<div className="page-selection-area">
 			<a
 				className="all-editions-page-a"
-				href={Firebase.pageGenerator.generateBookStatsPage(
-					bookId,
-					bookInfo.title
-				)}
+				href={Firebase.pageGenerator.generateBookStatsPage(bookId)}
 			>{`All ${bookInfo.otherEditionsPages.length + 1} Editions`}</a>
 			<span className="just-this-edition-page-span">{`Just This Editon ${
 				bookInfo.ISBN !== undefined ? `ISBN ${bookInfo.ISBN}` : ''
@@ -53,13 +50,19 @@ const BookStatsForEditionPage = ({ bookId }) => {
 	const editionDescriptionArea = loaded ? (
 		<div className="edition-description-area">
 			<img src={bookInfo.cover} alt={bookInfo.title}></img>
-			<span>{`Stats for: ${bookInfo.title}${
-				bookInfo.series !== undefined
-					? ` (${bookInfo.series.name}, #${bookInfo.seriesInstance})`
-					: ''
-			}${bookInfo.type !== undefined ? ` (${bookInfo.type})` : ''}${
-				bookInfo.ISBN !== undefined ? ` - ${bookInfo.ISBN}` : ''
-			}`}</span>
+			<span>
+				<span>Stats for: </span>
+				<a
+					href={Firebase.pageGenerator.generateBookPage(bookId, bookInfo.title)}
+				>{`${bookInfo.title}${
+					bookInfo.series !== undefined
+						? ` (${bookInfo.series.name}, #${bookInfo.seriesInstance})`
+						: ''
+				}`}</a>
+				<span>{`${bookInfo.type !== undefined ? ` (${bookInfo.type})` : ''}${
+					bookInfo.ISBN !== undefined ? ` - ${bookInfo.ISBN}` : ''
+				}`}</span>
+			</span>
 		</div>
 	) : null;
 
@@ -70,22 +73,15 @@ const BookStatsForEditionPage = ({ bookId }) => {
 				<select
 					name="chart-type"
 					className="chart-type-select"
+					value={chartType}
 					onChange={(e) => {
 						setChartType(e.target.value);
 					}}
 				>
-					<option value="ColumnChart" selected={chartType === 'ColumnChart'}>
-						ColumnChart
-					</option>
-					<option value="LineChart" selected={chartType === 'LineChart'}>
-						LineChart
-					</option>
-					<option value="AreaChart" selected={chartType === 'AreaChart'}>
-						AreaChart
-					</option>
-					<option value="BarChart" selected={chartType === 'BarChart'}>
-						BarChart
-					</option>
+					<option value="ColumnChart">ColumnChart</option>
+					<option value="LineChart">LineChart</option>
+					<option value="AreaChart">AreaChart</option>
+					<option value="BarChart">BarChart</option>
 				</select>
 			</form>
 			{chartType === 'ColumnChart' ? (
@@ -121,18 +117,20 @@ const BookStatsForEditionPage = ({ bookId }) => {
 									src={bookInfo.otherEditionsCovers[index]}
 									alt={bookInfo.otherEditionsTitles[index]}
 								></img>
-							</div>
-							<div className="middle-section">
-								<a href={editionPage}>{`${bookInfo.otherEditionsTitles[index]}${
-									bookInfo.series !== undefined
-										? ` (${bookInfo.series.name}, #${bookInfo.seriesInstance})`
-										: ''
-								}`}</a>
-								<span>{`ISBN: ${
-									bookInfo.otherEditionsISBNs[index] !== undefined
-										? bookInfo.otherEditionsISBNs[index]
-										: ''
-								}`}</span>
+								<div className="middle-section">
+									<a href={editionPage}>{`${
+										bookInfo.otherEditionsTitles[index]
+									}${
+										bookInfo.series !== undefined
+											? ` (${bookInfo.series.name}, #${bookInfo.seriesInstance})`
+											: ''
+									}`}</a>
+									<span>{`ISBN: ${
+										bookInfo.otherEditionsISBNs[index] !== undefined
+											? bookInfo.otherEditionsISBNs[index]
+											: ''
+									}`}</span>
+								</div>
 							</div>
 							<div className="right-section">
 								<span>{`${bookInfo.otherEditionsAddedBy[index]} people added`}</span>
@@ -147,8 +145,10 @@ const BookStatsForEditionPage = ({ bookId }) => {
 	return (
 		<div className="book-stats-for-edition-page">
 			<TopBar />
-			{leftSection}
-			{rightSection}
+			<div className="book-stats-for-edition-page-main-content">
+				{leftSection}
+				{rightSection}
+			</div>
 			<HomePageFootBar />
 		</div>
 	);

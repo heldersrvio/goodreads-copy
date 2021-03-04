@@ -1,7 +1,7 @@
-import firebase from 'firebase/app';
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { format, eachDayOfInterval, isSameDay, subDays } from 'date-fns';
+import Firebase from '../../Firebase';
 
 const ColumnChart = (props) => {
 	const [statusUpdates, setStatusUpdates] = useState([]);
@@ -25,189 +25,14 @@ const ColumnChart = (props) => {
 
 	useEffect(() => {
 		const getStatusInfo = async () => {
-			//const statusUpdateObjs = await Firebase.queryStatusUpdatesForRootBook(bookId);
-			const statusUpdateObjs = [
-				{
-					action: 'add-book',
-					shelf: 'read',
-					user: 'abc',
-					book: props.bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 1, 28)),
-				},
-				{
-					action: 'add-book',
-					shelf: 'to-read',
-					user: 'abc',
-					book: props.bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 1, 28)),
-				},
-				{
-					action: 'add-book',
-					shelf: 'read',
-					user: 'abc',
-					book: props.bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 1, 28)),
-				},
-				{
-					action: 'add-book',
-					shelf: 'to-read',
-					user: 'abc',
-					book: props.bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 1, 28)),
-				},
-				{
-					action: 'add-book',
-					shelf: 'read',
-					user: 'abc',
-					book: props.bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 1)),
-				},
-				{
-					action: 'add-book',
-					shelf: 'read',
-					user: 'abc',
-					book: props.bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 1)),
-				},
-				{
-					action: 'add-book',
-					shelf: 'to-read',
-					user: 'abc',
-					book: props.bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 1)),
-				},
-				{
-					action: 'add-book',
-					shelf: 'read',
-					user: 'abc',
-					book: props.bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 1)),
-				},
-				{
-					action: 'add-book',
-					shelf: 'to-read',
-					user: 'abc',
-					book: props.bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 1)),
-				},
-				{
-					action: 'add-book',
-					shelf: 'read',
-					user: 'abc',
-					book: props.bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 1)),
-				},
-				{
-					action: 'add-book',
-					shelf: 'to-read',
-					user: 'abc',
-					book: props.bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 1)),
-				},
-				{
-					action: 'add-book',
-					shelf: 'read',
-					user: 'abc',
-					book: props.bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 1)),
-				},
-				{
-					action: 'add-book',
-					shelf: 'to-read',
-					user: 'abc',
-					book: props.bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 2)),
-				},
-				{
-					action: 'add-book',
-					shelf: 'read',
-					user: 'abc',
-					book: props.bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 2)),
-				},
-				{
-					action: 'add-book',
-					shelf: 'to-read',
-					user: 'abc',
-					book: props.bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 2)),
-				},
-				{
-					action: 'add-book',
-					shelf: 'read',
-					user: 'abc',
-					book: props.bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 2)),
-				},
-				{
-					action: 'add-book',
-					shelf: 'read',
-					user: 'abc',
-					book: props.bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 2)),
-				},
-				{
-					action: 'add-book',
-					shelf: 'to-read',
-					user: 'abc',
-					book: props.bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 2)),
-				},
-				{
-					action: 'add-book',
-					shelf: 'read',
-					user: 'abc',
-					book: props.bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 2)),
-				},
-				{
-					action: 'add-book',
-					shelf: 'to-read',
-					user: 'abc',
-					book: props.bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 2)),
-				},
-				{
-					action: 'add-book',
-					shelf: 'read',
-					user: 'abc',
-					book: props.bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 2)),
-				},
-				{
-					action: 'add-book',
-					shelf: 'to-read',
-					user: 'abc',
-					book: props.bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 2)),
-				},
-				{
-					action: 'add-book',
-					shelf: 'read',
-					user: 'abc',
-					book: props.bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2021, 2, 2)),
-				},
-				{
-					action: 'add-book',
-					shelf: 'to-read',
-					user: 'abc',
-					book: props.bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 14)),
-				},
-				{
-					action: 'add-book',
-					shelf: 'read',
-					user: 'abc',
-					book: props.bookId,
-					date: firebase.firestore.Timestamp.fromDate(new Date(2020, 9, 14)),
-				},
-			];
+			const statusUpdateObjs = props.allEditions
+				? await Firebase.queryStatusUpdatesForRootBook(props.bookId)
+				: await Firebase.queryStatusUpdatesForBook(props.bookId);
 			setStatusUpdates(statusUpdateObjs);
 			setLoaded(true);
 		};
 		getStatusInfo();
-	}, [props.bookId]);
+	}, [props.bookId, props.allEditions]);
 
 	const addedUpdatesNumbers = loaded
 		? eachDayOfInterval(interval).map(
@@ -433,7 +258,6 @@ const ColumnChart = (props) => {
 						stroke="#cccccc"
 						strokeWidth="1"
 						fill="#ffffff"
-						filter={`url(/book/stats?id=${props.bookId}#abstract-renderer-id-2`}
 					></path>
 					<g>
 						<text
@@ -1387,6 +1211,7 @@ const ColumnChart = (props) => {
 
 ColumnChart.propTypes = {
 	bookId: PropTypes.string,
+	allEditions: PropTypes.bool,
 };
 
 export default ColumnChart;

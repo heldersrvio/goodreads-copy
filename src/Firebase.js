@@ -81,17 +81,11 @@ const Firebase = (() => {
 			return '/work/shelves/' + bookId;
 		};
 
-		const generateBookStatsPage = (bookId, title) => {
-			return '/book/stats?id=' + bookId + '.' + title.replace(/ /g, '_');
+		const generateBookStatsPage = (bookId) => {
+			return '/book/stats?id=' + bookId;
 		};
-		const generateBookStatsPageForEdition = (bookId, title) => {
-			return (
-				'/book/stats?id=' +
-				bookId +
-				'.' +
-				title.replace(/ /g, '_') +
-				'&just_this_edition=yep'
-			);
+		const generateBookStatsPageForEdition = (bookId) => {
+			return '/book/stats?id=' + bookId + '&just_this_edition=yep';
 		};
 
 		const generateReviewPage = (reviewId) => {

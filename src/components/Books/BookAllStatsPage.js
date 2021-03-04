@@ -17,8 +17,7 @@ const BookAllStatsPage = ({ bookId }) => {
 
 	useEffect(() => {
 		const getBookInfo = async () => {
-			//const bookObj = await Firebase.queryBookById(user.userUID, bookId);
-			const bookObj = JSON.parse(localStorage.getItem(`${bookId}Obj`));
+			const bookObj = await Firebase.queryBookById(user.userUID, bookId);
 			setBookInfo(bookObj);
 			setLoaded(true);
 		};
@@ -43,10 +42,7 @@ const BookAllStatsPage = ({ bookId }) => {
 			} Editions`}</span>
 			<a
 				className="just-this-edition-page-a"
-				href={Firebase.pageGenerator.generateBookStatsPageForEdition(
-					bookId,
-					bookInfo.title
-				)}
+				href={Firebase.pageGenerator.generateBookStatsPageForEdition(bookId)}
 			>{`Just This Editon ${
 				bookInfo.ISBN !== undefined ? `ISBN ${bookInfo.ISBN}` : ''
 			}`}</a>
