@@ -616,6 +616,68 @@ const Firebase = (() => {
 		);
 	};
 
+	const getAlsoEnjoyedBooksDetails = async (userUID, bookId) => {
+		const bookObj = {
+			id: bookId,
+		};
+		const bookQuery = await database.collection('books').doc(bookId).get();
+		bookObj.title = bookQuery.data().title;
+		bookObj.cover = bookQuery.data().cover;
+		if (bookQuery.data().preSynopsis !== undefined) {
+			bookObj.preSynopsis = bookQuery.data().preSynopsis;
+		}
+		if (bookQuery.data().synopsis !== undefined) {
+			bookObj.synopsis = bookQuery.data().synopsis;
+		}
+		const rootBook = bookQuery.data().rootBook;
+		const rootBookQuery = await database
+			.collection('rootBooks')
+			.doc(rootBook)
+			.get();
+		const authorQuery = await database
+			.collection('authors')
+			.doc(rootBookQuery.data().authorId)
+			.get();
+		bookObj.authorName = authorQuery.data().name;
+		bookObj.authorId = rootBookQuery.data().authorId;
+		bookObj.authorIsMember = authorQuery.data().GRMember;
+		if (rootBookQuery.data().series !== undefined) {
+			const seriesQuery = await database
+				.collection('authors')
+				.doc(rootBookQuery.data().series)
+				.get();
+			bookObj.series = seriesQuery.data().name;
+			bookObj.seriesInstance = rootBookQuery.data().seriesInstance;
+		}
+		const userDetails = await getUserDetailsForBook(userUID, bookId);
+		Object.assign(bookObj, userDetails);
+		return bookObj;
+	};
+
+	const getAlsoEnjoyedBooksDetailsForBook = async (userUID, bookId) => {
+		const alsoEnjoyedObject = {};
+		alsoEnjoyedObject.mainBook = await getAlsoEnjoyedBooksDetails(
+			userUID,
+			bookId
+		);
+		const bookQuery = await database.collection('books').doc(bookId).get();
+		const rootBookQuery = await database
+			.collection('rootBooks')
+			.doc(bookQuery.data().rootBook)
+			.get();
+		if (rootBookQuery.data().alsoEnjoyed === undefined) {
+			return alsoEnjoyedObject;
+		}
+		alsoEnjoyedObject.alsoEnjoyedBooks = [];
+		await Promise.all(
+			rootBookQuery.data().map(async (book) => {
+				const detailsObject = await getAlsoEnjoyedBooksDetails(userUID, book);
+				alsoEnjoyedObject.alsoEnjoyedBooks.push(detailsObject);
+			})
+		);
+		return alsoEnjoyedObject;
+	};
+
 	const getQuizQuestionsForBook = async (rootBook) => {
 		const questions = [];
 		const quizQuery = await database
@@ -1378,6 +1440,7 @@ const Firebase = (() => {
 
 	return {
 		pageGenerator,
+		getAlsoEnjoyedBooksDetailsForBook,
 		queryBookById,
 		queryBooks,
 		queryNotifications,
