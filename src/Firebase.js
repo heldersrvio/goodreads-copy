@@ -616,13 +616,26 @@ const Firebase = (() => {
 		);
 	};
 
-	const getAlsoEnjoyedBooksDetails = async (userUID, bookId) => {
+	const getAlsoEnjoyedBooksDetails = async (userUID, bookId, isMainBook) => {
+		let mainEditionId = bookId;
+		if (!isMainBook) {
+			const mainEditionQuery = await database
+				.collection('books')
+				.where('rootBook', '==', bookId)
+				.where('mainEdition', '==', true)
+				.get();
+			mainEditionId = mainEditionQuery.docs[0].id;
+		}
 		const bookObj = {
-			id: bookId,
+			id: mainEditionId,
 		};
-		const bookQuery = await database.collection('books').doc(bookId).get();
+		const bookQuery = await database
+			.collection('books')
+			.doc(mainEditionId)
+			.get();
 		bookObj.title = bookQuery.data().title;
 		bookObj.cover = bookQuery.data().cover;
+		bookObj.rootBook = bookQuery.data().rootBook;
 		if (bookQuery.data().preSynopsis !== undefined) {
 			bookObj.preSynopsis = bookQuery.data().preSynopsis;
 		}
@@ -643,13 +656,13 @@ const Firebase = (() => {
 		bookObj.authorIsMember = authorQuery.data().GRMember;
 		if (rootBookQuery.data().series !== undefined) {
 			const seriesQuery = await database
-				.collection('authors')
+				.collection('series')
 				.doc(rootBookQuery.data().series)
 				.get();
 			bookObj.series = seriesQuery.data().name;
 			bookObj.seriesInstance = rootBookQuery.data().seriesInstance;
 		}
-		const userDetails = await getUserDetailsForBook(userUID, bookId);
+		const userDetails = await getUserDetailsForBook(userUID, mainEditionId);
 		Object.assign(bookObj, userDetails);
 		return bookObj;
 	};
@@ -658,7 +671,8 @@ const Firebase = (() => {
 		const alsoEnjoyedObject = {};
 		alsoEnjoyedObject.mainBook = await getAlsoEnjoyedBooksDetails(
 			userUID,
-			bookId
+			bookId,
+			true
 		);
 		const bookQuery = await database.collection('books').doc(bookId).get();
 		const rootBookQuery = await database
@@ -669,12 +683,18 @@ const Firebase = (() => {
 			return alsoEnjoyedObject;
 		}
 		alsoEnjoyedObject.alsoEnjoyedBooks = [];
-		await Promise.all(
-			rootBookQuery.data().map(async (book) => {
-				const detailsObject = await getAlsoEnjoyedBooksDetails(userUID, book);
-				alsoEnjoyedObject.alsoEnjoyedBooks.push(detailsObject);
-			})
-		);
+		if (rootBookQuery.data().alsoEnjoyed !== undefined) {
+			await Promise.all(
+				rootBookQuery.data().alsoEnjoyed.map(async (book) => {
+					const detailsObject = await getAlsoEnjoyedBooksDetails(
+						userUID,
+						book,
+						false
+					);
+					alsoEnjoyedObject.alsoEnjoyedBooks.push(detailsObject);
+				})
+			);
+		}
 		return alsoEnjoyedObject;
 	};
 

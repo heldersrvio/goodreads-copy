@@ -274,6 +274,7 @@ const BookPage = ({ match }) => {
 		);
 		if (reviews.length > 0) {
 			const haveButtons = [];
+			setReviewsShowingMore(Array.from(reviews).map((review) => false));
 			Array.from(reviews).forEach((review) => {
 				if (review.scrollHeight <= 292) {
 					haveButtons.push(false);
