@@ -165,7 +165,7 @@ const SimilarBooksPage = ({ match }) => {
 	};
 
 	const rateBook = async (bookId, index, rating) => {
-		if (bookInfo.id !== undefined) {
+		if (bookId !== undefined) {
 			await Firebase.rateBook(user.userUID, bookId, rating, history);
 			setBookInfo((previous, i) => {
 				if (index === 0) {
