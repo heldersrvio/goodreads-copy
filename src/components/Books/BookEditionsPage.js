@@ -192,9 +192,11 @@ const BookEditionsPage = ({ match }) => {
 				<span className="editions-bold">Editions</span>
 				<span className="page-showing-numbers-span">{`Showing ${
 					(page - 1) * 10 + 1
-				}-${(page - 1) * 10 + editionsPerPage} of ${
-					editionsInfo.length
-				}`}</span>
+				}-${
+					(page - 1) * 10 + editionsPerPage <= editionsInfo.length
+						? (page - 1) * 10 + editionsPerPage
+						: editionsInfo.length
+				} of ${editionsInfo.length}`}</span>
 			</div>
 			<div className="book-editions-page-info-and-filters-bottom-right">
 				<label htmlFor="format">Format</label>
@@ -242,6 +244,13 @@ const BookEditionsPage = ({ match }) => {
 			</div>
 		</div>
 	) : null;
+
+	const pageInfoAndFilters = (
+		<div className="page-info-and-filters">
+			{pageInfoAndFiltersTop}
+			{pageInfoAndFiltersBottom}
+		</div>
+	);
 
 	const generateAddToShelfButton = (editionObject, index) => {
 		return loaded && editionObject.userStatus === 'reading' ? (
@@ -521,71 +530,221 @@ const BookEditionsPage = ({ match }) => {
 		);
 	};
 
-	const bookOptionsDropdown = (
-		<div className="book-page-book-option-dropdown-trigger">
-			<div className="book-options-dropdown">
-				<div className="book-options-dropdown-top">
-					<button
-						className="dropdown-read-button"
-						onClick={() => changeBookShelf('read')}
-					>
-						Read
-					</button>
-					<button
-						className="dropdown-currently-reading-button"
-						onClick={() => changeBookShelf('reading')}
-					>
-						Currently Reading
-					</button>
-					<button
-						className="dropdown-want-to-read-button"
-						onClick={() => changeBookShelf('to-read')}
-					>
-						Want to Read
-					</button>
-				</div>
-				<div className="book-options-dropdown-bottom">
-					<button
-						className="dropdown-add-shelf"
-						onClick={(_e) => setIsAddShelfInputSectionHidden(false)}
-					>
-						Add Shelf
-					</button>
-					<div
-						className={
-							isAddShelfInputSectionHidden
-								? 'dropdown-add-shelf-input-section hidden'
-								: 'dropdown-add-shelf-input-section'
-						}
-					>
-						<input
-							className="dropdown-add-shelf-input"
-							type="text"
-							value={addShelfInput}
-							onChange={(e) => setAddShelfInput(e.target.value)}
-						></input>
+	const generateBookOptionsDropdown = (editionObject, index) => {
+		return (
+			<div className="book-page-book-option-dropdown-trigger">
+				<div className="book-options-dropdown">
+					<div className="book-options-dropdown-top">
 						<button
-							className="dropdown-add-shelf-add-button"
-							onClick={async (_e) => {
-								if (addShelfInput.length > 0) {
-									await Firebase.addBookToUserShelf(
-										user.userUID,
-										bookInfo.rootBook,
-										addShelfInput,
-										null,
-										history
-									);
-									setIsAddShelfInputSectionHidden(true);
-								}
-							}}
+							className="dropdown-read-button"
+							onClick={() => changeBookShelf('read')}
 						>
-							Add
+							Read
 						</button>
+						<button
+							className="dropdown-currently-reading-button"
+							onClick={() => changeBookShelf('reading')}
+						>
+							Currently Reading
+						</button>
+						<button
+							className="dropdown-want-to-read-button"
+							onClick={() => changeBookShelf('to-read')}
+						>
+							Want to Read
+						</button>
+					</div>
+					<div className="book-options-dropdown-bottom">
+						<button
+							className="dropdown-add-shelf"
+							onClick={(_e) =>
+								setAreAddShelfInputSectionsHidden((previous) =>
+									previous.map((value, i) => (i === index ? false : value))
+								)
+							}
+						>
+							Add Shelf
+						</button>
+						<div
+							className={
+								areAddShelfInputSectionsHidden[index]
+									? 'dropdown-add-shelf-input-section hidden'
+									: 'dropdown-add-shelf-input-section'
+							}
+						>
+							<input
+								className="dropdown-add-shelf-input"
+								type="text"
+								value={addShelfInputs[index]}
+								onChange={(e) => {
+									const newValue = e.target.value;
+									setAddShelfInputs((previous) =>
+										previous.map((value, i) => (i === index ? newValue : value))
+									);
+								}}
+							></input>
+							<button
+								className="dropdown-add-shelf-add-button"
+								onClick={async (_e) => {
+									if (addShelfInputs[index].length > 0) {
+										await Firebase.addBookToUserShelf(
+											user.userUID,
+											editionObject.rootBook,
+											addShelfInputs[index],
+											null,
+											history
+										);
+										setAreAddShelfInputSectionsHidden((previous) =>
+											previous.map((value, i) => (i === index ? true : value))
+										);
+									}
+								}}
+							>
+								Add
+							</button>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-	);
+		);
+	};
+
+	const generateRateBookSection = (editionObject, index) => {
+		return (
+			<div className="book-page-rate-book">
+				{editionObject.userRating === undefined ? null : (
+					<button
+						className="clear-rating-button"
+						onClick={() => rateBook(undefined)}
+					>
+						Clear rating
+					</button>
+				)}
+				{editionObject.userRating === undefined ? (
+					<span className="rate-this-book">Rate this book</span>
+				) : (
+					<span className="rate-this-book my-rating">My rating:</span>
+				)}
+				<div className="book-page-rate-book-star-rating">
+					<div
+						className={
+							exhibitedStarRatings[index] > 0
+								? 'interactive-star small on'
+								: 'interactive-star small'
+						}
+						title="did not like it"
+						onMouseOver={(_e) =>
+							setExhibitedStarRatings((previous) =>
+								previous.map((value, i) => (i === index ? 1 : value))
+							)
+						}
+						onMouseLeave={(_e) =>
+							setExhibitedStarRatings((previous) =>
+								previous.map((value, i) =>
+									i === index && editionObject.userRating !== undefined
+										? editionObject.userRating
+										: 0
+								)
+							)
+						}
+						onClick={() => rateBook(1)}
+					></div>
+					<div
+						className={
+							exhibitedStarRatings[index] > 1
+								? 'interactive-star small on'
+								: 'interactive-star small'
+						}
+						title="it was ok"
+						onMouseOver={(_e) =>
+							setExhibitedStarRatings((previous) =>
+								previous.map((value, i) => (i === index ? 2 : value))
+							)
+						}
+						onMouseLeave={(_e) =>
+							setExhibitedStarRatings((previous) =>
+								previous.map((value, i) =>
+									i === index && editionObject.userRating !== undefined
+										? editionObject.userRating
+										: 0
+								)
+							)
+						}
+						onClick={() => rateBook(2)}
+					></div>
+					<div
+						className={
+							exhibitedStarRatings[index] > 2
+								? 'interactive-star small on'
+								: 'interactive-star small'
+						}
+						title="liked it"
+						onMouseOver={(_e) =>
+							setExhibitedStarRatings((previous) =>
+								previous.map((value, i) => (i === index ? 3 : value))
+							)
+						}
+						onMouseLeave={(_e) =>
+							setExhibitedStarRatings((previous) =>
+								previous.map((value, i) =>
+									i === index && editionObject.userRating !== undefined
+										? editionObject.userRating
+										: 0
+								)
+							)
+						}
+						onClick={() => rateBook(3)}
+					></div>
+					<div
+						className={
+							exhibitedStarRatings[index] > 3
+								? 'interactive-star small on'
+								: 'interactive-star small'
+						}
+						title="really liked it"
+						onMouseOver={(_e) =>
+							setExhibitedStarRatings((previous) =>
+								previous.map((value, i) => (i === index ? 4 : value))
+							)
+						}
+						onMouseLeave={(_e) =>
+							setExhibitedStarRatings((previous) =>
+								previous.map((value, i) =>
+									i === index && editionObject.userRating !== undefined
+										? editionObject.userRating
+										: 0
+								)
+							)
+						}
+						onClick={() => rateBook(4)}
+					></div>
+					<div
+						className={
+							exhibitedStarRatings[index] > 4
+								? 'interactive-star small on'
+								: 'interactive-star small'
+						}
+						title="it was amazing"
+						onMouseOver={(_e) =>
+							setExhibitedStarRatings((previous) =>
+								previous.map((value, i) => (i === index ? 5 : value))
+							)
+						}
+						onMouseLeave={(_e) =>
+							setExhibitedStarRatings((previous) =>
+								previous.map((value, i) =>
+									i === index && editionObject.userRating !== undefined
+										? editionObject.userRating
+										: 0
+								)
+							)
+						}
+						onClick={() => rateBook(5)}
+					></div>
+				</div>
+			</div>
+		);
+	};
 
 	const generateEditionCard = (editionObject, index) => {
 		const editionRatingCount =
@@ -710,14 +869,135 @@ const BookEditionsPage = ({ match }) => {
 						</button>
 					</div>
 				</div>
-				<div className="right-section"></div>
+				<div className="right-section">
+					{generateAddToShelfButton(editionObject, index)}
+					{generateBookOptionsDropdown(editionObject, index)}
+					{generateRateBookSection(editionObject, index)}
+				</div>
 			</div>
 		);
 	};
 
 	const editionCardList = loaded ? (
-		<div className="book-editions-page-edition-card-list"></div>
+		<div className="book-editions-page-edition-card-list">
+			{editionsInfo
+				.map((edition, index) => generateEditionCard(edition, index))
+				.sort((a, b) => {
+					const aRatingCount =
+						a.fiveRatings +
+						a.fourRatings +
+						a.threeRatings +
+						a.twoRatings +
+						a.oneRatings;
+					const aAverageRating =
+						aRatingCount !== 0
+							? (a.fiveRatings * 5 +
+									a.fourRatings * 4 +
+									a.threeRatings * 3 +
+									a.twoRatings * 2 +
+									a.oneRatings) /
+							  aRatingCount
+							: 0;
+					const bRatingCount =
+						b.fiveRatings +
+						b.fourRatings +
+						b.threeRatings +
+						b.twoRatings +
+						b.oneRatings;
+					const bAverageRating =
+						bRatingCount !== 0
+							? (b.fiveRatings * 5 +
+									b.fourRatings * 4 +
+									b.threeRatings * 3 +
+									b.twoRatings * 2 +
+									b.oneRatings) /
+							  bRatingCount
+							: 0;
+					switch (sortOrder) {
+						case 'title':
+							return a.title < b.title ? -1 : 1;
+						case 'original date published':
+							return a.publishedDate - b.publishedDate;
+						case 'date published':
+							return b.publishedDate - a.publishedDate;
+						case 'avg rating':
+							return bAverageRating - aAverageRating;
+						case 'num ratings':
+							return bRatingCount - aRatingCount;
+						case 'format':
+							return a.type < b.type ? -1 : 1;
+						default:
+							return -1;
+					}
+				})
+				.filter((_editionCard, index) => {
+					return (
+						index >= (page - 1) * 10 &&
+						index + 1 <= (page - 1) * 10 + editionsPerPage
+					);
+				})}
+			<div className="page-navigation-section">
+				<button
+					onClick={setPage((previous) => previous - 1)}
+					disabled={page === 1}
+				>
+					« previous
+				</button>
+				{Array.from(
+					{ length: Math.ceiling(editionsInfo.length / editionsPerPage) },
+					(_x, i) => i + 1
+				).map((number) => {
+					return (
+						<button onClick={setPage(number)} disabled={page === number}>
+							{number}
+						</button>
+					);
+				})}
+				<button
+					onClick={setPage((previous) => previous + 1)}
+					disabled={
+						page === Math.ceiling(editionsInfo.length / editionsPerPage)
+					}
+				>
+					next »
+				</button>
+			</div>
+		</div>
 	) : null;
+
+	const editionsPerPageSelectionArea = loaded ? (
+		<div className="editions-per-page-selection-area">
+			<label htmlFor="editions-per-page">per page</label>
+			<select
+				name="editions-per-page"
+				value={editionsPerPage}
+				onChange={(e) => setEditionsPerPage(parseInt(e.target.value))}
+			>
+				<option value="10">10</option>
+				<option value="25">25</option>
+				<option value="50">50</option>
+				<option value="75">75</option>
+				<option value="100">100</option>
+			</select>
+		</div>
+	) : null;
+
+	const mainContent = loaded ? (
+		<div className="book-editions-page-main-content">
+			{pageTitle}
+			{pageInfoAndFilters}
+			{editionCardList}
+			{editionsPerPageSelectionArea}
+		</div>
+	) : null;
+
+	return (
+		<div className="book-editions-page">
+			<TopBar />
+			{mainContent}
+			<HomePageFootBar />
+		</div>
+	);
 };
 
 export default BookEditionsPage;
