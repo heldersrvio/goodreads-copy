@@ -13,6 +13,7 @@ import ForgotPasswordPage from './components/Authentication/ForgotPasswordPage';
 import BookStatsForEditionPage from './components/Books/BookStatsForEditionPage';
 import BookAllStatsPage from './components/Books/BookAllStatsPage';
 import SimilarBooksPage from './components/Books/SimilarBooksPage';
+import BookEditionsPage from './components/Books/BookEditionsPage';
 
 const store = createStore(reducer.userReducer);
 
@@ -40,6 +41,10 @@ ReactDOM.render(
 					<Route
 						path="/book/similar/:similarBooksPageId"
 						component={SimilarBooksPage}
+					/>
+					<Route
+						path="/work/editions/:bookEditionsPageId"
+						component={BookEditionsPage}
 					/>
 					<Route path="/" component={App} />
 				</Switch>

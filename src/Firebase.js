@@ -853,6 +853,35 @@ const Firebase = (() => {
 		);
 	};
 
+	const getEditionDetailsForBook = async (userUID, bookId) => {
+		const bookQuery = await database.collection('books').doc(bookId).get();
+		const rootBook = bookQuery.data().rootBook;
+		const booksQuery = await database
+			.collection('books')
+			.where('rootBook', '==', rootBook)
+			.get();
+		return await Promise.all(
+			booksQuery.docs.map(async (edition) => {
+				const editionObject = {
+					title: edition.data().title,
+					cover: edition.data().cover,
+					id: edition.id,
+					type: edition.data().type,
+					publisher: edition.data().publisher,
+					language: edition.data().language,
+					pageCount: edition.data().pageCount,
+					publishedDate: edition.data().publishedDate.toDate(),
+				};
+				const userDetailsForEdition = await getUserDetailsForBook(
+					userUID,
+					edition.id
+				);
+				Object.assign(editionObject, userDetailsForEdition);
+				return editionObject;
+			})
+		);
+	};
+
 	const queryBooks = async (searchString) => {
 		try {
 			const allBooksQuery = await queryAllBooksForSearchBar();
@@ -1462,6 +1491,7 @@ const Firebase = (() => {
 		pageGenerator,
 		getAlsoEnjoyedBooksDetailsForBook,
 		queryBookById,
+		getEditionDetailsForBook,
 		queryBooks,
 		queryNotifications,
 		getNumberOfNewFriends,

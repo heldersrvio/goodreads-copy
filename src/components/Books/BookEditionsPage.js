@@ -18,7 +18,7 @@ const BookEditionsPage = ({ match }) => {
 	const [defaultExpanding, setDefaultExpanding] = useState(false);
 	const [editionsPerPage, setEditionsPerPage] = useState(10);
 	const [page, setPage] = useState(1);
-	const [format, setFormat] = useState('');
+	const [formatFilter, setFormatFilter] = useState('');
 	const [sortOrder, setSortOrder] = useState('num ratings');
 	const [savingShelves, setSavingShelves] = useState([]);
 	const [
@@ -35,6 +35,55 @@ const BookEditionsPage = ({ match }) => {
 	const [shelfPopupToReadInputs, setShelfPopupToReadInputs] = useState([]);
 
 	const user = JSON.parse(localStorage.getItem('userState'));
+
+	useEffect(() => {
+		const getEditionsInfo = async () => {
+			const lSObjectItem = localStorage.getItem(`editions${bookId}Obj`);
+			if (lSObjectItem !== null) {
+				const lSObject = JSON.parse(lSObjectItem);
+				setEditionsInfo(lSObject);
+				console.log('Loaded editions from storage');
+				setDetailsExpanding(lSObject.map((_edition) => false));
+				setSavingShelves(lSObject.map((_edition) => false));
+				setAreAddShelfInputSectionsHidden(lSObject.map((_edition) => true));
+				setAddShelfInputs(lSObject.map((_edition) => ''));
+				setExhibitedStarRatings(
+					lSObject.map((edition) =>
+						edition.userRating !== undefined ? edition.userRating : 0
+					)
+				);
+				setAreShelfPopupsHidden(lSObject.map((_edition) => true));
+				setAreShelfPopupsBottomHidden(lSObject.map((_edition) => true));
+				setShelfPopupReadingInputs(lSObject.map((_edition) => ''));
+				setShelfPopupToReadInputs(lSObject.map((_edition) => ''));
+			} else {
+				const editionsObj = await Firebase.getEditionDetailsForBook(
+					user.userUID,
+					bookId
+				);
+				localStorage.setItem(
+					`alsoEnjoyed${bookId}Obj`,
+					JSON.stringify(editionsObj)
+				);
+				setEditionsInfo(editionsObj);
+				setDetailsExpanding(editionsObj.map((_edition) => false));
+				setSavingShelves(editionsObj.map((_edition) => false));
+				setAreAddShelfInputSectionsHidden(editionsObj.map((_edition) => true));
+				setAddShelfInputs(editionsObj.map((_edition) => ''));
+				setExhibitedStarRatings(
+					editionsObj.map((edition) =>
+						edition.userRating !== undefined ? edition.userRating : 0
+					)
+				);
+				setAreShelfPopupsHidden(editionsObj.map((_edition) => true));
+				setAreShelfPopupsBottomHidden(editionsObj.map((_edition) => true));
+				setShelfPopupReadingInputs(editionsObj.map((_edition) => ''));
+				setShelfPopupToReadInputs(editionsObj.map((_edition) => ''));
+			}
+			setLoaded(true);
+		};
+		getEditionsInfo();
+	}, [bookId, user.userUID]);
 
 	const displayRemoveBookConfirm = () => {
 		return window.confirm(
@@ -119,138 +168,6 @@ const BookEditionsPage = ({ match }) => {
 			});
 		}
 	};
-
-	const pageTitle = (
-		<div className="book-editions-page-title">
-			<a href={Firebase.pageGenerator.generateBookPage(bookId, bookTitle)}>
-				{bookTitle}
-			</a>
-			<span>{'>'}</span>
-			<span>Editions</span>
-		</div>
-	);
-
-	const pageInfoAndFiltersTop = loaded ? (
-		<div className="book-editions-page-info-and-filters-top">
-			<div className="book-editions-page-info-and-filters-top-left">
-				<span className="author-name-field">
-					<span>by</span>
-					<a
-						href={Firebase.pageGenerator.generateAuthorPage(
-							editionsInfo[0].authorIds[0],
-							editionsInfo[0].authorNames[0]
-						)}
-					>
-						{editionsInfo[0].authorNames[0]}
-					</a>
-				</span>
-				<span className="first-published-date-field">
-					{`First published ${format(
-						editionsInfo.reduce((previous, current) => {
-							if (
-								previous.publishedDate === undefined ||
-								current.publishedDate < previous.publishedDate
-							) {
-								return current.publishedDate;
-							}
-							return previous.publishedDate;
-						}, editionsInfo[0].publishedDate),
-						'MMMM do yyyy'
-					)}`}
-				</span>
-			</div>
-			<div className="book-editions-page-info-and-filters-top-right">
-				<button
-					className="expand-collapse-details-button"
-					onClick={(_e) => {
-						if (defaultExpanding) {
-							setDetailsExpanding((previous) =>
-								previous.map((_value) => false)
-							);
-							setDefaultExpanding(false);
-						} else {
-							setDetailsExpanding((previous) => previous.map((_value) => true));
-							setDefaultExpanding(true);
-						}
-					}}
-				>
-					{defaultExpanding ? 'collapse details' : 'expand details'}
-				</button>
-				<a
-					className="add-new-edition-a"
-					href={Firebase.pageGenerator.generateAddBookPage()}
-				>
-					Add a new edition
-				</a>
-			</div>
-		</div>
-	) : null;
-
-	const pageInfoAndFiltersBottom = loaded ? (
-		<div className="book-editions-page-info-and-filters-bottom">
-			<div className="book-editions-page-info-and-filters-bottom-left">
-				<span className="editions-bold">Editions</span>
-				<span className="page-showing-numbers-span">{`Showing ${
-					(page - 1) * 10 + 1
-				}-${
-					(page - 1) * 10 + editionsPerPage <= editionsInfo.length
-						? (page - 1) * 10 + editionsPerPage
-						: editionsInfo.length
-				} of ${editionsInfo.length}`}</span>
-			</div>
-			<div className="book-editions-page-info-and-filters-bottom-right">
-				<label htmlFor="format">Format</label>
-				<select
-					name="format"
-					value={format}
-					onChange={(e) => setFormat(e.target.value)}
-				>
-					<option value=""></option>
-					<option value="Paperback">Paperback</option>
-					<option value="Hardcover">Hardcover</option>
-					<option value="Mass Market Paperback">Mass Market Paperback</option>
-					<option value="Kindle Edition">Kindle Edition</option>
-					<option value="Nook">Nook</option>
-					<option value="ebook">ebook</option>
-					<option value="Library Binding">Library Binding</option>
-					<option value="Audiobook">Audiobook</option>
-					<option value="Audio CD">Audio CD</option>
-					<option value="Audio Cassette">Audio Cassette</option>
-					<option value="Audible Audio">Audible Audio</option>
-					<option value="CD-ROM">CD-ROM</option>
-					<option value="MP3 CD">MP3 CD</option>
-					<option value="Board book">Board book</option>
-					<option value="Leather Bound">Leather Bound</option>
-					<option value="Unbound">Unbound</option>
-					<option value="Spiral-bound">Spiral-bound</option>
-					<option value="Unknown Binding">Unknown Binding</option>
-				</select>
-				<label htmlFor="sort-order">Sort by</label>
-				<select
-					name="sort-order"
-					value={sortOrder}
-					onChange={(e) => setSortOrder(e.target.value)}
-				>
-					<option value="Paperback">Paperback</option>
-					<option value="title">title</option>
-					<option value="original date published">
-						original date published
-					</option>
-					<option value="date published">date published</option>
-					<option value="avg rating">avg rating</option>
-					<option value="num ratings">num ratings</option>
-					<option value="format">format</option>
-				</select>
-			</div>
-		</div>
-	) : null;
-
-	const pageInfoAndFilters = (
-		<div className="page-info-and-filters">
-			{pageInfoAndFiltersTop}
-			{pageInfoAndFiltersBottom}
-		</div>
-	);
 
 	const generateAddToShelfButton = (editionObject, index) => {
 		return loaded && editionObject.userStatus === 'reading' ? (
@@ -878,9 +795,8 @@ const BookEditionsPage = ({ match }) => {
 		);
 	};
 
-	const editionCardList = loaded ? (
-		<div className="book-editions-page-edition-card-list">
-			{editionsInfo
+	const sortedEditionCards = loaded
+		? editionsInfo
 				.map((edition, index) => generateEditionCard(edition, index))
 				.sort((a, b) => {
 					const aRatingCount =
@@ -930,38 +846,50 @@ const BookEditionsPage = ({ match }) => {
 							return -1;
 					}
 				})
-				.filter((_editionCard, index) => {
+		: null;
+
+	const editionCardList = loaded ? (
+		<div className="book-editions-page-edition-card-list">
+			{sortedEditionCards.length > 0 ? (
+				sortedEditionCards.filter((_editionCard, index) => {
 					return (
 						index >= (page - 1) * 10 &&
 						index + 1 <= (page - 1) * 10 + editionsPerPage
 					);
-				})}
-			<div className="page-navigation-section">
-				<button
-					onClick={setPage((previous) => previous - 1)}
-					disabled={page === 1}
-				>
-					« previous
-				</button>
-				{Array.from(
-					{ length: Math.ceiling(editionsInfo.length / editionsPerPage) },
-					(_x, i) => i + 1
-				).map((number) => {
-					return (
-						<button onClick={setPage(number)} disabled={page === number}>
-							{number}
-						</button>
-					);
-				})}
-				<button
-					onClick={setPage((previous) => previous + 1)}
-					disabled={
-						page === Math.ceiling(editionsInfo.length / editionsPerPage)
-					}
-				>
-					next »
-				</button>
-			</div>
+				})
+			) : (
+				<span className="no-editions-with-format-span">{`There are no editions with format ${formatFilter}.`}</span>
+			)}
+			{Math.ceiling(sortedEditionCards.length / editionsPerPage) > 1 ? (
+				<div className="page-navigation-section">
+					<button
+						onClick={setPage((previous) => previous - 1)}
+						disabled={page === 1}
+					>
+						« previous
+					</button>
+					{Array.from(
+						{
+							length: Math.ceiling(sortedEditionCards.length / editionsPerPage),
+						},
+						(_x, i) => i + 1
+					).map((number) => {
+						return (
+							<button onClick={setPage(number)} disabled={page === number}>
+								{number}
+							</button>
+						);
+					})}
+					<button
+						onClick={setPage((previous) => previous + 1)}
+						disabled={
+							page === Math.ceiling(sortedEditionCards.length / editionsPerPage)
+						}
+					>
+						next »
+					</button>
+				</div>
+			) : null}
 		</div>
 	) : null;
 
@@ -981,6 +909,138 @@ const BookEditionsPage = ({ match }) => {
 			</select>
 		</div>
 	) : null;
+
+	const pageTitle = (
+		<div className="book-editions-page-title">
+			<a href={Firebase.pageGenerator.generateBookPage(bookId, bookTitle)}>
+				{bookTitle}
+			</a>
+			<span>{'>'}</span>
+			<span>Editions</span>
+		</div>
+	);
+
+	const pageInfoAndFiltersTop = loaded ? (
+		<div className="book-editions-page-info-and-filters-top">
+			<div className="book-editions-page-info-and-filters-top-left">
+				<span className="author-name-field">
+					<span>by</span>
+					<a
+						href={Firebase.pageGenerator.generateAuthorPage(
+							editionsInfo[0].authorIds[0],
+							editionsInfo[0].authorNames[0]
+						)}
+					>
+						{editionsInfo[0].authorNames[0]}
+					</a>
+				</span>
+				<span className="first-published-date-field">
+					{`First published ${format(
+						editionsInfo.reduce((previous, current) => {
+							if (
+								previous.publishedDate === undefined ||
+								current.publishedDate < previous.publishedDate
+							) {
+								return current.publishedDate;
+							}
+							return previous.publishedDate;
+						}, editionsInfo[0].publishedDate),
+						'MMMM do yyyy'
+					)}`}
+				</span>
+			</div>
+			<div className="book-editions-page-info-and-filters-top-right">
+				<button
+					className="expand-collapse-details-button"
+					onClick={(_e) => {
+						if (defaultExpanding) {
+							setDetailsExpanding((previous) =>
+								previous.map((_value) => false)
+							);
+							setDefaultExpanding(false);
+						} else {
+							setDetailsExpanding((previous) => previous.map((_value) => true));
+							setDefaultExpanding(true);
+						}
+					}}
+				>
+					{defaultExpanding ? 'collapse details' : 'expand details'}
+				</button>
+				<a
+					className="add-new-edition-a"
+					href={Firebase.pageGenerator.generateAddBookPage()}
+				>
+					Add a new edition
+				</a>
+			</div>
+		</div>
+	) : null;
+
+	const pageInfoAndFiltersBottom = loaded ? (
+		<div className="book-editions-page-info-and-filters-bottom">
+			<div className="book-editions-page-info-and-filters-bottom-left">
+				<span className="editions-bold">Editions</span>
+				<span className="page-showing-numbers-span">{`Showing ${
+					sortedEditionCards.length > 0 ? (page - 1) * 10 + 1 : 0
+				}-${
+					(page - 1) * 10 + editionsPerPage <= sortedEditionCards.length
+						? (page - 1) * 10 + editionsPerPage
+						: sortedEditionCards.length
+				} of ${sortedEditionCards.length}`}</span>
+			</div>
+			<div className="book-editions-page-info-and-filters-bottom-right">
+				<label htmlFor="format">Format</label>
+				<select
+					name="format"
+					value={formatFilter}
+					onChange={(e) => setFormatFilter(e.target.value)}
+				>
+					<option value=""></option>
+					<option value="Paperback">Paperback</option>
+					<option value="Hardcover">Hardcover</option>
+					<option value="Mass Market Paperback">Mass Market Paperback</option>
+					<option value="Kindle Edition">Kindle Edition</option>
+					<option value="Nook">Nook</option>
+					<option value="ebook">ebook</option>
+					<option value="Library Binding">Library Binding</option>
+					<option value="Audiobook">Audiobook</option>
+					<option value="Audio CD">Audio CD</option>
+					<option value="Audio Cassette">Audio Cassette</option>
+					<option value="Audible Audio">Audible Audio</option>
+					<option value="CD-ROM">CD-ROM</option>
+					<option value="MP3 CD">MP3 CD</option>
+					<option value="Board book">Board book</option>
+					<option value="Leather Bound">Leather Bound</option>
+					<option value="Unbound">Unbound</option>
+					<option value="Spiral-bound">Spiral-bound</option>
+					<option value="Unknown Binding">Unknown Binding</option>
+				</select>
+				<label htmlFor="sort-order">Sort by</label>
+				<select
+					name="sort-order"
+					value={sortOrder}
+					onChange={(e) => setSortOrder(e.target.value)}
+				>
+					<option value="Paperback">Paperback</option>
+					<option value="title">title</option>
+					<option value="original date published">
+						original date published
+					</option>
+					<option value="date published">date published</option>
+					<option value="avg rating">avg rating</option>
+					<option value="num ratings">num ratings</option>
+					<option value="format">format</option>
+				</select>
+			</div>
+		</div>
+	) : null;
+
+	const pageInfoAndFilters = (
+		<div className="page-info-and-filters">
+			{pageInfoAndFiltersTop}
+			{pageInfoAndFiltersBottom}
+		</div>
+	);
 
 	const mainContent = loaded ? (
 		<div className="book-editions-page-main-content">
