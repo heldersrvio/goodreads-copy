@@ -180,6 +180,15 @@
 	font-weight: normal;
 }
 
+.similar-books-page-book-card-right-section div.book-on-to-read-shelf span,
+.similar-books-page-book-card-right-section div.book-on-read-shelf span,
+.similar-books-page-book-card-right-section div.book-on-reading-shelf span {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	width: 90px;
+}
+
 .similar-books-page-book-card-right-section
 	.book-page-book-option-dropdown-trigger {
 	width: 27px;
@@ -250,6 +259,12 @@
 	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
 		Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 	padding-left: 8px;
+}
+
+.similar-books-page-book-card-right-section
+	.book-options-dropdown-top
+	> button.bold {
+	font-weight: bold;
 }
 
 .similar-books-page-book-card-right-section
@@ -334,6 +349,48 @@
 
 .similar-books-page-book-card-right-section .interactive-star.on {
 	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAABwElEQVR4Ab2WNbDVQBSGg0uLu+y5wUoqKrxHW0pK3B0q3N11N7hLg9e49A0VLrsXD/lmeK7RnVk95/+/3Mh5z0vafpyRoXSv6FY2spJeONga9YJeKPTHOX+w1Sqksy7wNpeWVYBZF3mbn1WAWRcC/R4M9iugFZ2zIt7mJbXBnOUOtlqe1AZzlu9tPqMEUH2dWG7gciCLGgITi2mmprmgtL2s1V5r5JAzcjzqgTPqfLS/arXcclruOK0eRvv3DYGJkUMuGrR44IUn3jBgwfTCq8M7RgKDuIgOC6ZX0aKDuc6o33kB8YbRwKfij7Va3mUNxRPvxp/5+SH9rJHHWUHxwtNrTgvPjOjgjJxIC8UDLy9uc1pmReJfCYC/0KYrGro0Pi4YTRa1eVRcMJrUYBeodXHBaDL5FycuGE0qqDOqT4qC0Sf5rw3U9IZLn+yiNxRHm+IXy6V6TD8440+syGHNWe08tImg4ZlhbSPx11oF/mF9t5AzYrXAX/GIDaa2VgP+sUatCc9MbdVQPjFyyK3Q4ZGkam36f+Vv4nyX5KJBi0eCz0he88c8vOp3jqtFgxaPeMLzQ3q4oDTTS9nwwKu+2D9N9rM09Bxb/wAAAABJRU5ErkJggg==');
+}
+
+.similar-books-page-book-card-right-section .book-on-reading-shelf,
+.similar-books-page-book-card-right-section .book-on-read-shelf,
+.similar-books-page-book-card-right-section .book-on-to-read-shelf {
+	display: flex;
+	flex-direction: row;
+	border: none;
+	background-color: rgb(242, 242, 242);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	align-items: center;
+	border-radius: 3px;
+}
+
+.similar-books-page-book-card-right-section button.remove-book-from-shelf {
+	margin-right: 5px;
+}
+
+.similar-books-page-book-card-right-section
+	button.remove-book-from-shelf.to-read {
+	background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMCIgaGVpZ2h0PSIyOCIgdmlld0JveD0iMCAwIDMwIDI4IiB2ZXJzaW9uPSIxLjEiPjx0aXRsZT5UbyBSZWFkIENoZWNrbWFyazwvdGl0bGU+PGcgc3Ryb2tlPSJub25lIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+PHBhdGggZD0iTTI2LjQgMC40QzI1LjUtMC4zIDI0LjEtMC4xIDIzLjMgMC45TDEwLjYgMTggNS42IDE0LjFDNC42IDEzLjQgMy4yIDEzLjYgMi41IDE0LjVMMC41IDE3LjJDLTAuMyAxOC4yLTAuMSAxOS42IDAuOSAyMC4zTDEwLjMgMjcuNUMxMSAyOCAxMS43IDI4LjEgMTIuNCAyNy45IDEyLjkgMjcuNyAxMy4zIDI3LjUgMTMuNiAyNy4xTDI5LjYgNS42QzMwLjMgNC42IDMwLjEgMy4yIDI5LjEgMi41TDI2LjQgMC40WiIgZmlsbD0iIzI5NzIyRSIvPjwvZz48L3N2Zz4K');
+	background-repeat: no-repeat;
+	background-size: 13px 12px;
+}
+
+.similar-books-page-book-card-right-section button.remove-book-from-shelf.read {
+	background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMCIgaGVpZ2h0PSIyOCIgdmlld0JveD0iMCAwIDMwIDI4IiB2ZXJzaW9uPSIxLjEiPjx0aXRsZT5SZWFkIENoZWNrbWFyazwvdGl0bGU+PGcgc3Ryb2tlPSJub25lIiBzdHJva2Utd2lkdGg9IjEiIGZpbGw9Im5vbmUiIGZpbGwtcnVsZT0iZXZlbm9kZCI+PHBhdGggZD0iTTI2LjQgMC40QzI1LjUtMC4zIDI0LjEtMC4xIDIzLjMgMC45TDEwLjYgMTggNS42IDE0LjFDNC42IDEzLjQgMy4yIDEzLjYgMi41IDE0LjVMMC41IDE3LjJDLTAuMyAxOC4yLTAuMSAxOS42IDAuOSAyMC4zTDEwLjMgMjcuNUMxMSAyOCAxMS43IDI4LjEgMTIuNCAyNy45IDEyLjkgMjcuNyAxMy4zIDI3LjUgMTMuNiAyNy4xTDI5LjYgNS42QzMwLjMgNC42IDMwLjEgMy4yIDI5LjEgMi41TDI2LjQgMC40WiIgZmlsbD0iIzkwNzI2NCIvPjwvZz48L3N2Zz4K');
+	background-repeat: no-repeat;
+	background-size: 13px 12px;
+}
+
+.similar-books-page-book-card-right-section
+	button.remove-book-from-shelf.reading {
+	background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMCIgaGVpZ2h0PSIyOCIgdmlld0JveD0iMCAwIDMwIDI4IiB2ZXJzaW9uPSIxLjEiPjx0aXRsZT5DdXJyZW50bHkgUmVhZGluZyBDaGVja21hcms8L3RpdGxlPjxnIHN0cm9rZT0ibm9uZSIgc3Ryb2tlLXdpZHRoPSIxIiBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0yNi40IDAuNEMyNS41LTAuMyAyNC4xLTAuMSAyMy4zIDAuOUwxMC42IDE4IDUuNiAxNC4xQzQuNiAxMy40IDMuMiAxMy42IDIuNSAxNC41TDAuNSAxNy4yQy0wLjMgMTguMi0wLjEgMTkuNiAwLjkgMjAuM0wxMC4zIDI3LjVDMTEgMjggMTEuNyAyOC4xIDEyLjQgMjcuOSAxMi45IDI3LjcgMTMuMyAyNy41IDEzLjYgMjcuMUwyOS42IDUuNkMzMC4zIDQuNiAzMC4xIDMuMiAyOS4xIDIuNUwyNi40IDAuNFoiIGZpbGw9IiNGREM0MzEiLz48L2c+PC9zdmc+Cg==');
+	background-repeat: no-repeat;
+	background-size: 13px 12px;
+}
+
+.similar-books-page-book-card-right-section
+	button.remove-book-from-shelf:hover {
+	background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMyIgaGVpZ2h0PSIxMyIgdmlld0JveD0iMCAwIDEzIDEzIiB2ZXJzaW9uPSIxLjEiPjx0aXRsZT5SZW1vdmUgQm9vayBYPC90aXRsZT48ZyBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNNS40IDcuMkwtMS43IDcuMiAtMS43IDUuNCA1LjQgNS40IDUuNC0xLjcgNy4yLTEuNyA3LjIgNS40IDE0LjMgNS40IDE0LjMgNy4yIDcuMiA3LjIgNy4yIDE0LjMgNS40IDE0LjMgNS40IDcuMloiIGZpbGw9IiM3Njc2NzYiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDYuMzEzNzA4LCA2LjMxMzcwOCkgcm90YXRlKC00NS4wMDAwMDApIHRyYW5zbGF0ZSgtNi4zMTM3MDgsIC02LjMxMzcwOCkgIi8+PC9nPjwvc3ZnPgo=');
 }
 
 .similar-books-page-main-content > span {

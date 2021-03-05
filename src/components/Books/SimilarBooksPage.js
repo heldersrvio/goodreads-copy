@@ -36,7 +36,7 @@ const SimilarBooksPage = ({ match }) => {
 				}
 				i++;
 			}
-			const lSObjectItem = localStorage.getItem(`alsoEnjoyed${bookId}Obj`);
+			/*const lSObjectItem = localStorage.getItem(`alsoEnjoyed${bookId}Obj`);
 			if (lSObjectItem !== null) {
 				const lSObject = JSON.parse(lSObjectItem);
 				setBookInfo(lSObject);
@@ -57,31 +57,31 @@ const SimilarBooksPage = ({ match }) => {
 						book.userRating !== undefined ? book.userRating : 0
 					)
 				);
-			} else {
-				const bookObj = await Firebase.getAlsoEnjoyedBooksDetailsForBook(
-					user.userUID,
-					bookId
-				);
-				localStorage.setItem(
-					`alsoEnjoyed${bookId}Obj`,
-					JSON.stringify(bookObj)
-				);
-				setBookInfo(bookObj);
-				setSynopsisShowingMore(
-					[bookObj.mainBook, ...bookObj.alsoEnjoyedBooks].map((_book) => false)
-				);
-				setAreAddShelfInputSectionsHidden(
-					[bookObj.mainBook, ...bookObj.alsoEnjoyedBooks].map((_book) => true)
-				);
-				setAddShelfInputs(
-					[bookObj.mainBook, ...bookObj.alsoEnjoyedBooks].map((_book) => '')
-				);
-				setExhibitedStarRatings(
-					[bookObj.mainBook, ...bookObj.alsoEnjoyedBooks].map((book) =>
-						book.userRating !== undefined ? book.userRating : 0
-					)
-				);
-			}
+			} else {*/
+			const bookObj = await Firebase.getAlsoEnjoyedBooksDetailsForBook(
+				user.userUID,
+				bookId
+			);
+			localStorage.setItem(`alsoEnjoyed${bookId}Obj`, JSON.stringify(bookObj));
+			setBookInfo(bookObj);
+			setSynopsisShowingMore(
+				[bookObj.mainBook, ...bookObj.alsoEnjoyedBooks].map((_book) => false)
+			);
+			setSavingShelves(
+				[bookObj.mainBook, ...bookObj.alsoEnjoyedBooks].map((_book) => false)
+			);
+			setAreAddShelfInputSectionsHidden(
+				[bookObj.mainBook, ...bookObj.alsoEnjoyedBooks].map((_book) => true)
+			);
+			setAddShelfInputs(
+				[bookObj.mainBook, ...bookObj.alsoEnjoyedBooks].map((_book) => '')
+			);
+			setExhibitedStarRatings(
+				[bookObj.mainBook, ...bookObj.alsoEnjoyedBooks].map((book) =>
+					book.userRating !== undefined ? book.userRating : 0
+				)
+			);
+			//}
 			setLoaded(true);
 		};
 		getBookInfo();
@@ -233,7 +233,7 @@ const SimilarBooksPage = ({ match }) => {
 					className="remove-book-from-shelf reading"
 					onClick={(_e) => removeBookSafely(bookObject.id, index)}
 				></button>
-				<span>Currently Reading</span>
+				<span>{savingShelves[index] ? 'Saving...' : 'Currently Reading'}</span>
 			</div>
 		) : loaded && bookObject.userStatus === 'read' ? (
 			<div className="book-on-read-shelf">
@@ -241,7 +241,7 @@ const SimilarBooksPage = ({ match }) => {
 					className="remove-book-from-shelf read"
 					onClick={(_e) => removeBookSafely(bookObject.id, index)}
 				></button>
-				<span>Read</span>
+				<span>{savingShelves[index] ? 'Saving...' : 'Read'}</span>
 			</div>
 		) : loaded && bookObject.userStatus === 'to-read' ? (
 			<div className="book-on-to-read-shelf">
@@ -249,7 +249,7 @@ const SimilarBooksPage = ({ match }) => {
 					className="remove-book-from-shelf to-read"
 					onClick={(_e) => removeBookSafely(bookObject.id, index)}
 				></button>
-				<span>Want to Read</span>
+				<span>{savingShelves[index] ? 'Saving...' : 'Want to Read'}</span>
 			</div>
 		) : (
 			<button
@@ -273,22 +273,34 @@ const SimilarBooksPage = ({ match }) => {
 				>
 					<div className="book-options-dropdown-top">
 						<button
-							className="dropdown-read-button"
-							onClick={() => changeBookShelf(bookObject.id, index, 'read')}
+							className={
+								bookObject.userStatus === 'to-read'
+									? 'dropdown-want-to-read-button bold'
+									: 'dropdown-want-to-read-button'
+							}
+							onClick={() => changeBookShelf(bookObject.id, index, 'to-read')}
 						>
-							Read
+							Want to Read
 						</button>
 						<button
-							className="dropdown-currently-reading-button"
+							className={
+								bookObject.userStatus === 'reading'
+									? 'dropdown-reading-button bold'
+									: 'dropdown-want-reading-button'
+							}
 							onClick={() => changeBookShelf(bookObject.id, index, 'reading')}
 						>
 							Currently Reading
 						</button>
 						<button
-							className="dropdown-want-to-read-button"
-							onClick={() => changeBookShelf(bookObject.id, index, 'to-read')}
+							className={
+								bookObject.userStatus === 'read'
+									? 'dropdown-read-button bold'
+									: 'dropdown-read-button'
+							}
+							onClick={() => changeBookShelf(bookObject.id, index, 'read')}
 						>
-							Want to Read
+							Read
 						</button>
 					</div>
 					<div className="book-options-dropdown-bottom">
