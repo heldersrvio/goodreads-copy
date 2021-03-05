@@ -41,6 +41,22 @@ const SimilarBooksPage = ({ match }) => {
 				const lSObject = JSON.parse(lSObjectItem);
 				setBookInfo(lSObject);
 				console.log('Loaded book from storage');
+				setSynopsisShowingMore(
+					[lSObject.mainBook, ...lSObject.alsoEnjoyedBooks].map(
+						(_book) => false
+					)
+				);
+				setAreAddShelfInputSectionsHidden(
+					[lSObject.mainBook, ...lSObject.alsoEnjoyedBooks].map((_book) => true)
+				);
+				setAddShelfInputs(
+					[lSObject.mainBook, ...lSObject.alsoEnjoyedBooks].map((_book) => '')
+				);
+				setExhibitedStarRatings(
+					[lSObject.mainBook, ...lSObject.alsoEnjoyedBooks].map((book) =>
+						book.userRating !== undefined ? book.userRating : 0
+					)
+				);
 			} else {
 				const bookObj = await Firebase.getAlsoEnjoyedBooksDetailsForBook(
 					user.userUID,
@@ -51,6 +67,20 @@ const SimilarBooksPage = ({ match }) => {
 					JSON.stringify(bookObj)
 				);
 				setBookInfo(bookObj);
+				setSynopsisShowingMore(
+					[bookObj.mainBook, ...bookObj.alsoEnjoyedBooks].map((_book) => false)
+				);
+				setAreAddShelfInputSectionsHidden(
+					[bookObj.mainBook, ...bookObj.alsoEnjoyedBooks].map((_book) => true)
+				);
+				setAddShelfInputs(
+					[bookObj.mainBook, ...bookObj.alsoEnjoyedBooks].map((_book) => '')
+				);
+				setExhibitedStarRatings(
+					[bookObj.mainBook, ...bookObj.alsoEnjoyedBooks].map((book) =>
+						book.userRating !== undefined ? book.userRating : 0
+					)
+				);
 			}
 			setLoaded(true);
 		};
@@ -60,23 +90,7 @@ const SimilarBooksPage = ({ match }) => {
 	useLayoutEffect(() => {
 		const synopsis = document.getElementsByClassName('synopsis');
 		setSynopsisHaveButton(Array.from(synopsis).map((p) => p.scrollHeight > 36));
-		if (loaded) {
-			setSynopsisShowingMore(
-				[bookInfo.mainBook, ...bookInfo.alsoEnjoyedBooks].map((_book) => false)
-			);
-			setAreAddShelfInputSectionsHidden(
-				[bookInfo.mainBook, ...bookInfo.alsoEnjoyedBooks].map((_book) => true)
-			);
-			setAddShelfInputs(
-				[bookInfo.mainBook, ...bookInfo.alsoEnjoyedBooks].map((_book) => '')
-			);
-			setExhibitedStarRatings(
-				[bookInfo.mainBook, ...bookInfo.alsoEnjoyedBooks].map((book) =>
-					book.userRating !== undefined ? book.userRating : 0
-				)
-			);
-		}
-	}, [loaded, bookInfo.mainBook, bookInfo.alsoEnjoyedBooks]);
+	}, [loaded]);
 
 	const displayRemoveBookConfirm = () => {
 		return window.confirm(
@@ -213,7 +227,7 @@ const SimilarBooksPage = ({ match }) => {
 	) : null;
 
 	const generateAddToShelfButton = (bookObject, index) => {
-		return loaded && bookInfo.userStatus === 'reading' ? (
+		return loaded && bookObject.userStatus === 'reading' ? (
 			<div className="book-on-reading-shelf">
 				<button
 					className="remove-book-from-shelf reading"
@@ -221,7 +235,7 @@ const SimilarBooksPage = ({ match }) => {
 				></button>
 				<span>Currently Reading</span>
 			</div>
-		) : loaded && bookInfo.userStatus === 'read' ? (
+		) : loaded && bookObject.userStatus === 'read' ? (
 			<div className="book-on-read-shelf">
 				<button
 					className="remove-book-from-shelf read"
@@ -229,7 +243,7 @@ const SimilarBooksPage = ({ match }) => {
 				></button>
 				<span>Read</span>
 			</div>
-		) : loaded && bookInfo.userStatus === 'to-read' ? (
+		) : loaded && bookObject.userStatus === 'to-read' ? (
 			<div className="book-on-to-read-shelf">
 				<button
 					className="remove-book-from-shelf to-read"
@@ -242,7 +256,7 @@ const SimilarBooksPage = ({ match }) => {
 				className="book-page-want-to-read-button"
 				onClick={() => changeBookShelf(bookObject.id, index, 'to-read')}
 			>
-				{savingShelves[index] ? '...saving' : 'Want to Read'}
+				{savingShelves[index] ? 'Saving...' : 'Want to Read'}
 			</button>
 		);
 	};
@@ -250,7 +264,13 @@ const SimilarBooksPage = ({ match }) => {
 	const generateBookOptionsDropdown = (bookObject, index) => {
 		return (
 			<div className="book-page-book-option-dropdown-trigger">
-				<div className="book-options-dropdown">
+				<div
+					className={
+						areAddShelfInputSectionsHidden[index]
+							? 'book-options-dropdown'
+							: 'book-options-dropdown expanded'
+					}
+				>
 					<div className="book-options-dropdown-top">
 						<button
 							className="dropdown-read-button"
@@ -273,7 +293,11 @@ const SimilarBooksPage = ({ match }) => {
 					</div>
 					<div className="book-options-dropdown-bottom">
 						<button
-							className="dropdown-add-shelf"
+							className={
+								areAddShelfInputSectionsHidden[index]
+									? 'dropdown-add-shelf'
+									: 'dropdown-add-shelf hidden'
+							}
 							onClick={(_e) =>
 								setAreAddShelfInputSectionsHidden((previous) =>
 									previous.map((value, i) => (i === index ? false : value))
@@ -292,6 +316,7 @@ const SimilarBooksPage = ({ match }) => {
 							<input
 								className="dropdown-add-shelf-input"
 								type="text"
+								placeholder="New Shelf Name"
 								value={addShelfInputs[index]}
 								onChange={(e) => {
 									const newValue = e.target.value;
@@ -301,6 +326,7 @@ const SimilarBooksPage = ({ match }) => {
 								}}
 							></input>
 							<button
+								disabled={addShelfInputs[index].length === 0}
 								className="dropdown-add-shelf-add-button"
 								onClick={async (_e) => {
 									if (addShelfInputs[index].length > 0) {
@@ -347,7 +373,14 @@ const SimilarBooksPage = ({ match }) => {
 				: 0;
 
 		return (
-			<div className="similar-books-page-book-card" key={index}>
+			<div
+				className={
+					index === bookInfo.alsoEnjoyedBooks.length
+						? 'similar-books-page-book-card borderless'
+						: 'similar-books-page-book-card'
+				}
+				key={index}
+			>
 				<div className="similar-books-page-book-card-left-section">
 					<a
 						href={Firebase.pageGenerator.generateBookPage(
