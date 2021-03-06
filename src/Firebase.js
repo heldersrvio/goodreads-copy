@@ -853,9 +853,7 @@ const Firebase = (() => {
 		);
 	};
 
-	const getEditionDetailsForBook = async (userUID, bookId) => {
-		const bookQuery = await database.collection('books').doc(bookId).get();
-		const rootBook = bookQuery.data().rootBook;
+	const getEditionDetailsForBook = async (userUID, rootBook) => {
 		const booksQuery = await database
 			.collection('books')
 			.where('rootBook', '==', rootBook)
@@ -872,6 +870,15 @@ const Firebase = (() => {
 					pageCount: edition.data().pageCount,
 					publishedDate: edition.data().publishedDate.toDate(),
 				};
+				const mainAuthorDetails = await getMainAuthorDetailsForBook(rootBook);
+				Object.assign(editionObject, mainAuthorDetails);
+				editionObject.authorFunctions = ['Writer'];
+				await getOtherAuthorsDetailsForBook(
+					edition.data().otherAuthors,
+					editionObject.authorNames,
+					editionObject.authorPages,
+					editionObject.authorFunctions
+				);
 				const userDetailsForEdition = await getUserDetailsForBook(
 					userUID,
 					edition.id

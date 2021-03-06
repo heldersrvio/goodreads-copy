@@ -4,6 +4,7 @@ import Firebase from '../../Firebase';
 import { format } from 'date-fns';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
+import '../styles/Books/BookEditionsPage.css';
 
 const BookEditionsPage = ({ match }) => {
 	const history = useHistory();
@@ -40,7 +41,12 @@ const BookEditionsPage = ({ match }) => {
 		const getEditionsInfo = async () => {
 			const lSObjectItem = localStorage.getItem(`editions${bookId}Obj`);
 			if (lSObjectItem !== null) {
-				const lSObject = JSON.parse(lSObjectItem);
+				const lSObject = JSON.parse(lSObjectItem).map((edition) => {
+					return {
+						...edition,
+						publishedDate: new Date(edition.publishedDate),
+					};
+				});
 				setEditionsInfo(lSObject);
 				console.log('Loaded editions from storage');
 				setDetailsExpanding(lSObject.map((_edition) => false));
@@ -62,7 +68,7 @@ const BookEditionsPage = ({ match }) => {
 					bookId
 				);
 				localStorage.setItem(
-					`alsoEnjoyed${bookId}Obj`,
+					`editions${bookId}Obj`,
 					JSON.stringify(editionsObj)
 				);
 				setEditionsInfo(editionsObj);
@@ -860,7 +866,7 @@ const BookEditionsPage = ({ match }) => {
 			) : (
 				<span className="no-editions-with-format-span">{`There are no editions with format ${formatFilter}.`}</span>
 			)}
-			{Math.ceiling(sortedEditionCards.length / editionsPerPage) > 1 ? (
+			{Math.ceil(sortedEditionCards.length / editionsPerPage) > 1 ? (
 				<div className="page-navigation-section">
 					<button
 						onClick={setPage((previous) => previous - 1)}
@@ -870,7 +876,7 @@ const BookEditionsPage = ({ match }) => {
 					</button>
 					{Array.from(
 						{
-							length: Math.ceiling(sortedEditionCards.length / editionsPerPage),
+							length: Math.ceil(sortedEditionCards.length / editionsPerPage),
 						},
 						(_x, i) => i + 1
 					).map((number) => {
@@ -883,7 +889,7 @@ const BookEditionsPage = ({ match }) => {
 					<button
 						onClick={setPage((previous) => previous + 1)}
 						disabled={
-							page === Math.ceiling(sortedEditionCards.length / editionsPerPage)
+							page === Math.ceil(sortedEditionCards.length / editionsPerPage)
 						}
 					>
 						next »
@@ -925,12 +931,7 @@ const BookEditionsPage = ({ match }) => {
 			<div className="book-editions-page-info-and-filters-top-left">
 				<span className="author-name-field">
 					<span>by</span>
-					<a
-						href={Firebase.pageGenerator.generateAuthorPage(
-							editionsInfo[0].authorIds[0],
-							editionsInfo[0].authorNames[0]
-						)}
-					>
+					<a href={editionsInfo[0].authorPages[0]}>
 						{editionsInfo[0].authorNames[0]}
 					</a>
 				</span>
