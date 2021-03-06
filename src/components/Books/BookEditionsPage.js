@@ -12,7 +12,7 @@ const BookEditionsPage = ({ match }) => {
 		params: { bookEditionsPageId },
 	} = match;
 	const bookId = bookEditionsPageId.split('.')[0];
-	const bookTitle = bookEditionsPageId.split('.')[1].replace('_', ' ');
+	const bookTitle = bookEditionsPageId.split('.')[1].replace(/_/g, ' ');
 	const [loaded, setLoaded] = useState(false);
 	const [editionsInfo, setEditionsInfo] = useState([]);
 	const [detailsExpanding, setDetailsExpanding] = useState([]);
@@ -930,7 +930,7 @@ const BookEditionsPage = ({ match }) => {
 		<div className="book-editions-page-info-and-filters-top">
 			<div className="book-editions-page-info-and-filters-top-left">
 				<span className="author-name-field">
-					<span>by</span>
+					<span>{'by '}</span>
 					<a href={editionsInfo[0].authorPages[0]}>
 						{editionsInfo[0].authorNames[0]}
 					</a>
@@ -994,6 +994,7 @@ const BookEditionsPage = ({ match }) => {
 				<select
 					name="format"
 					value={formatFilter}
+					className="format-select"
 					onChange={(e) => setFormatFilter(e.target.value)}
 				>
 					<option value=""></option>
@@ -1020,6 +1021,7 @@ const BookEditionsPage = ({ match }) => {
 				<select
 					name="sort-order"
 					value={sortOrder}
+					className="sort-order-select"
 					onChange={(e) => setSortOrder(e.target.value)}
 				>
 					<option value="Paperback">Paperback</option>
