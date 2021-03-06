@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+
+.book-cover-page-main-content {
+	width: 970px;
+	margin: 20px 155px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.book-cover-page-main-content a {
+	padding: 0;
+	line-height: normal;
+	width: auto;
+}
+
+.book-cover-page-title {
+	color: rgb(56, 33, 16);
+	font-family: 'Merriweather', Georgia, 'Times New Roman', serif;
+	font-size: 20px;
+	font-weight: bold;
+	line-height: 24px;
+}
+
+.book-cover-page-title a {
+	display: inline;
+	color: rgb(0, 99, 93);
+	font-family: 'Merriweather', Georgia, 'Times New Roman', serif;
+	font-size: 20px;
+}
+
+.book-cover-page-title a:hover {
+	text-decoration: underline;
+}
+
+.book-cover-page-title > span {
+	margin-left: 6px;
+}
+
+.book-cover-page-main-content .main-content-left-section {
+	display: flex;
+	flex-direction: column;
+}
+
+.book-cover-page-main-content .main-content-left-section > a {
+	display: inline-block;
+	height: auto;
+	margin-top: 20px;
+}
+
+.book-cover-page-main-content .main-content-right-section {
+	margin-top: 15px;
+}
+
+.book-cover-page-main-content .main-content-right-section .photo-list > a {
+	width: 66px;
+	height: 50px;
+	overflow: hidden;
+	margin-right: 5px;
+	margin-bottom: 5px;
+}
+.book-cover-page-main-content .main-content-right-section .photo-list > a img {
+	width: 66px;
+}
+
+.book-cover-page .main-content-right-section-title-span {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	width: 300px;
+	padding: 2px 0;
+	height: 24px;
+	border-bottom: 1px solid rgb(216, 216, 216);
+	color: rgb(56, 33, 16);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.book-cover-page .main-content-right-section .photo-list {
+	margin-top: 10px;
+	width: 300px;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}

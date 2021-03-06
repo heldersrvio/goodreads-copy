@@ -30,6 +30,17 @@ const Firebase = (() => {
 			return '/book/photo/' + bookId + '.' + title.replace(/ /g, '_');
 		};
 
+		const generateBookPhotoPage = (bookId, title, photoId) => {
+			return (
+				'/photo/work/' +
+				bookId +
+				'.' +
+				title.replace(/ /g, '_') +
+				'?photo=' +
+				photoId
+			);
+		};
+
 		const generateBookEditionsPage = (originalBookId, originalBookTitle) => {
 			return (
 				'/work/editions/' +
@@ -147,6 +158,7 @@ const Firebase = (() => {
 			generateBookPage,
 			generateAddBookPage,
 			generateBookCoverPage,
+			generateBookPhotoPage,
 			generateBookEditionsPage,
 			generateSeriesPage,
 			generateAuthorPage,
@@ -1520,6 +1532,25 @@ const Firebase = (() => {
 		}
 	};
 
+	const getBookPhotos = async (bookId) => {
+		const bookQuery = await database.collection('books').doc(bookId).get();
+		const rootBook = bookQuery.data().rootBook;
+		const photoQuery = await database
+			.collection('bookPhotos')
+			.where('rootBook', '==', rootBook)
+			.get();
+		return {
+			cover: bookQuery.data().cover,
+			photos: photoQuery.docs.map((document) => {
+				return {
+					id: document.id,
+					url: document.data().url,
+					type: document.data().type,
+				};
+			}),
+		};
+	};
+
 	return {
 		pageGenerator,
 		getAlsoEnjoyedBooksDetailsForBook,
@@ -1552,6 +1583,7 @@ const Firebase = (() => {
 		followUnfollowAuthor,
 		recommendBook,
 		switchBookEditionForUser,
+		getBookPhotos,
 	};
 })();
 
