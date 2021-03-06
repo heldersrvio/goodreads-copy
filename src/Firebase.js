@@ -1495,6 +1495,31 @@ const Firebase = (() => {
 		}
 	};
 
+	const switchBookEditionForUser = async (userUID, oldEdition, newEdition) => {
+		const reviewQuery = await database
+			.collection('reviews')
+			.where('bookEdition', '==', oldEdition)
+			.where('user', '==', userUID)
+			.get();
+		if (reviewQuery.docs.length > 0) {
+			await database
+				.collection('reviews')
+				.doc(reviewQuery.docs[0].id)
+				.set({ bookEdition: newEdition }, { merge: true });
+		}
+		const userInstanceQuery = await database
+			.collection('userBooksInstances')
+			.where('bookId', '==', oldEdition)
+			.where('userId', '==', userUID)
+			.get();
+		if (userInstanceQuery.docs.length > 0) {
+			await database
+				.collection('userBooksInstances')
+				.doc(userInstanceQuery.docs[0].id)
+				.set({ bookId: newEdition }, { merge: true });
+		}
+	};
+
 	return {
 		pageGenerator,
 		getAlsoEnjoyedBooksDetailsForBook,
@@ -1526,6 +1551,7 @@ const Firebase = (() => {
 		likeUnlikeReview,
 		followUnfollowAuthor,
 		recommendBook,
+		switchBookEditionForUser,
 	};
 })();
 

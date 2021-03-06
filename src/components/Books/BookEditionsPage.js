@@ -34,12 +34,13 @@ const BookEditionsPage = ({ match }) => {
 	);
 	const [shelfPopupReadingInputs, setShelfPopupReadingInputs] = useState([]);
 	const [shelfPopupToReadInputs, setShelfPopupToReadInputs] = useState([]);
+	const [editionOnUserShelf, setEditionOnUserShelf] = useState(null);
 
 	const user = JSON.parse(localStorage.getItem('userState'));
 
 	useEffect(() => {
 		const getEditionsInfo = async () => {
-			const lSObjectItem = localStorage.getItem(`editions${rootBook}Obj`);
+			/*const lSObjectItem = localStorage.getItem(`editions${rootBook}Obj`);
 			if (lSObjectItem !== null) {
 				const lSObject = JSON.parse(lSObjectItem).map((edition) => {
 					return {
@@ -62,30 +63,38 @@ const BookEditionsPage = ({ match }) => {
 				setAreShelfPopupsBottomHidden(lSObject.map((_edition) => true));
 				setShelfPopupReadingInputs(lSObject.map((_edition) => ''));
 				setShelfPopupToReadInputs(lSObject.map((_edition) => ''));
-			} else {
-				const editionsObj = await Firebase.getEditionDetailsForBook(
-					user.userUID,
-					rootBook
-				);
-				localStorage.setItem(
-					`editions${rootBook}Obj`,
-					JSON.stringify(editionsObj)
-				);
-				setEditionsInfo(editionsObj);
-				setDetailsExpanding(editionsObj.map((_edition) => false));
-				setSavingShelves(editionsObj.map((_edition) => false));
-				setAreAddShelfInputSectionsHidden(editionsObj.map((_edition) => true));
-				setAddShelfInputs(editionsObj.map((_edition) => ''));
-				setExhibitedStarRatings(
-					editionsObj.map((edition) =>
-						edition.userRating !== undefined ? edition.userRating : 0
-					)
-				);
-				setAreShelfPopupsHidden(editionsObj.map((_edition) => true));
-				setAreShelfPopupsBottomHidden(editionsObj.map((_edition) => true));
-				setShelfPopupReadingInputs(editionsObj.map((_edition) => ''));
-				setShelfPopupToReadInputs(editionsObj.map((_edition) => ''));
-			}
+				setEditionOnUserShelf(lSObject.filter((edition) => edition.userStatus !== undefined).length > 0 ? lSObject.filter((edition) => edition.userStatus !== undefined)[0].id : null);
+			} else {*/
+			const editionsObj = await Firebase.getEditionDetailsForBook(
+				user.userUID,
+				rootBook
+			);
+			localStorage.setItem(
+				`editions${rootBook}Obj`,
+				JSON.stringify(editionsObj)
+			);
+			setEditionsInfo(editionsObj);
+			setDetailsExpanding(editionsObj.map((_edition) => false));
+			setSavingShelves(editionsObj.map((_edition) => false));
+			setAreAddShelfInputSectionsHidden(editionsObj.map((_edition) => true));
+			setAddShelfInputs(editionsObj.map((_edition) => ''));
+			setExhibitedStarRatings(
+				editionsObj.map((edition) =>
+					edition.userRating !== undefined ? edition.userRating : 0
+				)
+			);
+			setAreShelfPopupsHidden(editionsObj.map((_edition) => true));
+			setAreShelfPopupsBottomHidden(editionsObj.map((_edition) => true));
+			setShelfPopupReadingInputs(editionsObj.map((_edition) => ''));
+			setShelfPopupToReadInputs(editionsObj.map((_edition) => ''));
+			setEditionOnUserShelf(
+				editionsObj.filter((edition) => edition.userStatus !== undefined)
+					.length > 0
+					? editionsObj.filter((edition) => edition.userStatus !== undefined)[0]
+							.id
+					: null
+			);
+			//}
 			setLoaded(true);
 		};
 		getEditionsInfo();
@@ -679,22 +688,6 @@ const BookEditionsPage = ({ match }) => {
 	};
 
 	const generateEditionCard = (editionObject, index) => {
-		const editionRatingCount =
-			editionObject.fiveRatings +
-			editionObject.fourRatings +
-			editionObject.threeRatings +
-			editionObject.twoRatings +
-			editionObject.oneRatings;
-		const editionAverageRating =
-			editionRatingCount !== 0
-				? (editionObject.fiveRatings * 5 +
-						editionObject.fourRatings * 4 +
-						editionObject.threeRatings * 3 +
-						editionObject.twoRatings * 2 +
-						editionObject.oneRatings) /
-				  editionRatingCount
-				: 0;
-
 		return (
 			<div className="book-editions-page-edition-card" key={index}>
 				<div className="left-section">
@@ -718,7 +711,7 @@ const BookEditionsPage = ({ match }) => {
 						>
 							{`${editionObject.title}${
 								editionObject.type !== undefined
-									? `(${editionObject.type})`
+									? ` (${editionObject.type})`
 									: ''
 							}`}
 						</a>
@@ -790,9 +783,9 @@ const BookEditionsPage = ({ match }) => {
 									<th>Average rating:</th>
 									<td className="average-rating-td">
 										<span className="rating-value-span">
-											{Math.round(editionAverageRating, 2)}
+											{Math.round(editionObject.thisEditionRating, 2)}
 										</span>
-										<span className="rating-count-span">{` (${editionRatingCount} ratings)`}</span>
+										<span className="rating-count-span">{` (${editionObject.thisEditionRatings} ratings)`}</span>
 									</td>
 								</tr>
 							</tbody>
@@ -811,57 +804,46 @@ const BookEditionsPage = ({ match }) => {
 						</button>
 					</div>
 				</div>
-				<div className="right-section">
-					<div
-						className={`want-to-read-button-and-options ${
-							editionObject.userStatus !== undefined
-								? editionObject.userStatus
-								: ''
-						}`}
-					>
-						{generateAddToShelfButton(editionObject, index)}
-						{generateBookOptionsDropdown(editionObject, index)}
+				{editionOnUserShelf === null ||
+				editionOnUserShelf === editionObject.id ? (
+					<div className="right-section">
+						<div
+							className={`want-to-read-button-and-options ${
+								editionObject.userStatus !== undefined
+									? editionObject.userStatus
+									: ''
+							}`}
+						>
+							{generateAddToShelfButton(editionObject, index)}
+							{generateBookOptionsDropdown(editionObject, index)}
+						</div>
+						{generateRateBookSection(editionObject, index)}
 					</div>
-					{generateRateBookSection(editionObject, index)}
-				</div>
+				) : (
+					<button
+						className="switch-to-edition-button"
+						onClick={async (_e) => {
+							await Firebase.switchBookEditionForUser(
+								user.userUID,
+								editionOnUserShelf,
+								editionObject.id
+							);
+							setEditionOnUserShelf(editionObject.id);
+						}}
+					>
+						Switch to This Edition
+					</button>
+				)}
 			</div>
 		);
 	};
 
 	const sortedEditionCards = loaded
 		? editionsInfo
-				.map((edition, index) => generateEditionCard(edition, index))
+				.filter(
+					(edition) => edition.type === formatFilter || formatFilter === ''
+				)
 				.sort((a, b) => {
-					const aRatingCount =
-						a.fiveRatings +
-						a.fourRatings +
-						a.threeRatings +
-						a.twoRatings +
-						a.oneRatings;
-					const aAverageRating =
-						aRatingCount !== 0
-							? (a.fiveRatings * 5 +
-									a.fourRatings * 4 +
-									a.threeRatings * 3 +
-									a.twoRatings * 2 +
-									a.oneRatings) /
-							  aRatingCount
-							: 0;
-					const bRatingCount =
-						b.fiveRatings +
-						b.fourRatings +
-						b.threeRatings +
-						b.twoRatings +
-						b.oneRatings;
-					const bAverageRating =
-						bRatingCount !== 0
-							? (b.fiveRatings * 5 +
-									b.fourRatings * 4 +
-									b.threeRatings * 3 +
-									b.twoRatings * 2 +
-									b.oneRatings) /
-							  bRatingCount
-							: 0;
 					switch (sortOrder) {
 						case 'title':
 							return a.title < b.title ? -1 : 1;
@@ -870,15 +852,16 @@ const BookEditionsPage = ({ match }) => {
 						case 'date published':
 							return b.publishedDate - a.publishedDate;
 						case 'avg rating':
-							return bAverageRating - aAverageRating;
+							return b.thisEditionRating - a.thisEditionRating;
 						case 'num ratings':
-							return bRatingCount - aRatingCount;
+							return b.thisEditionRatings - a.thisEditionRatings;
 						case 'format':
 							return a.type < b.type ? -1 : 1;
 						default:
 							return -1;
 					}
 				})
+				.map((edition, index) => generateEditionCard(edition, index))
 		: null;
 
 	const editionCardList = loaded ? (
@@ -896,7 +879,7 @@ const BookEditionsPage = ({ match }) => {
 			{Math.ceil(sortedEditionCards.length / editionsPerPage) > 1 ? (
 				<div className="page-navigation-section">
 					<button
-						onClick={setPage((previous) => previous - 1)}
+						onClick={(_e) => setPage((previous) => previous - 1)}
 						disabled={page === 1}
 					>
 						« previous
@@ -908,13 +891,17 @@ const BookEditionsPage = ({ match }) => {
 						(_x, i) => i + 1
 					).map((number) => {
 						return (
-							<button onClick={setPage(number)} disabled={page === number}>
-								{number}
+							<button
+								key={number}
+								onClick={(_e) => setPage(number)}
+								disabled={page === number}
+							>
+								{page !== number ? number : <i>{number}</i>}
 							</button>
 						);
 					})}
 					<button
-						onClick={setPage((previous) => previous + 1)}
+						onClick={(_e) => setPage((previous) => previous + 1)}
 						disabled={
 							page === Math.ceil(sortedEditionCards.length / editionsPerPage)
 						}
@@ -932,7 +919,10 @@ const BookEditionsPage = ({ match }) => {
 			<select
 				name="editions-per-page"
 				value={editionsPerPage}
-				onChange={(e) => setEditionsPerPage(parseInt(e.target.value))}
+				onChange={(e) => {
+					setPage(1);
+					setEditionsPerPage(parseInt(e.target.value));
+				}}
 			>
 				<option value="10">10</option>
 				<option value="25">25</option>
@@ -1027,7 +1017,10 @@ const BookEditionsPage = ({ match }) => {
 					name="format"
 					value={formatFilter}
 					className="format-select"
-					onChange={(e) => setFormatFilter(e.target.value)}
+					onChange={(e) => {
+						setPage(1);
+						setFormatFilter(e.target.value);
+					}}
 				>
 					<option value=""></option>
 					<option value="Paperback">Paperback</option>
@@ -1056,7 +1049,6 @@ const BookEditionsPage = ({ match }) => {
 					className="sort-order-select"
 					onChange={(e) => setSortOrder(e.target.value)}
 				>
-					<option value="Paperback">Paperback</option>
 					<option value="title">title</option>
 					<option value="original date published">
 						original date published
