@@ -6,8 +6,10 @@
 	margin: 20px 155px;
 }
 
-.book-editions-page .page-info-and-filters, .book-editions-page .book-editions-page-edition-card-list, .book-editions-page .editions-per-page-selection-area {
-    padding-left: 10px;
+.book-editions-page .page-info-and-filters,
+.book-editions-page .book-editions-page-edition-card-list,
+.book-editions-page .editions-per-page-selection-area {
+	padding-left: 10px;
 }
 
 .book-editions-page-main-content a {
@@ -34,7 +36,8 @@
 	font-size: 20px;
 }
 
-.book-editions-page-title a:hover, .book-editions-page-info-and-filters-top-left .author-name-field a:hover {
+.book-editions-page-title a:hover,
+.book-editions-page-info-and-filters-top-left .author-name-field a:hover {
 	text-decoration: underline;
 }
 
@@ -43,127 +46,234 @@
 }
 
 .book-editions-page .page-info-and-filters {
-    margin-top: 20px;
-    margin-bottom: 20px;
+	margin-top: 20px;
+	margin-bottom: 20px;
 }
 
 .book-editions-page-info-and-filters-top {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    width: 759px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	width: 759px;
 }
 
-.book-editions-page-info-and-filters-top-left  {
-    font-family: 'Lato', Helvetica, Arial, sans-serif;
-    font-size: 16px;
-    font-weight: normal;
-    line-height: 18px;
-    color: rgb(56, 33, 16);
+.book-editions-page-info-and-filters-top-left {
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 16px;
+	font-weight: normal;
+	line-height: 18px;
+	color: rgb(56, 33, 16);
 }
 
 .book-editions-page-info-and-filters-top-left .first-published-date-field {
-    margin-left: 15px;
+	margin-left: 15px;
 }
 
 .book-editions-page-info-and-filters-top-left .author-name-field a {
-    display: inline;
-    color:rgb(0, 99, 93);
+	display: inline;
+	color: rgb(0, 99, 93);
 }
 
 .book-editions-page-info-and-filters-top-right {
-    display: flex;
-    flex-direction: row;
+	display: flex;
+	flex-direction: row;
 }
 
-.book-editions-page-info-and-filters-top-right button, .book-editions-page-info-and-filters-top-right a {
-    color:rgb(0, 99, 93);
-    padding: 0;
-    display: inline;
-    font-family: 'Lato', Helvetica, Arial, sans-serif;
-    font-size: 12px;
-    line-height: 18px;
-    height: auto;
+.book-editions-page-info-and-filters-top-right button,
+.book-editions-page-info-and-filters-top-right a {
+	color: rgb(0, 99, 93);
+	padding: 0;
+	display: inline;
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+	height: auto;
 }
 
-.book-editions-page-info-and-filters-top-right button:hover, .book-editions-page-info-and-filters-top-right a:hover, .book-editions-page-edition-card .info-section > a:hover {
-    text-decoration: underline;
-    background-color: transparent;
+.book-editions-page-info-and-filters-top-right button:hover,
+.book-editions-page-info-and-filters-top-right a:hover,
+.book-editions-page-edition-card .info-section > a:hover {
+	text-decoration: underline;
+	background-color: transparent;
 }
 
 .book-editions-page-info-and-filters-top-right .add-new-edition-a {
-    margin-left: 15px;
+	margin-left: 15px;
 }
 
 .book-editions-page-info-and-filters-bottom {
-    margin-top: 5px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    width: 653px;
+	margin-top: 5px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	width: 653px;
 }
 
 .book-editions-page-info-and-filters-bottom-left .editions-bold {
-    color: rgb(24, 24, 24);
-    font-family: 'Lato', Helvetica, Arial, sans-serif;
-    font-size: 14px;
-    font-weight: bold;
-    line-height: 18px;
-    margin-right: 5px;
+	color: rgb(24, 24, 24);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+	line-height: 18px;
+	margin-right: 5px;
 }
 
 .book-editions-page-info-and-filters-bottom-left .page-showing-numbers-span {
-    color: rgb(153, 153, 153);
-    font-family: 'Lato', Helvetica, Arial, sans-serif;
-    font-size: 11px;
-    line-height: 14px;
+	color: rgb(153, 153, 153);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 11px;
+	line-height: 14px;
 }
 
 .book-editions-page-info-and-filters-bottom-right label {
-    font-size: 11px;
-    cursor: text;
-    margin-right: 5px;
-    margin-left: 5px;
+	font-size: 11px;
+	cursor: text;
+	margin-right: 5px;
+	margin-left: 5px;
 }
 
 .book-editions-page-info-and-filters-bottom-right select.sort-order-select {
-    width: 151px;
-    height: 18px;
-    margin: 2px;
-    font-size: 11px;
+	width: 151px;
+	height: 18px;
+	margin: 2px;
+	font-size: 11px;
 }
 
 .book-editions-page-info-and-filters-bottom-right select.format-select {
-    width: 157px;
-    height: 18px;
-    margin: 2px;
-    font-size: 11px;
+	width: 157px;
+	height: 18px;
+	margin: 2px;
+	font-size: 11px;
 }
 
-.book-editions-page-edition-card, .book-editions-page-edition-card .left-section {
-    display: flex;
-    flex-direction: row;
+.book-editions-page-edition-card,
+.book-editions-page-edition-card .left-section {
+	display: flex;
+	flex-direction: row;
 }
 
-.book-editions-page-edition-card .right-section, .book-editions-page-edition-card .left-section .info-section {
-    display: flex;
-    flex-direction: column;
+.book-editions-page-edition-card .right-section,
+.book-editions-page-edition-card .left-section .info-section {
+	display: flex;
+	flex-direction: column;
 }
 
-.book-editions-page-edition-card .cover-section > a, .book-editions-page-edition-card .cover-section > a img {
-    width: 50px;
-    height: 70px;
+.book-editions-page-edition-card .cover-section > a,
+.book-editions-page-edition-card .cover-section > a img {
+	width: 50px;
+	height: 70px;
 }
 
 .book-editions-page-edition-card .info-section {
-    margin-left: 10px;
+	margin-left: 10px;
+	position: relative;
+	width: 321px;
 }
 
 .book-editions-page-edition-card .info-section > a {
-    display: inline;
-    color: rgb(51, 51, 51);
-    font-family: 'Merriweather', Georgia, 'Times New Roman', serif;
-    font-size: 14.4px;
-    font-weight: bold;
-    width: auto;
+	display: inline;
+	color: rgb(51, 51, 51);
+	font-family: 'Merriweather', Georgia, 'Times New Roman', serif;
+	font-size: 14.4px;
+	font-weight: bold;
+	width: auto;
+}
+
+.book-editions-page-edition-card .info-section button.more-less-detail-button {
+	padding: 0;
+	color: rgb(0, 99, 93);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+	width: 60px;
+	text-align: left;
+}
+
+.book-editions-page-edition-card
+	.info-section
+	button.more-less-detail-button:hover {
+	background-color: transparent;
+	text-decoration: underline;
+}
+
+.book-editions-page-edition-card .info-section span,
+.book-editions-page-edition-card .info-section th,
+.book-editions-page-edition-card .info-section td {
+	color: rgb(24, 24, 24);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.book-editions-page-edition-card .info-section > span {
+	margin-top: 2px;
+}
+
+.book-editions-page-edition-card .info-section-more-details {
+	table-layout: fixed;
+}
+
+.book-editions-page-edition-card .info-section-more-details.hidden {
+	display: none;
+}
+
+.book-editions-page-edition-card .info-section-more-details th {
+	width: 100px;
+	text-align: left;
+}
+
+.book-editions-page-edition-card
+	.info-section-more-details-author
+	.authors-td
+	a {
+	display: inline;
+	color: rgb(51, 51, 51);
+	font-family: 'Merriweather', Georgia, 'Times New Roman', serif;
+	font-size: 12px;
+	line-height: 18px;
+	padding: 0;
+	height: auto;
+}
+
+.book-editions-page-edition-card
+	.info-section-more-details-author
+	.authors-td
+	a:hover {
+	text-decoration: underline;
+}
+
+.book-editions-page-edition-card
+	.info-section-more-details-author
+	.author-function {
+	color: rgb(153, 153, 153);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+}
+
+.book-editions-page-edition-card .info-section-more-details .rating-count-span {
+	color: rgb(153, 153, 153);
+}
+
+.book-editions-page-edition-card .book-on-reading-shelf > span,
+.book-editions-page-edition-card .book-on-read-shelf > span,
+.book-editions-page-edition-card .book-on-to-read-shelf > span,
+.book-editions-page-edition-card .book-page-want-to-read-button {
+	font-size: 13px;
+}
+
+.book-editions-page-edition-card .shelf-pop-up span {
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	font-weight: normal;
+}
+
+.book-editions-page-edition-card .shelf-pop-up {
+	background-color: rgb(255, 255, 255);
+	-webkit-box-shadow: rgba(0, 0, 0, 0.5) 0px 3px 4px -3px;
+	box-shadow: rgba(0, 0, 0, 0.5) 0px 3px 4px -3px;
+	border: 1px solid rgb(204, 204, 204);
+	color: rgb(24, 24, 24);
+	width: 210px;
+	border-radius: 3px;
+	padding: 5px;
 }

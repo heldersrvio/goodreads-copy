@@ -11,7 +11,7 @@ const BookEditionsPage = ({ match }) => {
 	const {
 		params: { bookEditionsPageId },
 	} = match;
-	const bookId = bookEditionsPageId.split('.')[0];
+	const rootBook = bookEditionsPageId.split('.')[0];
 	const bookTitle = bookEditionsPageId.split('.')[1].replace(/_/g, ' ');
 	const [loaded, setLoaded] = useState(false);
 	const [editionsInfo, setEditionsInfo] = useState([]);
@@ -39,7 +39,7 @@ const BookEditionsPage = ({ match }) => {
 
 	useEffect(() => {
 		const getEditionsInfo = async () => {
-			const lSObjectItem = localStorage.getItem(`editions${bookId}Obj`);
+			const lSObjectItem = localStorage.getItem(`editions${rootBook}Obj`);
 			if (lSObjectItem !== null) {
 				const lSObject = JSON.parse(lSObjectItem).map((edition) => {
 					return {
@@ -65,10 +65,10 @@ const BookEditionsPage = ({ match }) => {
 			} else {
 				const editionsObj = await Firebase.getEditionDetailsForBook(
 					user.userUID,
-					bookId
+					rootBook
 				);
 				localStorage.setItem(
-					`editions${bookId}Obj`,
+					`editions${rootBook}Obj`,
 					JSON.stringify(editionsObj)
 				);
 				setEditionsInfo(editionsObj);
@@ -89,7 +89,7 @@ const BookEditionsPage = ({ match }) => {
 			setLoaded(true);
 		};
 		getEditionsInfo();
-	}, [bookId, user.userUID]);
+	}, [rootBook, user.userUID]);
 
 	const displayRemoveBookConfirm = () => {
 		return window.confirm(
@@ -97,9 +97,9 @@ const BookEditionsPage = ({ match }) => {
 		);
 	};
 
-	const removeBookSafely = (bookId, index) => {
+	const removeBookSafely = (editionObject, index) => {
 		if (displayRemoveBookConfirm()) {
-			Firebase.removeBookFromShelf(user.userUID, bookId);
+			Firebase.removeBookFromShelf(user.userUID, editionObject.id);
 			setEditionsInfo((previous) => {
 				return previous.map((previousObject, i) =>
 					i === index
@@ -115,12 +115,17 @@ const BookEditionsPage = ({ match }) => {
 		}
 	};
 
-	const changeBookShelf = async (bookId, index, shelf) => {
-		if (bookId !== undefined) {
+	const changeBookShelf = async (editionObject, index, shelf) => {
+		if (editionObject.id !== undefined) {
 			setSavingShelves((previous) =>
 				previous.map((value, i) => (i === index ? true : value))
 			);
-			await Firebase.addBookToShelf(user.userUID, bookId, shelf, history);
+			await Firebase.addBookToShelf(
+				user.userUID,
+				editionObject.id,
+				shelf,
+				history
+			);
 			setEditionsInfo((previous) => {
 				return previous.map((previousObject, i) =>
 					i === index
@@ -137,9 +142,9 @@ const BookEditionsPage = ({ match }) => {
 		}
 	};
 
-	const rateBook = async (bookId, index, rating) => {
-		if (bookId !== undefined) {
-			await Firebase.rateBook(user.userUID, bookId, rating, history);
+	const rateBook = async (editionObject, index, rating) => {
+		if (editionObject.id !== undefined) {
+			await Firebase.rateBook(user.userUID, editionObject.id, rating, history);
 			setEditionsInfo((previous, i) => {
 				return previous.map((previousObject, i) =>
 					i === index
@@ -243,7 +248,11 @@ const BookEditionsPage = ({ match }) => {
 							<button
 								className="progress-submit-button"
 								onClick={(_e) => {
-									updateProgress(shelfPopupReadingInputs[index]);
+									updateProgress(
+										editionObject,
+										index,
+										shelfPopupReadingInputs[index]
+									);
 									setAreShelfPopupsBottomHidden((previous) =>
 										previous.map((value, i) => (i === index ? true : value))
 									);
@@ -271,7 +280,7 @@ const BookEditionsPage = ({ match }) => {
 							<button
 								className="progress-finished-button"
 								onClick={(_e) => {
-									changeBookShelf('read');
+									changeBookShelf(editionObject, index, 'read');
 									setAreShelfPopupsBottomHidden((previous) =>
 										previous.map((value, i) => (i === index ? true : value))
 									);
@@ -290,7 +299,7 @@ const BookEditionsPage = ({ match }) => {
 				</div>
 				<button
 					className="remove-book-from-shelf reading"
-					onClick={removeBookSafely}
+					onClick={(_e) => removeBookSafely(editionObject, index)}
 				></button>
 				<span>Currently Reading</span>
 			</div>
@@ -328,7 +337,7 @@ const BookEditionsPage = ({ match }) => {
 				</div>
 				<button
 					className="remove-book-from-shelf read"
-					onClick={removeBookSafely}
+					onClick={(_e) => removeBookSafely(editionObject, index)}
 				></button>
 				<span>Read</span>
 			</div>
@@ -439,14 +448,14 @@ const BookEditionsPage = ({ match }) => {
 				</div>
 				<button
 					className="remove-book-from-shelf to-read"
-					onClick={removeBookSafely}
+					onClick={(_e) => removeBookSafely(editionObject, index)}
 				></button>
 				<span>Want to Read</span>
 			</div>
 		) : (
 			<button
 				className="book-page-want-to-read-button"
-				onClick={() => changeBookShelf('to-read')}
+				onClick={() => changeBookShelf(editionObject, index, 'to-read')}
 			>
 				{savingShelves[index] ? '...saving' : 'Want to Read'}
 			</button>
@@ -460,19 +469,19 @@ const BookEditionsPage = ({ match }) => {
 					<div className="book-options-dropdown-top">
 						<button
 							className="dropdown-read-button"
-							onClick={() => changeBookShelf('read')}
+							onClick={() => changeBookShelf(editionObject, index, 'read')}
 						>
 							Read
 						</button>
 						<button
 							className="dropdown-currently-reading-button"
-							onClick={() => changeBookShelf('reading')}
+							onClick={() => changeBookShelf(editionObject, index, 'reading')}
 						>
 							Currently Reading
 						</button>
 						<button
 							className="dropdown-want-to-read-button"
-							onClick={() => changeBookShelf('to-read')}
+							onClick={() => changeBookShelf(editionObject, index, 'to-read')}
 						>
 							Want to Read
 						</button>
@@ -538,7 +547,7 @@ const BookEditionsPage = ({ match }) => {
 				{editionObject.userRating === undefined ? null : (
 					<button
 						className="clear-rating-button"
-						onClick={() => rateBook(undefined)}
+						onClick={() => rateBook(editionObject, index, undefined)}
 					>
 						Clear rating
 					</button>
@@ -570,7 +579,7 @@ const BookEditionsPage = ({ match }) => {
 								)
 							)
 						}
-						onClick={() => rateBook(1)}
+						onClick={() => rateBook(editionObject, index, 1)}
 					></div>
 					<div
 						className={
@@ -593,7 +602,7 @@ const BookEditionsPage = ({ match }) => {
 								)
 							)
 						}
-						onClick={() => rateBook(2)}
+						onClick={() => rateBook(editionObject, index, 2)}
 					></div>
 					<div
 						className={
@@ -616,7 +625,7 @@ const BookEditionsPage = ({ match }) => {
 								)
 							)
 						}
-						onClick={() => rateBook(3)}
+						onClick={() => rateBook(editionObject, index, 3)}
 					></div>
 					<div
 						className={
@@ -639,7 +648,7 @@ const BookEditionsPage = ({ match }) => {
 								)
 							)
 						}
-						onClick={() => rateBook(4)}
+						onClick={() => rateBook(editionObject, index, 4)}
 					></div>
 					<div
 						className={
@@ -662,7 +671,7 @@ const BookEditionsPage = ({ match }) => {
 								)
 							)
 						}
-						onClick={() => rateBook(5)}
+						onClick={() => rateBook(editionObject, index, 5)}
 					></div>
 				</div>
 			</div>
@@ -739,45 +748,55 @@ const BookEditionsPage = ({ match }) => {
 								? `${editionObject.pageCount} pages`
 								: ''}
 						</span>
-						<div
+						<table
 							className={
 								detailsExpanding[index]
 									? 'info-section-more-details'
 									: 'info-section-more-details hidden'
 							}
 						>
-							<div className="info-section-more-details-left">
-								<span>Author(s):</span>
-								{editionObject.ISBN !== undefined ? <span>ISBN:</span> : null}
-								<span>Edition language:</span>
-								<span>Average rating:</span>
-							</div>
-							<div className="info-section-more-details-right">
-								<span className="authors-span">
-									{editionObject.authorPages.map((authorPage, i) => {
-										return (
-											<span key={i}>
-												<a href={authorPage}>{editionObject.authorNames[i]}</a>
-												{i !== 0 ? (
-													<span className="author-function">{` (${editionObject.authorFunctions[i]})`}</span>
-												) : null}
-												{i !== editionsInfo.length - 1 ? ', ' : ''}
-											</span>
-										);
-									})}
-								</span>
+							<tbody>
+								<tr className="info-section-more-details-author">
+									<th>Author(s):</th>
+									<td className="authors-td">
+										{editionObject.authorPages.map((authorPage, i) => {
+											return (
+												<span key={i}>
+													<a href={authorPage}>
+														{editionObject.authorNames[i]}
+													</a>
+													{i !== 0 ? (
+														<span className="author-function">{` (${editionObject.authorFunctions[i]})`}</span>
+													) : null}
+													{i !== editionObject.authorPages.length - 1
+														? ', '
+														: ''}
+												</span>
+											);
+										})}
+									</td>
+								</tr>
 								{editionObject.ISBN !== undefined ? (
-									<span>{editionObject.ISBN}</span>
+									<tr className="info-section-more-details-ISBN">
+										<th>ISBN:</th>
+										<td className="isbn-td">{editionObject.ISBN}</td>
+									</tr>
 								) : null}
-								<span>{editionObject.language}</span>
-								<span className="average-rating-span">
-									<span className="rating-value-span">
-										{Math.round(editionAverageRating, 2)}
-									</span>
-									<span className="rating-count-span">{`(${editionRatingCount} ratings)`}</span>
-								</span>
-							</div>
-						</div>
+								<tr className="info-section-more-details-language">
+									<th>Edition language:</th>
+									<td className="language-td">{editionObject.language}</td>
+								</tr>
+								<tr className="info-section-more-details-rating">
+									<th>Average rating:</th>
+									<td className="average-rating-td">
+										<span className="rating-value-span">
+											{Math.round(editionAverageRating, 2)}
+										</span>
+										<span className="rating-count-span">{` (${editionRatingCount} ratings)`}</span>
+									</td>
+								</tr>
+							</tbody>
+						</table>
 						<button
 							className="more-less-detail-button"
 							onClick={(_e) => {
@@ -793,8 +812,16 @@ const BookEditionsPage = ({ match }) => {
 					</div>
 				</div>
 				<div className="right-section">
-					{generateAddToShelfButton(editionObject, index)}
-					{generateBookOptionsDropdown(editionObject, index)}
+					<div
+						className={`want-to-read-button-and-options ${
+							editionObject.userStatus !== undefined
+								? editionObject.userStatus
+								: ''
+						}`}
+					>
+						{generateAddToShelfButton(editionObject, index)}
+						{generateBookOptionsDropdown(editionObject, index)}
+					</div>
 					{generateRateBookSection(editionObject, index)}
 				</div>
 			</div>
@@ -916,15 +943,20 @@ const BookEditionsPage = ({ match }) => {
 		</div>
 	) : null;
 
-	const pageTitle = (
+	const pageTitle = loaded ? (
 		<div className="book-editions-page-title">
-			<a href={Firebase.pageGenerator.generateBookPage(bookId, bookTitle)}>
+			<a
+				href={Firebase.pageGenerator.generateBookPage(
+					editionsInfo.filter((edition) => edition.isMainEdition)[0].id,
+					bookTitle
+				)}
+			>
 				{bookTitle}
 			</a>
 			<span>{'>'}</span>
 			<span>Editions</span>
 		</div>
-	);
+	) : null;
 
 	const pageInfoAndFiltersTop = loaded ? (
 		<div className="book-editions-page-info-and-filters-top">

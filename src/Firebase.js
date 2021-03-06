@@ -869,6 +869,7 @@ const Firebase = (() => {
 					language: edition.data().language,
 					pageCount: edition.data().pageCount,
 					publishedDate: edition.data().publishedDate.toDate(),
+					isMainEdition: edition.data().mainEdition,
 				};
 				const mainAuthorDetails = await getMainAuthorDetailsForBook(rootBook);
 				Object.assign(editionObject, mainAuthorDetails);
