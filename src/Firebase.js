@@ -1551,6 +1551,26 @@ const Firebase = (() => {
 		};
 	};
 
+	const getPhotoDetails = async (userUID, photoId) => {
+		const photoQuery = await database
+			.collection('bookPhotos')
+			.doc(photoId)
+			.get();
+		if (
+			userUID !== null &&
+			!photoQuery.data().usersWhoViewed.includes(userUID)
+		) {
+			await database
+				.collection('bookPhotos')
+				.doc(photoId)
+				.set(
+					{ usersWhoViewed: photoQuery.data().usersWhoViewed.concat(userUID) },
+					{ merge: true }
+				);
+		}
+		return photoQuery.data();
+	};
+
 	return {
 		pageGenerator,
 		getAlsoEnjoyedBooksDetailsForBook,
@@ -1584,6 +1604,7 @@ const Firebase = (() => {
 		recommendBook,
 		switchBookEditionForUser,
 		getBookPhotos,
+		getPhotoDetails,
 	};
 })();
 

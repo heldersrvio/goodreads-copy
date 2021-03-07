@@ -15,6 +15,7 @@ import BookAllStatsPage from './components/Books/BookAllStatsPage';
 import SimilarBooksPage from './components/Books/SimilarBooksPage';
 import BookEditionsPage from './components/Books/BookEditionsPage';
 import BookCoverPage from './components/Books/BookCoverPage';
+import BookPhotoPage from './components/Books/BookPhotoPage';
 
 const store = createStore(reducer.userReducer);
 
@@ -50,6 +51,10 @@ ReactDOM.render(
 					<Route
 						path="/book/photo/:bookCoverPageId"
 						component={BookCoverPage}
+					/>
+					<Route
+						path="/photo/work/:bookPhotoPageId"
+						component={BookPhotoPage}
 					/>
 					<Route path="/" component={App} />
 				</Switch>
