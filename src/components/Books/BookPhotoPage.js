@@ -14,22 +14,16 @@ const BookPhotoPage = ({ match, location }) => {
 	const bookId = bookPhotoPageId.split('.')[0];
 	const bookTitle = bookPhotoPageId.split('.')[1].replace(/_/g, ' ');
 
-	const user = JSON.parse(localStorage.getItem('userState'));
+    const user = JSON.parse(localStorage.getItem('userState'));
 
 	useEffect(() => {
-		const loadInfo = () => {
-			//const photoObj = await Firebase.getPhotoDetails(user.userUID, photoId);
-			const photoObj = {
-				url:
-					'https://m.media-amazon.com/images/M/MV5BMTU3MjUwMzQ3MF5BMl5BanBnXkFtZTgwMjcwNjkxMjI@._V1_UY1200_CR90,0,630,1200_AL_.jpg',
-				usersWhoViewed: ['3Vh4hNGoKqXx27fpUrsGalLOyU62'],
-				type: 'Extra',
-			};
+		const loadInfo = async () => {
+			const photoObj = await Firebase.getPhotoDetails(user.userUID, photoId);
 			setPhotoInfo(photoObj);
 			setLoaded(true);
 		};
 		loadInfo();
-	}, []);
+	}, [user.userUID, photoId]);
 
 	const mainContent = loaded ? (
 		<div className="book-photo-page-main-content">
