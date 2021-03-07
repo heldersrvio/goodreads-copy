@@ -1571,6 +1571,27 @@ const Firebase = (() => {
 		return photoQuery.data();
 	};
 
+	const getSynopsisAndPreSynopsisForBook = async (bookId) => {
+		try {
+			const bookQuery = await database.collection('books').doc(bookId).get();
+			return {
+				preSynopsis:
+					bookQuery.data().preSynopsis !== undefined
+						? bookQuery.data().preSynopsis
+						: null,
+				synopsis:
+					bookQuery.data().synopsis !== undefined
+						? bookQuery.data().synopsis
+						: null,
+			};
+		} catch (error) {
+			return {
+				preSynopsis: null,
+				synopsis: null,
+			};
+		}
+	};
+
 	return {
 		pageGenerator,
 		getAlsoEnjoyedBooksDetailsForBook,
@@ -1605,6 +1626,7 @@ const Firebase = (() => {
 		switchBookEditionForUser,
 		getBookPhotos,
 		getPhotoDetails,
+		getSynopsisAndPreSynopsisForBook,
 	};
 })();
 

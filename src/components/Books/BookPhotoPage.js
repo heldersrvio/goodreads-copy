@@ -14,7 +14,7 @@ const BookPhotoPage = ({ match, location }) => {
 	const bookId = bookPhotoPageId.split('.')[0];
 	const bookTitle = bookPhotoPageId.split('.')[1].replace(/_/g, ' ');
 
-    const user = JSON.parse(localStorage.getItem('userState'));
+	const user = JSON.parse(localStorage.getItem('userState'));
 
 	useEffect(() => {
 		const loadInfo = async () => {
