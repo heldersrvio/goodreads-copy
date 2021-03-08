@@ -339,11 +339,11 @@ const AddNewBookPage = ({ location }) => {
 				{titlePopup}
 			</div>
 			<div className="form-author-area">
-				<label htmlFor="author" className="main-label">
-					<span>author</span>
-					<span className="red-asterisk">*</span>
-				</label>
 				<div className="main-author-area">
+					<label htmlFor="author" className="main-label">
+						<span>author</span>
+						<span className="red-asterisk">*</span>
+					</label>
 					<input
 						type="text"
 						name="author"
@@ -632,6 +632,7 @@ const AddNewBookPage = ({ location }) => {
 				</label>
 				<textarea
 					name="description"
+					rows="20"
 					value={description}
 					onChange={(e) => setDescription(e.target.value)}
 					onFocus={(_e) => setIsDescriptionPopupHidden(false)}
@@ -650,7 +651,7 @@ const AddNewBookPage = ({ location }) => {
 					onFocus={(_e) => setIsLanguagePopupHidden(false)}
 					onBlur={(_e) => setIsLanguagePopupHidden(true)}
 				>
-					<option value="Selected...">Selected...</option>
+					<option value="Select...">Select...</option>
 					{languageOptions.map((option, index) => {
 						return (
 							<option value={option} key={index}>
@@ -665,7 +666,7 @@ const AddNewBookPage = ({ location }) => {
 	);
 
 	const workSettingsForm =
-		bookId === undefined ? (
+		bookId === null ? (
 			<form className="add-new-book-page-work-settings-form">
 				<div className="work-settings-form-top">
 					<h2>Work Settings</h2>
@@ -676,7 +677,9 @@ const AddNewBookPage = ({ location }) => {
 				</div>
 				<div className="work-settings-form-bottom">
 					<div className="form-original-title-area">
-						<label htmlFor="original-title">original title</label>
+						<label htmlFor="original-title" className="main-label">
+							original title
+						</label>
 						<input
 							type="text"
 							name="original-title"
@@ -688,56 +691,67 @@ const AddNewBookPage = ({ location }) => {
 						{originalTitlePopup}
 					</div>
 					<div className="form-original-publication-date-area">
-						<div className="published-year">
-							<label htmlFor="published-year">year:</label>
-							<input
-								type="text"
-								name="published-year"
-								value={originalPublishedYearInput}
-								onChange={(e) => setOriginalPublishedYearInput(e.target.value)}
-								onFocus={(_e) => setIsOriginalPublicationYearPopupHidden(false)}
-								onBlur={(_e) => setIsOriginalPublicationYearPopupHidden(true)}
-							></input>
-							{originalPublicationYearPopup}
-						</div>
-						<div className="published-month">
-							<label htmlFor="published-month">month:</label>
-							<select
-								name="published-month"
-								value={originalPublishedMonthInput}
-								onChange={(e) => setOriginalPublishedMonthInput(e.target.value)}
-							>
-								<option value=""></option>
-								<option value="January">January</option>
-								<option value="February">February</option>
-								<option value="March">March</option>
-								<option value="April">April</option>
-								<option value="May">May</option>
-								<option value="June">June</option>
-								<option value="July">July</option>
-								<option value="August">August</option>
-								<option value="September">September</option>
-								<option value="October">October</option>
-								<option value="November">November</option>
-								<option value="December">December</option>
-							</select>
-						</div>
-						<div className="published-day">
-							<label htmlFor="published-day">day:</label>
-							<select
-								name="published-day"
-								value={originalPublishedDayInput}
-								onChange={(e) => setOriginalPublishedDayInput(e.target.value)}
-							>
-								<option></option>
-								{Array(31)
-									.fill(0)
-									.map((_value, index) => (
-										<option key={index} value={toString(index + 1)}>
-											{index + 1}
-										</option>
-									))}
-							</select>
+						<label htmlFor="original-publication-date" className="main-label">
+							original publication date
+						</label>
+						<div className="original-publication-date">
+							<div className="published-year">
+								<label htmlFor="published-year">year:</label>
+								<input
+									type="text"
+									name="published-year"
+									value={originalPublishedYearInput}
+									onChange={(e) =>
+										setOriginalPublishedYearInput(e.target.value)
+									}
+									onFocus={(_e) =>
+										setIsOriginalPublicationYearPopupHidden(false)
+									}
+									onBlur={(_e) => setIsOriginalPublicationYearPopupHidden(true)}
+								></input>
+								{originalPublicationYearPopup}
+							</div>
+							<div className="published-month">
+								<label htmlFor="published-month">month:</label>
+								<select
+									name="published-month"
+									value={originalPublishedMonthInput}
+									onChange={(e) =>
+										setOriginalPublishedMonthInput(e.target.value)
+									}
+								>
+									<option value=""></option>
+									<option value="January">January</option>
+									<option value="February">February</option>
+									<option value="March">March</option>
+									<option value="April">April</option>
+									<option value="May">May</option>
+									<option value="June">June</option>
+									<option value="July">July</option>
+									<option value="August">August</option>
+									<option value="September">September</option>
+									<option value="October">October</option>
+									<option value="November">November</option>
+									<option value="December">December</option>
+								</select>
+							</div>
+							<div className="published-day">
+								<label htmlFor="published-day">day:</label>
+								<select
+									name="published-day"
+									value={originalPublishedDayInput}
+									onChange={(e) => setOriginalPublishedDayInput(e.target.value)}
+								>
+									<option></option>
+									{Array(31)
+										.fill(0)
+										.map((_value, index) => (
+											<option key={index} value={toString(index + 1)}>
+												{index + 1}
+											</option>
+										))}
+								</select>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -766,28 +780,29 @@ const AddNewBookPage = ({ location }) => {
 	const rightSection = (
 		<div className="add-new-book-page-right-section">
 			<div className="add-cover-image-section">
+				<span>Add a cover image for this book.</span>
 				<input type="file"></input>
 			</div>
 			<div className="guidelines-section">
 				<span className="guidelines-section-title">Guidelines</span>
 				<ul>
 					<li>
-						<b>Authors:</b>
+						<b>Authors: </b>
 						Add authors in the order they are listed on the book cover, or
 						alphabetically if there is no cover or various editions disagree.
 					</li>
 					<li>
-						<b>Format:</b>
+						<b>Format: </b>
 						Should generally be Hardcover, Paperback, Audio CD, Ebook, etc
 					</li>
 					<li>
-						<b>Title:</b>
+						<b>Title: </b>
 						If the book is in a series, put which book it is in parenthesis
 						after the title. For example: Harry Potter and the Sorcerer's Stone
 						(Harry Potter, #1).
 					</li>
 					<li>
-						<b>Types of books:</b>
+						<b>Types of books: </b>
 						Please only add books. Books generally have ISBN numbers (but don't
 						have to), and are usually published. Periodicals such as newspapers,
 						magazines, and comics are not books. However a volume of comics or

@@ -13,6 +13,10 @@
 
 .add-new-book-page-right-section {
 	width: 300px;
+	color: rgb(24, 24, 24);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
 }
 
 .add-new-book-page-main-content h1 {
@@ -21,15 +25,17 @@
 	font-size: 20px;
 	font-weight: bold;
 	display: block;
-	margin-bottom: 25px;
+	margin-bottom: 115px;
 }
 
 .add-new-book-page-main-content .main-label {
+	display: block;
 	color: rgb(56, 33, 16);
 	font-family: 'Lato', Helvetica, Arial, sans-serif;
 	font-size: 12px;
 	font-weight: bold;
 	line-height: 18px;
+	width: 135px;
 }
 
 .add-new-book-page-main-content .red-asterisk {
@@ -40,11 +46,21 @@
 	margin-left: 5px;
 }
 
+.add-new-book-page-main-content select {
+	height: 18px;
+	color: rgba(0, 0, 0, 0.847);
+	font-size: 11px;
+}
+
 .add-new-book-page-main-content input[type='text'] {
 	height: 13px;
 	padding: 1px;
 	border: 1px solid rgb(220, 214, 204);
 	border-radius: 3px;
+	color: rgb(51, 51, 51);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 11px;
+	line-height: normal;
 }
 
 .add-new-book-page-main-content input[type='text']:focus {
@@ -54,7 +70,8 @@
 
 .add-new-book-page-main-content .add-new-author-button,
 .add-new-book-page-main-content .add-role-button,
-.add-new-book-page-main-content .set-format-to-other-button {
+.add-new-book-page-main-content .set-format-to-other-button,
+.add-new-book-page-main-content button.set-format-to-options {
 	padding: 0;
 	display: inline;
 	color: rgb(0, 99, 93);
@@ -64,13 +81,331 @@
 	margin-left: 10px;
 }
 
+.add-new-book-page-main-content .add-new-author-button {
+	margin-left: 0;
+	margin-top: 2px;
+	margin-bottom: 5px;
+}
+
 .add-new-book-page-main-content .add-role-button {
 	font-size: 11px;
 }
 
 .add-new-book-page-main-content .add-new-author-button:hover,
 .add-new-book-page-main-content .add-role-button:hover,
-.add-new-book-page-main-content .set-format-to-other-button:hover {
+.add-new-book-page-main-content .set-format-to-other-button:hover,
+.add-new-book-page-main-content button.set-format-to-options:hover {
 	background-color: transparent;
 	text-decoration: underline;
+}
+
+.add-new-book-page-popup-wrapper.hidden {
+	display: none;
+}
+
+.add-new-book-page-main-content .form-title-area,
+.add-new-book-page-main-content .form-author-area .main-author-area,
+.add-new-book-page-main-content .form-isbn-area,
+.add-new-book-page-main-content .form-publisher-area,
+.add-new-book-page-main-content .form-published-area,
+.add-new-book-page-main-content .form-pages-area,
+.add-new-book-page-main-content .form-format-area,
+.add-new-book-page-main-content .form-edition-area,
+.add-new-book-page-main-content .form-edition-language-area,
+.add-new-book-page-main-content .form-original-title-area,
+.add-new-book-page-main-content .form-original-publication-date-area {
+	position: relative;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin-bottom: 2px;
+}
+
+.add-new-book-page-main-content .form-description-area {
+	position: relative;
+	display: flex;
+	flex-direction: row;
+	align-items: flex-start;
+	margin-bottom: 2px;
+}
+
+.add-new-book-page-main-content .form-title-area input {
+	width: 60%;
+}
+
+.add-new-book-page-main-content .form-isbn-area input {
+	width: 15%;
+}
+
+.add-new-book-page-main-content .form-publisher-area input,
+.add-new-book-page-main-content .form-edition-area input {
+	width: 40%;
+}
+
+.add-new-book-page-main-content .form-pages-area input {
+	width: 7%;
+}
+
+.add-new-book-page-main-content .form-author-area {
+	display: flex;
+	flex-direction: column;
+}
+
+.add-new-book-page-main-content .main-author-role-area {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin-left: 5px;
+}
+
+.add-new-book-page-main-content .main-author-role-area input {
+	width: 30%;
+}
+
+.add-new-book-page-main-content .form-author-area .other-authors-area {
+	margin-left: 135px;
+}
+
+.add-new-book-page-main-content
+	.form-author-area
+	.other-authors-area
+	.other-author-input {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.add-new-book-page-main-content
+	.form-author-area
+	.other-authors-area
+	.other-author-input-name {
+	margin-right: 10px;
+}
+
+.add-new-book-page-main-content
+	.form-author-area
+	.other-authors-area
+	.other-author-input-name,
+.add-new-book-page-main-content
+	.form-author-area
+	.other-authors-area
+	.other-author-input-role {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.add-new-book-page-main-content .other-authors-area label,
+.add-new-book-page-main-content .main-author-role-area label,
+.add-new-book-page-main-content .form-published-area .published label,
+.add-new-book-page-main-content
+	.form-original-publication-date-area
+	.original-publication-date
+	label {
+	color: rgb(24, 24, 24);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+	cursor: text;
+	margin-right: 5px;
+}
+
+.add-new-book-page-main-content .other-author-input-role input {
+	width: 30%;
+}
+
+.add-new-book-page-main-content .form-published-area .published,
+.add-new-book-page-main-content
+	.form-original-publication-date-area
+	.original-publication-date {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.add-new-book-page-main-content .form-published-area .published input,
+.add-new-book-page-main-content
+	.form-original-publication-date-area
+	.original-publication-date
+	input {
+	margin-right: 5px;
+}
+
+.add-new-book-page-main-content .published-day label {
+	margin-left: 5px;
+}
+
+.add-new-book-page-main-content textarea {
+	width: 385px;
+	padding: 2px;
+	margin: 5px 0;
+	border: 1px solid rgb(220, 214, 204);
+	border-radius: 3px;
+	color: rgb(51, 51, 51);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	line-height: 18px;
+}
+
+.add-new-book-page-main-content .form-edition-language-area select {
+	width: 303px;
+}
+
+.add-new-book-page-work-settings-form {
+	margin-top: 30px;
+}
+
+.add-new-book-page-work-settings-form h2 {
+	color: rgb(56, 33, 16);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 18px;
+	line-height: 18px;
+	margin-bottom: 3px;
+}
+
+.add-new-book-page-work-settings-form .work-settings-form-top {
+	margin-bottom: 5px;
+}
+
+.add-new-book-page-work-settings-form .work-settings-form-top span {
+	color: rgb(153, 153, 153);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.add-new-book-page-left-section-bottom > span {
+	display: block;
+	margin-top: 10px;
+	color: rgb(24, 24, 24);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.add-new-book-page-left-section-bottom > span .red-asterisk {
+	margin-right: 20px;
+}
+
+.add-new-book-page iframe {
+	margin-left: 135px;
+	margin-top: 5px;
+}
+
+.add-new-book-page input[type='submit'] {
+	width: 99.3px;
+	height: 30px;
+	border-radius: 3px;
+	padding: 8px 12px;
+	background-color: rgb(244, 241, 234);
+	color: rgb(51, 51, 51);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	line-height: 14px;
+	border: 1px solid rgb(214, 208, 196);
+	margin: 30px 0;
+}
+
+.add-new-book-page input[type='submit']:hover {
+	background-color: rgb(237, 230, 214);
+}
+
+.add-new-book-page-right-section .guidelines-section {
+	margin-top: 35px;
+}
+
+.add-new-book-page-right-section .guidelines-section-title {
+	font-family: 'Merriweather', Georgia, 'Times New Roman', serif;
+	color: rgb(0, 0, 0);
+	font-size: 15px;
+	font-weight: bold;
+	line-height: 24px;
+}
+
+.add-new-book-page-right-section b {
+	font-weight: bold;
+}
+
+.add-new-book-page-right-section ul {
+	padding-top: 10px;
+	padding-left: 18px;
+}
+
+.add-new-book-page-right-section li {
+	list-style-type: disc;
+	height: auto;
+	padding: 0;
+}
+
+.add-new-book-page-popup-wrapper {
+	position: absolute;
+	bottom: 25px;
+	width: 250px;
+	border: 6px solid rgb(235, 228, 180);
+	background-color: rgb(255, 246, 191);
+	color: rgb(81, 71, 33);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+	padding: 5px;
+	border-radius: 5px;
+}
+
+.add-new-book-page-popup-tip {
+	position: absolute;
+	bottom: -16px;
+	left: 5px;
+	width: 0;
+	height: 0;
+	border-right: 15px solid transparent;
+	border-bottom: 15px solid transparent;
+	border-left: 15px solid rgb(235, 228, 180);
+}
+
+.add-new-book-page .form-title-area .add-new-book-page-popup-wrapper {
+	left: 60%;
+}
+
+.add-new-book-page .main-author-area .add-new-book-page-popup-wrapper {
+	left: 33%;
+}
+
+.add-new-book-page .main-author-role-area .add-new-book-page-popup-wrapper {
+	left: 41%;
+}
+
+.add-new-book-page .other-author-input-name .add-new-book-page-popup-wrapper {
+	left: 53%;
+}
+
+.add-new-book-page .other-author-input-role .add-new-book-page-popup-wrapper {
+	left: 70%;
+}
+
+.add-new-book-page .published-year .add-new-book-page-popup-wrapper,
+.add-new-book-page .form-format-area .add-new-book-page-popup-wrapper {
+	left: 40%;
+}
+
+.add-new-book-page .form-edition-area .add-new-book-page-popup-wrapper,
+.add-new-book-page
+	.form-edition-language-area
+	.add-new-book-page-popup-wrapper {
+	left: 50%;
+}
+
+.add-new-book-page .form-description-area .add-new-book-page-popup-wrapper {
+	left: 65%;
+	bottom: 375px;
+}
+
+.add-new-book-page .form-original-title-area .add-new-book-page-popup-wrapper {
+	left: 40%;
+}
+
+.add-new-book-page .main-author-area,
+.add-new-book-page .other-author-input-name,
+.add-new-book-page .main-author-role-area,
+.add-new-book-page .other-author-input-role {
+	position: relative;
 }
