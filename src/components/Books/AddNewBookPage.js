@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Firebase from '../../Firebase';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
+import ReCAPTCHA from 'react-google-recaptcha';
+import '../styles/Books/AddNewBookPage.css';
 
 const AddNewBookPage = ({ location }) => {
 	const query = new URLSearchParams(location.search);
@@ -11,10 +13,10 @@ const AddNewBookPage = ({ location }) => {
 	const [loaded, setLoaded] = useState(false);
 	const [description, setDescription] = useState('');
 	const [titleInput, setTitleInput] = useState(
-		bookTitle !== undefined ? bookTitle : ''
+		bookTitle !== null ? bookTitle : ''
 	);
 	const [mainAuthorNameInput, setMainAuthorNameInput] = useState(
-		authorName !== undefined ? authorName : ''
+		authorName !== null ? authorName : ''
 	);
 	const [mainAuthorRoleInput, setMainAuthorRoleInput] = useState(null);
 	const [otherAuthorNameInputs, setOtherAuthorNameInputs] = useState([]);
@@ -40,6 +42,35 @@ const AddNewBookPage = ({ location }) => {
 	const [originalPublishedDayInput, setOriginalPublishedDayInput] = useState(
 		''
 	);
+	const [isTitlePopupHidden, setIsTitlePopupHidden] = useState(true);
+	const [isMainAuthorPopupHidden, setIsMainAuthorPopupHidden] = useState(true);
+	const [
+		isMainAuthorRolePopupHidden,
+		setIsMainAuthorRolePopupHidden,
+	] = useState(true);
+	const [isOtherAuthorsPopupHidden, setIsOtherAuthorsPopupHidden] = useState(
+		[]
+	);
+	const [
+		isOtherAuthorsRolesPopupHidden,
+		setIsOtherAuthorsRolesPopupHidden,
+	] = useState([]);
+	const [isPublishedYearPopupHidden, setIsPublishedYearPopupHidden] = useState(
+		true
+	);
+	const [isFormatPopupHidden, setIsFormatPopupHidden] = useState(true);
+	const [isEditionPopupHidden, setIsEditionPopupHidden] = useState(true);
+	const [isDescriptionPopupHidden, setIsDescriptionPopupHidden] = useState(
+		true
+	);
+	const [isLanguagePopupHidden, setIsLanguagePopupHidden] = useState(true);
+	const [isOriginalTitlePopupHidden, setIsOriginalTitlePopupHidden] = useState(
+		true
+	);
+	const [
+		isOriginalPublicationYearPopupHidden,
+		setIsOriginalPublicationYearPopupHidden,
+	] = useState(true);
 
 	const languageOptions = [
 		'Arabic',
@@ -83,7 +114,13 @@ const AddNewBookPage = ({ location }) => {
 	);
 
 	const titlePopup = (
-		<div className="add-new-book-page-popup-wrapper">
+		<div
+			className={
+				isTitlePopupHidden
+					? 'add-new-book-page-popup-wrapper hidden'
+					: 'add-new-book-page-popup-wrapper'
+			}
+		>
 			<div className="add-new-book-page-popup">
 				<span>
 					If the book is in a series, put which book it is in parenthesis after
@@ -95,7 +132,13 @@ const AddNewBookPage = ({ location }) => {
 	);
 
 	const mainAuthorPopup = (
-		<div className="add-new-book-page-popup-wrapper">
+		<div
+			className={
+				isMainAuthorPopupHidden
+					? 'add-new-book-page-popup-wrapper hidden'
+					: 'add-new-book-page-popup-wrapper'
+			}
+		>
 			<div className="add-new-book-page-popup">
 				<span>
 					First name goes first. Only social suffixes are used. This includes
@@ -107,8 +150,15 @@ const AddNewBookPage = ({ location }) => {
 		</div>
 	);
 
-	const rolePopup = (
-		<div className="add-new-book-page-popup-wrapper">
+	const generateRolePopup = (index) => (
+		<div
+			className={
+				(index === 0 && isMainAuthorRolePopupHidden) ||
+				(index !== 0 && isOtherAuthorsRolesPopupHidden[index - 1])
+					? 'add-new-book-page-popup-wrapper hidden'
+					: 'add-new-book-page-popup-wrapper'
+			}
+		>
 			<div className="add-new-book-page-popup">
 				<span>
 					Help us keep this field consistent. Suggested values are:
@@ -130,8 +180,14 @@ const AddNewBookPage = ({ location }) => {
 		</div>
 	);
 
-	const otherAuthorsPopup = (
-		<div className="add-new-book-page-popup-wrapper">
+	const generateOtherAuthorsPopup = (index) => (
+		<div
+			className={
+				isOtherAuthorsPopupHidden[index]
+					? 'add-new-book-page-popup-wrapper hidden'
+					: 'add-new-book-page-popup-wrapper'
+			}
+		>
 			<div className="add-new-book-page-popup">
 				<span>
 					Add authors in the order they are listed on the book cover, or
@@ -143,7 +199,13 @@ const AddNewBookPage = ({ location }) => {
 	);
 
 	const publishedYearPopup = (
-		<div className="add-new-book-page-popup-wrapper">
+		<div
+			className={
+				isPublishedYearPopupHidden
+					? 'add-new-book-page-popup-wrapper hidden'
+					: 'add-new-book-page-popup-wrapper'
+			}
+		>
 			<div className="add-new-book-page-popup">
 				<span>This is the date this particular edition was published.</span>
 			</div>
@@ -152,7 +214,13 @@ const AddNewBookPage = ({ location }) => {
 	);
 
 	const formatPopup = (
-		<div className="add-new-book-page-popup-wrapper">
+		<div
+			className={
+				isFormatPopupHidden
+					? 'add-new-book-page-popup-wrapper hidden'
+					: 'add-new-book-page-popup-wrapper'
+			}
+		>
 			<div className="add-new-book-page-popup">
 				<span>
 					To use a format not in the list click "other". Please only add books.
@@ -167,7 +235,13 @@ const AddNewBookPage = ({ location }) => {
 	);
 
 	const editionPopup = (
-		<div className="add-new-book-page-popup-wrapper">
+		<div
+			className={
+				isEditionPopupHidden
+					? 'add-new-book-page-popup-wrapper hidden'
+					: 'add-new-book-page-popup-wrapper'
+			}
+		>
 			<div className="add-new-book-page-popup">
 				<span>
 					Edition specific information about this book such as "Large print" or
@@ -179,7 +253,13 @@ const AddNewBookPage = ({ location }) => {
 	);
 
 	const descriptionPopup = (
-		<div className="add-new-book-page-popup-wrapper">
+		<div
+			className={
+				isDescriptionPopupHidden
+					? 'add-new-book-page-popup-wrapper hidden'
+					: 'add-new-book-page-popup-wrapper'
+			}
+		>
 			<div className="add-new-book-page-popup">
 				<span>
 					Description/synopsis only -- not your review. Please avoid spoilers,
@@ -191,7 +271,13 @@ const AddNewBookPage = ({ location }) => {
 	);
 
 	const languagePopup = (
-		<div className="add-new-book-page-popup-wrapper">
+		<div
+			className={
+				isLanguagePopupHidden
+					? 'add-new-book-page-popup-wrapper hidden'
+					: 'add-new-book-page-popup-wrapper'
+			}
+		>
 			<div className="add-new-book-page-popup">
 				<span>
 					The language this edition of the book is primarily written in.
@@ -202,7 +288,13 @@ const AddNewBookPage = ({ location }) => {
 	);
 
 	const originalTitlePopup = (
-		<div className="add-new-book-page-popup-wrapper">
+		<div
+			className={
+				isOriginalTitlePopupHidden
+					? 'add-new-book-page-popup-wrapper hidden'
+					: 'add-new-book-page-popup-wrapper'
+			}
+		>
 			<div className="add-new-book-page-popup">
 				<span>Title of the original publication of this work.</span>
 			</div>
@@ -211,7 +303,13 @@ const AddNewBookPage = ({ location }) => {
 	);
 
 	const originalPublicationYearPopup = (
-		<div className="add-new-book-page-popup-wrapper">
+		<div
+			className={
+				isOriginalPublicationYearPopupHidden
+					? 'add-new-book-page-popup-wrapper hidden'
+					: 'add-new-book-page-popup-wrapper'
+			}
+		>
 			<div className="add-new-book-page-popup">
 				<span>
 					The date the first edition of this title was published. All fields
@@ -235,6 +333,8 @@ const AddNewBookPage = ({ location }) => {
 					required={true}
 					value={titleInput}
 					onChange={(e) => setTitleInput(e.target.value)}
+					onFocus={(_e) => setIsTitlePopupHidden(false)}
+					onBlur={(_e) => setIsTitlePopupHidden(true)}
 				></input>
 				{titlePopup}
 			</div>
@@ -250,9 +350,11 @@ const AddNewBookPage = ({ location }) => {
 						required={true}
 						value={mainAuthorNameInput}
 						onChange={(e) => setMainAuthorNameInput(e.target.value)}
+						onFocus={(_e) => setIsMainAuthorPopupHidden(false)}
+						onBlur={(_e) => setIsMainAuthorPopupHidden(true)}
 					></input>
 					{mainAuthorPopup}
-					{mainAuthorRoleInput !== null ? (
+					{mainAuthorRoleInput === null ? (
 						<button
 							className="add-role-button"
 							onClick={(_e) => setMainAuthorRoleInput('')}
@@ -265,10 +367,12 @@ const AddNewBookPage = ({ location }) => {
 							<input
 								type="text"
 								name="main-author-role"
-								value={mainAuthorRoleInput}
+								value={mainAuthorRoleInput !== null ? mainAuthorRoleInput : ''}
 								onChange={(e) => setMainAuthorRoleInput(e.target.value)}
+								onFocus={(_e) => setIsMainAuthorRolePopupHidden(false)}
+								onBlur={(_e) => setIsMainAuthorRolePopupHidden(true)}
 							></input>
-							{rolePopup}
+							{generateRolePopup(0)}
 						</div>
 					)}
 				</div>
@@ -290,8 +394,20 @@ const AddNewBookPage = ({ location }) => {
 												)
 											);
 										}}
+										onFocus={(_e) =>
+											setIsOtherAuthorsPopupHidden((previous) =>
+												previous.map((value, i) =>
+													i === index ? false : value
+												)
+											)
+										}
+										onBlur={(_e) =>
+											setIsOtherAuthorsPopupHidden((previous) =>
+												previous.map((value, i) => (i === index ? true : value))
+											)
+										}
 									></input>
-									{otherAuthorsPopup}
+									{generateOtherAuthorsPopup(index)}
 								</div>
 								<div className="other-author-input-role">
 									<label htmlFor="role">role:</label>
@@ -307,8 +423,22 @@ const AddNewBookPage = ({ location }) => {
 												)
 											);
 										}}
+										onFocus={(_e) =>
+											setIsOtherAuthorsRolesPopupHidden((previous) =>
+												previous.map((value, i) =>
+													i === index + 1 ? false : value
+												)
+											)
+										}
+										onBlur={(_e) =>
+											setIsOtherAuthorsRolesPopupHidden((previous) =>
+												previous.map((value, i) =>
+													i === index + 1 ? true : value
+												)
+											)
+										}
 									></input>
-									{rolePopup}
+									{generateRolePopup(index + 1)}
 								</div>
 							</div>
 						);
@@ -318,6 +448,10 @@ const AddNewBookPage = ({ location }) => {
 						onClick={(_e) => {
 							setOtherAuthorNameInputs((previous) => previous.concat(''));
 							setOtherAuthorRoleInputs((previous) => previous.concat(''));
+							setIsOtherAuthorsPopupHidden((previous) => previous.concat(true));
+							setIsOtherAuthorsRolesPopupHidden((previous) =>
+								previous.concat(true)
+							);
 						}}
 					>
 						Add new author
@@ -358,6 +492,8 @@ const AddNewBookPage = ({ location }) => {
 							name="published-year"
 							value={publishedYearInput}
 							onChange={(e) => setPublishedYearInput(e.target.value)}
+							onFocus={(_e) => setIsPublishedYearPopupHidden(false)}
+							onBlur={(_e) => setIsPublishedYearPopupHidden(true)}
 						></input>
 						{publishedYearPopup}
 					</div>
@@ -422,6 +558,8 @@ const AddNewBookPage = ({ location }) => {
 						name="format"
 						value={formatInput}
 						onChange={(e) => setFormatInput(e.target.value)}
+						onFocus={(_e) => setIsFormatPopupHidden(false)}
+						onBlur={(_e) => setIsFormatPopupHidden(true)}
 					>
 						<option value=""></option>
 						<option value="Paperback">Paperback</option>
@@ -455,6 +593,7 @@ const AddNewBookPage = ({ location }) => {
 						className="set-format-to-other-button"
 						onClick={(_e) => {
 							setFormatIsOther(true);
+							setIsFormatPopupHidden(true);
 							setFormatInput('');
 						}}
 					>
@@ -482,6 +621,8 @@ const AddNewBookPage = ({ location }) => {
 					name="edition"
 					value={editionInput}
 					onChange={(e) => setEditionInput(e.target.value)}
+					onFocus={(_e) => setIsEditionPopupHidden(false)}
+					onBlur={(_e) => setIsEditionPopupHidden(true)}
 				></input>
 				{editionPopup}
 			</div>
@@ -493,6 +634,8 @@ const AddNewBookPage = ({ location }) => {
 					name="description"
 					value={description}
 					onChange={(e) => setDescription(e.target.value)}
+					onFocus={(_e) => setIsDescriptionPopupHidden(false)}
+					onBlur={(_e) => setIsDescriptionPopupHidden(true)}
 				></textarea>
 				{descriptionPopup}
 			</div>
@@ -504,6 +647,8 @@ const AddNewBookPage = ({ location }) => {
 					name="edition-language"
 					value={editionLanguageInput}
 					onChange={(e) => setEditionLanguageInput(e.target.value)}
+					onFocus={(_e) => setIsLanguagePopupHidden(false)}
+					onBlur={(_e) => setIsLanguagePopupHidden(true)}
 				>
 					<option value="Selected...">Selected...</option>
 					{languageOptions.map((option, index) => {
@@ -537,6 +682,8 @@ const AddNewBookPage = ({ location }) => {
 							name="original-title"
 							value={originalTitleInput}
 							onChange={(e) => setOriginalTitleInput(e.target.value)}
+							onFocus={(_e) => setIsOriginalTitlePopupHidden(false)}
+							onBlur={(_e) => setIsOriginalTitlePopupHidden(true)}
 						></input>
 						{originalTitlePopup}
 					</div>
@@ -548,6 +695,8 @@ const AddNewBookPage = ({ location }) => {
 								name="published-year"
 								value={originalPublishedYearInput}
 								onChange={(e) => setOriginalPublishedYearInput(e.target.value)}
+								onFocus={(_e) => setIsOriginalPublicationYearPopupHidden(false)}
+								onBlur={(_e) => setIsOriginalPublicationYearPopupHidden(true)}
 							></input>
 							{originalPublicationYearPopup}
 						</div>
@@ -605,12 +754,55 @@ const AddNewBookPage = ({ location }) => {
 					<span className="red-asterisk">*</span>
 					<span>denotes required field</span>
 				</span>
+				<ReCAPTCHA
+					sitekey={process.env.REACT_APP_SITE_KEY}
+					onChange={(value) => console.log(value)}
+				/>
+				<input type="submit" value="Create book"></input>
 			</div>
 		</div>
 	) : null;
 
+	const rightSection = (
+		<div className="add-new-book-page-right-section">
+			<div className="add-cover-image-section">
+				<input type="file"></input>
+			</div>
+			<div className="guidelines-section">
+				<span className="guidelines-section-title">Guidelines</span>
+				<ul>
+					<li>
+						<b>Authors:</b>
+						Add authors in the order they are listed on the book cover, or
+						alphabetically if there is no cover or various editions disagree.
+					</li>
+					<li>
+						<b>Format:</b>
+						Should generally be Hardcover, Paperback, Audio CD, Ebook, etc
+					</li>
+					<li>
+						<b>Title:</b>
+						If the book is in a series, put which book it is in parenthesis
+						after the title. For example: Harry Potter and the Sorcerer's Stone
+						(Harry Potter, #1).
+					</li>
+					<li>
+						<b>Types of books:</b>
+						Please only add books. Books generally have ISBN numbers (but don't
+						have to), and are usually published. Periodicals such as newspapers,
+						magazines, and comics are not books. However a volume of comics or
+						articles or a graphic novel is considered a book.
+					</li>
+				</ul>
+			</div>
+		</div>
+	);
+
 	const mainContent = (
-		<div className="add-new-book-page-main-content">{leftSection}</div>
+		<div className="add-new-book-page-main-content">
+			{leftSection}
+			{rightSection}
+		</div>
 	);
 
 	return (

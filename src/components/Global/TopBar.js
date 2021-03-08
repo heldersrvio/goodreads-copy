@@ -28,10 +28,14 @@ const TopBar = () => {
 		};
 
 		const checkForNewFriends = async () => {
-			const numberOfNewFriends = await Firebase.getNumberOfNewFriends(
-				user.userUID
-			);
-			setNewFriends(numberOfNewFriends);
+			if (user === null) {
+				setNewFriends(0);
+			} else {
+				const numberOfNewFriends = await Firebase.getNumberOfNewFriends(
+					user.userUID
+				);
+				setNewFriends(numberOfNewFriends);
+			}
 		};
 
 		document.addEventListener('click', (event) => {
@@ -109,7 +113,7 @@ const TopBar = () => {
 	);
 
 	const rightSection =
-		user.userUID === null ? (
+		user === null || user.userUID === undefined || user.userUID === null ? (
 			<div id="top-bar-right-section">
 				<div id="top-bar-sign-in-link-container">
 					<a id="top-bar-sign-in-link" href="/">
@@ -246,7 +250,7 @@ const TopBar = () => {
 		);
 
 	const browseDropDownGenresList =
-		user.userUID === null ? (
+		user === null || user.userUID === undefined || user.userUID === null ? (
 			<div id="browse-drop-down-right-section">
 				<span>GENRES</span>
 				<ul>
@@ -364,7 +368,7 @@ const TopBar = () => {
 					{browseDropDown}
 				</div>
 			</div>
-			<TopBarSearchBar userUID={user.userUID} />
+			<TopBarSearchBar userUID={user === null ? user : user.userUID} />
 			{rightSection}
 		</div>
 	);

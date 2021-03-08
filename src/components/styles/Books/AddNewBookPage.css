@@ -1,0 +1,76 @@
+.add-new-book-page-main-content {
+	margin: 0 155px;
+	padding: 15px 5px 5px 25px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.add-new-book-page-left-section {
+	width: 625px;
+	padding-right: 10px;
+}
+
+.add-new-book-page-right-section {
+	width: 300px;
+}
+
+.add-new-book-page-main-content h1 {
+	color: rgb(56, 33, 16);
+	font-family: 'Merriweather', Georgia, 'Times New Roman', serif;
+	font-size: 20px;
+	font-weight: bold;
+	display: block;
+	margin-bottom: 25px;
+}
+
+.add-new-book-page-main-content .main-label {
+	color: rgb(56, 33, 16);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	line-height: 18px;
+}
+
+.add-new-book-page-main-content .red-asterisk {
+	font-size: 18px;
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-weight: bold;
+	color: rgb(255, 0, 0);
+	margin-left: 5px;
+}
+
+.add-new-book-page-main-content input[type='text'] {
+	height: 13px;
+	padding: 1px;
+	border: 1px solid rgb(220, 214, 204);
+	border-radius: 3px;
+}
+
+.add-new-book-page-main-content input[type='text']:focus {
+	border-color: rgb(185, 173, 153);
+	box-shadow: rgba(185, 173, 153, 0.5) 0px 0px 4px 0px;
+}
+
+.add-new-book-page-main-content .add-new-author-button,
+.add-new-book-page-main-content .add-role-button,
+.add-new-book-page-main-content .set-format-to-other-button {
+	padding: 0;
+	display: inline;
+	color: rgb(0, 99, 93);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 14px;
+	margin-left: 10px;
+}
+
+.add-new-book-page-main-content .add-role-button {
+	font-size: 11px;
+}
+
+.add-new-book-page-main-content .add-new-author-button:hover,
+.add-new-book-page-main-content .add-role-button:hover,
+.add-new-book-page-main-content .set-format-to-other-button:hover {
+	background-color: transparent;
+	text-decoration: underline;
+}
