@@ -1,15 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Firebase from '../../Firebase';
+import { useHistory } from 'react-router-dom';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 import ReCAPTCHA from 'react-google-recaptcha';
 import '../styles/Books/AddNewBookPage.css';
 
+/* TODO: 
+ - Set up edition suggestions and message below title field
+ - Fix book fields that were once required in other components to become more flexible
+ - Adjust styling for error box and top warning/error message
+ - After successful book creation, redirect to book review page with message: 'Book was created. Please note that it will take up to 10 minutes for this book to be searchable by title/author.'
+*/
+
 const AddNewBookPage = ({ location }) => {
+	const history = useHistory();
 	const query = new URLSearchParams(location.search);
 	const authorName = query.get('author[name]');
 	const bookTitle = query.get('book[title]');
 	const bookId = query.get('work[id]');
+	const fileInput = useRef();
 	const [loaded, setLoaded] = useState(false);
 	const [description, setDescription] = useState('');
 	const [titleInput, setTitleInput] = useState(
@@ -29,7 +39,7 @@ const AddNewBookPage = ({ location }) => {
 	const [numberOfPagesInput, setNumberOfPagesInput] = useState('');
 	const [formatIsOther, setFormatIsOther] = useState(false);
 	const [formatInput, setFormatInput] = useState('');
-	const [editionInput, setEditionInput] = useState('');
+	const [amazonLinkInput, setAmazonLinkInput] = useState('');
 	const [editionLanguageInput, setEditionLanguageInput] = useState('Select...');
 	const [originalTitleInput, setOriginalTitleInput] = useState('');
 	const [originalPublishedYearInput, setOriginalPublishedYearInput] = useState(
@@ -59,7 +69,7 @@ const AddNewBookPage = ({ location }) => {
 		true
 	);
 	const [isFormatPopupHidden, setIsFormatPopupHidden] = useState(true);
-	const [isEditionPopupHidden, setIsEditionPopupHidden] = useState(true);
+	const [isAmazonLinkPopupHidden, setIsAmazonLinkPopupHidden] = useState(true);
 	const [isDescriptionPopupHidden, setIsDescriptionPopupHidden] = useState(
 		true
 	);
@@ -71,6 +81,9 @@ const AddNewBookPage = ({ location }) => {
 		isOriginalPublicationYearPopupHidden,
 		setIsOriginalPublicationYearPopupHidden,
 	] = useState(true);
+	const [isRecaptchaCompleted, setIsRecaptchaCompleted] = useState(false);
+	const [errorType, setErrorType] = useState(null);
+	const [errors, setErrors] = useState([]);
 
 	const languageOptions = [
 		'Arabic',
@@ -88,6 +101,55 @@ const AddNewBookPage = ({ location }) => {
 		'Russian',
 		'Spanish',
 	];
+
+	const organizeInputsForSubmit = () => {
+		return {
+			title: titleInput,
+			authorNames: [mainAuthorNameInput].concat(
+				otherAuthorNameInputs.filter((name) => name.length > 0)
+			),
+			authorRoles: [
+				mainAuthorRoleInput.length > 0 ? mainAuthorRoleInput : 'Writer',
+			]
+				.concat(
+					otherAuthorRoleInputs.filter(
+						(_role, index) => otherAuthorNameInputs[index].length > 0
+					)
+				)
+				.map((role) => (role.length === 0 ? 'Writer' : role)),
+			isbn: isbnInput,
+			publisher: publisherInput,
+			publishedYear: publishedYearInput,
+			publishedMonth: publishedMonthInput,
+			publishedDay: publishedDayInput,
+			numberOfPages: numberOfPagesInput,
+			format: formatInput,
+			amazonLink: amazonLinkInput,
+			description: description,
+			editionLanguage: editionLanguageInput,
+			originalTitle: originalTitleInput,
+			originalPublicationYear: originalPublishedYearInput,
+			originalPublicationMonth: originalPublishedMonthInput,
+			originalPublicationDay: originalPublishedDayInput,
+			coverImage:
+				fileInput.current !== undefined &&
+				fileInput.current !== null &&
+				fileInput.current.files.length > 0
+					? URL.createObjectURL(fileInput.current.files[0])
+					: '',
+			history: history,
+		};
+	};
+
+	useEffect(() => {
+		const user = JSON.parse(localStorage.getItem('userState'));
+		if (user === undefined || user === null) {
+			history.push({
+				pathname: '/user/sign_in',
+				state: {},
+			});
+		}
+	});
 
 	useEffect(() => {
 		const getBookMiscInfo = async () => {
@@ -109,8 +171,61 @@ const AddNewBookPage = ({ location }) => {
 		getBookMiscInfo();
 	}, [bookId]);
 
+	const topWarningMessage = (
+		<div className="add-new-book-page-top-message warning">
+			<span>
+				Please prove to us that you're not a robot by solving the challenge
+				below
+			</span>
+			<button
+				className="top-message-close-button"
+				onClick={(_e) => setErrorType(null)}
+			></button>
+		</div>
+	);
+
+	const topErrorMessage = (
+		<div className="add-new-book-page-top-message error">
+			<span>Sorry, something went wrong with creating this book.</span>
+			<button
+				className="top-message-close-button"
+				onClick={(_e) => setErrorType(null)}
+			></button>
+		</div>
+	);
+
+	const errorList = (
+		<div className="add-new-book-page-error-list">
+			<span className="error-list-title">
+				{errors.length === 1
+					? '1 error prohibited this book from being saved:'
+					: `${errors.length} errors prohibited this book from being saved:`}
+			</span>
+			<ul>
+				{errors.includes('author') ? <li>Author can't be blank</li> : null}
+				{errors.includes('title') ? (
+					<li>Title is too short (minimum is 1 character)</li>
+				) : null}
+				{errors.includes('year') ? <li>Year is invalid</li> : null}
+				{errors.includes('pages') ? <li>Number of pages is invalid</li> : null}
+			</ul>
+		</div>
+	);
+
 	const addNewBookPageTitle = (
 		<h1 className="add-new-book-page-title">Add a New Book</h1>
+	);
+
+	const addNewBookPageNote = (
+		<span className="add-new-book-page-note">
+			<b>Note: </b>Please{' '}
+			<a href="/search">
+				<nobr>do a search</nobr>
+			</a>{' '}
+			before adding a book, as it may be a duplicate. Please also carefully read
+			the guidelines to the right, especially the part about what kind of books
+			to add.
+		</span>
 	);
 
 	const titlePopup = (
@@ -234,19 +349,16 @@ const AddNewBookPage = ({ location }) => {
 		</div>
 	);
 
-	const editionPopup = (
+	const amazonLinkPopup = (
 		<div
 			className={
-				isEditionPopupHidden
+				isAmazonLinkPopupHidden
 					? 'add-new-book-page-popup-wrapper hidden'
 					: 'add-new-book-page-popup-wrapper'
 			}
 		>
 			<div className="add-new-book-page-popup">
-				<span>
-					Edition specific information about this book such as "Large print" or
-					"Anniversary Edition" should go in this field.
-				</span>
+				<span>Link to the book's page on Amazon.</span>
 			</div>
 			<div className="add-new-book-page-popup-tip"></div>
 		</div>
@@ -612,19 +724,19 @@ const AddNewBookPage = ({ location }) => {
 				)}
 				{!formatIsOther ? formatPopup : null}
 			</div>
-			<div className="form-edition-area">
-				<label htmlFor="edition" className="main-label">
-					edition
+			<div className="form-amazon-link-area">
+				<label htmlFor="amazon-link" className="main-label">
+					amazon link
 				</label>
 				<input
 					type="text"
-					name="edition"
-					value={editionInput}
-					onChange={(e) => setEditionInput(e.target.value)}
-					onFocus={(_e) => setIsEditionPopupHidden(false)}
-					onBlur={(_e) => setIsEditionPopupHidden(true)}
+					name="amazon-link"
+					value={amazonLinkInput}
+					onChange={(e) => setAmazonLinkInput(e.target.value)}
+					onFocus={(_e) => setIsAmazonLinkPopupHidden(false)}
+					onBlur={(_e) => setIsAmazonLinkPopupHidden(true)}
 				></input>
-				{editionPopup}
+				{amazonLinkPopup}
 			</div>
 			<div className="form-description-area">
 				<label htmlFor="description" className="main-label">
@@ -760,7 +872,14 @@ const AddNewBookPage = ({ location }) => {
 
 	const leftSection = loaded ? (
 		<div className="add-new-book-page-left-section">
+			{errorType === 'warning'
+				? topWarningMessage
+				: errorType === 'error'
+				? topErrorMessage
+				: null}
 			{addNewBookPageTitle}
+			{addNewBookPageNote}
+			{errors.length > 0 ? errorList : null}
 			{bookForm}
 			{workSettingsForm}
 			<div className="add-new-book-page-left-section-bottom">
@@ -770,9 +889,45 @@ const AddNewBookPage = ({ location }) => {
 				</span>
 				<ReCAPTCHA
 					sitekey={process.env.REACT_APP_SITE_KEY}
-					onChange={(value) => console.log(value)}
+					onChange={(value) => {
+						if (value.length !== 0) {
+							setIsRecaptchaCompleted(true);
+						} else {
+							setIsRecaptchaCompleted(false);
+						}
+					}}
 				/>
-				<input type="submit" value="Create book"></input>
+				<input
+					type="submit"
+					value="Create book"
+					onClick={(e) => {
+						e.preventDefault();
+						if (!isRecaptchaCompleted) {
+							setErrorType('warning');
+						} else {
+							const currentErrors = [];
+							if (titleInput.length < 1) {
+								currentErrors.push('title');
+							}
+							if (mainAuthorNameInput.length < 1) {
+								currentErrors.push('author');
+							}
+							if (
+								parseInt(publishedYearInput).isNan() ||
+								parseInt(originalPublishedYearInput).isNan()
+							) {
+								currentErrors.push('year');
+							}
+							if (parseInt(numberOfPagesInput).isNan()) {
+								currentErrors.push('pages');
+							}
+							if (currentErrors.length === 0) {
+								Firebase.createNewBook(...organizeInputsForSubmit());
+							}
+							setErrors(currentErrors);
+						}
+					}}
+				></input>
 			</div>
 		</div>
 	) : null;
@@ -781,7 +936,7 @@ const AddNewBookPage = ({ location }) => {
 		<div className="add-new-book-page-right-section">
 			<div className="add-cover-image-section">
 				<span>Add a cover image for this book.</span>
-				<input type="file"></input>
+				<input type="file" ref={fileInput}></input>
 			</div>
 			<div className="guidelines-section">
 				<span className="guidelines-section-title">Guidelines</span>

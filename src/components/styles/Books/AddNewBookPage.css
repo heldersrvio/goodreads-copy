@@ -25,7 +25,29 @@
 	font-size: 20px;
 	font-weight: bold;
 	display: block;
-	margin-bottom: 115px;
+	margin-bottom: 37px;
+}
+
+.add-new-book-page-note {
+	display: block;
+	color: rgb(24, 24, 24);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	line-height: 18px;
+	margin-bottom: 37px;
+}
+
+.add-new-book-page-note b {
+	font-weight: bold;
+}
+
+.add-new-book-page-note a {
+	padding: 0;
+	display: inline;
+	color: rgb(0, 99, 93);
+	line-height: 18px;
+	height: auto;
+	white-space: nowrap;
 }
 
 .add-new-book-page-main-content .main-label {
@@ -94,7 +116,8 @@
 .add-new-book-page-main-content .add-new-author-button:hover,
 .add-new-book-page-main-content .add-role-button:hover,
 .add-new-book-page-main-content .set-format-to-other-button:hover,
-.add-new-book-page-main-content button.set-format-to-options:hover {
+.add-new-book-page-main-content button.set-format-to-options:hover,
+.add-new-book-page-note a:hover {
 	background-color: transparent;
 	text-decoration: underline;
 }
@@ -110,7 +133,7 @@
 .add-new-book-page-main-content .form-published-area,
 .add-new-book-page-main-content .form-pages-area,
 .add-new-book-page-main-content .form-format-area,
-.add-new-book-page-main-content .form-edition-area,
+.add-new-book-page-main-content .form-amazon-link-area,
 .add-new-book-page-main-content .form-edition-language-area,
 .add-new-book-page-main-content .form-original-title-area,
 .add-new-book-page-main-content .form-original-publication-date-area {
@@ -138,7 +161,7 @@
 }
 
 .add-new-book-page-main-content .form-publisher-area input,
-.add-new-book-page-main-content .form-edition-area input {
+.add-new-book-page-main-content .form-amazon-link-area input {
 	width: 40%;
 }
 
@@ -387,7 +410,7 @@
 	left: 40%;
 }
 
-.add-new-book-page .form-edition-area .add-new-book-page-popup-wrapper,
+.add-new-book-page .form-amazon-link-area .add-new-book-page-popup-wrapper,
 .add-new-book-page
 	.form-edition-language-area
 	.add-new-book-page-popup-wrapper {

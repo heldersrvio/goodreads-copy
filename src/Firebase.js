@@ -1592,6 +1592,232 @@ const Firebase = (() => {
 		}
 	};
 
+	const createNewBook = async (
+		title,
+		authorNames,
+		authorRoles,
+		isbn,
+		publisher,
+		publishedYear,
+		publishedMonth,
+		publishedDay,
+		numberOfPages,
+		format,
+		amazonLink,
+		description,
+		editionLanguage,
+		originalTitle,
+		originalPublicationYear,
+		originalPublicationMonth,
+		originalPublicationDay,
+		coverImage,
+		history
+	) => {
+		try {
+			const newBookObject = {};
+			newBookObject.title = title;
+			if (editionLanguage.length > 0) {
+				newBookObject.language = editionLanguage;
+			}
+			if (isbn.length > 0) {
+				newBookObject.ISBN = isbn;
+			}
+			if (format.length > 0) {
+				newBookObject.type = format;
+			}
+			if (amazonLink.length > 0 && amazonLink.includes('amazon.co')) {
+				newBookObject.amazonLink = amazonLink;
+			}
+			if (numberOfPages.length > 0) {
+				newBookObject.pageCount = numberOfPages;
+			}
+			if (publishedYear.length > 0) {
+				const publishedDate = new Date(
+					parseInt(publishedYear),
+					publishedMonth.length > 0 ? parseInt(publishedMonth) : 0,
+					publishedDay.length > 0 ? parseInt(publishedDay) : 1
+				);
+				newBookObject.publishedDate = firebase.firestore.Timestamp.fromDate(
+					publishedDate
+				);
+			}
+			if (publisher.length > 0) {
+				newBookObject.publisher = publisher;
+			}
+			if (coverImage !== null) {
+				newBookObject.cover = coverImage;
+			}
+			if (description.length > 0) {
+				if (description.split('\n')[1] !== undefined) {
+					newBookObject.preSynopsis = description.split('\n')[0];
+					newBookObject.synopsis = description.split('\n').slice(1).join('');
+				} else {
+					newBookObject.synopsis = description;
+				}
+			}
+			if (authorNames.length > 1) {
+				newBookObject.otherAuthors = await Promise.all(
+					authorNames.slice(1).map(async (name, index) => {
+						const properName = name
+							.split(' ')
+							.map((n) =>
+								n.length > 1
+									? n[0].toUpperCase() + n.slice(1).toLowerCase()
+									: n[0].toUpperCase()
+							)
+							.join(' ');
+						const authorQuery = await database
+							.collection('authors')
+							.where('name', '==', properName)
+							.get();
+						if (authorQuery.docs.length > 0) {
+							return {
+								id: authorQuery.docs[0].id,
+								role: authorRoles[index],
+							};
+						} else {
+							const newAuthorRef = await database
+								.collection('authors')
+								.add({ name: properName, GRMember: false });
+							return {
+								id: newAuthorRef.id,
+								role: authorRoles[index],
+							};
+						}
+					})
+				);
+			}
+			const properAuthorName = authorNames[0]
+				.split(' ')
+				.map((n) =>
+					n.length > 1
+						? n[0].toUpperCase() + n.slice(1).toLowerCase()
+						: n[0].toUpperCase()
+				)
+				.join(' ');
+			const mainAuthorQuery = await database
+				.collection('authors')
+				.where('name', '==', properAuthorName)
+				.get();
+			let mainAuthorId = '';
+			if (mainAuthorQuery.docs.length === 0) {
+				const newMainAuthorRef = await database
+					.collection('authors')
+					.add({ name: properAuthorName, GRMember: false });
+				mainAuthorId = newMainAuthorRef.id;
+				const newRootBookRef = await database
+					.collection('rootBooks')
+					.add({ authorId: mainAuthorId });
+				newBookObject.rootBook = newRootBookRef.id;
+				newBookObject.mainEdition = true;
+			} else {
+				mainAuthorId = mainAuthorQuery.docs[0].id;
+				if (originalTitle.length > 0) {
+					const originalPublicationDate =
+						originalPublicationYear.length > 0
+							? new Date(
+									parseInt(originalPublicationYear),
+									originalPublicationMonth.length > 0
+										? parseInt(originalPublicationMonth)
+										: 0,
+									originalPublicationDay.length > 0
+										? parseInt(originalPublicationDay)
+										: 1
+							  )
+							: null;
+					const originalBookQuery = await database
+						.collection('books')
+						.where('title', '==', originalTitle)
+						.where('mainEdition', '==', true)
+						.get();
+					const originalBookCandidates = await Promise.all(
+						originalBookQuery.docs.map(async (book) => {
+							const rootBookQuery = await database
+								.collection('rootBooks')
+								.doc(book.data().rootBook)
+								.get();
+							const authorQuery = await database
+								.collection('authors')
+								.doc(rootBookQuery.data().authorId)
+								.get();
+							if (originalPublicationDate !== null) {
+								const timestamp = firebase.firestore.Timestamp.fromDate(
+									originalPublicationDate
+								);
+								if (
+									mainAuthorQuery.docs[0].data().name ===
+										authorQuery.data().name &&
+									book.data().publishedDate === timestamp
+								) {
+									return book;
+								}
+							} else {
+								if (
+									mainAuthorQuery.docs[0].data().name ===
+									authorQuery.data().name
+								) {
+									return book;
+								}
+							}
+							return null;
+						})
+					).filter((book) => book !== null);
+					if (originalBookCandidates.length !== 0) {
+						newBookObject.rootBook = originalBookCandidates[0].data().rootBook;
+						newBookObject.mainEdition = false;
+					} else {
+						const newRootBookRef = await database
+							.collection('rootBooks')
+							.add({ authorId: mainAuthorId });
+						newBookObject.rootBook = newRootBookRef.id;
+						newBookObject.mainEdition = true;
+					}
+				} else {
+					const originalBookQuery = await database
+						.collection('books')
+						.where('title', '==', title)
+						.where('mainEdition', '==', true)
+						.get();
+					const originalBookCandidates = await Promise.all(
+						originalBookQuery.docs.filter(async (book) => {
+							const rootBookQuery = await database
+								.collection('rootBooks')
+								.doc(book.data().rootBook)
+								.get();
+							const authorQuery = await database
+								.collection('authors')
+								.doc(rootBookQuery.data().authorId)
+								.get();
+							if (
+								mainAuthorQuery.docs[0].data().name === authorQuery.data().name
+							) {
+								return book;
+							}
+							return null;
+						})
+					).filter((book) => book !== null);
+					if (originalBookCandidates.length !== 0) {
+						newBookObject.rootBook = originalBookCandidates[0].data().rootBook;
+						newBookObject.mainEdition = false;
+					} else {
+						const newRootBookRef = await database
+							.collection('rootBooks')
+							.add({ authorId: mainAuthorId });
+						newBookObject.rootBook = newRootBookRef.id;
+						newBookObject.mainEdition = true;
+					}
+				}
+			}
+			const newBookRef = await database.collection('books').add(newBookObject);
+			history.push({
+				pathname: `/review/new/${newBookRef.id}`,
+				state: { addedNewBook: true },
+			});
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	return {
 		pageGenerator,
 		getAlsoEnjoyedBooksDetailsForBook,
@@ -1627,6 +1853,7 @@ const Firebase = (() => {
 		getBookPhotos,
 		getPhotoDetails,
 		getSynopsisAndPreSynopsisForBook,
+		createNewBook,
 	};
 })();
 
