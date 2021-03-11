@@ -6,10 +6,6 @@ import HomePageFootBar from '../Authentication/HomePageFootBar';
 import ReCAPTCHA from 'react-google-recaptcha';
 import '../styles/Books/AddNewBookPage.css';
 
-/* TODO:
- - Adjust styling for error box and top warning/error message
-*/
-
 const AddNewBookPage = ({ location }) => {
 	const history = useHistory();
 	const query = new URLSearchParams(location.search);
@@ -143,7 +139,7 @@ const AddNewBookPage = ({ location }) => {
 		};
 	};
 
-	/*useEffect(() => {
+	useEffect(() => {
 		const user = JSON.parse(localStorage.getItem('userState'));
 		if (user === undefined || user === null) {
 			history.push({
@@ -151,7 +147,7 @@ const AddNewBookPage = ({ location }) => {
 				state: {},
 			});
 		}
-	});*/
+	});
 
 	useEffect(() => {
 		const getBookMiscInfo = async () => {
@@ -452,14 +448,9 @@ const AddNewBookPage = ({ location }) => {
 						setIsTitlePopupHidden(true);
 						if (titleInput.length > 0) {
 							setIsShowingTitleMessage(true);
-							/*setBookSuggestions(
+							setBookSuggestions(
 								await Firebase.queryBooksForBookCreation(titleInput)
-							);*/
-							setBookSuggestions([
-								{ title: 'The Treasure Island', link: '/' },
-								{ title: 'Pride and Prejudice', link: '/' },
-								{ title: '兎になったバリスタ', link: '/' },
-							]);
+							);
 						} else {
 							setBookSuggestions([]);
 						}
