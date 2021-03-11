@@ -432,3 +432,64 @@
 .add-new-book-page .other-author-input-role {
 	position: relative;
 }
+
+.add-new-book-page-main-content .title-suggestions-area {
+	color: rgb(24, 24, 24);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+	margin-left: 135px;
+}
+
+.add-new-book-page-main-content .title-suggestions-area a {
+	padding: 0;
+	color: rgb(0, 99, 93);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+	height: auto;
+}
+
+.add-new-book-page-main-content .title-suggestions-area a:hover {
+	background-color: transparent;
+	text-decoration: underline;
+}
+
+.add-new-book-page-top-message {
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+	width: 576px;
+	height: 18px;
+	padding: 5px 10px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 15px;
+}
+
+.add-new-book-page-top-message.warning {
+	background-color: rgb(255, 251, 217);
+	border: 2px solid rgb(248, 227, 149);
+	color: rgb(81, 71, 33);
+}
+
+.add-new-book-page-top-message.error {
+	background-color: rgb(255, 204, 204);
+	border: 2px solid rgb(255, 102, 102);
+	color: rgb(0, 0, 0);
+}
+
+.add-new-book-page-top-message button {
+	width: 10px;
+	height: 10px;
+	background-image: url('https://s.gr-assets.com/assets/layout/delete-a9a86f59648bf17079954ea50a673dbc.png');
+	background-repeat: no-repeat;
+	background-size: 10px 10px;
+	padding: 0;
+}
+
+.add-new-book-page-top-message button:hover {
+	background-color: transparent;
+}

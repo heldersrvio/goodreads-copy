@@ -450,14 +450,22 @@ const AddNewBookPage = ({ location }) => {
 						setIsTitlePopupHidden(true);
 						if (titleInput.length > 0) {
 							setIsShowingTitleMessage(true);
-							setBookSuggestions(
+							/*setBookSuggestions(
 								await Firebase.queryBooksForBookCreation(titleInput)
-							);
+							);*/
+							setBookSuggestions([
+								{ title: 'The Treasure Island', link: '/' },
+								{ title: 'Pride and Prejudice', link: '/' },
+								{ title: '兎になったバリスタ', link: '/' },
+							]);
 						} else {
 							setBookSuggestions([]);
 						}
 					}}
 				></input>
+				{titlePopup}
+			</div>
+			<div className="title-suggestions-area">
 				{isShowingTitleMessage ? (
 					<span>
 						The book you are adding may already exist in our database. If it
@@ -477,7 +485,6 @@ const AddNewBookPage = ({ location }) => {
 						);
 					})}
 				</div>
-				{titlePopup}
 			</div>
 			<div className="form-author-area">
 				<div className="main-author-area">
@@ -942,16 +949,18 @@ const AddNewBookPage = ({ location }) => {
 								currentErrors.push('author');
 							}
 							if (
-								parseInt(publishedYearInput).isNan() ||
-								parseInt(originalPublishedYearInput).isNan()
+								Number.isNaN(parseInt(publishedYearInput)) ||
+								Number.isNaN(parseInt(originalPublishedYearInput))
 							) {
 								currentErrors.push('year');
 							}
-							if (parseInt(numberOfPagesInput).isNan()) {
+							if (Number.isNaN(parseInt(numberOfPagesInput))) {
 								currentErrors.push('pages');
 							}
 							if (currentErrors.length === 0) {
 								Firebase.createNewBook(...organizeInputsForSubmit());
+							} else {
+								setErrorType('error');
 							}
 							setErrors(currentErrors);
 						}

@@ -1760,7 +1760,7 @@ const Firebase = (() => {
 					.add({ authorId: mainAuthorId });
 				newBookObject.rootBook = newRootBookRef.id;
 				newBookObject.mainEdition = true;
-				if (seriesName.length > 0 && !seriesInstance.isNan()) {
+				if (seriesName.length > 0 && !Number.isNaN(seriesInstance)) {
 					const properSeriesName = seriesName
 						.split(' ')
 						.map((n) =>
@@ -1899,7 +1899,7 @@ const Firebase = (() => {
 							.add({ authorId: mainAuthorId });
 						newBookObject.rootBook = newRootBookRef.id;
 						newBookObject.mainEdition = true;
-						if (seriesName.length > 0 && !seriesInstance.isNan()) {
+						if (seriesName.length > 0 && !Number.isNaN(seriesInstance)) {
 							const properSeriesName = seriesName
 								.split(' ')
 								.map((n) =>
