@@ -698,7 +698,14 @@ const BookEditionsPage = ({ match }) => {
 								editionObject.title
 							)}
 						>
-							<img src={editionObject.cover} alt={editionObject.title} />
+							<img
+								src={
+									editionObject.cover !== undefined
+										? editionObject.cover
+										: 'https://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png'
+								}
+								alt={editionObject.title}
+							/>
 						</a>
 					</div>
 					<div className="info-section">
@@ -775,10 +782,12 @@ const BookEditionsPage = ({ match }) => {
 										<td className="isbn-td">{editionObject.ISBN}</td>
 									</tr>
 								) : null}
-								<tr className="info-section-more-details-language">
-									<th>Edition language:</th>
-									<td className="language-td">{editionObject.language}</td>
-								</tr>
+								{editionObject.language !== undefined ? (
+									<tr className="info-section-more-details-language">
+										<th>Edition language:</th>
+										<td className="language-td">{editionObject.language}</td>
+									</tr>
+								) : null}
 								<tr className="info-section-more-details-rating">
 									<th>Average rating:</th>
 									<td className="average-rating-td">

@@ -400,7 +400,14 @@ const SimilarBooksPage = ({ match }) => {
 							bookObject.title
 						)}
 					>
-						<img src={bookObject.cover} alt={bookObject.title} />
+						<img
+							src={
+								bookObject.cover !== undefined
+									? bookObject.cover
+									: 'https://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png'
+							}
+							alt={bookObject.title}
+						/>
 					</a>
 				</div>
 				<div className="similar-books-page-book-card-right-section">

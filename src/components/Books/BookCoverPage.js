@@ -33,7 +33,14 @@ const BookCoverPage = ({ match }) => {
 					<span>Cover</span>
 				</span>
 				<a href={Firebase.pageGenerator.generateBookPage(bookId, bookTitle)}>
-					<img src={bookPhotos.cover} alt={`${bookTitle} cover`} />
+					<img
+						src={
+							bookPhotos.cover !== undefined
+								? bookPhotos.cover
+								: 'https://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png'
+						}
+						alt={`${bookTitle} cover`}
+					/>
 				</a>
 			</div>
 			<div className="main-content-right-section">

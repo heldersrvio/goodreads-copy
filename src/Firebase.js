@@ -915,6 +915,43 @@ const Firebase = (() => {
 		}
 	};
 
+	const queryBooksForBookCreation = async (searchString) => {
+		try {
+			const allBooksQuery = await database.collection('books').get();
+			return await Promise.all(
+				allBooksQuery.docs
+					.filter((doc) =>
+						doc.data().title.toLowerCase().includes(searchString.toLowerCase())
+					)
+					.map(async (doc) => {
+						const rootBookQuery = await database
+							.collection('rootBooks')
+							.doc(doc.data().rootBook)
+							.get();
+						if (rootBookQuery.data().series === undefined) {
+							return {
+								title: doc.data().title,
+								link: pageGenerator.generateBookPage(doc.id, doc.data().title),
+							};
+						} else {
+							const seriesQuery = await database
+								.collection('series')
+								.doc(rootBookQuery.data().series)
+								.get();
+							return {
+								title: `${doc.data().title} (${seriesQuery.data().name} ${
+									rootBookQuery.data().seriesInstance
+								})`,
+								link: pageGenerator.generateBookPage(doc.id, doc.data().title),
+							};
+						}
+					})
+			);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	const queryNotifications = async () => {
 		try {
 			const query = await database
@@ -1824,6 +1861,7 @@ const Firebase = (() => {
 		queryBookById,
 		getEditionDetailsForBook,
 		queryBooks,
+		queryBooksForBookCreation,
 		queryNotifications,
 		getNumberOfNewFriends,
 		getFriendsInfo,

@@ -688,7 +688,11 @@ const BookPage = ({ match }) => {
 					)}
 				>
 					<img
-						src={bookInfo.cover}
+						src={
+							bookInfo.cover !== undefined
+								? bookInfo.cover
+								: 'https://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png'
+						}
 						alt={bookInfo.title}
 						className="book-info-book-cover"
 					/>
@@ -703,13 +707,15 @@ const BookPage = ({ match }) => {
 					>
 						Other editions
 					</a>
-					<button
-						className="book-page-enlarge-cover"
-						onClick={() => setShowEnlargeCoverWindow((previous) => !previous)}
-						ref={enlargeCoverButton}
-					>
-						Enlarge cover
-					</button>
+					{bookInfo.cover !== undefined ? (
+						<button
+							className="book-page-enlarge-cover"
+							onClick={() => setShowEnlargeCoverWindow((previous) => !previous)}
+							ref={enlargeCoverButton}
+						>
+							Enlarge cover
+						</button>
+					) : null}
 				</div>
 			</div>
 			<div className="book-page-user-shelf-section">
@@ -1259,7 +1265,7 @@ const BookPage = ({ match }) => {
 			<div className="book-page-book-info-details-expanded-left">
 				<span>Original Title</span>
 				{bookInfo.ISBN !== undefined ? <span>ISBN</span> : null}
-				<span>Edition Language</span>
+				{bookInfo.language !== undefined ? <span>Edition Language</span> : null}
 				{bookInfo.series !== undefined ? <span>Series</span> : null}
 				<a
 					href={Firebase.pageGenerator.generateBookEditionsPage(
@@ -1271,7 +1277,9 @@ const BookPage = ({ match }) => {
 			<div className="book-page-book-info-details-expanded-right">
 				<span>{bookInfo.originalTitle}</span>
 				{bookInfo.ISBN !== undefined ? <span>{bookInfo.ISBN}</span> : null}
-				<span>{bookInfo.language}</span>
+				{bookInfo.language !== undefined ? (
+					<span>{bookInfo.language}</span>
+				) : null}
 				{bookInfo.series !== undefined ? (
 					<a
 						href={bookInfo.series.page}
@@ -1289,7 +1297,11 @@ const BookPage = ({ match }) => {
 										className="book-page-details-other-editions-a"
 									>
 										<img
-											src={bookInfo.otherEditionsCovers[index]}
+											src={
+												bookInfo.otherEditionsCovers[index] !== undefined
+													? bookInfo.otherEditionsCovers[index]
+													: 'bookInfo.otherEditionsCovers[index]'
+											}
 											alt={bookInfo.title}
 										/>
 									</a>
@@ -1326,12 +1338,15 @@ const BookPage = ({ match }) => {
 					: `${bookInfo.pageCount} pages`}
 			</span>
 			<span className="book-publication">
-				{`Published ${format(
-					bookInfo.editionPublishedDate,
-					'MMMM do yyyy'
-				)} by ${bookInfo.publisher}`}
+				{bookInfo.editionPublishedDate !== undefined
+					? `Published ${format(
+							bookInfo.editionPublishedDate,
+							'MMMM do yyyy'
+					  )} by ${bookInfo.publisher}`
+					: null}
 				{bookInfo.firstEditionPublishedYear !==
-				bookInfo.editionPublishedDate.getYear() ? (
+					bookInfo.editionPublishedDate.getYear() &&
+				bookInfo.firstEditionPublishedYear !== undefined ? (
 					<span className="book-publication-original-year">{` (first published ${bookInfo.firstEditionPublishedYear})`}</span>
 				) : null}
 			</span>
@@ -1388,7 +1403,11 @@ const BookPage = ({ match }) => {
 										key={index}
 									>
 										<img
-											src={list.bookCovers[index]}
+											src={
+												list.bookCovers[index] !== undefined
+													? list.bookCovers[index]
+													: 'https://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png'
+											}
 											alt={list.bookTitles[index]}
 										/>
 									</a>
@@ -2204,7 +2223,14 @@ const BookPage = ({ match }) => {
 												book.title
 											)}
 										>
-											<img src={book.cover} alt={book.title} />
+											<img
+												src={
+													book.cover !== undefined
+														? book.cover
+														: 'https://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png'
+												}
+												alt={book.title}
+											/>
 										</a>
 									);
 								})}
@@ -2435,7 +2461,14 @@ const BookPage = ({ match }) => {
 					{bookInfo.publishedBooksByAuthor.map((book, index) => {
 						return (
 							<a key={index} href={book.page}>
-								<img src={book.cover} alt={book.id} />
+								<img
+									src={
+										book.cover !== undefined
+											? book.cover
+											: 'https://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png'
+									}
+									alt={book.id}
+								/>
 							</a>
 						);
 					})}
@@ -2685,7 +2718,14 @@ const BookPage = ({ match }) => {
 						</div>
 					</div>
 					<div className="recommend-window-top-area-right">
-						<img src={bookInfo.cover} alt={bookInfo.title} />
+						<img
+							src={
+								bookInfo.cover !== undefined
+									? bookInfo.cover
+									: 'https://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png'
+							}
+							alt={bookInfo.title}
+						/>
 					</div>
 				</div>
 				<div className="recommend-window-bottom-area">

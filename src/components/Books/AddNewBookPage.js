@@ -6,9 +6,7 @@ import HomePageFootBar from '../Authentication/HomePageFootBar';
 import ReCAPTCHA from 'react-google-recaptcha';
 import '../styles/Books/AddNewBookPage.css';
 
-/* TODO: 
- - Set up edition suggestions and message below title field
- - Fix book fields that were once required in other components to become more flexible
+/* TODO:
  - Adjust styling for error box and top warning/error message
  - After successful book creation, redirect to book review page with message: 'Book was created. Please note that it will take up to 10 minutes for this book to be searchable by title/author.'
 */
@@ -84,6 +82,8 @@ const AddNewBookPage = ({ location }) => {
 	const [isRecaptchaCompleted, setIsRecaptchaCompleted] = useState(false);
 	const [errorType, setErrorType] = useState(null);
 	const [errors, setErrors] = useState([]);
+	const [isShowingTitleMessage, setIsShowingTitleMessage] = useState(false);
+	const [bookSuggestions, setBookSuggestions] = useState([]);
 
 	const languageOptions = [
 		'Arabic',
@@ -141,7 +141,7 @@ const AddNewBookPage = ({ location }) => {
 		};
 	};
 
-	useEffect(() => {
+	/*useEffect(() => {
 		const user = JSON.parse(localStorage.getItem('userState'));
 		if (user === undefined || user === null) {
 			history.push({
@@ -149,7 +149,7 @@ const AddNewBookPage = ({ location }) => {
 				state: {},
 			});
 		}
-	});
+	});*/
 
 	useEffect(() => {
 		const getBookMiscInfo = async () => {
@@ -446,8 +446,37 @@ const AddNewBookPage = ({ location }) => {
 					value={titleInput}
 					onChange={(e) => setTitleInput(e.target.value)}
 					onFocus={(_e) => setIsTitlePopupHidden(false)}
-					onBlur={(_e) => setIsTitlePopupHidden(true)}
+					onBlur={async (_e) => {
+						setIsTitlePopupHidden(true);
+						if (titleInput.length > 0) {
+							setIsShowingTitleMessage(true);
+							setBookSuggestions(
+								await Firebase.queryBooksForBookCreation(titleInput)
+							);
+						} else {
+							setBookSuggestions([]);
+						}
+					}}
 				></input>
+				{isShowingTitleMessage ? (
+					<span>
+						The book you are adding may already exist in our database. If it
+						appears below, please use that edition instead of adding a new one.
+					</span>
+				) : null}
+				<div className="book-suggestion-list">
+					{bookSuggestions.map((suggestion, index) => {
+						return (
+							<a
+								href={suggestion.link}
+								className="title-book-suggestion"
+								key={index}
+							>
+								{suggestion.title}
+							</a>
+						);
+					})}
+				</div>
 				{titlePopup}
 			</div>
 			<div className="form-author-area">

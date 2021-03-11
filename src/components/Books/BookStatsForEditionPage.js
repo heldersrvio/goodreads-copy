@@ -49,7 +49,14 @@ const BookStatsForEditionPage = ({ bookId }) => {
 
 	const editionDescriptionArea = loaded ? (
 		<div className="edition-description-area">
-			<img src={bookInfo.cover} alt={bookInfo.title}></img>
+			<img
+				src={
+					bookInfo.cover !== undefined
+						? bookInfo.cover
+						: 'https://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png'
+				}
+				alt={bookInfo.title}
+			></img>
 			<span>
 				<span>Stats for: </span>
 				<a
@@ -114,7 +121,11 @@ const BookStatsForEditionPage = ({ bookId }) => {
 						<div className="edition-card" key={index}>
 							<div className="left-section">
 								<img
-									src={bookInfo.otherEditionsCovers[index]}
+									src={
+										bookInfo.otherEditionsCovers[index] !== undefined
+											? bookInfo.otherEditionsCovers[index]
+											: 'https://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png'
+									}
 									alt={bookInfo.otherEditionsTitles[index]}
 								></img>
 								<div className="middle-section">
