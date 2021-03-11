@@ -1652,7 +1652,20 @@ const Firebase = (() => {
 	) => {
 		try {
 			const newBookObject = {};
-			newBookObject.title = title;
+			const seriesMatches = title.match(/[(][\w\d\s]+,[ ]*#\d[)]/g);
+			const seriesName =
+				seriesMatches.length > 0
+					? seriesMatches[0].split(',')[0].splice(1).join('')
+					: '';
+			const seriesInstance =
+				seriesMatches.length > 0
+					? parseInt(seriesMatches[0].split('#')[1].split(')')[0])
+					: NaN;
+			if (seriesMatches.length === 0) {
+				newBookObject.title = title;
+			} else {
+				newBookObject.title = title.split('(')[0];
+			}
 			if (editionLanguage.length > 0) {
 				newBookObject.language = editionLanguage;
 			}
@@ -1747,6 +1760,23 @@ const Firebase = (() => {
 					.add({ authorId: mainAuthorId });
 				newBookObject.rootBook = newRootBookRef.id;
 				newBookObject.mainEdition = true;
+				if (seriesName.length > 0 && !seriesInstance.isNan()) {
+					const properSeriesName = seriesName
+						.split(' ')
+						.map((n) =>
+							n.length > 1
+								? n[0].toUpperCase() + n.slice(1).toLowerCase()
+								: n[0].toUpperCase()
+						)
+						.join(' ');
+					const newSeriesRef = await database
+						.collection('series')
+						.add({ name: properSeriesName });
+					newRootBookRef.set(
+						{ series: newSeriesRef.id, seriesInstance },
+						{ merge: true }
+					);
+				}
 			} else {
 				mainAuthorId = mainAuthorQuery.docs[0].id;
 				if (originalTitle.length > 0) {
@@ -1777,6 +1807,13 @@ const Firebase = (() => {
 								.collection('authors')
 								.doc(rootBookQuery.data().authorId)
 								.get();
+							const seriesQuery =
+								rootBookQuery.data().series !== undefined
+									? await database
+											.collection('series')
+											.doc(rootBookQuery.data().series)
+											.get()
+									: null;
 							if (originalPublicationDate !== null) {
 								const timestamp = firebase.firestore.Timestamp.fromDate(
 									originalPublicationDate
@@ -1784,14 +1821,22 @@ const Firebase = (() => {
 								if (
 									mainAuthorQuery.docs[0].data().name ===
 										authorQuery.data().name &&
-									book.data().publishedDate === timestamp
+									book.data().publishedDate === timestamp &&
+									((seriesQuery === null && seriesName.length === 0) ||
+										(seriesName.toLowerCase() ===
+											seriesQuery.data().name.toLowerCase() &&
+											seriesInstance === rootBookQuery.data().seriesInstance))
 								) {
 									return book;
 								}
 							} else {
 								if (
 									mainAuthorQuery.docs[0].data().name ===
-									authorQuery.data().name
+										authorQuery.data().name &&
+									((seriesQuery === null && seriesName.length === 0) ||
+										(seriesName.toLowerCase() ===
+											seriesQuery.data().name.toLowerCase() &&
+											seriesInstance === rootBookQuery.data().seriesInstance))
 								) {
 									return book;
 								}
@@ -1825,8 +1870,20 @@ const Firebase = (() => {
 								.collection('authors')
 								.doc(rootBookQuery.data().authorId)
 								.get();
+							const seriesQuery =
+								rootBookQuery.data().series !== undefined
+									? await database
+											.collection('series')
+											.doc(rootBookQuery.data().series)
+											.get()
+									: null;
 							if (
-								mainAuthorQuery.docs[0].data().name === authorQuery.data().name
+								mainAuthorQuery.docs[0].data().name ===
+									authorQuery.data().name &&
+								((seriesQuery === null && seriesName.length === 0) ||
+									(seriesName.toLowerCase() ===
+										seriesQuery.data().name.toLowerCase() &&
+										seriesInstance === rootBookQuery.data().seriesInstance))
 							) {
 								return book;
 							}
@@ -1842,6 +1899,23 @@ const Firebase = (() => {
 							.add({ authorId: mainAuthorId });
 						newBookObject.rootBook = newRootBookRef.id;
 						newBookObject.mainEdition = true;
+						if (seriesName.length > 0 && !seriesInstance.isNan()) {
+							const properSeriesName = seriesName
+								.split(' ')
+								.map((n) =>
+									n.length > 1
+										? n[0].toUpperCase() + n.slice(1).toLowerCase()
+										: n[0].toUpperCase()
+								)
+								.join(' ');
+							const newSeriesRef = await database
+								.collection('series')
+								.add({ name: properSeriesName });
+							newRootBookRef.set(
+								{ series: newSeriesRef.id, seriesInstance },
+								{ merge: true }
+							);
+						}
 					}
 				}
 			}
