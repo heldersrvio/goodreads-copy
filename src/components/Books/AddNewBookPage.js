@@ -8,7 +8,6 @@ import '../styles/Books/AddNewBookPage.css';
 
 /* TODO:
  - Adjust styling for error box and top warning/error message
- - After successful book creation, redirect to book review page with message: 'Book was created. Please note that it will take up to 10 minutes for this book to be searchable by title/author.'
 */
 
 const AddNewBookPage = ({ location }) => {
@@ -109,7 +108,9 @@ const AddNewBookPage = ({ location }) => {
 				otherAuthorNameInputs.filter((name) => name.length > 0)
 			),
 			authorRoles: [
-				mainAuthorRoleInput.length > 0 ? mainAuthorRoleInput : 'Writer',
+				mainAuthorRoleInput !== null && mainAuthorRoleInput.length > 0
+					? mainAuthorRoleInput
+					: 'Writer',
 			]
 				.concat(
 					otherAuthorRoleInputs.filter(
@@ -126,7 +127,8 @@ const AddNewBookPage = ({ location }) => {
 			format: formatInput,
 			amazonLink: amazonLinkInput,
 			description: description,
-			editionLanguage: editionLanguageInput,
+			editionLanguage:
+				editionLanguageInput !== 'Select...' ? editionLanguageInput : '',
 			originalTitle: originalTitleInput,
 			originalPublicationYear: originalPublishedYearInput,
 			originalPublicationMonth: originalPublishedMonthInput,
@@ -949,16 +951,21 @@ const AddNewBookPage = ({ location }) => {
 								currentErrors.push('author');
 							}
 							if (
-								Number.isNaN(parseInt(publishedYearInput)) ||
-								Number.isNaN(parseInt(originalPublishedYearInput))
+								(publishedYearInput.length > 0 &&
+									Number.isNaN(parseInt(publishedYearInput))) ||
+								(originalPublishedYearInput.length > 0 &&
+									Number.isNaN(parseInt(originalPublishedYearInput)))
 							) {
 								currentErrors.push('year');
 							}
-							if (Number.isNaN(parseInt(numberOfPagesInput))) {
+							if (
+								numberOfPagesInput.length > 0 &&
+								Number.isNaN(parseInt(numberOfPagesInput))
+							) {
 								currentErrors.push('pages');
 							}
 							if (currentErrors.length === 0) {
-								Firebase.createNewBook(...organizeInputsForSubmit());
+								Firebase.createNewBook(organizeInputsForSubmit());
 							} else {
 								setErrorType('error');
 							}

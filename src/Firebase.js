@@ -1629,7 +1629,7 @@ const Firebase = (() => {
 		}
 	};
 
-	const createNewBook = async (
+	const createNewBook = async ({
 		title,
 		authorNames,
 		authorRoles,
@@ -1648,20 +1648,20 @@ const Firebase = (() => {
 		originalPublicationMonth,
 		originalPublicationDay,
 		coverImage,
-		history
-	) => {
+		history,
+	}) => {
 		try {
 			const newBookObject = {};
 			const seriesMatches = title.match(/[(][\w\d\s]+,[ ]*#\d[)]/g);
 			const seriesName =
-				seriesMatches.length > 0
+				seriesMatches !== null
 					? seriesMatches[0].split(',')[0].splice(1).join('')
 					: '';
 			const seriesInstance =
-				seriesMatches.length > 0
+				seriesMatches !== null
 					? parseInt(seriesMatches[0].split('#')[1].split(')')[0])
 					: NaN;
-			if (seriesMatches.length === 0) {
+			if (seriesMatches === null) {
 				newBookObject.title = title;
 			} else {
 				newBookObject.title = title.split('(')[0];
@@ -1694,7 +1694,7 @@ const Firebase = (() => {
 			if (publisher.length > 0) {
 				newBookObject.publisher = publisher;
 			}
-			if (coverImage !== null) {
+			if (coverImage !== '') {
 				newBookObject.cover = coverImage;
 			}
 			if (description.length > 0) {
@@ -1920,8 +1920,9 @@ const Firebase = (() => {
 				}
 			}
 			const newBookRef = await database.collection('books').add(newBookObject);
+			// 'Book was created. Please note that it will take up to 10 minutes for this book to be searchable by title/author.'
 			history.push({
-				pathname: `/review/new/${newBookRef.id}`,
+				pathname: `/review/new/${newBookRef.id}?newBook=yes`,
 				state: { addedNewBook: true },
 			});
 		} catch (error) {

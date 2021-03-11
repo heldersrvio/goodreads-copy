@@ -493,3 +493,38 @@
 .add-new-book-page-top-message button:hover {
 	background-color: transparent;
 }
+
+.add-new-book-page-error-list {
+	background-color: rgb(255, 204, 204);
+	border: 2px solid rgb(255, 102, 102);
+	border-radius: 5px;
+	width: 75%;
+	margin-bottom: 20px;
+}
+
+.add-new-book-page-error-list ul {
+	padding: 10px;
+	padding-left: 30px;
+}
+
+.add-new-book-page-error-list ul li {
+	padding: 0;
+	height: auto;
+	list-style-type: square;
+	display: list-item;
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+	color: rgb(0, 0, 0);
+}
+
+.add-new-book-page-error-list > span {
+	display: block;
+	background-color: rgb(255, 102, 102);
+	padding: 10px;
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+	font-weight: bold;
+	color: rgb(255, 255, 255);
+}
