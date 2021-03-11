@@ -1930,6 +1930,24 @@ const Firebase = (() => {
 		}
 	};
 
+	const getBookInfoForTopShelvesPage = async (bookId) => {
+		try {
+			const bookQuery = await database.collection('books').doc(bookId).get();
+			const genres = await getGenresForBook(bookQuery.data().rootBook);
+			return {
+				title: bookQuery.data().title,
+				genres: genres.map((genre) => {
+					return {
+						name: genre.genre,
+						userCount: genre.userCount,
+					};
+				}),
+			};
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	return {
 		pageGenerator,
 		getAlsoEnjoyedBooksDetailsForBook,
@@ -1967,6 +1985,7 @@ const Firebase = (() => {
 		getPhotoDetails,
 		getSynopsisAndPreSynopsisForBook,
 		createNewBook,
+		getBookInfoForTopShelvesPage,
 	};
 })();
 
