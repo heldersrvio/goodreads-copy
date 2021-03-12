@@ -39,8 +39,10 @@
 }
 
 .book-trivia-page-quizzes-section {
+	position: relative;
 	margin-top: 70px;
 	width: 451px;
+	margin-bottom: 90px;
 }
 
 .book-trivia-page-quizzes-section .book-trivia-page-quizzes-title {
@@ -136,4 +138,36 @@
 	line-height: 18px;
 	padding-right: 100px;
 	margin-top: 10px;
+}
+
+.book-trivia-page .page-navigation-section {
+	display: flex;
+	flex-direction: row;
+	position: absolute;
+	right: 0;
+	bottom: -50px;
+}
+
+.book-trivia-page .page-navigation-section button {
+	display: inline;
+	padding: 0;
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+	height: auto;
+	color: rgb(0, 99, 93);
+	margin-right: 3px;
+}
+
+.book-trivia-page .page-navigation-section button:hover {
+	background-color: transparent;
+	text-decoration: underline;
+}
+
+.book-trivia-page .page-navigation-section button:disabled {
+	color: rgb(24, 24, 24);
+}
+
+.book-trivia-page .page-navigation-section button:disabled:hover {
+	text-decoration: none;
 }
