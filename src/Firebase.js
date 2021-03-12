@@ -129,10 +129,18 @@ const Firebase = (() => {
 			return '/trivia/work/' + bookId + '.' + title.replace(/ /g, '_');
 		};
 
+		const generateQuizzesPage = () => {
+			return '/quizzes';
+		};
+
 		const generateQuizPage = (quizId, title) => {
 			return (
 				'/quizzes/' + quizId + '-' + title.toLowerCase().replace(/ /g, '-')
 			);
+		};
+
+		const generateCreateQuizPage = () => {
+			return '/quizzes/new';
 		};
 
 		const generateBookQuotesPage = (bookId, title) => {
@@ -176,7 +184,9 @@ const Firebase = (() => {
 			generateBooksByAuthorPage,
 			generateArticlePage,
 			generateBookTriviaPage,
+			generateQuizzesPage,
 			generateQuizPage,
+			generateCreateQuizPage,
 			generateBookQuotesPage,
 			generateQuotePage,
 			generateWriteReviewPageForBook,
@@ -1963,7 +1973,7 @@ const Firebase = (() => {
 							.doc(rootBookQuery.data().series)
 							.get()
 				  ).data().name;
-		const seriesInstance = rootBookQuery.seriesInstance;
+		const seriesInstance = rootBookQuery.data().seriesInstance;
 		const shelfQuery = await database
 			.collection('shelves')
 			.where('name', '==', shelf)
@@ -2038,6 +2048,72 @@ const Firebase = (() => {
 		};
 	};
 
+	const getBookInfoForTriviaPage = async (bookId) => {
+		const bookQuery = await database.collection('books').doc(bookId).get();
+		const rootBookQuery = await database
+			.collection('rootBooks')
+			.doc(bookQuery.data().rootBook)
+			.get();
+		const series =
+			rootBookQuery.data().series === undefined
+				? undefined
+				: (
+						await database
+							.collection('series')
+							.doc(rootBookQuery.data().series)
+							.get()
+				  ).data().name;
+		const seriesInstance = rootBookQuery.data().seriesInstance;
+		const quizQuery = await database
+			.collection('quizzes')
+			.where('books', 'array-contains', bookQuery.data().rootBook)
+			.get();
+		const quizQuestions = await Promise.all(
+			quizQuery.docs.map(async (quiz) => {
+				const quizId = quiz.id;
+				const quizName = quiz.data().title;
+				const creatorId = quiz.data().creator;
+				const quizCreatorQuery = await database
+					.collection('users')
+					.doc(creatorId)
+					.get();
+				const creatorFirstName = quizCreatorQuery.data().firstName;
+				const question = quiz.data().questions[0].mainQuestion;
+				const questionRootBook = quiz.data().questions[0].rootBook;
+				const book =
+					questionRootBook === undefined
+						? undefined
+						: (
+								await database
+									.collection('books')
+									.where('rootBook', '==', questionRootBook)
+									.where('mainEdition', '==', true)
+									.get()
+						  ).data().title;
+				const numberOfUsersWhoTookQuiz = quiz.data().usersWhoTook.length;
+				const numberOfQuestions = quiz.data().questions.length;
+				const rating = quiz.data().rating;
+
+				return {
+					quizId,
+					quizName,
+					creatorId,
+					creatorFirstName,
+					question,
+					book,
+					numberOfUsersWhoTookQuiz,
+					numberOfQuestions,
+					rating,
+				};
+			})
+		);
+		return {
+			series,
+			seriesInstance,
+			quizQuestions,
+		};
+	};
+
 	return {
 		pageGenerator,
 		getAlsoEnjoyedBooksDetailsForBook,
@@ -2077,6 +2153,7 @@ const Firebase = (() => {
 		createNewBook,
 		getBookInfoForTopShelvesPage,
 		getBookInfoForGenreShelfPage,
+		getBookInfoForTriviaPage,
 	};
 })();
 

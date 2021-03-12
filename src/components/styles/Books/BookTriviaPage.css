@@ -1,0 +1,139 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+
+.book-trivia-page-main-content {
+	position: relative;
+	margin: 15px 155px;
+	min-height: 400px;
+}
+
+.book-trivia-page-main-content a {
+	color: rgb(0, 99, 93);
+	padding: 0;
+	display: inline;
+	height: auto;
+	width: auto;
+}
+
+.book-trivia-page-main-content a:hover {
+	background-color: transparent;
+	text-decoration: underline;
+}
+
+.book-trivia-page h1 {
+	font-family: 'Merriweather', Georgia, 'Times New Roman', serif;
+	font-size: 20px;
+	font-weight: bold;
+	line-height: 24px;
+	color: rgb(56, 33, 16);
+	margin-bottom: 25px;
+}
+
+.book-trivia-page .back-to-book-page-a {
+	position: absolute;
+	right: 0;
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 13px;
+	font-weight: bold;
+	line-height: 18px;
+}
+
+.book-trivia-page-quizzes-section {
+	margin-top: 70px;
+	width: 451px;
+}
+
+.book-trivia-page-quizzes-section .book-trivia-page-quizzes-title {
+	display: block;
+	width: 100%;
+	height: 24px;
+	padding: 2px 0;
+	border-bottom: 1px solid rgb(216, 216, 216);
+	color: rgb(56, 33, 16);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	line-height: 24px;
+}
+
+.book-trivia-page-quizzes-section .book-trivia-page-quizzes-other-quizzes,
+.book-trivia-page-quizzes-section .book-trivia-page-quizzes-other-quizzes a {
+	text-align: center;
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.book-trivia-page-quizzes-section .book-trivia-page-quizzes-other-quizzes {
+	margin: 7px 0;
+}
+
+.book-trivia-page-quizzes-section .quiz-questions {
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	color: rgb(24, 24, 24);
+	margin-top: 30px;
+}
+
+.book-trivia-page-quizzes-section .quiz-questions .quiz-question {
+	margin-bottom: 40px;
+}
+
+.book-trivia-page-quizzes-section .quiz-questions a {
+	line-height: 18px;
+}
+
+.book-trivia-page-quizzes-section .quiz-questions .quiz-question-top-section {
+	display: flex;
+	flex-direction: column;
+}
+
+.book-trivia-page-quizzes-section .quiz-questions .quiz-title {
+	font-size: 14px;
+}
+
+.book-trivia-page-quizzes-section .quiz-questions .quiz-author-span {
+	font-size: 12px;
+}
+
+.book-trivia-page-quizzes-section
+	.quiz-questions
+	.quiz-question-middle-section {
+	padding-left: 5px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.book-trivia-page-quizzes-section
+	.quiz-questions
+	.quiz-question-middle-section
+	.question {
+	font-size: 13.3px;
+}
+
+.book-trivia-page-quizzes-section
+	.quiz-questions
+	.quiz-number-of-questions-and-rating
+	.quiz-rating {
+	display: flex;
+	flex-direction: row;
+	margin-top: 2px;
+}
+
+.book-trivia-page-quizzes-section
+	.quiz-questions
+	.quiz-number-of-questions-and-rating
+	> span {
+	font-size: 12px;
+}
+
+.book-trivia-page-quizzes-section
+	.quiz-questions
+	.quiz-question-bottom-section {
+	text-align: end;
+	font-size: 12px;
+	line-height: 18px;
+	padding-right: 100px;
+	margin-top: 10px;
+}
