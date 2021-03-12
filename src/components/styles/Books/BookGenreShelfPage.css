@@ -1,0 +1,123 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+
+.book-genre-shelf-page-main-content {
+	margin: 0 155px;
+	padding: 15px 0 0 5px;
+}
+
+.book-genre-shelf-page-main-content a {
+	color: rgb(0, 99, 93);
+	padding: 0;
+	display: inline;
+	height: auto;
+	width: auto;
+}
+
+.book-genre-shelf-page-main-content a:hover {
+	background-color: transparent;
+	text-decoration: underline;
+}
+
+.book-genre-shelf-page h1 {
+	font-family: 'Merriweather', Georgia, 'Times New Roman', serif;
+	font-size: 20px;
+	font-weight: bold;
+	line-height: 24px;
+	color: rgb(56, 33, 16);
+	margin-bottom: 25px;
+}
+
+.book-genre-shelf-page h1 a {
+	font-family: 'Merriweather', Georgia, 'Times New Roman', serif;
+	font-size: 20px;
+	font-weight: bold;
+	line-height: 24px;
+}
+
+.book-genre-shelf-page-main-content .central-section {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	margin-bottom: 20px;
+}
+
+.book-genre-shelf-page-left-section {
+	width: 625px;
+	padding: 15px 10px 0 8px;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+
+.book-genre-shelf-page-left-section .user-card {
+	display: flex;
+	flex-direction: row;
+	width: 150px;
+	margin-bottom: 10px;
+}
+
+.book-genre-shelf-page-left-section .user-card-picture-a,
+.user-card-picture {
+	display: block;
+	width: 50px;
+	height: 50px;
+}
+
+.book-genre-shelf-page-left-section .user-card-right-section {
+	display: flex;
+	flex-direction: column;
+	margin-left: 10px;
+}
+
+.book-genre-shelf-page-left-section .user-card-right-section span,
+.book-genre-shelf-page-left-section .user-card-right-section a {
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.book-genre-shelf-page-left-section .user-card-right-section span {
+	color: rgb(119, 119, 119);
+}
+
+.book-genre-shelf-page-left-section .user-card-right-section .user-name-a {
+	font-weight: bold;
+}
+
+.book-genre-shelf-page .popular-book-card .image-container,
+.book-genre-shelf-page .popular-book-card .image-container img {
+	width: 49px;
+	height: 75px;
+}
+
+.book-genre-shelf-page-right-section .popular-books-title {
+	display: block;
+	width: 300px;
+	height: 24px;
+	padding: 2px 0;
+	border-bottom: 1px solid rgb(216, 216, 216);
+	color: rgb(56, 33, 16);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	line-height: 24px;
+}
+
+.book-genre-shelf-page-right-section .popular-books-list {
+	padding-top: 15px;
+}
+
+.book-genre-shelf-page-right-section .popular-book-card {
+	display: flex;
+	flex-direction: row;
+	margin-bottom: 5px;
+}
+
+.book-genre-shelf-page-right-section .popular-book-card .book-title-a {
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+	height: 18px;
+	margin-left: 10px;
+}

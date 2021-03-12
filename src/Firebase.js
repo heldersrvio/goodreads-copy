@@ -1948,6 +1948,96 @@ const Firebase = (() => {
 		}
 	};
 
+	const getBookInfoForGenreShelfPage = async (bookId, shelf) => {
+		const bookQuery = await database.collection('books').doc(bookId).get();
+		const rootBookQuery = await database
+			.collection('rootBooks')
+			.doc(bookQuery.data().rootBook)
+			.get();
+		const series =
+			rootBookQuery.data().series === undefined
+				? undefined
+				: (
+						await database
+							.collection('series')
+							.doc(rootBookQuery.data().series)
+							.get()
+				  ).data().name;
+		const seriesInstance = rootBookQuery.seriesInstance;
+		const shelfQuery = await database
+			.collection('shelves')
+			.where('name', '==', shelf)
+			.where('rootBooks', 'array-contains', bookQuery.data().rootBook)
+			.get();
+		const users = await Promise.all(
+			shelfQuery.docs.map(async (shelf) => {
+				const id = shelf.data().user;
+				const userQuery = await database.collection('users').doc(id).get();
+				const firstName = userQuery.data().firstName;
+				const picture = userQuery.data().profileImage;
+				const numberOfFriends = userQuery.data().friends.length;
+				const userBooksInstancesQuery = await database
+					.collection('userBooksInstances')
+					.where('userId', '==', id)
+					.get();
+				const numberOfBooks = userBooksInstancesQuery.docs.length;
+				const numberOfBooksOnShelf = shelf.data().rootBooks.length;
+				return {
+					id,
+					firstName,
+					picture,
+					numberOfBooks,
+					numberOfFriends,
+					numberOfBooksOnShelf,
+				};
+			})
+		);
+		const allOccurrencesOfRootBooksOnShelf = shelfQuery.docs
+			.map((doc) => doc.data().rootBooks)
+			.reduce((previous, current) => previous.concat(current), []);
+		const numberOfOccurrencesOfRootBooks = allOccurrencesOfRootBooksOnShelf.reduce(
+			(previous, current) => {
+				if (previous[current] === undefined) {
+					previous[current] = 1;
+				} else {
+					previous[current] = previous[current] + 1;
+				}
+				return previous;
+			},
+			{}
+		);
+		const rootBooksSortedByPopularity = Object.keys(
+			numberOfOccurrencesOfRootBooks
+		).sort(
+			(a, b) =>
+				numberOfOccurrencesOfRootBooks[b] - numberOfOccurrencesOfRootBooks[a]
+		);
+		rootBooksSortedByPopularity.length = Math.min(
+			rootBooksSortedByPopularity.length,
+			5
+		);
+		const popularBooksOnShelf = await Promise.all(
+			rootBooksSortedByPopularity.map(async (rootBook) => {
+				const bookQueryForRootBook = await database
+					.collection('books')
+					.where('rootBook', '==', rootBook)
+					.where('mainEdition', '==', true)
+					.get();
+				return {
+					id: bookQueryForRootBook.docs[0].id,
+					title: bookQueryForRootBook.docs[0].data().title,
+					cover: bookQueryForRootBook.docs[0].data().cover,
+				};
+			})
+		);
+		return {
+			series,
+			seriesInstance,
+			users,
+			popularBooksOnShelf,
+		};
+	};
+
 	return {
 		pageGenerator,
 		getAlsoEnjoyedBooksDetailsForBook,
@@ -1986,6 +2076,7 @@ const Firebase = (() => {
 		getSynopsisAndPreSynopsisForBook,
 		createNewBook,
 		getBookInfoForTopShelvesPage,
+		getBookInfoForGenreShelfPage,
 	};
 })();
 
