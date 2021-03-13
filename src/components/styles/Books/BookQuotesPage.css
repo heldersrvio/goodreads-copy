@@ -145,8 +145,10 @@
 }
 
 .book-quotes-page-quote-list {
+	position: relative;
 	padding: 0 10px 0 8px;
 	margin-top: 15px;
+	margin-bottom: 20px;
 }
 
 .book-quotes-page-quote-list .quote,
@@ -295,4 +297,36 @@
 
 .book-quotes-page .quote-card .right-section .quote-a:hover {
 	text-decoration: underline;
+}
+
+.book-quotes-page .page-navigation-section {
+	display: flex;
+	flex-direction: row;
+	position: absolute;
+	right: 0;
+	bottom: -30px;
+}
+
+.book-quotes-page .page-navigation-section button {
+	display: inline;
+	padding: 0;
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+	height: auto;
+	color: rgb(0, 99, 93);
+	margin-right: 3px;
+}
+
+.book-quotes-page .page-navigation-section button:hover {
+	background-color: transparent;
+	text-decoration: underline;
+}
+
+.book-quotes-page .page-navigation-section button:disabled {
+	color: rgb(24, 24, 24);
+}
+
+.book-quotes-page .page-navigation-section button:disabled:hover {
+	text-decoration: none;
 }

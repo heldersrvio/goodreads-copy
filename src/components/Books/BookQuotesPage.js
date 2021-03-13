@@ -34,27 +34,6 @@ const BookQuotesPage = ({ match }) => {
 	const [savingShelf, setSavingShelf] = useState(false);
 	const [userLikedQuotes, setUserLikedQuotes] = useState([]);
 	const [searchInput, setSearchInput] = useState('');
-	/*
-    bookInfo: {
-        authorId,
-        authorName,
-		cover,
-        numberOfRatings,
-        averageRating,
-        numberOfReviews,
-		pageCount,
-        userStatus,
-        userRating,
-        userProgress,
-        toReadBookPosition,
-        quotes: [{
-            id,
-            content,
-            tags,
-            usersWhoLiked,
-        }]
-    };
-    */
 
 	const user = JSON.parse(localStorage.getItem('userState'));
 
@@ -589,110 +568,114 @@ const BookQuotesPage = ({ match }) => {
 
 	const quoteList = loaded ? (
 		<div className="book-quotes-page-quote-list">
-			{bookInfo.quotes.map((quote, index) => {
-				return (
-					<div className="quote-card" key={index}>
-						<div className="left-section">
-							<span className="quote">{`“${quote.content}”`}</span>
-							<span className="quote-authorship">
-								<span className="dash">― </span>
-								{`${bookInfo.authorName}, ${bookTitle}`}
-							</span>
-							{quote.tags.length !== 0 ? (
-								<span className="tag-list">
-									<span>tags: </span>
-									<span>
-										{quote.tags.map((tag, i) => {
-											if (i === quote.tags.length - 1) {
-												return (
-													<a
-														key={i}
-														href={Firebase.pageGenerator.generateQuotesTagPage(
-															tag
-														)}
-													>
-														{tag}
-													</a>
-												);
-											} else {
-												return (
-													<span key={i}>
+			{bookInfo.quotes
+				.filter(
+					(_quote, index) => index >= (page - 1) * 30 && index <= page * 30
+				)
+				.map((quote, index) => {
+					return (
+						<div className="quote-card" key={index}>
+							<div className="left-section">
+								<span className="quote">{`“${quote.content}”`}</span>
+								<span className="quote-authorship">
+									<span className="dash">― </span>
+									{`${bookInfo.authorName}, ${bookTitle}`}
+								</span>
+								{quote.tags.length !== 0 ? (
+									<span className="tag-list">
+										<span>tags: </span>
+										<span>
+											{quote.tags.map((tag, i) => {
+												if (i === quote.tags.length - 1) {
+													return (
 														<a
+															key={i}
 															href={Firebase.pageGenerator.generateQuotesTagPage(
 																tag
 															)}
 														>
 															{tag}
 														</a>
-														{', '}
-													</span>
-												);
-											}
-										})}
+													);
+												} else {
+													return (
+														<span key={i}>
+															<a
+																href={Firebase.pageGenerator.generateQuotesTagPage(
+																	tag
+																)}
+															>
+																{tag}
+															</a>
+															{', '}
+														</span>
+													);
+												}
+											})}
+										</span>
 									</span>
-								</span>
-							) : null}
-						</div>
-						<div className="right-section">
-							{user.userUID === null ||
-							!quote.usersWhoLiked.includes(user.userUID) ? (
-								<button
-									className="like-button"
-									onClick={async (_e) => {
-										await Firebase.likeQuote(user.userUID, quote.id, history);
-										setBookInfo((previous) => {
-											return {
-												...previous,
-												quotes: previous.quotes.map((quote, i) => {
-													if (i === index) {
-														return {
-															...quote,
-															usersWhoLiked: quote.usersWhoLiked.concat(
-																user.userUID
-															),
-														};
-													}
-													return quote;
-												}),
-											};
-										});
-										setUserLikedQuotes((previous) => previous.concat(index));
-									}}
-								>
-									Like
-								</button>
-							) : userLikedQuotes.includes(index) ? (
-								<a
-									className="quote-a"
-									href={Firebase.pageGenerator.generateQuotePage(
-										quote.id,
-										quote.content
-									)}
-								>
-									View quote
-								</a>
-							) : (
-								<a
-									className="quote-a"
-									href={Firebase.pageGenerator.generateQuotePage(
-										quote.id,
-										quote.content
-									)}
-								>
-									In my quotes
-								</a>
-							)}
-							<a
-								className="number-of-likes-a"
-								href={Firebase.pageGenerator.generateQuotePage(
-									quote.id,
-									quote.content
+								) : null}
+							</div>
+							<div className="right-section">
+								{user.userUID === null ||
+								!quote.usersWhoLiked.includes(user.userUID) ? (
+									<button
+										className="like-button"
+										onClick={async (_e) => {
+											await Firebase.likeQuote(user.userUID, quote.id, history);
+											setBookInfo((previous) => {
+												return {
+													...previous,
+													quotes: previous.quotes.map((quote, i) => {
+														if (i === index) {
+															return {
+																...quote,
+																usersWhoLiked: quote.usersWhoLiked.concat(
+																	user.userUID
+																),
+															};
+														}
+														return quote;
+													}),
+												};
+											});
+											setUserLikedQuotes((previous) => previous.concat(index));
+										}}
+									>
+										Like
+									</button>
+								) : userLikedQuotes.includes(index) ? (
+									<a
+										className="quote-a"
+										href={Firebase.pageGenerator.generateQuotePage(
+											quote.id,
+											quote.content
+										)}
+									>
+										View quote
+									</a>
+								) : (
+									<a
+										className="quote-a"
+										href={Firebase.pageGenerator.generateQuotePage(
+											quote.id,
+											quote.content
+										)}
+									>
+										In my quotes
+									</a>
 								)}
-							>{`${quote.usersWhoLiked.length} likes`}</a>
+								<a
+									className="number-of-likes-a"
+									href={Firebase.pageGenerator.generateQuotePage(
+										quote.id,
+										quote.content
+									)}
+								>{`${quote.usersWhoLiked.length} likes`}</a>
+							</div>
 						</div>
-					</div>
-				);
-			})}
+					);
+				})}
 			{Math.ceil(bookInfo.quotes.length / 30) > 1 ? (
 				<div className="page-navigation-section">
 					<button
