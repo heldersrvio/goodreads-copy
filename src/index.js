@@ -21,6 +21,7 @@ import BookTopShelvesPage from './components/Books/BookTopShelvesPage';
 import BookGenreShelfPage from './components/Books/BookGenreShelfPage';
 import BookTriviaPage from './components/Books/BookTriviaPage';
 import BookQuotesPage from './components/Books/BookQuotesPage';
+import BookListsPage from './components/Books/BookListsPage';
 
 const store = createStore(reducer.userReducer);
 
@@ -75,6 +76,7 @@ ReactDOM.render(
 						path="/work/quotes/:bookQuotesPageId"
 						component={BookQuotesPage}
 					/>
+					<Route path="/list/book/:bookId" component={BookListsPage} />
 					<Route path="/" component={App} />
 				</Switch>
 			</BrowserRouter>

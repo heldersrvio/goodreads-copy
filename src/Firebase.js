@@ -50,12 +50,36 @@ const Firebase = (() => {
 			);
 		};
 
+		const generateBookListsPage = (bookId) => {
+			return '/list/book' + bookId;
+		};
+
 		const generateSeriesPage = (seriesId, name) => {
 			return `/series/${seriesId}-${name.toLowerCase().replace(/ /g, '-')}`;
 		};
 
 		const generateAuthorPage = (authorId, name) => {
 			return '/author/show/' + authorId + '.' + name.replace(/ /g, '_');
+		};
+
+		const generateListopiaPage = () => {
+			return '/list';
+		};
+
+		const generateCreateListPage = () => {
+			return '/list/new';
+		};
+
+		const generateListsCreatedByUserPage = (userId, firstName) => {
+			return '/list/created/' + userId + '-' + firstName.toLowerCase();
+		};
+
+		const generateListsVotedByUserPage = (userId, firstName) => {
+			return '/list/user_votes/' + userId + '-' + firstName.toLowerCase();
+		};
+
+		const generateListsLikedByUserPage = (userId, firstName) => {
+			return '/list/liked/' + userId + '-' + firstName.toLowerCase();
 		};
 
 		const generateListPage = (listId, title) => {
@@ -184,8 +208,14 @@ const Firebase = (() => {
 			generateBookCoverPage,
 			generateBookPhotoPage,
 			generateBookEditionsPage,
+			generateBookListsPage,
 			generateSeriesPage,
 			generateAuthorPage,
+			generateListopiaPage,
+			generateCreateListPage,
+			generateListsCreatedByUserPage,
+			generateListsVotedByUserPage,
+			generateListsLikedByUserPage,
 			generateListPage,
 			generateUserPage,
 			generateUserShelfPage,
