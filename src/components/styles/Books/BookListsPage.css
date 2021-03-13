@@ -28,43 +28,44 @@
 }
 
 .book-lists-page-book-card {
-    display: flex;
-    flex-direction: row;
+	display: flex;
+	flex-direction: row;
 }
 
-.book-lists-page-book-card .cover-wrapper, .book-lists-page-book-card .cover-wrapper img {
-    width: 48px;
-    height: 75px;
+.book-lists-page-book-card .cover-wrapper,
+.book-lists-page-book-card .cover-wrapper img {
+	width: 48px;
+	height: 75px;
 }
 
 .book-lists-page-book-card .right-section {
-    margin-left: 10px;
+	margin-left: 10px;
 }
 
 .book-lists-page-book-card .right-section a {
-    color: rgb(0, 99, 93);
+	color: rgb(0, 99, 93);
 }
 
 .book-lists-page-book-card .right-section a:hover {
-    text-decoration: underline;
+	text-decoration: underline;
 }
 
 .book-lists-page-authorship {
-    color: rgb(0, 0, 0);
-    font-family: 'Lato', Helvetica, Arial, sans-serif;
+	color: rgb(0, 0, 0);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
 	font-size: 13px;
-    line-height: 18px;
+	line-height: 18px;
 }
 
 .book-lists-page-authorship a {
-    font-family: 'Merriweather', Georgia, 'Times New Roman', serif;
-    font-size: 12px;
-    color: rgb(51, 51, 51);
-    line-height: 18px;
+	font-family: 'Merriweather', Georgia, 'Times New Roman', serif;
+	font-size: 12px;
+	color: rgb(51, 51, 51);
+	line-height: 18px;
 }
 
 .book-lists-page-authorship .goodreads-author-span {
-    color: rgb(153, 153, 153);
-    font-family: 'Lato', Helvetica, Arial, sans-serif;
+	color: rgb(153, 153, 153);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
 	font-size: 12px;
 }
