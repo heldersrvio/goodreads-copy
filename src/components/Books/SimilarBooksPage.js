@@ -173,6 +173,10 @@ const SimilarBooksPage = ({ match }) => {
 						...previous,
 						mainBook: {
 							...previous.mainBook,
+							userStatus:
+								previous.mainBook.userStatus !== undefined
+									? previous.mainBook.userStatus
+									: 'read',
 							userRating: rating,
 						},
 					};
@@ -183,6 +187,10 @@ const SimilarBooksPage = ({ match }) => {
 						i === index
 							? {
 									...previousObject,
+									userStatus:
+										previousObject.userStatus !== undefined
+											? previousObject.userStatus
+											: 'read',
 									userRating: rating,
 							  }
 							: previousObject

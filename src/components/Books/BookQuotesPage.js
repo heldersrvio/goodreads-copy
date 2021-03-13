@@ -11,7 +11,11 @@ const BookQuotesPage = ({ match }) => {
 		params: { bookQuotesPageId },
 	} = match;
 	const bookId = bookQuotesPageId.split('-')[0];
-	const bookTitle = bookQuotesPageId.split('-').slice(1).join(' ');
+	const bookTitle = bookQuotesPageId
+		.split('-')
+		.slice(1)
+		.map((string) => string[0].toUpperCase() + string.slice(1))
+		.join(' ');
 	const [loaded, setLoaded] = useState(false);
 	const [bookInfo, setBookInfo] = useState({});
 	const [page, setPage] = useState(1);
@@ -38,6 +42,7 @@ const BookQuotesPage = ({ match }) => {
         numberOfRatings,
         averageRating,
         numberOfReviews,
+		pageCount,
         userStatus,
         userRating,
         userProgress,
@@ -55,41 +60,13 @@ const BookQuotesPage = ({ match }) => {
 
 	useEffect(() => {
 		const getBookInfo = async () => {
-			setBookInfo({
-				authorId: '12345',
-				authorName: 'Stephen King',
-				cover:
-					'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1372296329l/5091._SY475_.jpg',
-				numberOfRatings: 20,
-				averageRating: 4.5,
-				numberOfReviews: 0,
-				userStatus: 'reading',
-				userProgress: 35,
-				quotes: [
-					{
-						id: '1',
-						content: '和藹可親',
-						tags: ['chinese', 'kindness'],
-						usersWhoLiked: [],
-					},
-					{
-						id: '2',
-						content: 'Be the change you want to see in the world',
-						tags: ['change', 'Gandhi'],
-						usersWhoLiked: ['flora12', 'ezekiel', 'bibici'],
-					},
-					{
-						id: '3',
-						content: 'Ba dum!',
-						tags: ['change', 'Gandhi'],
-						usersWhoLiked: ['flora12', 'ezekiel', 'bibici', 'Daniel'],
-					},
-				],
-			});
+			setBookInfo(
+				await Firebase.getBookInfoForQuotesPage(user.userUID, bookId)
+			);
 			setLoaded(true);
 		};
 		getBookInfo();
-	}, []);
+	}, [bookId, user.userUID]);
 
 	const displayRemoveBookConfirm = () => {
 		return window.confirm(
@@ -99,7 +76,7 @@ const BookQuotesPage = ({ match }) => {
 
 	const removeBookSafely = () => {
 		if (displayRemoveBookConfirm()) {
-			Firebase.removeBookFromShelf(user.userUID, bookInfo.id);
+			Firebase.removeBookFromShelf(user.userUID, bookId);
 			setBookInfo((previous) => {
 				return {
 					...previous,
@@ -112,43 +89,36 @@ const BookQuotesPage = ({ match }) => {
 	};
 
 	const changeBookShelf = async (shelf) => {
-		if (bookInfo.id !== undefined) {
-			setSavingShelf(true);
-			await Firebase.addBookToShelf(user.userUID, bookInfo.id, shelf, history);
-			setBookInfo((previous) => {
-				return {
-					...previous,
-					userStatus: shelf,
-				};
-			});
-			setSavingShelf(false);
-		}
+		setSavingShelf(true);
+		await Firebase.addBookToShelf(user.userUID, bookId, shelf, history);
+		setBookInfo((previous) => {
+			return {
+				...previous,
+				userStatus: shelf,
+			};
+		});
+		setSavingShelf(false);
 	};
 
 	const rateBook = async (rating) => {
-		if (bookInfo.id !== undefined) {
-			await Firebase.rateBook(user.userUID, bookInfo.id, rating, history);
-			setBookInfo((previous) => {
-				return {
-					...previous,
-					userRating: rating,
-				};
-			});
-		}
+		await Firebase.rateBook(user.userUID, bookId, rating, history);
+		setBookInfo((previous) => {
+			return {
+				...previous,
+				userStatus:
+					previous.userStatus !== undefined ? previous.userStatus : 'read',
+				userRating: rating,
+			};
+		});
 	};
 
 	const updateProgress = async (pages) => {
 		if (
 			user.userUID !== null &&
 			user.userUID !== undefined &&
-			bookInfo.id !== undefined &&
 			pages.length > 0
 		) {
-			await Firebase.updateBookInShelf(
-				user.userUID,
-				bookInfo.id,
-				parseInt(pages)
-			);
+			await Firebase.updateBookInShelf(user.userUID, bookId, parseInt(pages));
 			setBookInfo((previous) => {
 				return {
 					...previous,
@@ -158,7 +128,9 @@ const BookQuotesPage = ({ match }) => {
 		}
 	};
 
-	const pageHeader = <h1 className="book-quotes-page-header">{bookTitle}</h1>;
+	const pageHeader = (
+		<h1 className="book-quotes-page-header">{`${bookTitle} Quotes`}</h1>
+	);
 
 	const addToShelfButton =
 		loaded && bookInfo.userStatus === 'reading' ? (
@@ -462,7 +434,14 @@ const BookQuotesPage = ({ match }) => {
 					className="cover-wrapper"
 					href={Firebase.pageGenerator.generateBookPage(bookId, bookTitle)}
 				>
-					<img src={bookInfo.cover} alt={bookTitle} />
+					<img
+						src={
+							bookInfo.cover !== undefined
+								? bookInfo.cover
+								: 'https://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png'
+						}
+						alt={bookTitle}
+					/>
 				</a>
 				<div className="book-info">
 					<span className="book-title">
@@ -483,7 +462,7 @@ const BookQuotesPage = ({ match }) => {
 							{bookInfo.authorName}
 						</a>
 					</span>
-					<span>{`${bookInfo.numberOfRatings} ratings, ${bookInfo.averageRating} average rating, ${bookInfo.numberOfReviews} reviews`}</span>
+					<span className="numbers">{`${bookInfo.numberOfRatings} ratings, ${bookInfo.averageRating} average rating, ${bookInfo.numberOfReviews} reviews`}</span>
 				</div>
 			</div>
 			<div className="right-section">
@@ -491,7 +470,9 @@ const BookQuotesPage = ({ match }) => {
 					<div className="add-to-shelf-buttons">
 						<div
 							className={`want-to-read-button-and-options ${
-								bookInfo.userStatus !== undefined ? bookInfo.userStatus : ''
+								bookInfo.userStatus !== undefined
+									? bookInfo.userStatus
+									: 'to-read'
 							}`}
 						>
 							{addToShelfButton}
@@ -612,8 +593,11 @@ const BookQuotesPage = ({ match }) => {
 				return (
 					<div className="quote-card" key={index}>
 						<div className="left-section">
-							<span className="quote">{quote.content}</span>
-							<span className="quote-authorship">{`― ${bookInfo.authorName}, ${bookTitle}`}</span>
+							<span className="quote">{`“${quote.content}”`}</span>
+							<span className="quote-authorship">
+								<span className="dash">― </span>
+								{`${bookInfo.authorName}, ${bookTitle}`}
+							</span>
 							{quote.tags.length !== 0 ? (
 								<span className="tag-list">
 									<span>tags: </span>
@@ -640,7 +624,7 @@ const BookQuotesPage = ({ match }) => {
 														>
 															{tag}
 														</a>
-														,
+														{', '}
 													</span>
 												);
 											}
@@ -679,6 +663,7 @@ const BookQuotesPage = ({ match }) => {
 								</button>
 							) : userLikedQuotes.includes(index) ? (
 								<a
+									className="quote-a"
 									href={Firebase.pageGenerator.generateQuotePage(
 										quote.id,
 										quote.content
@@ -688,6 +673,7 @@ const BookQuotesPage = ({ match }) => {
 								</a>
 							) : (
 								<a
+									className="quote-a"
 									href={Firebase.pageGenerator.generateQuotePage(
 										quote.id,
 										quote.content
@@ -756,6 +742,7 @@ const BookQuotesPage = ({ match }) => {
 			<form className="top-section">
 				<input
 					className="search-quote input"
+					type="text"
 					placeholder="Find quotes by keyword, author"
 					value={searchInput}
 					onChange={(e) => setSearchInput(e.target.value)}

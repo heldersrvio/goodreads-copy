@@ -3,4 +3,296 @@
 
 .book-quotes-page-main-content {
 	margin: 15px 155px 30px 160px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	min-height: 500px;
+}
+
+.book-quotes-page-main-content h1 {
+	color: rgb(56, 33, 16);
+	font-family: 'Merriweather', Georgia, 'Times New Roman', serif;
+	font-size: 20px;
+	font-weight: bold;
+	line-height: 24px;
+}
+
+.book-quotes-page-main-content a {
+	padding: 0;
+	display: inline;
+	line-height: normal;
+}
+
+.book-quotes-page-main-content a:hover {
+	background-color: transparent;
+}
+
+.book-quotes-page-main-content-left-section {
+	width: 625px;
+}
+
+.book-quotes-page-book-card {
+	padding: 0 10px 0 8px;
+	margin-top: 40px;
+	margin-bottom: 5px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	width: 100%;
+}
+
+.book-quotes-page-book-card .cover-wrapper,
+.book-quotes-page-book-card .cover-wrapper img {
+	width: 50px;
+	height: 75px;
+}
+
+.book-quotes-page-book-card .left-section {
+	display: flex;
+	flex-direction: row;
+}
+
+.book-quotes-page-book-card .right-section .want-to-read-button-and-options {
+	margin-top: 0;
+}
+
+.book-quotes-page-book-card .book-info {
+	margin-left: 10px;
+	display: flex;
+	flex-direction: column;
+}
+
+.book-quotes-page-book-card .book-info .book-title {
+	color: rgb(0, 0, 0);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 13px;
+	line-height: 18px;
+}
+
+.book-quotes-page-book-card .book-info .book-title .book-title-bold {
+	color: rgb(51, 51, 51);
+	font-family: 'Merriweather', Georgia, 'Times New Roman', serif;
+	font-size: 14.4px;
+	font-weight: bold;
+	line-height: 18px;
+}
+
+.book-quotes-page-book-card .book-info .book-title .author-name {
+	color: rgb(51, 51, 51);
+	font-family: 'Merriweather', Georgia, 'Times New Roman', serif;
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.book-quotes-page-book-card .book-info .book-title .book-title-bold:hover,
+.book-quotes-page-book-card .book-info .book-title .author-name:hover {
+	text-decoration: underline;
+}
+
+.book-quotes-page-book-card .book-info .numbers {
+	color: rgb(24, 24, 24);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.book-quotes-page .interactive-star {
+	cursor: pointer;
+	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAQAAACROWYpAAABaUlEQVR4AZ3UtaLUQBgF4MGlxd31JfAH2BfYckvcHSqc6+7ubs31+ipwzgT3BocOm3XfSTY5fzP2xSfCLM/2PtsrnIbXeM05fsRHDqmxGwrK2O0Iy8t+LC87wpzxY844oTuhgsWd9vHFCL5oG2MqjDFlkz7fDhWt59ttYZ6PxTyvuzw3s1iAUlShga3s5gCHMI4vsdjXG+cQB9jNVjSgCqUsYBbc4uNS1kPZL9Z/XCr84Sn+tQX/8lTsp3iIn9Omn41DIj4vN2EyLTz5cpNIzrslqLak1e+WCF1wHH+08A+OW31ZR7T4iLAK9+sw91ti3NZh3LbEfKTDlr+k5xug9PV8gymmJ3axzJW5sX16TDE6Iku/whUYceFrZKzDhKqF+BVaNv58Q8ytjIdGf6mFWmwc8i/hP3lTzYsdV/PkTf7zzxmHtJj3ofiB+1O/f36A4n0tBthtLNde13J2Azq6Rh4TFpHHsCba8wIHb2XVGoaSPQAAAABJRU5ErkJggg==');
+	background-repeat: no-repeat;
+}
+
+.book-quotes-page .interactive-star.small {
+	background-size: 15px 15px;
+	width: 15px;
+	height: 15px;
+}
+
+.book-quotes-page .interactive-star.big {
+	background-size: 30px 30px;
+	width: 30px;
+	height: 30px;
+	background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxuczpza2V0Y2g9Imh0dHA6Ly93d3cuYm9oZW1pYW5jb2RpbmcuY29tL3NrZXRjaC9ucyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiBoZWlnaHQ9IjE1cHgiIHdpZHRoPSIxNXB4IiB2ZXJzaW9uPSIxLjEiIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2aWV3Qm94PSIwIDAgMTUgMTUiPjwhLS0gR2VuZXJhdG9yOiBTa2V0Y2ggMy40LjEgKDE1NjgxKSAtIGh0dHA6Ly93d3cuYm9oZW1pYW5jb2RpbmcuY29tL3NrZXRjaCAtLT4KIDx0aXRsZT5nci1zdGFyLWVtcHR5PC90aXRsZT4KIDxnIGlkPSJBc3NldHMiIGZpbGwtcnVsZT0iZXZlbm9kZCIgc2tldGNoOnR5cGU9Ik1TUGFnZSIgZmlsbD0ibm9uZSI+CiAgPHBvbHlnb24gaWQ9IlN0YXItMTAtQ29weS02IiBza2V0Y2g6dHlwZT0iTVNTaGFwZUdyb3VwIiBwb2ludHM9IjcuNSAxMS42MDkgMi44NjQ3IDE1IDQuNSA5LjMxNjcgNC4zNTY2ZS0xNiA1LjcyOTUgNS42NDU5IDUuNjA4NSA3LjUgMCA5LjM1NDEgNS42MDg1IDE1IDUuNzI5NSAxMC41IDkuMzE2NyAxMi4xMzUgMTUiIGZpbGw9IiNENkQ2RDYiLz4KIDwvZz4KPC9zdmc+Cg==');
+}
+
+.book-quotes-page .interactive-star.big.on {
+	background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxuczpza2V0Y2g9Imh0dHA6Ly93d3cuYm9oZW1pYW5jb2RpbmcuY29tL3NrZXRjaC9ucyIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiBoZWlnaHQ9IjE1cHgiIHdpZHRoPSIxNXB4IiB2ZXJzaW9uPSIxLjEiIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2aWV3Qm94PSIwIDAgMTUgMTUiPjwhLS0gR2VuZXJhdG9yOiBTa2V0Y2ggMy40LjEgKDE1NjgxKSAtIGh0dHA6Ly93d3cuYm9oZW1pYW5jb2RpbmcuY29tL3NrZXRjaCAtLT4KIDx0aXRsZT5nci1zdGFyLXlvdXItcmF0aW5nPC90aXRsZT4KIDxnIGlkPSJBc3NldHMiIGZpbGwtcnVsZT0iZXZlbm9kZCIgc2tldGNoOnR5cGU9Ik1TUGFnZSIgZmlsbD0ibm9uZSI+CiAgPHBvbHlnb24gaWQ9IlN0YXItMTAtQ29weS03IiBza2V0Y2g6dHlwZT0iTVNTaGFwZUdyb3VwIiBwb2ludHM9IjcuNSAxMS42MDkgMi44NjQ3IDE1IDQuNSA5LjMxNjcgMS4xNjE4ZS0xNCA1LjcyOTUgNS42NDU5IDUuNjA4NSA3LjUgMCA5LjM1NDEgNS42MDg1IDE1IDUuNzI5NSAxMC41IDkuMzE2NyAxMi4xMzUgMTUiIGZpbGw9IiNGNkE2MjMiLz4KIDwvZz4KPC9zdmc+Cg==');
+}
+
+.book-quotes-page .interactive-star.on {
+	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAABwElEQVR4Ab2WNbDVQBSGg0uLu+y5wUoqKrxHW0pK3B0q3N11N7hLg9e49A0VLrsXD/lmeK7RnVk95/+/3Mh5z0vafpyRoXSv6FY2spJeONga9YJeKPTHOX+w1Sqksy7wNpeWVYBZF3mbn1WAWRcC/R4M9iugFZ2zIt7mJbXBnOUOtlqe1AZzlu9tPqMEUH2dWG7gciCLGgITi2mmprmgtL2s1V5r5JAzcjzqgTPqfLS/arXcclruOK0eRvv3DYGJkUMuGrR44IUn3jBgwfTCq8M7RgKDuIgOC6ZX0aKDuc6o33kB8YbRwKfij7Va3mUNxRPvxp/5+SH9rJHHWUHxwtNrTgvPjOjgjJxIC8UDLy9uc1pmReJfCYC/0KYrGro0Pi4YTRa1eVRcMJrUYBeodXHBaDL5FycuGE0qqDOqT4qC0Sf5rw3U9IZLn+yiNxRHm+IXy6V6TD8440+syGHNWe08tImg4ZlhbSPx11oF/mF9t5AzYrXAX/GIDaa2VgP+sUatCc9MbdVQPjFyyK3Q4ZGkam36f+Vv4nyX5KJBi0eCz0he88c8vOp3jqtFgxaPeMLzQ3q4oDTTS9nwwKu+2D9N9rM09Bxb/wAAAABJRU5ErkJggg==');
+}
+
+.book-quotes-page .shelf-pop-up a,
+.shelf-pop-up span {
+	font-size: 12px;
+}
+
+.book-quotes-page-showing-numbers-span {
+	padding: 0 10px 0 8px;
+}
+
+.book-quotes-page-showing-numbers-span .big-text {
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	line-height: 18px;
+}
+
+.book-quotes-page-showing-numbers-span .small-text {
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 11px;
+	line-height: 14px;
+}
+
+.book-quotes-page-quote-list {
+	padding: 0 10px 0 8px;
+	margin-top: 15px;
+}
+
+.book-quotes-page-quote-list .quote,
+.book-quotes-page-quote-list .quote-authorship .dash {
+	color: rgb(24, 24, 24);
+	font-family: 'Merriweather', Georgia, 'Times New Roman', serif;
+	font-size: 14px;
+	line-height: 21px;
+	font-weight: normal;
+}
+
+.book-quotes-page-quote-list .quote-card {
+	position: relative;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	padding: 10px 0;
+	border-bottom: 1px solid rgb(215, 215, 215);
+}
+
+.book-quotes-page-quote-list .quote-card .left-section {
+	display: flex;
+	flex-direction: column;
+}
+
+.book-quotes-page-quote-list .quote-authorship {
+	color: rgb(51, 51, 51);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+	line-height: 21px;
+}
+
+.book-quotes-page-quote-list .tag-list {
+	margin-top: 10px;
+	color: rgb(153, 153, 153);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 11px;
+	line-height: 14px;
+}
+
+.book-quotes-page-quote-list .tag-list a {
+	color: rgb(0, 99, 93);
+}
+
+.book-quotes-page-quote-list .tag-list a:hover {
+	text-decoration: underline;
+}
+
+.book-quotes-page-quote-list button.like-button {
+	background-color: rgb(244, 241, 234);
+	padding: 4px 12px;
+	width: 43.4px;
+	height: 20px;
+	color: rgb(51, 51, 51);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 11px;
+	line-height: 11px;
+	border: 1px solid rgb(214, 208, 196);
+	border-radius: 3px;
+}
+
+.book-quotes-page-quote-list button.like-button:hover {
+	background-color: rgb(237, 230, 214);
+}
+
+.book-quotes-page-quote-list .number-of-likes-a {
+	position: absolute;
+	color: rgb(0, 99, 93);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 11px;
+	line-height: 14px;
+	height: 14px;
+	bottom: 10px;
+	right: 70px;
+}
+
+.book-quotes-page-quote-list .number-of-likes-a:hover {
+	text-decoration: underline;
+}
+
+.book-quotes-page-main-content-right-section {
+	margin-top: 65px;
+}
+
+.book-quotes-page-main-content-right-section .search-a {
+	background-color: rgb(244, 241, 234);
+	padding: 4px 12px;
+	width: 32.4px;
+	height: 20px;
+	color: rgb(51, 51, 51);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 11px;
+	line-height: 11px;
+	border: 1px solid rgb(214, 208, 196);
+	border-radius: 3px;
+}
+
+.book-quotes-page-main-content-right-section .search-a:hover {
+	background-color: rgb(237, 230, 214);
+}
+
+.book-quotes-page-main-content-right-section input[type='text'] {
+	width: 225px;
+	height: 15px;
+	padding: 2px;
+	border-radius: 3px;
+	border: 1px solid rgb(220, 214, 204);
+	color: rgb(51, 51, 51);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 11px;
+	line-height: normal;
+	margin-right: 5px;
+}
+
+.book-quotes-page-main-content-right-section input[type='text']:focus {
+	border-color: rgb(185, 173, 153);
+	box-shadow: rgba(185, 173, 153, 0.5) 0px 0px 4px 0px;
+}
+
+.book-quotes-page-main-content-right-section .bottom-section {
+	margin-top: 20px;
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.book-quotes-page-main-content-right-section .bottom-section a {
+	color: rgb(0, 99, 93);
+}
+
+.book-quotes-page-main-content-right-section .bottom-section a:hover {
+	text-decoration: underline;
+}
+
+.book-quotes-page .to-read .book-page-book-option-dropdown-trigger {
+	border-left: 1px solid rgb(56, 136, 61);
+}
+
+.book-quotes-page .quote-card .right-section .quote-a {
+	color: rgb(0, 99, 93);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 11px;
+	line-height: 14px;
+}
+
+.book-quotes-page .quote-card .right-section .quote-a:hover {
+	text-decoration: underline;
 }

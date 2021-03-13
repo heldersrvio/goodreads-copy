@@ -159,6 +159,10 @@ const BookEditionsPage = ({ match }) => {
 					i === index
 						? {
 								...previousObject,
+								userStatus:
+									previousObject.userStatus !== undefined
+										? previousObject.userStatus
+										: 'read',
 								userRating: rating,
 						  }
 						: previousObject

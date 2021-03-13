@@ -1388,13 +1388,14 @@ const Firebase = (() => {
 					.collection('userBooksInstances')
 					.add({ bookId, userId: userUID, status: 'read', rating });
 			}
-			await database.collection('userBooksUpdates').add({
-				user: userUID,
-				book: bookId,
-				action: 'rate-book',
-				rating,
-				date: firebase.firestore.Timestamp.fromDate(new Date()),
-			});
+			if (rating !== undefined) {
+				await database.collection('userBooksUpdates').add({
+					user: userUID,
+					book: bookId,
+					action: 'rate-book',
+					date: firebase.firestore.Timestamp.fromDate(new Date()),
+				});
+			}
 		}
 	};
 
@@ -2154,6 +2155,96 @@ const Firebase = (() => {
 		}
 	};
 
+	const getBookInfoForQuotesPage = async (userUID, bookId) => {
+		const bookQuery = await database.collection('books').doc(bookId).get();
+		const pageCount = bookQuery.data().pageCount;
+		const cover = bookQuery.data().cover;
+		const rootBookQuery = await database
+			.collection('rootBooks')
+			.doc(bookQuery.data().rootBook)
+			.get();
+		const authorId = rootBookQuery.data().authorId;
+		const authorQuery = await database
+			.collection('authors')
+			.doc(authorId)
+			.get();
+		const authorName = authorQuery.data().name;
+		const ratingsQuery = await database
+			.collection('userBooksInstances')
+			.where('rating', '>', 0)
+			.get();
+		const numberOfRatings = ratingsQuery.docs.length;
+		const ratings = ratingsQuery.docs.map((doc) => doc.data().rating);
+		const averageRating =
+			ratingsQuery.docs.lengh === 0
+				? 0
+				: ratings.reduce(
+						(previous, current) => previous + current / numberOfRatings,
+						0
+				  );
+		const editionsQuery = await database
+			.collection('books')
+			.where('rootBook', '==', bookQuery.data().rootBook)
+			.get();
+		const editions = editionsQuery.docs.map((doc) => doc.id);
+		const reviewsQuery = await database
+			.collection('reviews')
+			.where('bookEdition', 'in', editions)
+			.get();
+		const numberOfReviews = reviewsQuery.docs.length;
+		const thisUserInstanceQuery =
+			userUID === null || userUID === undefined
+				? null
+				: await database
+						.collection('userBooksInstances')
+						.where('userId', '==', userUID)
+						.where('bookId', '==', bookId)
+						.get();
+		const userStatus =
+			thisUserInstanceQuery === null || thisUserInstanceQuery.docs.length === 0
+				? undefined
+				: thisUserInstanceQuery.docs[0].data().status;
+		const userRating =
+			thisUserInstanceQuery === null || thisUserInstanceQuery.docs.length === 0
+				? undefined
+				: thisUserInstanceQuery.docs[0].data().rating;
+		const userProgress =
+			thisUserInstanceQuery === null || thisUserInstanceQuery.docs.length === 0
+				? undefined
+				: thisUserInstanceQuery.docs[0].data().progress;
+		const toReadBookPosition =
+			thisUserInstanceQuery === null || thisUserInstanceQuery.docs.length === 0
+				? undefined
+				: thisUserInstanceQuery.docs[0].data().position;
+		const quotes = (
+			await database
+				.collection('quotes')
+				.where('rootBook', '==', bookQuery.data().rootBook)
+				.get()
+		).docs.map((doc) => {
+			return {
+				id: doc.id,
+				content: doc.data().text,
+				tags: doc.data().tags,
+				usersWhoLiked: doc.data().usersWhoLiked,
+			};
+		});
+		return {
+			pageCount,
+			cover,
+			authorId,
+			authorName,
+			numberOfRatings,
+			averageRating,
+			numberOfReviews,
+			userStatus,
+			userRating,
+			userProgress,
+			toReadBookPosition,
+			quotes,
+		};
+	};
+
 	return {
 		pageGenerator,
 		getAlsoEnjoyedBooksDetailsForBook,
@@ -2195,6 +2286,7 @@ const Firebase = (() => {
 		getBookInfoForGenreShelfPage,
 		getBookInfoForTriviaPage,
 		likeQuote,
+		getBookInfoForQuotesPage,
 	};
 })();
 

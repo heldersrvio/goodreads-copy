@@ -355,6 +355,8 @@ const BookPage = ({ match }) => {
 			setBookInfo((previous) => {
 				return {
 					...previous,
+					userStatus:
+						previous.userStatus !== undefined ? previous.userStatus : 'read',
 					userRating: rating,
 				};
 			});
