@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 import Firebase from '../../Firebase';
+import '../styles/Books/BookQuotesPage.css';
 
 const BookQuotesPage = ({ match }) => {
 	const history = useHistory();
@@ -27,10 +28,13 @@ const BookQuotesPage = ({ match }) => {
 	const [shelfPopupToReadInput, setShelfPopupToReadInput] = useState('');
 	const [exhibitedStarRating, setExhibitedStarRating] = useState(0);
 	const [savingShelf, setSavingShelf] = useState(false);
+	const [userLikedQuotes, setUserLikedQuotes] = useState([]);
+	const [searchInput, setSearchInput] = useState('');
 	/*
     bookInfo: {
         authorId,
         authorName,
+		cover,
         numberOfRatings,
         averageRating,
         numberOfReviews,
@@ -48,6 +52,44 @@ const BookQuotesPage = ({ match }) => {
     */
 
 	const user = JSON.parse(localStorage.getItem('userState'));
+
+	useEffect(() => {
+		const getBookInfo = async () => {
+			setBookInfo({
+				authorId: '12345',
+				authorName: 'Stephen King',
+				cover:
+					'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1372296329l/5091._SY475_.jpg',
+				numberOfRatings: 20,
+				averageRating: 4.5,
+				numberOfReviews: 0,
+				userStatus: 'reading',
+				userProgress: 35,
+				quotes: [
+					{
+						id: '1',
+						content: '和藹可親',
+						tags: ['chinese', 'kindness'],
+						usersWhoLiked: [],
+					},
+					{
+						id: '2',
+						content: 'Be the change you want to see in the world',
+						tags: ['change', 'Gandhi'],
+						usersWhoLiked: ['flora12', 'ezekiel', 'bibici'],
+					},
+					{
+						id: '3',
+						content: 'Ba dum!',
+						tags: ['change', 'Gandhi'],
+						usersWhoLiked: ['flora12', 'ezekiel', 'bibici', 'Daniel'],
+					},
+				],
+			});
+			setLoaded(true);
+		};
+		getBookInfo();
+	}, []);
 
 	const displayRemoveBookConfirm = () => {
 		return window.confirm(
@@ -413,9 +455,340 @@ const BookQuotesPage = ({ match }) => {
 		</div>
 	);
 
+	const bookCard = loaded ? (
+		<div className="book-quotes-page-book-card">
+			<div className="left-section">
+				<a
+					className="cover-wrapper"
+					href={Firebase.pageGenerator.generateBookPage(bookId, bookTitle)}
+				>
+					<img src={bookInfo.cover} alt={bookTitle} />
+				</a>
+				<div className="book-info">
+					<span className="book-title">
+						<a
+							className="book-title-bold"
+							href={Firebase.pageGenerator.generateBookPage(bookId, bookTitle)}
+						>
+							{bookTitle}
+						</a>{' '}
+						by{' '}
+						<a
+							className="author-name"
+							href={Firebase.pageGenerator.generateAuthorPage(
+								bookInfo.authorId,
+								bookInfo.authorName
+							)}
+						>
+							{bookInfo.authorName}
+						</a>
+					</span>
+					<span>{`${bookInfo.numberOfRatings} ratings, ${bookInfo.averageRating} average rating, ${bookInfo.numberOfReviews} reviews`}</span>
+				</div>
+			</div>
+			<div className="right-section">
+				<div className="book-page-user-shelf-section">
+					<div className="add-to-shelf-buttons">
+						<div
+							className={`want-to-read-button-and-options ${
+								bookInfo.userStatus !== undefined ? bookInfo.userStatus : ''
+							}`}
+						>
+							{addToShelfButton}
+							{bookOptionsDropdown}
+						</div>
+					</div>
+				</div>
+				<div className="book-page-rate-book">
+					{bookInfo.userRating === undefined ? null : (
+						<button
+							className="clear-rating-button"
+							onClick={() => rateBook(undefined)}
+						>
+							Clear rating
+						</button>
+					)}
+					{bookInfo.userRating === undefined ? (
+						<span className="rate-this-book">Rate this book</span>
+					) : (
+						<span className="rate-this-book my-rating">My rating:</span>
+					)}
+					<div className="book-page-rate-book-star-rating">
+						<div
+							className={
+								exhibitedStarRating > 0
+									? 'interactive-star small on'
+									: 'interactive-star small'
+							}
+							title="did not like it"
+							onMouseOver={(_e) => setExhibitedStarRating(1)}
+							onMouseLeave={(_e) =>
+								setExhibitedStarRating(
+									bookInfo.userRating === undefined ? 0 : bookInfo.userRating
+								)
+							}
+							onClick={() => rateBook(1)}
+						></div>
+						<div
+							className={
+								exhibitedStarRating > 1
+									? 'interactive-star small on'
+									: 'interactive-star small'
+							}
+							title="it was ok"
+							onMouseOver={(_e) => setExhibitedStarRating(2)}
+							onMouseLeave={(_e) =>
+								setExhibitedStarRating(
+									bookInfo.userRating === undefined ? 0 : bookInfo.userRating
+								)
+							}
+							onClick={() => rateBook(2)}
+						></div>
+						<div
+							className={
+								exhibitedStarRating > 2
+									? 'interactive-star small on'
+									: 'interactive-star small'
+							}
+							title="liked it"
+							onMouseOver={(_e) => setExhibitedStarRating(3)}
+							onMouseLeave={(_e) =>
+								setExhibitedStarRating(
+									bookInfo.userRating === undefined ? 0 : bookInfo.userRating
+								)
+							}
+							onClick={() => rateBook(3)}
+						></div>
+						<div
+							className={
+								exhibitedStarRating > 3
+									? 'interactive-star small on'
+									: 'interactive-star small'
+							}
+							title="really liked it"
+							onMouseOver={(_e) => setExhibitedStarRating(4)}
+							onMouseLeave={(_e) =>
+								setExhibitedStarRating(
+									bookInfo.userRating === undefined ? 0 : bookInfo.userRating
+								)
+							}
+							onClick={() => rateBook(4)}
+						></div>
+						<div
+							className={
+								exhibitedStarRating > 4
+									? 'interactive-star small on'
+									: 'interactive-star small'
+							}
+							title="it was amazing"
+							onMouseOver={(_e) => setExhibitedStarRating(5)}
+							onMouseLeave={(_e) =>
+								setExhibitedStarRating(
+									bookInfo.userRating === undefined ? 0 : bookInfo.userRating
+								)
+							}
+							onClick={() => rateBook(5)}
+						></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	) : null;
+
+	const showingNumbersSpan = loaded ? (
+		<span className="book-quotes-page-showing-numbers-span">
+			<span className="big-text">{`${bookTitle} Quotes `}</span>
+			<span className="small-text">{`Showing ${(page - 1) * 30 + 1}-${
+				page === Math.ceil(bookInfo.quotes.length / 30)
+					? bookInfo.quotes.length
+					: page * 30
+			} of ${bookInfo.quotes.length}`}</span>
+		</span>
+	) : null;
+
+	const quoteList = loaded ? (
+		<div className="book-quotes-page-quote-list">
+			{bookInfo.quotes.map((quote, index) => {
+				return (
+					<div className="quote-card" key={index}>
+						<div className="left-section">
+							<span className="quote">{quote.content}</span>
+							<span className="quote-authorship">{`― ${bookInfo.authorName}, ${bookTitle}`}</span>
+							{quote.tags.length !== 0 ? (
+								<span className="tag-list">
+									<span>tags: </span>
+									<span>
+										{quote.tags.map((tag, i) => {
+											if (i === quote.tags.length - 1) {
+												return (
+													<a
+														key={i}
+														href={Firebase.pageGenerator.generateQuotesTagPage(
+															tag
+														)}
+													>
+														{tag}
+													</a>
+												);
+											} else {
+												return (
+													<span key={i}>
+														<a
+															href={Firebase.pageGenerator.generateQuotesTagPage(
+																tag
+															)}
+														>
+															{tag}
+														</a>
+														,
+													</span>
+												);
+											}
+										})}
+									</span>
+								</span>
+							) : null}
+						</div>
+						<div className="right-section">
+							{user.userUID === null ||
+							!quote.usersWhoLiked.includes(user.userUID) ? (
+								<button
+									className="like-button"
+									onClick={async (_e) => {
+										await Firebase.likeQuote(user.userUID, quote.id, history);
+										setBookInfo((previous) => {
+											return {
+												...previous,
+												quotes: previous.quotes.map((quote, i) => {
+													if (i === index) {
+														return {
+															...quote,
+															usersWhoLiked: quote.usersWhoLiked.concat(
+																user.userUID
+															),
+														};
+													}
+													return quote;
+												}),
+											};
+										});
+										setUserLikedQuotes((previous) => previous.concat(index));
+									}}
+								>
+									Like
+								</button>
+							) : userLikedQuotes.includes(index) ? (
+								<a
+									href={Firebase.pageGenerator.generateQuotePage(
+										quote.id,
+										quote.content
+									)}
+								>
+									View quote
+								</a>
+							) : (
+								<a
+									href={Firebase.pageGenerator.generateQuotePage(
+										quote.id,
+										quote.content
+									)}
+								>
+									In my quotes
+								</a>
+							)}
+							<a
+								className="number-of-likes-a"
+								href={Firebase.pageGenerator.generateQuotePage(
+									quote.id,
+									quote.content
+								)}
+							>{`${quote.usersWhoLiked.length} likes`}</a>
+						</div>
+					</div>
+				);
+			})}
+			{Math.ceil(bookInfo.quotes.length / 30) > 1 ? (
+				<div className="page-navigation-section">
+					<button
+						onClick={(_e) => setPage((previous) => previous - 1)}
+						disabled={page === 1}
+					>
+						« previous
+					</button>
+					{Array.from(
+						{
+							length: Math.ceil(bookInfo.quotes.length / 30),
+						},
+						(_x, i) => i + 1
+					).map((number) => {
+						return (
+							<button
+								key={number}
+								onClick={(_e) => setPage(number)}
+								disabled={page === number}
+							>
+								{page !== number ? number : <i>{number}</i>}
+							</button>
+						);
+					})}
+					<button
+						onClick={(_e) => setPage((previous) => previous + 1)}
+						disabled={page === Math.ceil(bookInfo.quotes.length / 30)}
+					>
+						next »
+					</button>
+				</div>
+			) : null}
+		</div>
+	) : null;
+
+	const mainContentLeftSection = (
+		<div className="book-quotes-page-main-content-left-section">
+			{pageHeader}
+			{bookCard}
+			{showingNumbersSpan}
+			{quoteList}
+		</div>
+	);
+
+	const mainContentRightSection = (
+		<div className="book-quotes-page-main-content-right-section">
+			<form className="top-section">
+				<input
+					className="search-quote input"
+					placeholder="Find quotes by keyword, author"
+					value={searchInput}
+					onChange={(e) => setSearchInput(e.target.value)}
+				></input>
+				<a
+					className="search-a"
+					href={Firebase.pageGenerator.generateQuotesSearchPage(searchInput)}
+				>
+					Search
+				</a>
+			</form>
+			<div className="bottom-section">
+				<span>
+					<a href={Firebase.pageGenerator.generateQuotesPage()}>All Quotes</a> |{' '}
+					<a href={Firebase.pageGenerator.generateAddQuotePage()}>
+						Add A Quote
+					</a>
+				</span>
+			</div>
+		</div>
+	);
+
+	const mainContent = (
+		<div className="book-quotes-page-main-content">
+			{mainContentLeftSection}
+			{mainContentRightSection}
+		</div>
+	);
+
 	return (
 		<div className="book-quotes-page">
 			<TopBar />
+			{mainContent}
 			<HomePageFootBar />
 		</div>
 	);

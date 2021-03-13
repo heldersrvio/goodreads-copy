@@ -143,6 +143,10 @@ const Firebase = (() => {
 			return '/quizzes/new';
 		};
 
+		const generateQuotesPage = () => {
+			return '/quotes';
+		};
+
 		const generateBookQuotesPage = (bookId, title) => {
 			return (
 				'/work/quotes/' + bookId + '-' + title.toLowerCase().replace(/ /g, '-')
@@ -156,6 +160,18 @@ const Firebase = (() => {
 				'-' +
 				text.slice(0, 50).toLowerCase().replace(/ /g, '-')
 			);
+		};
+
+		const generateAddQuotePage = () => {
+			return '/quotes/new';
+		};
+
+		const generateQuotesTagPage = (tag) => {
+			return '/quotes/tag/' + tag;
+		};
+
+		const generateQuotesSearchPage = (queryTerm) => {
+			return '/quotes/search?q=' + queryTerm;
 		};
 
 		const generateWriteReviewPageForBook = (bookId) => {
@@ -187,8 +203,12 @@ const Firebase = (() => {
 			generateQuizzesPage,
 			generateQuizPage,
 			generateCreateQuizPage,
+			generateQuotesPage,
 			generateBookQuotesPage,
 			generateQuotePage,
+			generateAddQuotePage,
+			generateQuotesTagPage,
+			generateQuotesSearchPage,
 			generateWriteReviewPageForBook,
 		};
 	})();
@@ -2114,6 +2134,26 @@ const Firebase = (() => {
 		};
 	};
 
+	const likeQuote = async (userUID, quoteId, history) => {
+		if (userUID === null || userUID === undefined) {
+			history.push({
+				pathname: '/user/sign_in',
+				state: { error: 'User not logged in' },
+			});
+		} else {
+			const quoteQuery = await database.collection('quotes').doc(quoteId).get();
+			if (!quoteQuery.data().usersWhoLiked.includes(userUID)) {
+				await database
+					.collection('quotes')
+					.doc(quoteId)
+					.set(
+						{ usersWhoLiked: quoteQuery.data().usersWhoLiked.concat(userUID) },
+						{ merge: true }
+					);
+			}
+		}
+	};
+
 	return {
 		pageGenerator,
 		getAlsoEnjoyedBooksDetailsForBook,
@@ -2154,6 +2194,7 @@ const Firebase = (() => {
 		getBookInfoForTopShelvesPage,
 		getBookInfoForGenreShelfPage,
 		getBookInfoForTriviaPage,
+		likeQuote,
 	};
 })();
 
