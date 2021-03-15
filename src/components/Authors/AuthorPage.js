@@ -17,6 +17,19 @@ const AuthorPage = ({ match }) => {
 	const authorFirstName = authorName.split(' ')[0];
 	const [loaded, setLoaded] = useState(false);
 	const [authorInfo, setAuthorInfo] = useState({});
+	const [savingShelves, setSavingShelves] = useState([]);
+	const [areShelfPopupsHidden, setAreShelfPopupsHidden] = useState([]);
+	const [areShelfPopupsBottomHidden, setAreShelfPopupsBottomHidden] = useState(
+		[]
+	);
+	const [shelfPopupReadingInputs, setShelfPopupReadingInputs] = useState([]);
+	const [shelfPopupToReadInputs, setShelfPopupToReadInputs] = useState([]);
+	const [
+		areAddShelfInputSectionsHidden,
+		setAreAddShelfInputSectionsHidden,
+	] = useState([]);
+	const [addShelfInputs, setAddShelfInputs] = useState([]);
+	const [exhibitedStarRatings, setExhibitedStarRatings] = useState([]);
 	const [nowAuthorInFavorites, setNowAuthorInFavorites] = useState(false);
 	const [nowAuthorNotInFavorites, setNowAuthorNotInFavorites] = useState(false);
 	const [
@@ -69,6 +82,7 @@ const AuthorPage = ({ match }) => {
                 numberOfFriends,
             }],
             booksByAuthor: [{
+                id,
                 title,
                 series,
                 seriesInstance,
@@ -85,6 +99,7 @@ const AuthorPage = ({ match }) => {
                 title,
                 books: [{
                     id,
+                    title,
                     seriesInstance,
                     cover,
                 }],
@@ -96,6 +111,7 @@ const AuthorPage = ({ match }) => {
                 title,
                 content,
                 numberOfLikes,
+                image,
             }],
             updates: [{
                 date,
@@ -127,6 +143,29 @@ const AuthorPage = ({ match }) => {
             }],
         }
     */
+
+	useEffect(() => {
+		//const authorObject = await Firebase...
+		const authorObject = {};
+		setAuthorInfo(authorObject);
+		setSavingShelves(authorObject.booksByAuthor.map((_book) => false));
+		setAreAddShelfInputSectionsHidden(
+			authorObject.booksByAuthor.map((_book) => true)
+		);
+		setAddShelfInputs(authorObject.booksByAuthor.map((_book) => ''));
+		setExhibitedStarRatings(
+			authorObject.booksByAuthor.map((book) =>
+				book.userRating !== undefined ? book.userRating : 0
+			)
+		);
+		setAreShelfPopupsHidden(authorObject.booksByAuthor.map((_book) => true));
+		setAreShelfPopupsBottomHidden(
+			authorObject.booksByAuthor.map((_book) => true)
+		);
+		setShelfPopupReadingInputs(authorObject.booksByAuthor.map((_book) => ''));
+		setShelfPopupToReadInputs(authorObject.booksByAuthor.map((_book) => ''));
+		setLoaded(true);
+	}, []);
 
 	useEffect(() => {
 		document.addEventListener('click', (event) => {
@@ -163,6 +202,617 @@ const AuthorPage = ({ match }) => {
 				0
 		  )
 		: 0;
+
+	const displayRemoveBookConfirm = () => {
+		return window.confirm(
+			'Removing a book deletes your rating, review, etc. Remove this book from all your shelves?'
+		);
+	};
+
+	const removeBookSafely = (bookObject, index) => {
+		if (displayRemoveBookConfirm()) {
+			Firebase.removeBookFromShelf(user.userUID, bookObject.id);
+			setAuthorInfo((previous) => {
+				return {
+					...previous,
+					booksByAuthor: previous.booksByAuthor.map((book, i) => {
+						if (i === index) {
+							return {
+								...book,
+								userStatus: undefined,
+								userProgress: undefined,
+								userRating: undefined,
+							};
+						}
+						return book;
+					}),
+				};
+			});
+		}
+	};
+
+	const changeBookShelf = async (bookObject, index, shelf) => {
+		if (bookObject.id !== undefined) {
+			setSavingShelves((previous) =>
+				previous.map((value, i) => (i === index ? true : value))
+			);
+			await Firebase.addBookToShelf(
+				user.userUID,
+				bookObject.id,
+				shelf,
+				history
+			);
+			setAuthorInfo((previous) => {
+				return {
+					...previous,
+					booksByAuthor: previous.booksByAuthor.map((book, i) => {
+						if (i === index) {
+							return {
+								...book,
+								userStatus: shelf,
+							};
+						}
+						return book;
+					}),
+				};
+			});
+			setSavingShelves((previous) =>
+				previous.map((value, i) => (i === index ? false : value))
+			);
+		}
+	};
+
+	const rateBook = async (bookObject, index, rating) => {
+		if (bookObject.id !== undefined) {
+			await Firebase.rateBook(user.userUID, bookObject.id, rating, history);
+			setAuthorInfo((previous, i) => {
+				return {
+					...previous,
+					booksByAuthor: previous.booksByAuthor.map((book, i) => {
+						if (i === index) {
+							return {
+								...book,
+								userStatus:
+									book.userStatus === undefined ? 'read' : book.userStatus,
+								userRating: rating,
+							};
+						}
+						return book;
+					}),
+				};
+			});
+		}
+	};
+
+	const updateProgress = async (bookObject, index, pages) => {
+		if (
+			user.userUID !== null &&
+			user.userUID !== undefined &&
+			bookObject.id !== undefined &&
+			pages.length > 0
+		) {
+			await Firebase.updateBookInShelf(
+				user.userUID,
+				bookObject.id,
+				parseInt(pages)
+			);
+			setAuthorInfo((previous) => {
+				return {
+					...previous,
+					booksByAuthor: previous.booksByAuthor.map((book, i) => {
+						if (i === index) {
+							return {
+								...book,
+								userProgress: pages,
+							};
+						}
+						return book;
+					}),
+				};
+			});
+		}
+	};
+
+	const generateAddToShelfButton = (bookObject, index) => {
+		return loaded && bookObject.userStatus === 'reading' ? (
+			<div className="book-on-reading-shelf">
+				<div
+					className={
+						areShelfPopupsHidden[index]
+							? 'shelf-pop-up-wrapper'
+							: 'shelf-pop-up-wrapper always-visible'
+					}
+				>
+					<div className="shelf-pop-up reading">
+						<div className="shelf-pop-up-top">
+							<span>
+								<b>Update your reading progress:</b>
+							</span>
+							<span>
+								I'm on page{' '}
+								<input
+									type="text"
+									value={shelfPopupReadingInputs[index]}
+									className={
+										areShelfPopupsBottomHidden[index]
+											? 'page-progress-input'
+											: 'page-progress-input white-background'
+									}
+									onClick={(_e) => {
+										setAreShelfPopupsBottomHidden((previous) =>
+											previous.map((value, i) => (i === index ? false : value))
+										);
+										setAreShelfPopupsHidden((previous) =>
+											previous.map((value, i) => (i === index ? false : value))
+										);
+									}}
+									onChange={(e) => {
+										const newValue = e.target.value;
+										setShelfPopupReadingInputs((previous) =>
+											previous.map((value, i) =>
+												i === index ? newValue : value
+											)
+										);
+									}}
+								/>{' '}
+								of {bookObject.pageCount}.{' '}
+								<a
+									href={
+										user.userUID !== undefined && user.userUID !== null
+											? Firebase.pageGenerator.generateUserShelfPage(
+													user.userUID,
+													user.userInfo.firstName,
+													'reading'
+											  )
+											: '/user/sign_in'
+									}
+								>
+									View shelf
+								</a>
+							</span>
+						</div>
+						<div
+							className={
+								areShelfPopupsBottomHidden[index]
+									? 'shelf-pop-up-bottom hidden'
+									: 'shelf-pop-up-bottom'
+							}
+						>
+							<button
+								className="progress-submit-button"
+								onClick={(_e) => {
+									updateProgress(
+										bookObject,
+										index,
+										shelfPopupReadingInputs[index]
+									);
+									setAreShelfPopupsBottomHidden((previous) =>
+										previous.map((value, i) => (i === index ? true : value))
+									);
+									setAreShelfPopupsHidden((previous) =>
+										previous.map((value, i) => (i === index ? true : value))
+									);
+								}}
+							>
+								Submit
+							</button>
+							<button
+								className="progress-cancel-button"
+								onClick={(_e) => {
+									setAreShelfPopupsBottomHidden((previous) =>
+										previous.map((value, i) => (i === index ? true : value))
+									);
+									setAreShelfPopupsHidden((previous) =>
+										previous.map((value, i) => (i === index ? true : value))
+									);
+								}}
+							>
+								Cancel
+							</button>
+							<span>·</span>
+							<button
+								className="progress-finished-button"
+								onClick={(_e) => {
+									changeBookShelf(bookObject, index, 'read');
+									setAreShelfPopupsBottomHidden((previous) =>
+										previous.map((value, i) => (i === index ? true : value))
+									);
+									setAreShelfPopupsHidden((previous) =>
+										previous.map((value, i) => (i === index ? true : value))
+									);
+								}}
+							>
+								Finished book
+							</button>
+						</div>
+					</div>
+					<div className="shelf-pop-up-arrow-grey">
+						<div className="shelf-pop-up-arrow"></div>
+					</div>
+				</div>
+				<button
+					className="remove-book-from-shelf reading"
+					onClick={(_e) => removeBookSafely(bookObject, index)}
+				></button>
+				<span>Currently Reading</span>
+			</div>
+		) : loaded && bookObject.userStatus === 'read' ? (
+			<div className="book-on-read-shelf">
+				<div className="shelf-pop-up-wrapper">
+					<div className="shelf-pop-up read">
+						<div className="shelf-pop-up-top">
+							<a
+								href={Firebase.pageGenerator.generateWriteReviewPageForBook(
+									bookObject.id
+								)}
+							>
+								Write a review
+							</a>
+							<span>·</span>
+							<a
+								href={
+									user.userUID !== undefined && user.userUID !== null
+										? Firebase.pageGenerator.generateUserShelfPage(
+												user.userUID,
+												user.userInfo.firstName,
+												'to-read'
+										  )
+										: '/user/sign_in'
+								}
+							>
+								View shelf
+							</a>
+						</div>
+					</div>
+					<div className="shelf-pop-up-arrow-grey">
+						<div className="shelf-pop-up-arrow"></div>
+					</div>
+				</div>
+				<button
+					className="remove-book-from-shelf read"
+					onClick={(_e) => removeBookSafely(bookObject, index)}
+				></button>
+				<span>Read</span>
+			</div>
+		) : loaded && bookObject.userStatus === 'to-read' ? (
+			<div className="book-on-to-read-shelf">
+				<div
+					className={
+						areShelfPopupsHidden[index]
+							? 'shelf-pop-up-wrapper'
+							: 'shelf-pop-up-wrapper always-visible'
+					}
+				>
+					<div className="shelf-pop-up to-read">
+						<div className="shelf-pop-up-top">
+							<span>
+								#
+								<input
+									type="text"
+									value={shelfPopupToReadInputs[index]}
+									className="shelf-pop-up-to-read-input"
+									onChange={(e) => {
+										const newValue = e.target.value;
+										setShelfPopupToReadInputs((previous) =>
+											previous.map((value, i) =>
+												i === index ? newValue : value
+											)
+										);
+									}}
+									onClick={(_e) => {
+										setAreShelfPopupsBottomHidden((previous) =>
+											previous.map((value, i) => (i === index ? false : value))
+										);
+										setAreShelfPopupsHidden((previous) =>
+											previous.map((value, i) => (i === index ? false : value))
+										);
+									}}
+								/>{' '}
+								on your <b>To Read</b> shelf.
+							</span>
+						</div>
+						{areShelfPopupsBottomHidden[index] ? (
+							<div className="shelf-pop-up-bottom">
+								<a
+									href={
+										user.userUID !== undefined && user.userUID !== null
+											? Firebase.pageGenerator.generateUserShelfPage(
+													user.userUID,
+													user.userInfo.firstName,
+													'to-read'
+											  )
+											: '/user/sign_in'
+									}
+								>
+									View shelf
+								</a>
+							</div>
+						) : (
+							<div className="shelf-pop-up-bottom">
+								<button
+									className="progress-submit-button"
+									onClick={(_e) => {
+										Firebase.changeBookPosition(
+											user.userUID,
+											bookObject.id,
+											parseInt(shelfPopupToReadInputs[index])
+										);
+										setAuthorInfo((previous) => {
+											return {
+												...previous,
+												booksByAuthor: previous.booksByAuthor.map((book, i) =>
+													i === index
+														? {
+																...book,
+																toReadBookPosition: parseInt(
+																	shelfPopupToReadInputs[index]
+																),
+														  }
+														: book
+												),
+											};
+										});
+										setAreShelfPopupsBottomHidden((previous) =>
+											previous.map((value, i) => (i === index ? true : value))
+										);
+										setAreShelfPopupsHidden((previous) =>
+											previous.map((value, i) => (i === index ? true : value))
+										);
+									}}
+								>
+									Save
+								</button>
+								<button
+									className="progress-cancel-button"
+									onClick={(_e) => {
+										setAreShelfPopupsBottomHidden((previous) =>
+											previous.map((value, i) => (i === index ? true : value))
+										);
+										setAreShelfPopupsHidden((previous) =>
+											previous.map((value, i) => (i === index ? true : value))
+										);
+									}}
+								>
+									Cancel
+								</button>
+							</div>
+						)}
+					</div>
+					<div className="shelf-pop-up-arrow-grey">
+						<div className="shelf-pop-up-arrow"></div>
+					</div>
+				</div>
+				<button
+					className="remove-book-from-shelf to-read"
+					onClick={(_e) => removeBookSafely(bookObject, index)}
+				></button>
+				<span>Want to Read</span>
+			</div>
+		) : (
+			<button
+				className="book-page-want-to-read-button"
+				onClick={() => changeBookShelf(bookObject, index, 'to-read')}
+			>
+				{savingShelves[index] ? '...saving' : 'Want to Read'}
+			</button>
+		);
+	};
+
+	const generateBookOptionsDropdown = (bookObject, index) => {
+		return (
+			<div className="book-page-book-option-dropdown-trigger">
+				<div className="book-options-dropdown">
+					<div className="book-options-dropdown-top">
+						<button
+							className="dropdown-read-button"
+							onClick={() => changeBookShelf(bookObject, index, 'read')}
+						>
+							Read
+						</button>
+						<button
+							className="dropdown-currently-reading-button"
+							onClick={() => changeBookShelf(bookObject, index, 'reading')}
+						>
+							Currently Reading
+						</button>
+						<button
+							className="dropdown-want-to-read-button"
+							onClick={() => changeBookShelf(bookObject, index, 'to-read')}
+						>
+							Want to Read
+						</button>
+					</div>
+					<div className="book-options-dropdown-bottom">
+						<button
+							className="dropdown-add-shelf"
+							onClick={(_e) =>
+								setAreAddShelfInputSectionsHidden((previous) =>
+									previous.map((value, i) => (i === index ? false : value))
+								)
+							}
+						>
+							Add Shelf
+						</button>
+						<div
+							className={
+								areAddShelfInputSectionsHidden[index]
+									? 'dropdown-add-shelf-input-section hidden'
+									: 'dropdown-add-shelf-input-section'
+							}
+						>
+							<input
+								className="dropdown-add-shelf-input"
+								type="text"
+								value={addShelfInputs[index]}
+								onChange={(e) => {
+									const newValue = e.target.value;
+									setAddShelfInputs((previous) =>
+										previous.map((value, i) => (i === index ? newValue : value))
+									);
+								}}
+							></input>
+							<button
+								className="dropdown-add-shelf-add-button"
+								onClick={async (_e) => {
+									if (addShelfInputs[index].length > 0) {
+										await Firebase.addBookToUserShelf(
+											user.userUID,
+											bookObject.rootBook,
+											addShelfInputs[index],
+											null,
+											history
+										);
+										setAreAddShelfInputSectionsHidden((previous) =>
+											previous.map((value, i) => (i === index ? true : value))
+										);
+									}
+								}}
+							>
+								Add
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		);
+	};
+
+	const generateRateBookSection = (bookObject, index) => {
+		return (
+			<div className="book-page-rate-book">
+				{bookObject.userRating === undefined ? null : (
+					<button
+						className="clear-rating-button"
+						onClick={() => rateBook(bookObject, index, undefined)}
+					>
+						Clear rating
+					</button>
+				)}
+				{bookObject.userRating === undefined ? (
+					<span className="rate-this-book">Rate this book</span>
+				) : (
+					<span className="rate-this-book my-rating">My rating:</span>
+				)}
+				<div className="book-page-rate-book-star-rating">
+					<div
+						className={
+							exhibitedStarRatings[index] > 0
+								? 'interactive-star small on'
+								: 'interactive-star small'
+						}
+						title="did not like it"
+						onMouseOver={(_e) =>
+							setExhibitedStarRatings((previous) =>
+								previous.map((value, i) => (i === index ? 1 : value))
+							)
+						}
+						onMouseLeave={(_e) =>
+							setExhibitedStarRatings((previous) =>
+								previous.map((value, i) =>
+									i === index && bookObject.userRating !== undefined
+										? bookObject.userRating
+										: 0
+								)
+							)
+						}
+						onClick={() => rateBook(bookObject, index, 1)}
+					></div>
+					<div
+						className={
+							exhibitedStarRatings[index] > 1
+								? 'interactive-star small on'
+								: 'interactive-star small'
+						}
+						title="it was ok"
+						onMouseOver={(_e) =>
+							setExhibitedStarRatings((previous) =>
+								previous.map((value, i) => (i === index ? 2 : value))
+							)
+						}
+						onMouseLeave={(_e) =>
+							setExhibitedStarRatings((previous) =>
+								previous.map((value, i) =>
+									i === index && bookObject.userRating !== undefined
+										? bookObject.userRating
+										: 0
+								)
+							)
+						}
+						onClick={() => rateBook(bookObject, index, 2)}
+					></div>
+					<div
+						className={
+							exhibitedStarRatings[index] > 2
+								? 'interactive-star small on'
+								: 'interactive-star small'
+						}
+						title="liked it"
+						onMouseOver={(_e) =>
+							setExhibitedStarRatings((previous) =>
+								previous.map((value, i) => (i === index ? 3 : value))
+							)
+						}
+						onMouseLeave={(_e) =>
+							setExhibitedStarRatings((previous) =>
+								previous.map((value, i) =>
+									i === index && bookObject.userRating !== undefined
+										? bookObject.userRating
+										: 0
+								)
+							)
+						}
+						onClick={() => rateBook(bookObject, index, 3)}
+					></div>
+					<div
+						className={
+							exhibitedStarRatings[index] > 3
+								? 'interactive-star small on'
+								: 'interactive-star small'
+						}
+						title="really liked it"
+						onMouseOver={(_e) =>
+							setExhibitedStarRatings((previous) =>
+								previous.map((value, i) => (i === index ? 4 : value))
+							)
+						}
+						onMouseLeave={(_e) =>
+							setExhibitedStarRatings((previous) =>
+								previous.map((value, i) =>
+									i === index && bookObject.userRating !== undefined
+										? bookObject.userRating
+										: 0
+								)
+							)
+						}
+						onClick={() => rateBook(bookObject, index, 4)}
+					></div>
+					<div
+						className={
+							exhibitedStarRatings[index] > 4
+								? 'interactive-star small on'
+								: 'interactive-star small'
+						}
+						title="it was amazing"
+						onMouseOver={(_e) =>
+							setExhibitedStarRatings((previous) =>
+								previous.map((value, i) => (i === index ? 5 : value))
+							)
+						}
+						onMouseLeave={(_e) =>
+							setExhibitedStarRatings((previous) =>
+								previous.map((value, i) =>
+									i === index && bookObject.userRating !== undefined
+										? bookObject.userRating
+										: 0
+								)
+							)
+						}
+						onClick={() => rateBook(bookObject, index, 5)}
+					></div>
+				</div>
+			</div>
+		);
+	};
 
 	const followButtonAndDropdown = loaded ? (
 		<div className="follow-button-and-dropdown">
@@ -521,6 +1171,30 @@ const AuthorPage = ({ match }) => {
 		</div>
 	);
 
+	const authorNowInFavoritesMessage =
+		loaded & (nowAuthorInFavorites || nowAuthorNotInFavorites) ? (
+			<div className="author-now-in-favorites-message">
+				{nowAuthorInFavorites ? (
+					<span>
+						{`${authorName} is now on your `}
+						<b>Favorite Authors</b> list
+					</span>
+				) : (
+					<span>
+						{`${authorName} has been removed from your `}
+						<b>Favorite Authors</b> list
+					</span>
+				)}
+				<button
+					className="close-button"
+					onClick={(_e) => {
+						setNowAuthorInFavorites(false);
+						setNowAuthorNotInFavorites(false);
+					}}
+				></button>
+			</div>
+		) : null;
+
 	const authorMainInfoSection = loaded ? (
 		<div className="author-page-author-main-info-section">
 			<div className="author-name-area">
@@ -650,13 +1324,345 @@ const AuthorPage = ({ match }) => {
 				<span className="separator">·</span>
 				<span>{`${authorBooksNumberOfReviews} reviews`}</span>
 			</div>
+			<div className="author-book-list">
+				{authorInfo.booksByAuthor.map((book, index) => {
+					return (
+						<div className="author-book-card" key={index}>
+							<div className="left-section">
+								<a
+									className="book-cover-wrapper"
+									href={Firebase.pageGenerator.generateBookPage(
+										book.id,
+										book.title
+									)}
+								>
+									<img
+										src={
+											book.cover !== undefined
+												? book.cover
+												: 'https://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png'
+										}
+										alt={book.title}
+									/>
+								</a>
+								<div className="book-details-section">
+									<a
+										className="book-title-a"
+										href={Firebase.pageGenerator.generateBookPage(
+											book.id,
+											book.title
+										)}
+									>
+										{book.series === undefined
+											? book.title
+											: `${book.title} (${book.series}, #${book.seriesInstance})`}
+									</a>
+									<span className="by-author-span">
+										by{' '}
+										<a
+											className="author-book-card-author-a"
+											href={Firebase.pageGenerator.generateAuthorPage(
+												authorId,
+												authorName
+											)}
+										>
+											{authorName}
+										</a>
+										{authorInfo.GRMember ? (
+											<span className="book-card-goodreads-member-span">
+												{' '}
+												(Goodreads Author)
+											</span>
+										) : null}
+									</span>
+									<div className="author-book-card-stats">
+										<div className="author-page-general-rating">
+											<div className="author-page-general-rating-stars">
+												<div
+													className={
+														book.averageRating >= 1
+															? 'static-star small full'
+															: book.averageRating >= 0.5
+															? 'static-star small almost-full'
+															: book.averageRating > 0
+															? 'static-star small almost-empty'
+															: 'static-star small empty'
+													}
+												></div>
+												<div
+													className={
+														book.averageRating >= 2
+															? 'static-star small full'
+															: book.averageRating >= 1.5
+															? 'static-star small almost-full'
+															: book.averageRating > 1
+															? 'static-star small almost-empty'
+															: 'static-star small empty'
+													}
+												></div>
+												<div
+													className={
+														book.averageRating >= 3
+															? 'static-star small full'
+															: book.averageRating >= 2.5
+															? 'static-star small almost-full'
+															: book.averageRating > 2
+															? 'static-star small almost-empty'
+															: 'static-star small empty'
+													}
+												></div>
+												<div
+													className={
+														book.averageRating >= 4
+															? 'static-star small full'
+															: book.averageRating >= 3.5
+															? 'static-star small almost-full'
+															: book.averageRating > 3
+															? 'static-star small almost-empty'
+															: 'static-star small empty'
+													}
+												></div>
+												<div
+													className={
+														book.averageRating >= 5
+															? 'static-star small full'
+															: book.averageRating >= 4.5
+															? 'static-star small almost-full'
+															: book.averageRating > 4
+															? 'static-star small almost-empty'
+															: 'static-star small empty'
+													}
+												></div>
+											</div>
+											<span>
+												<span>{`${Math.round(
+													book.averageRating,
+													2
+												)} avg rating — ${book.ratings} ratings ${
+													book.publishedYear !== undefined
+														? `— published ${book.publishedYear}`
+														: ''
+												} —`}</span>
+												<a
+													href={Firebase.pageGenerator.generateBookEditionsPage(
+														book.id,
+														book.title
+													)}
+												>{` ${book.editions} editions`}</a>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div className="right-section">
+								<div
+									className={`want-to-read-button-and-options ${
+										book.userStatus !== undefined ? book.userStatus : ''
+									}`}
+								>
+									{generateAddToShelfButton(book, index)}
+									{generateBookOptionsDropdown(book, index)}
+								</div>
+								{generateRateBookSection(book, index)}
+							</div>
+						</div>
+					);
+				})}
+			</div>
 		</div>
 	) : null;
 
+	const authorSeriesSection =
+		loaded && authorInfo.seriesByAuthor.length > 0 ? (
+			<div className="author-page-author-series-section">
+				<span className="title-span">{`SERIES BY ${authorName.toUpperCase()}`}</span>
+				<div className="series-list">
+					{authorInfo.seriesByAuthor.map((series, index) => {
+						return (
+							<div className="author-page-series-card" key={index}>
+								<div className="series-card-left-section">
+									<div className="series-title">
+										<span className="bold-title">{series.title}</span>
+										<span className="number-of-books">{` (${series.books.length} books)`}</span>
+									</div>
+									<div className="series-authorship">
+										<span className="by-author-span">
+											by{' '}
+											<a
+												className="author-series-card-author-a"
+												href={Firebase.pageGenerator.generateAuthorPage(
+													authorId,
+													authorName
+												)}
+											>
+												{authorName}
+											</a>
+											{authorInfo.GRMember ? (
+												<span className="series-card-goodreads-member-span">
+													{' '}
+													(Goodreads Author)
+												</span>
+											) : null}
+										</span>
+										<div className="series-stats">
+											<div className="author-page-general-rating-stars">
+												<div
+													className={
+														series.averageRating >= 1
+															? 'static-star small full'
+															: series.averageRating >= 0.5
+															? 'static-star small almost-full'
+															: series.averageRating > 0
+															? 'static-star small almost-empty'
+															: 'static-star small empty'
+													}
+												></div>
+												<div
+													className={
+														series.averageRating >= 2
+															? 'static-star small full'
+															: series.averageRating >= 1.5
+															? 'static-star small almost-full'
+															: series.averageRating > 1
+															? 'static-star small almost-empty'
+															: 'static-star small empty'
+													}
+												></div>
+												<div
+													className={
+														series.averageRating >= 3
+															? 'static-star small full'
+															: series.averageRating >= 2.5
+															? 'static-star small almost-full'
+															: series.averageRating > 2
+															? 'static-star small almost-empty'
+															: 'static-star small empty'
+													}
+												></div>
+												<div
+													className={
+														series.averageRating >= 4
+															? 'static-star small full'
+															: series.averageRating >= 3.5
+															? 'static-star small almost-full'
+															: series.averageRating > 3
+															? 'static-star small almost-empty'
+															: 'static-star small empty'
+													}
+												></div>
+												<div
+													className={
+														series.averageRating >= 5
+															? 'static-star small full'
+															: series.averageRating >= 4.5
+															? 'static-star small almost-full'
+															: series.averageRating > 4
+															? 'static-star small almost-empty'
+															: 'static-star small empty'
+													}
+												></div>
+											</div>
+											<span className="stats-span">{`${series.averageRating} avg rating — ${series.numberOfRatings} ratings`}</span>
+										</div>
+									</div>
+								</div>
+								<div className="series-card-right-section">
+									{series.books
+										.sort((a, b) => a.seriesInstance - b.seriesInstance)
+										.map((book, i) => {
+											return (
+												<a
+													className="series-card-book-cover-wrapper"
+													key={i}
+													href={Firebase.pageGenerator.generateBookPage(
+														book.id,
+														book.title
+													)}
+												>
+													<img
+														src={
+															book.cover !== undefined
+																? book.cover
+																: 'https://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png'
+														}
+														alt={book.title}
+													/>
+												</a>
+											);
+										})}
+								</div>
+							</div>
+						);
+					})}
+				</div>
+			</div>
+		) : null;
+
+	const relatedNewsSection =
+		loaded && authorInfo.relatedNews.length > 0 ? (
+			<div className="author-page-related-news-section">
+				<span className="section-title">RELATED NEWS</span>
+				<div className="news-list">
+					{authorInfo.relatedNews.map((article, index) => {
+						return (
+							<div className="related-news-card" key={index}>
+								<div className="left-section">
+									<a
+										className="article-title"
+										href={Firebase.pageGenerator.generateArticlePage(
+											article.id,
+											article.title
+										)}
+									>
+										{article.title}
+									</a>
+									<p>{article.content}</p>
+									<a
+										className="article-read-more-a"
+										href={Firebase.pageGenerator.generateArticlePage(
+											article.id,
+											article.title
+										)}
+									>
+										Read more...
+									</a>
+									<span className="article-like-count">{`${article.numberOfLikes} likes`}</span>
+								</div>
+							</div>
+						);
+					})}
+				</div>
+			</div>
+		) : null;
+
+	const recentUpdatesSection =
+		loaded &&
+		authorInfo.updates !== undefined &&
+		authorInfo.updates.length > 0 ? (
+			<div className="author-page-recent-updates-section">{/* To do */}</div>
+		) : null;
+
+	const quotesSection =
+		loaded && authorInfo.quotes.length > 0 ? (
+			<div className="author-page-quotes-section">
+				<span className="section-title">{`QUOTES BY ${authorName.toUpperCase()}`}</span>
+				<div className="quote-list">
+					{authorInfo.quotes.map((quote, index) => {
+						return <div className="quote-card">{/* To do */}</div>;
+					})}
+				</div>
+			</div>
+		) : null;
+
 	const mainContentRightSection = (
 		<div className="author-page-main-content-right-section">
+			{authorNowInFavoritesMessage}
 			{authorMainInfoSection}
 			{authorBooksSection}
+			{authorSeriesSection}
+			{relatedNewsSection}
+			{recentUpdatesSection}
+			{quotesSection}
 		</div>
 	);
 
