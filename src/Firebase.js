@@ -2275,6 +2275,60 @@ const Firebase = (() => {
 		};
 	};
 
+	const getBookInfoForListsPage = async (bookId) => {
+		const bookQuery = await database.collection('books').doc(bookId).get();
+		const title = bookQuery.data().title;
+		const cover = bookQuery.data().cover;
+		const rootBookQuery = await database
+			.collection('rootBooks')
+			.doc(bookQuery.data().rootBook)
+			.get();
+		const seriesQuery = await database
+			.collection('series')
+			.doc(rootBookQuery.data().series)
+			.get();
+		const series = seriesQuery.data().name;
+		const seriesInstance = rootBookQuery.data().seriesInstance;
+		const authorId = rootBookQuery.data().authorId;
+		const authorQuery = await database
+			.collection('authors')
+			.doc(authorId)
+			.get();
+		const authorName = authorQuery.data().name;
+		const authorIsMember = authorQuery.data().GRMember;
+		const listsQuery = await database
+			.collection('lists')
+			.where('books', 'array-contains', bookId)
+			.get();
+		const lists = await Promise.all(
+			listsQuery.docs.map(async (doc) => {
+				return {
+					id: doc.id,
+					name: doc.data().title,
+					bookPosition: doc.data().books.indexOf(bookId) + 1,
+					bookCovers: await Promise.all(
+						doc.data().books.map(async (id) => {
+							return (await database.collection('books').doc(id).get()).data()
+								.cover;
+						})
+					),
+					voterCount: doc.data().userVotes.length,
+				};
+			})
+		);
+
+		return {
+			title,
+			cover,
+			series,
+			seriesInstance,
+			authorId,
+			authorName,
+			authorIsMember,
+			lists,
+		};
+	};
+
 	return {
 		pageGenerator,
 		getAlsoEnjoyedBooksDetailsForBook,
@@ -2317,6 +2371,7 @@ const Firebase = (() => {
 		getBookInfoForTriviaPage,
 		likeQuote,
 		getBookInfoForQuotesPage,
+		getBookInfoForListsPage,
 	};
 })();
 

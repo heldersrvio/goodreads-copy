@@ -12,56 +12,16 @@ const BookListsPage = ({ match }) => {
 	const [page, setPage] = useState(1);
 	const [bookInfo, setBookInfo] = useState({});
 	const [searchInput, setSearchInput] = useState('');
-	/*
-    bookInfo: {
-        title,
-        cover,
-        series,
-        seriesInstance,
-        authorId,
-        authorName,
-        authorIsMember,
-        lists: [{
-            id,
-            name,
-            bookPosition,
-            bookCovers,
-            voterCount,
-        }]
-    }
-    */
 
 	const user = JSON.parse(localStorage.getItem('userState'));
 
 	useEffect(() => {
-		const getBookInfo = () => {
-			setBookInfo({
-				title: '孽子',
-				series: '孽子',
-				seriesInstance: 3,
-				authorId: '13',
-				authorName: '李孫雪',
-				authorIsMember: true,
-				lists: Array(100).fill({
-					id: '9',
-					name: '好讀的書',
-					bookPosition: 3,
-					bookCovers: [
-						'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327873635l/2998.jpg',
-						'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1345958969l/128029.jpg',
-						'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1507963312l/33574273._SX318_.jpg',
-						'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1457810586l/12232938.jpg',
-						'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1468680100l/23772.jpg',
-						undefined,
-						'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1342493368l/3636.jpg',
-					],
-					voterCount: 1324,
-				}),
-			});
+		const getBookInfo = async () => {
+			setBookInfo(await Firebase.getBookInfoForListsPage(bookId));
 			setLoaded(true);
 		};
 		getBookInfo();
-	}, []);
+	}, [bookId]);
 
 	const pageHeader = loaded ? (
 		<h1 className="book-lists-page-header">
@@ -117,32 +77,34 @@ const BookListsPage = ({ match }) => {
 		<div className="book-lists-page-lists-list">
 			{bookInfo.lists
 				.filter(
-					(_list, index) => index >= (page - 1) * 30 && index <= page * 30
+					(_list, index) => index >= (page - 1) * 30 && index <= page * 30 - 1
 				)
 				.map((list, index) => {
 					return (
 						<div className="book-list" key={index}>
-							{list.bookCovers.map((cover, i) => {
-								return (
-									<a
-										className="book-cover-wrapper"
-										href={Firebase.pageGenerator.generateListPage(
-											list.id,
-											list.name
-										)}
-										key={i}
-									>
-										<img
-											src={
-												cover !== undefined
-													? cover
-													: 'https://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png'
-											}
-											alt={`${list.name} book`}
-										/>
-									</a>
-								);
-							})}
+							<div className="covers">
+								{list.bookCovers.map((cover, i) => {
+									return (
+										<a
+											className="book-cover-wrapper"
+											href={Firebase.pageGenerator.generateListPage(
+												list.id,
+												list.name
+											)}
+											key={i}
+										>
+											<img
+												src={
+													cover !== undefined
+														? cover
+														: 'https://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png'
+												}
+												alt={`${list.name} book`}
+											/>
+										</a>
+									);
+								})}
+							</div>
 							<a
 								className="list-name-a"
 								href={Firebase.pageGenerator.generateListPage(
@@ -160,7 +122,7 @@ const BookListsPage = ({ match }) => {
 									: list.bookPosition === 3
 									? '3rd'
 									: `${list.bookPosition}th`
-							} out of ${list.bookCovers.count} books — ${
+							} out of ${list.bookCovers.length} books — ${
 								list.voterCount
 							} voters`}</span>
 						</div>
@@ -214,7 +176,7 @@ const BookListsPage = ({ match }) => {
 				<input
 					className="search-quote input"
 					type="text"
-					placeholder="Find quotes by keyword, author"
+					placeholder="Search lists"
 					value={searchInput}
 					onChange={(e) => setSearchInput(e.target.value)}
 				></input>

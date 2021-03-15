@@ -27,6 +27,14 @@
 	background-color: transparent;
 }
 
+.book-lists-page-main-content-left-section {
+	width: 625px;
+}
+
+.book-lists-page-main-content-right-section {
+	width: 300px;
+}
+
 .book-lists-page-book-card {
 	display: flex;
 	flex-direction: row;
@@ -68,4 +76,142 @@
 	color: rgb(153, 153, 153);
 	font-family: 'Lato', Helvetica, Arial, sans-serif;
 	font-size: 12px;
+}
+
+.book-lists-page-lists-list {
+	position: relative;
+	margin-top: 20px;
+	padding-left: 10px;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+
+.book-lists-page-lists-list .book-cover-wrapper,
+.book-lists-page-lists-list .book-cover-wrapper img {
+	width: 55px;
+	height: 80px;
+	margin-right: 2px;
+}
+
+.book-lists-page-lists-list .book-list {
+	display: flex;
+	flex-direction: column;
+	margin-right: 20px;
+	margin-bottom: 20px;
+}
+
+.book-lists-page-lists-list .book-list .covers {
+	display: flex;
+	flex-direction: row;
+	width: 285px;
+	height: 80px;
+	overflow: hidden;
+}
+
+.book-lists-page-lists-list .book-list .list-name-a {
+	margin-top: 3px;
+	display: inline;
+	padding: 0;
+	line-height: 18px;
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 13px;
+	color: rgb(0, 99, 93);
+	font-weight: bold;
+	height: auto;
+}
+
+.book-lists-page-lists-list .book-list .list-name-a:hover {
+	text-decoration: underline;
+}
+
+.book-lists-page-lists-list .book-list .list-details-span {
+	color: rgb(153, 153, 153);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.book-lists-page .page-navigation-section {
+	display: flex;
+	flex-direction: row;
+	position: absolute;
+	left: 0;
+	bottom: -10px;
+}
+
+.book-lists-page .page-navigation-section button {
+	display: inline;
+	padding: 0;
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+	height: auto;
+	color: rgb(0, 99, 93);
+	margin-right: 3px;
+}
+
+.book-lists-page .page-navigation-section button:hover {
+	background-color: transparent;
+	text-decoration: underline;
+}
+
+.book-lists-page .page-navigation-section button:disabled {
+	color: rgb(24, 24, 24);
+}
+
+.book-lists-page .page-navigation-section button:disabled:hover {
+	text-decoration: none;
+}
+
+.book-lists-page-main-content-right-section input[type='text'] {
+	width: 225px;
+	height: 15px;
+	padding: 2px;
+	border-radius: 3px;
+	border: 1px solid rgb(220, 214, 204);
+	color: rgb(51, 51, 51);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 11px;
+	line-height: normal;
+}
+
+.book-lists-page-main-content-right-section input[type='text']:focus {
+	border-color: rgb(185, 173, 153);
+	box-shadow: rgba(185, 173, 153, 0.5) 0px 0px 4px 0px;
+}
+
+.book-lists-page-main-content-right-section .search-a {
+	width: 32.4px;
+	height: 11px;
+	padding: 3px 12px;
+	background-color: rgb(244, 241, 234);
+	border: 1px solid rgb(214, 208, 196);
+	border-radius: 3px;
+	color: rgb(51, 51, 51);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 11px;
+	line-height: 11px;
+	margin-left: 5px;
+}
+
+.book-lists-page-main-content-right-section .search-a:hover {
+	background-color: rgb(237, 230, 214);
+}
+
+.book-lists-page-main-content-right-section .bottom-section {
+	display: flex;
+	flex-direction: column;
+	margin-top: 30px;
+}
+
+.book-lists-page-main-content-right-section .bottom-section a {
+	color: rgb(0, 99, 93);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.book-lists-page-main-content-right-section .bottom-section a:hover {
+	text-decoration: underline;
 }
