@@ -90,6 +90,18 @@ const Firebase = (() => {
 			return '/user/show/' + userId + '-' + firstName.toLowerCase();
 		};
 
+		const generateUserBooksPage = (userId) => {
+			return '/review/list/' + userId;
+		};
+
+		const generateUserRatingsPage = (userId) => {
+			return '/review/list/' + userId + '?sort=rating&view=reviews';
+		};
+
+		const generateUserReviewsPage = (userId) => {
+			return '/review/list/' + userId + '?sort=review&view=reviews';
+		};
+
 		const generateUserShelfPage = (userId, firstName, shelf) => {
 			return (
 				'/review/list/' +
@@ -202,6 +214,18 @@ const Firebase = (() => {
 			return '/review/edit' + bookId;
 		};
 
+		const generateUserCompareBooksPage = (userId) => {
+			return '/user/compare/' + userId;
+		};
+
+		const generateFavoriteAuthorsPage = () => {
+			return '/favorite_authors';
+		};
+
+		const generateUserYearInBooksPage = (year, userId) => {
+			return '/user/year_in_books/' + year + '/' + userId;
+		};
+
 		return {
 			generateBookPage,
 			generateAddBookPage,
@@ -218,6 +242,9 @@ const Firebase = (() => {
 			generateListsLikedByUserPage,
 			generateListPage,
 			generateUserPage,
+			generateUserBooksPage,
+			generateUserRatingsPage,
+			generateUserReviewsPage,
 			generateUserShelfPage,
 			generateReviewPage,
 			generateReviewLikesPage,
@@ -240,6 +267,9 @@ const Firebase = (() => {
 			generateQuotesTagPage,
 			generateQuotesSearchPage,
 			generateWriteReviewPageForBook,
+			generateUserCompareBooksPage,
+			generateFavoriteAuthorsPage,
+			generateUserYearInBooksPage,
 		};
 	})();
 
@@ -2329,6 +2359,45 @@ const Firebase = (() => {
 		};
 	};
 
+	const addRemoveAuthorToFavorites = async (userUID, authorId, history) => {
+		if (userUID === null || userUID === undefined) {
+			history.push({
+				pathname: '/user/sign_in',
+				state: { error: 'User not logged in' },
+			});
+		} else {
+			const userQuery = await database.collection('users').doc(userUID).get();
+			if (
+				userQuery.data().favoriteAuthors !== undefined &&
+				userQuery.data().favoriteAuthors.includes(authorId)
+			) {
+				await database
+					.collection('users')
+					.doc(userUID)
+					.set(
+						{
+							favoriteAuthors: userQuery
+								.data()
+								.favoriteAuthors.filter((author) => author !== authorId),
+						},
+						{ merge: true }
+					);
+			} else {
+				await database
+					.collection('users')
+					.doc(userUID)
+					.set(
+						{
+							favoriteAuthors: userQuery
+								.data()
+								.favoriteAuthors.concat(authorId),
+						},
+						{ merge: true }
+					);
+			}
+		}
+	};
+
 	return {
 		pageGenerator,
 		getAlsoEnjoyedBooksDetailsForBook,
@@ -2372,6 +2441,7 @@ const Firebase = (() => {
 		likeQuote,
 		getBookInfoForQuotesPage,
 		getBookInfoForListsPage,
+		addRemoveAuthorToFavorites,
 	};
 })();
 
