@@ -1,0 +1,329 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+
+.author-page-main-content {
+	margin: 20px 155px;
+	display: flex;
+	flex-direction: row;
+}
+
+.author-page-main-content a {
+	padding: 0;
+}
+
+.author-page-main-content a:hover {
+	background-color: transparent;
+}
+
+.author-page-main-content-left-section {
+	width: 300px;
+	margin-right: 12px;
+}
+
+.author-page-main-content-right-section {
+	width: 625px;
+}
+
+.author-page-photo-and-stats-area .top-section {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.author-page-photo-and-stats-area .profile-picture-section {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.author-page-photo-and-stats-area .profile-picture-section .author-stats {
+	margin-top: 5px;
+	display: flex;
+	flex-direction: row;
+}
+
+.author-page-photo-and-stats-area .profile-picture-section .author-stats span {
+	color: rgb(24, 24, 24);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 11px;
+	line-height: 14px;
+	padding: 0;
+	margin: 0 2px;
+}
+
+.author-page-photo-and-stats-area .profile-picture-section .author-stats a,
+.author-page-photo-and-stats-area
+	.profile-picture-section
+	.author-stats
+	button {
+	color: rgb(0, 99, 93);
+	display: inline;
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 11px;
+	line-height: 14px;
+	padding: 0;
+}
+
+.author-page-photo-and-stats-area
+	.profile-picture-section
+	.author-stats
+	a:hover,
+.author-page-photo-and-stats-area
+	.profile-picture-section
+	.author-stats
+	button:hover {
+	background-color: transparent;
+	text-decoration: underline;
+}
+
+.author-page-photo-and-stats-area .follow-author-button {
+	width: 138px;
+	height: 30px;
+	padding: 8px 12px;
+	border-radius: 3px;
+	background-color: rgb(244, 241, 234);
+	border: 1px solid rgb(214, 208, 196);
+	color: rgb(51, 51, 51);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	line-height: 14px;
+}
+
+.author-page-photo-and-stats-area .follow-button-and-dropdown {
+	margin: 40px 0;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.author-page-photo-and-stats-area .follow-author-button:hover {
+	background-color: rgb(237, 230, 214);
+}
+
+.author-page-photo-and-stats-area .follow-author-dropdown-trigger {
+	position: relative;
+	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAICAYAAADJEc7MAAAAAXNSR0IArs4c6QAAAPBJREFUGBljYACChoYGrr6+PiEQGx8AqQGpBalhAhHi4uJTOTk5z0+bNs0CxMcGQHIgNSC1IHnG7u5ubiDYw8jICNL0+9+/f+XZ2dn9yJqnTp1ayMTE1AkUY/3///+JV69eOTOCFKSlpbEaGBh0ADUXQTWs//HjRxKIzcHBMQ9IBYLYQE19Fy5cqJg1a9ZvsEaQIAgAnRMApOYDDRAA0k9BYkAgDdTwAeiShJycnI0QIaBTYQwYPXnyZEUWFpZNQL4OVOzKnz9//HJzc+/D1IBoDI0gQWDIsQED4QqI/fLlSx0g/xeITRQIDQ1lBmFcigEiIFGeIjnB4AAAAABJRU5ErkJggg==');
+	width: 14px;
+	height: 8px;
+	margin-left: 5px;
+}
+
+.author-page-photo-and-stats-area .bottom-section {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 20px;
+}
+
+.author-page-photo-and-stats-area .bottom-section span {
+	color: rgb(56, 33, 16);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+	display: inline;
+	padding: 0;
+}
+
+.author-page-year-in-books-section .section-title,
+.author-page-followers-section .section-title,
+.author-page-bookshelves-section .section-title,
+.author-page-friends-section .section-title {
+	display: block;
+	width: 100%;
+	padding: 2px 0;
+	border-bottom: 1px solid rgb(216, 216, 216);
+	color: rgb(56, 33, 16);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 24px;
+	font-weight: bold;
+}
+
+.author-page-year-in-books-section .section-title:hover,
+.author-page-bookshelves-section .section-title:hover {
+	background-color: transparent;
+	text-decoration: underline;
+}
+
+.author-page-year-in-books-section .inner-content {
+	margin-top: 10px;
+	display: flex;
+	flex-direction: row;
+}
+
+.author-page-year-in-books-section .inner-content .image-wrapper,
+.author-page-year-in-books-section .inner-content .image-wrapper img {
+	width: 108px;
+	height: 128px;
+}
+
+.author-page-year-in-books-section .inner-content .year-in-books-right-section {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	margin-bottom: 20px;
+	margin-left: 5px;
+}
+
+.author-page-year-in-books-section
+	.inner-content
+	.year-in-books-right-section
+	span
+	b {
+	font-weight: bold;
+}
+
+.author-page-year-in-books-section
+	.inner-content
+	.year-in-books-right-section
+	span {
+	color: rgb(24, 24, 24);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.author-page-year-in-books-section
+	.inner-content
+	.year-in-books-right-section
+	a {
+	color: rgb(0, 99, 93);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+	height: auto;
+}
+
+.author-page-year-in-books-section
+	.inner-content
+	.year-in-books-right-section
+	a:hover {
+	text-decoration: underline;
+}
+
+.author-page-followers-section,
+.author-page-bookshelves-section {
+	margin-top: 20px;
+}
+
+.author-page-followers-section .follower-list {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	max-height: 130px;
+	overflow: hidden;
+}
+
+.author-page-followers-section .follower-list a {
+	margin-right: 5px;
+	margin-bottom: 10px;
+}
+
+.author-page-followers-section .follower-list a,
+.author-page-followers-section .follower-list a img {
+	width: 25px;
+	height: 33px;
+}
+
+.author-page-followers-section .no-followers-span {
+	margin-top: 10px;
+	display: block;
+	color: rgb(24, 24, 24);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.author-page-bookshelves-section {
+	margin-bottom: 20px;
+}
+
+.author-page-bookshelves-section .section-title {
+	margin-bottom: 10px;
+}
+
+.author-page-bookshelves-section .shelf-list {
+	display: flex;
+	flex-direction: column;
+}
+
+.author-page-bookshelves-section a,
+.author-page-friends-section .friend-list .friend-card .right-section a {
+	display: inline;
+	color: rgb(0, 99, 93);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+	width: auto;
+}
+
+.author-page-bookshelves-section a:hover,
+.author-page-friends-section .friend-list .friend-card .right-section a:hover {
+	text-decoration: underline;
+}
+
+.author-page-friends-section .friend-list {
+	margin-top: 10px;
+}
+
+.author-page-friends-section .friend-list .friend-card {
+	display: flex;
+	flex-direction: row;
+	margin-bottom: 10px;
+}
+
+.author-page-friends-section .friend-list .friend-card .right-section {
+	margin-left: 10px;
+}
+
+.author-page-friends-section .friend-list .friend-card .right-section span {
+	color: rgb(24, 24, 24);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.author-page-friends-section
+	.friend-list
+	.friend-card
+	.right-section
+	.separator {
+	color: rgb(153, 153, 153);
+	margin: 0 2px;
+}
+
+.author-page-friends-section .friend-list .profile-picture-wrapper,
+.author-page-friends-section .friend-list .profile-picture-wrapper img {
+	width: 50px;
+	height: 66px;
+}
+
+.author-page-photo-and-stats-area .follow-author-dropdown {
+	position: absolute;
+	top: 13px;
+	left: 0;
+	width: 220px;
+	border-radius: 5px;
+	background-color: rgb(255, 255, 255);
+	border: 1px solid rgb(153, 153, 153);
+	box-shadow: rgba(46, 41, 41, 0.3) 0px 1px 4px 0px;
+}
+
+.author-page-photo-and-stats-area .follow-author-dropdown li {
+	padding: 5px 10px;
+}
+
+.author-page-photo-and-stats-area .follow-author-dropdown a,
+.author-page-photo-and-stats-area .follow-author-dropdown button {
+	display: inline;
+	color: rgb(24, 24, 24);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+	padding: 0;
+}
+
+.author-page-photo-and-stats-area .follow-author-dropdown a:hover,
+.author-page-photo-and-stats-area .follow-author-dropdown button:hover {
+	background-color: transparent;
+	text-decoration: underline;
+}

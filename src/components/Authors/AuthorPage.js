@@ -4,6 +4,7 @@ import { format } from 'date-fns';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 import Firebase from '../../Firebase';
+import '../styles/Authors/AuthorPage.css';
 
 const AuthorPage = ({ match }) => {
 	const history = useHistory();
@@ -133,7 +134,228 @@ const AuthorPage = ({ match }) => {
 
 	useEffect(() => {
 		//const authorObject = await Firebase...
-		const authorObject = {};
+		const authorObject = {
+			GRMember: true,
+			placeOfBirth: 'San Antonio, Texas, The United States',
+			dateOfBirth: new Date(1965, 10, 4),
+			influences: [
+				{
+					id: '132',
+					name: 'Charles Dickens',
+				},
+				{
+					id: '132',
+					name: 'J.K. Rowling',
+				},
+				{
+					id: '132',
+					name: 'Victor Hugo',
+				},
+			],
+			website: 'http://www.rickriordan.com/',
+			twitter: 'camphalfblood',
+			genre: ['Children', 'Science Fiction & Fantasy'],
+			memberSince: new Date(2013, 8, 10),
+			description:
+				'Rick Riordan is the #1 New York Times bestselling author of many books, including the Percy Jackson series. You can follow him on Twitter and via his official website.',
+			profilePicture:
+				'https://images.gr-assets.com/authors/1608906571p5/15872.jpg',
+			numberOfRatings: 262,
+			numberOfReviews: 182,
+			averageRating: 4.55098,
+			followers: [],
+			mostFollowedPosition: 5,
+			reviewerPosition: 30,
+			usersWhoHaveAsFavorite: ['kaasaa', 'aba', 'lua'],
+			numberOfReadBooks: 210,
+			numberOfToReadBooks: 0,
+			numberOfReadingBooks: 3,
+			numberOfFavoriteBooks: 40,
+			friends: [
+				{
+					id: '1256',
+					name: 'Mark Lawrence',
+					profilePicture:
+						'https://images.gr-assets.com/users/1442536170p2/4508542.jpg',
+					numberOfBooks: 888,
+					numberOfFriends: 3876,
+				},
+				{
+					id: '1256',
+					name: 'Neil Shusterman',
+					profilePicture:
+						'https://images.gr-assets.com/users/1442449838p2/5092518.jpg',
+					numberOfBooks: 97,
+					numberOfFriends: 1125,
+				},
+				{
+					id: '1256',
+					name: 'Geoff',
+					profilePicture:
+						'https://images.gr-assets.com/users/1409839406p2/10057468.jpg',
+					numberOfBooks: 11,
+					numberOfFriends: 64,
+				},
+				{
+					id: '1256',
+					name: 'Cinda',
+					profilePicture:
+						'https://images.gr-assets.com/users/1442456431p2/1258344.jpg',
+					numberOfBooks: 508,
+					numberOfFriends: 2034,
+				},
+				{
+					id: '1256',
+					name: 'Sarwat Chadda',
+					profilePicture:
+						'https://images.gr-assets.com/users/1579381881p2/108845495.jpg',
+					numberOfBooks: 46,
+					numberOfFriends: 134,
+				},
+				{
+					id: '1256',
+					name: 'Leigh Bardugo',
+					profilePicture:
+						'https://images.gr-assets.com/users/1534446092p2/657056.jpg',
+					numberOfBooks: 42,
+					numberOfFriends: 4937,
+				},
+				{
+					id: '1256',
+					name: 'Elizabeth',
+					profilePicture:
+						'https://images.gr-assets.com/users/1207771377p2/717971.jpg',
+					numberOfBooks: 270,
+					numberOfFriends: 716,
+				},
+				{
+					id: '1256',
+					name: 'Gennifer Choldenko',
+					numberOfBooks: 1,
+					numberOfFriends: 164,
+				},
+			],
+			booksByAuthor: Array(20).fill({
+				id: '456',
+				title: 'The Lightning Thief',
+				series: 'Percy Jackson and the Olympians',
+				seriesInstance: 1,
+				userStatus: 'read',
+				userRating: 3,
+				averageRating: 4.26,
+				ratings: 2106769,
+				publishedYear: 2005,
+				editions: 239,
+				numberOfReviews: 250,
+			}),
+			seriesByAuthor: Array(15).fill({
+				title: 'The Heroes of Olympus',
+				books: [
+					{
+						id: '1',
+						title: 'The Son of Neptune',
+						seriesInstance: 2,
+						cover:
+							'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1464201114l/9520360._SY75_.jpg',
+					},
+					{
+						id: '2',
+						title: 'The House of Hades',
+						seriesInstance: 4,
+						cover:
+							'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1464201430l/12127810._SY75_.jpg',
+					},
+					{
+						id: '3',
+						title: 'The Olympian Blood',
+						seriesInstance: 5,
+						cover:
+							'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1464201441l/18705209._SY75_.jpg',
+					},
+					{
+						id: '4',
+						title: 'The Lost Hero',
+						seriesInstance: 1,
+						cover:
+							'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1464201003l/7736182._SY75_.jpg',
+					},
+					{
+						id: '5',
+						title: 'The Mark of Athena',
+						seriesInstance: 3,
+						cover:
+							'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1464201354l/12127750._SY75_.jpg',
+					},
+				],
+				averageRating: 4.32,
+				numberOfRatings: 5000000,
+			}),
+			relatedNews: Array(7).fill({
+				id: '24',
+				title: '7 Books Hitting Shelves This Week',
+				content:
+					"Need another excuse to go to the bookstore this week? We've got you covered with the buzziest new releases of the day.\nTo create our list, we focused on the books Goodreads members can't wait to read, which we measure by how many times a book has been added to Want to Read shelves. All these top titles are now available in the United States! Which ones catch your eye?",
+				numberOfLikes: 36,
+				image: 'https://images.gr-assets.com/blogs/1565145045p8/1673.jpg',
+			}),
+			quotes: Array(20).fill({
+				id: '15',
+				content:
+					'With great power... comes great need to take a nap. Wake me up later.',
+				bookTitle: 'The Last Olympian',
+				tags: ['nico'],
+				usersWhoLiked: ['kimberly', '3Vh4hNGoKqXx27fpUrsGalLOyU62'],
+			}),
+			favoriteAuthors: [
+				{
+					id: '20',
+					name: 'Suzane Collins',
+					bestBookId: '14',
+					bestBookTitle: 'The Hunger Games',
+				},
+				{
+					id: '20',
+					name: 'Jonathan Straud',
+					image: 'https://images.gr-assets.com/authors/1562922774p2/33467.jpg',
+					bestBookId: '14',
+					bestBookTitle: 'The Amulet',
+				},
+				{
+					id: '20',
+					name: 'Eoin Colfer',
+					image: 'https://images.gr-assets.com/authors/1254336426p2/10896.jpg',
+					bestBookId: '14',
+					bestBookTitle: 'Artemis Fowl',
+				},
+				{
+					id: '20',
+					name: 'Margareth Atwood',
+					bestBookId: '14',
+					bestBookTitle: 'The Handmaidens Tale',
+				},
+				{
+					id: '20',
+					name: 'Ridley Pearson',
+					image: 'https://images.gr-assets.com/authors/1263049167p2/6244.jpg',
+					bestBookId: '14',
+					bestBookTitle: 'Disney After Dark',
+				},
+				{
+					id: '20',
+					name: 'Mo Willems',
+					image: 'https://images.gr-assets.com/authors/1199684071p2/33274.jpg',
+					bestBookId: '14',
+					bestBookTitle: 'Dont let me go',
+				},
+				{
+					id: '20',
+					name: 'Erin Hunter',
+					image: 'https://images.gr-assets.com/authors/1318547591p2/27498.jpg',
+					bestBookId: '14',
+					bestBookTitle: 'Into the Unknown',
+				},
+			],
+		};
 		setAuthorInfo(authorObject);
 		setSavingShelves(authorObject.booksByAuthor.map((_book) => false));
 		setAreAddShelfInputSectionsHidden(
@@ -838,7 +1060,7 @@ const AuthorPage = ({ match }) => {
 				onMouseOver={(_e) => {
 					if (
 						user !== null &&
-						!authorInfo.followers
+						authorInfo.followers
 							.map((follower) => follower.id)
 							.includes(user.userUID)
 					) {
@@ -850,7 +1072,7 @@ const AuthorPage = ({ match }) => {
 				onMouseOut={(_e) => {
 					if (
 						user !== null &&
-						!authorInfo.followers
+						authorInfo.followers
 							.map((follower) => follower.id)
 							.includes(user.userUID)
 					) {
@@ -862,7 +1084,7 @@ const AuthorPage = ({ match }) => {
 			>
 				{user === null ||
 				user.userUID === undefined ||
-				authorInfo.followers
+				!authorInfo.followers
 					.map((follower) => follower.id)
 					.includes(user.userUID)
 					? 'Follow Author'
@@ -1048,7 +1270,10 @@ const AuthorPage = ({ match }) => {
 					{authorInfo.followers.map((follower, index) => {
 						return (
 							<a
-								href={Firebase.pageGenerator.generateUserPage(follower.id)}
+								href={Firebase.pageGenerator.generateUserPage(
+									follower.id,
+									follower.name
+								)}
 								key={index}
 							>
 								<img src={follower.profilePicture} alt={follower.name} />
@@ -1057,7 +1282,7 @@ const AuthorPage = ({ match }) => {
 					})}
 				</div>
 			) : (
-				<span className="no-followers-span">None yet</span>
+				<span className="no-followers-span">None yet.</span>
 			)}
 		</div>
 	) : null;
@@ -1105,7 +1330,7 @@ const AuthorPage = ({ match }) => {
 	const friendsSection =
 		loaded && authorInfo.GRMember && authorInfo.friends.length > 0 ? (
 			<div className="author-page-friends-section">
-				<span className="section-title">{`${authorFirstName.toUpperCase}'S FRIENDS`}</span>
+				<span className="section-title">{`${authorFirstName.toUpperCase()}'S FRIENDS`}</span>
 				<div className="friend-list">
 					{authorInfo.friends.map((friend, index) => {
 						return (
@@ -1137,7 +1362,7 @@ const AuthorPage = ({ match }) => {
 									</a>
 									<div className="friend-stats">
 										<span>{`${friend.numberOfBooks} books`}</span>
-										<span className="sepator">|</span>
+										<span className="separator">|</span>
 										<span>{`${friend.numberOfFriends} friends`}</span>
 									</div>
 								</div>
@@ -1219,7 +1444,9 @@ const AuthorPage = ({ match }) => {
 						<tr>
 							<th>Twitter</th>
 							<td>
-								<a href={authorInfo.twitter}>{authorInfo.twitter}</a>
+								<a href={`https://twitter.com/${authorInfo.twitter}`}>
+									{authorInfo.twitter}
+								</a>
 							</td>
 						</tr>
 					) : null}
@@ -1229,7 +1456,7 @@ const AuthorPage = ({ match }) => {
 							<td>
 								{authorInfo.genre.map((genre, index) => {
 									return (
-										<span className="author-genre">
+										<span className="author-genre" key={index}>
 											<a
 												key={index}
 												href={Firebase.pageGenerator.generateGenrePage(genre)}
@@ -1247,6 +1474,7 @@ const AuthorPage = ({ match }) => {
 					) : null}
 					{authorInfo.influences !== undefined ? (
 						<tr>
+							<th>Influences</th>
 							<td>
 								{authorInfo.influences.map((influence, index) => {
 									return (
@@ -1254,7 +1482,8 @@ const AuthorPage = ({ match }) => {
 											<a
 												key={index}
 												href={Firebase.pageGenerator.generateAuthorPage(
-													influence.id
+													influence.id,
+													influence.name
 												)}
 											>
 												{influence.name}
@@ -1627,116 +1856,118 @@ const AuthorPage = ({ match }) => {
 			<div className="author-page-quotes-section">
 				<span className="section-title">{`QUOTES BY ${authorName.toUpperCase()}`}</span>
 				<div className="quote-list">
-					{authorInfo.quotes.map((quote, index) => {
-						return (
-							<div className="quote-card" key={index}>
-								<div className="left-section">
-									<span className="quote">{`“${quote.content}”`}</span>
-									<span className="quote-authorship">
-										<span className="dash">― </span>
-										{`${authorName}, ${quote.bookTitle}`}
-									</span>
-									{quote.tags.length !== 0 ? (
-										<span className="tag-list">
-											<span>tags: </span>
-											<span>
-												{quote.tags.map((tag, i) => {
-													if (i === quote.tags.length - 1) {
-														return (
-															<a
-																key={i}
-																href={Firebase.pageGenerator.generateQuotesTagPage(
-																	tag
-																)}
-															>
-																{tag}
-															</a>
-														);
-													} else {
-														return (
-															<span key={i}>
+					{authorInfo.quotes
+						.filter((quote, index) => index <= 2)
+						.map((quote, index) => {
+							return (
+								<div className="quote-card" key={index}>
+									<div className="left-section">
+										<span className="quote">{`“${quote.content}”`}</span>
+										<span className="quote-authorship">
+											<span className="dash">― </span>
+											{`${authorName}, ${quote.bookTitle}`}
+										</span>
+										{quote.tags.length !== 0 ? (
+											<span className="tag-list">
+												<span>tags: </span>
+												<span>
+													{quote.tags.map((tag, i) => {
+														if (i === quote.tags.length - 1) {
+															return (
 																<a
+																	key={i}
 																	href={Firebase.pageGenerator.generateQuotesTagPage(
 																		tag
 																	)}
 																>
 																	{tag}
 																</a>
-																{', '}
-															</span>
-														);
-													}
-												})}
+															);
+														} else {
+															return (
+																<span key={i}>
+																	<a
+																		href={Firebase.pageGenerator.generateQuotesTagPage(
+																			tag
+																		)}
+																	>
+																		{tag}
+																	</a>
+																	{', '}
+																</span>
+															);
+														}
+													})}
+												</span>
 											</span>
-										</span>
-									) : null}
-								</div>
-								<div className="right-section">
-									{user.userUID === null ||
-									!quote.usersWhoLiked.includes(user.userUID) ? (
-										<button
-											className="like-button"
-											onClick={async (_e) => {
-												await Firebase.likeQuote(
-													user.userUID,
+										) : null}
+									</div>
+									<div className="right-section">
+										{user.userUID === null ||
+										!quote.usersWhoLiked.includes(user.userUID) ? (
+											<button
+												className="like-button"
+												onClick={async (_e) => {
+													await Firebase.likeQuote(
+														user.userUID,
+														quote.id,
+														history
+													);
+													setAuthorInfo((previous) => {
+														return {
+															...previous,
+															quotes: previous.quotes.map((quote, i) => {
+																if (i === index) {
+																	return {
+																		...quote,
+																		usersWhoLiked: quote.usersWhoLiked.concat(
+																			user.userUID
+																		),
+																	};
+																}
+																return quote;
+															}),
+														};
+													});
+													setUserLikedQuotes((previous) =>
+														previous.concat(index)
+													);
+												}}
+											>
+												Like
+											</button>
+										) : userLikedQuotes.includes(index) ? (
+											<a
+												className="quote-a"
+												href={Firebase.pageGenerator.generateQuotePage(
 													quote.id,
-													history
-												);
-												setAuthorInfo((previous) => {
-													return {
-														...previous,
-														quotes: previous.quotes.map((quote, i) => {
-															if (i === index) {
-																return {
-																	...quote,
-																	usersWhoLiked: quote.usersWhoLiked.concat(
-																		user.userUID
-																	),
-																};
-															}
-															return quote;
-														}),
-													};
-												});
-												setUserLikedQuotes((previous) =>
-													previous.concat(index)
-												);
-											}}
-										>
-											Like
-										</button>
-									) : userLikedQuotes.includes(index) ? (
-										<a
-											className="quote-a"
-											href={Firebase.pageGenerator.generateQuotePage(
-												quote.id,
-												quote.content
-											)}
-										>
-											View quote
-										</a>
-									) : (
-										<a
-											className="quote-a"
-											href={Firebase.pageGenerator.generateQuotePage(
-												quote.id,
-												quote.content
-											)}
-										>
-											In my quotes
-										</a>
-									)}
-									<a
-										className="number-of-likes-a"
-										href={Firebase.pageGenerator.generateQuotePage(
-											quote.id,
-											quote.content
+													quote.content
+												)}
+											>
+												View quote
+											</a>
+										) : (
+											<a
+												className="quote-a"
+												href={Firebase.pageGenerator.generateQuotePage(
+													quote.id,
+													quote.content
+												)}
+											>
+												In my quotes
+											</a>
 										)}
-									>{`${quote.usersWhoLiked.length} likes`}</a>
+										<a
+											className="number-of-likes-a"
+											href={Firebase.pageGenerator.generateQuotePage(
+												quote.id,
+												quote.content
+											)}
+										>{`${quote.usersWhoLiked.length} likes`}</a>
+									</div>
 								</div>
-							</div>
-						);
-					})}
+							);
+						})}
 				</div>
 			</div>
 		) : null;
