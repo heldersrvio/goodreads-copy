@@ -327,3 +327,89 @@
 	background-color: transparent;
 	text-decoration: underline;
 }
+
+.author-page-author-main-info-section .author-name-area {
+	padding: 4px 0;
+	border-bottom: 1px solid rgb(216, 216, 216);
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.author-page-author-main-info-section .author-name-area .author-name {
+	color: rgb(51, 51, 51);
+	font-family: 'Merriweather', Georgia, 'Times New Roman', serif;
+	font-size: 20px;
+	font-weight: bold;
+	line-height: 26px;
+}
+
+.author-page-author-main-info-section .author-name-area .goodreads-seal {
+	width: 23px;
+	height: 23px;
+	background-size: 23px 23px;
+	background-image: url('https://s.gr-assets.com/assets/icons/gr-author-badge_23x23.png');
+}
+
+.author-page-author-main-info-section .author-name-area .goodreads-seal-area {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.author-page-author-main-info-section
+	.author-name-area
+	.goodreads-seal-area
+	span {
+	color: rgb(56, 33, 16);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	line-height: 14px;
+	font-weight: bold;
+	margin-left: 5px;
+}
+
+.author-page-author-main-info-section table {
+	margin-top: 10px;
+}
+
+.author-page-author-main-info-section td {
+	color: rgb(24, 24, 24);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.author-page-author-main-info-section td a {
+	color: rgb(0, 99, 93);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+	display: inline;
+}
+
+.author-page-author-main-info-section td a:hover {
+	text-decoration: underline;
+}
+
+.author-page-author-main-info-section th {
+	display: inline-block;
+	text-align: left;
+	color: rgb(0, 0, 0);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+	font-weight: bold;
+	margin-right: 45px;
+}
+
+.author-page-author-main-info-section .author-description-area {
+	margin-top: 20px;
+}
+
+.author-page-author-main-info-section .author-description-area p {
+	color: rgb(24, 24, 24);
+	font-family: 'Merriweather', Georgia, 'Times New Roman', serif;
+	font-size: 14px;
+	line-height: 21px;
+}
