@@ -42,6 +42,7 @@ const AuthorPage = ({ match }) => {
 	const [authorDescriptionShowMore, setAuthorDescriptionShowMore] = useState(
 		false
 	);
+	const [userLikedQuotes, setUserLikedQuotes] = useState([]);
 
 	const user = JSON.parse(localStorage.getItem('userState'));
 	/* 
@@ -113,21 +114,6 @@ const AuthorPage = ({ match }) => {
                 numberOfLikes,
                 image,
             }],
-            updates: [{
-                date,
-                action,
-                book: {
-                    id,
-                    title,
-                    authorId,
-                    authorName,
-                    authorIsMember,
-                    cover,
-                    userStatus,
-                    userRating,
-                },
-                review,
-            }],
             quotes: [{
                 id,
                 content,
@@ -138,6 +124,7 @@ const AuthorPage = ({ match }) => {
             favoriteAuthors: [{
                 id,
                 name,
+				image,
                 bestBookId,
                 bestBookTitle,
             }],
@@ -1635,21 +1622,193 @@ const AuthorPage = ({ match }) => {
 			</div>
 		) : null;
 
-	const recentUpdatesSection =
-		loaded &&
-		authorInfo.updates !== undefined &&
-		authorInfo.updates.length > 0 ? (
-			<div className="author-page-recent-updates-section">{/* To do */}</div>
-		) : null;
-
 	const quotesSection =
 		loaded && authorInfo.quotes.length > 0 ? (
 			<div className="author-page-quotes-section">
 				<span className="section-title">{`QUOTES BY ${authorName.toUpperCase()}`}</span>
 				<div className="quote-list">
 					{authorInfo.quotes.map((quote, index) => {
-						return <div className="quote-card">{/* To do */}</div>;
+						return (
+							<div className="quote-card" key={index}>
+								<div className="left-section">
+									<span className="quote">{`“${quote.content}”`}</span>
+									<span className="quote-authorship">
+										<span className="dash">― </span>
+										{`${authorName}, ${quote.bookTitle}`}
+									</span>
+									{quote.tags.length !== 0 ? (
+										<span className="tag-list">
+											<span>tags: </span>
+											<span>
+												{quote.tags.map((tag, i) => {
+													if (i === quote.tags.length - 1) {
+														return (
+															<a
+																key={i}
+																href={Firebase.pageGenerator.generateQuotesTagPage(
+																	tag
+																)}
+															>
+																{tag}
+															</a>
+														);
+													} else {
+														return (
+															<span key={i}>
+																<a
+																	href={Firebase.pageGenerator.generateQuotesTagPage(
+																		tag
+																	)}
+																>
+																	{tag}
+																</a>
+																{', '}
+															</span>
+														);
+													}
+												})}
+											</span>
+										</span>
+									) : null}
+								</div>
+								<div className="right-section">
+									{user.userUID === null ||
+									!quote.usersWhoLiked.includes(user.userUID) ? (
+										<button
+											className="like-button"
+											onClick={async (_e) => {
+												await Firebase.likeQuote(
+													user.userUID,
+													quote.id,
+													history
+												);
+												setAuthorInfo((previous) => {
+													return {
+														...previous,
+														quotes: previous.quotes.map((quote, i) => {
+															if (i === index) {
+																return {
+																	...quote,
+																	usersWhoLiked: quote.usersWhoLiked.concat(
+																		user.userUID
+																	),
+																};
+															}
+															return quote;
+														}),
+													};
+												});
+												setUserLikedQuotes((previous) =>
+													previous.concat(index)
+												);
+											}}
+										>
+											Like
+										</button>
+									) : userLikedQuotes.includes(index) ? (
+										<a
+											className="quote-a"
+											href={Firebase.pageGenerator.generateQuotePage(
+												quote.id,
+												quote.content
+											)}
+										>
+											View quote
+										</a>
+									) : (
+										<a
+											className="quote-a"
+											href={Firebase.pageGenerator.generateQuotePage(
+												quote.id,
+												quote.content
+											)}
+										>
+											In my quotes
+										</a>
+									)}
+									<a
+										className="number-of-likes-a"
+										href={Firebase.pageGenerator.generateQuotePage(
+											quote.id,
+											quote.content
+										)}
+									>{`${quote.usersWhoLiked.length} likes`}</a>
+								</div>
+							</div>
+						);
 					})}
+				</div>
+			</div>
+		) : null;
+
+	const favoriteAuthorsSection =
+		loaded &&
+		authorInfo.favoriteAuthors !== undefined &&
+		authorInfo.favoriteAuthors.length > 0 ? (
+			<div className="author-page-favorite-authors-section">
+				<div className="section-title">
+					<a
+						href={Firebase.pageGenerator.generateUserFavoriteAuthorsPage(
+							authorId
+						)}
+						className="title"
+					>{`${authorName.toUpperCase()}'S FAVORITE AUTHORS`}</a>
+					<a
+						className="grey-small-a"
+						href={Firebase.pageGenerator.generateUserFavoriteAuthorsPage(
+							authorId
+						)}
+					>{`view all ${authorInfo.favoriteAuthors.length}`}</a>
+				</div>
+				<div className="main-section">
+					{authorInfo.favoriteAuthors.map((author, index) => {
+						return (
+							<div className="favorite-author-card" key={index}>
+								<a
+									className="author-image-wrapper"
+									href={Firebase.pageGenerator.generateAuthorPage(
+										author.id,
+										author.name
+									)}
+								>
+									<img
+										src={
+											author.image !== undefined
+												? author.image
+												: 'https://www.goodreads.com/assets/nophoto/user/u_60x60-267f0ca0ea48fd3acfd44b95afa64f01.png'
+										}
+										alt={author.name}
+									/>
+								</a>
+								<a
+									className="author-name-a"
+									href={Firebase.pageGenerator.generateAuthorPage(
+										author.id,
+										author.name
+									)}
+								>
+									{author.name}
+								</a>
+								<span>author of</span>
+								<a
+									className="best-book-a"
+									href={Firebase.pageGenerator.generateBookPage(
+										author.bestBookId,
+										author.bestBookTitle
+									)}
+								>
+									{author.bestBookTitle}
+								</a>
+							</div>
+						);
+					})}
+				</div>
+				<div className="bottom-section">
+					<a
+						href={Firebase.pageGenerator.generateUserFavoriteAuthorsPage(
+							authorId
+						)}
+					>{`More of ${authorName}'s favorite authors...`}</a>
 				</div>
 			</div>
 		) : null;
@@ -1661,8 +1820,8 @@ const AuthorPage = ({ match }) => {
 			{authorBooksSection}
 			{authorSeriesSection}
 			{relatedNewsSection}
-			{recentUpdatesSection}
 			{quotesSection}
+			{favoriteAuthorsSection}
 		</div>
 	);
 

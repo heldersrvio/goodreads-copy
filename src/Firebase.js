@@ -222,6 +222,10 @@ const Firebase = (() => {
 			return '/favorite_authors';
 		};
 
+		const generateUserFavoriteAuthorsPage = (userId) => {
+			return '/user/' + userId + '/favorite_authors';
+		};
+
 		const generateUserYearInBooksPage = (year, userId) => {
 			return '/user/year_in_books/' + year + '/' + userId;
 		};
@@ -269,6 +273,7 @@ const Firebase = (() => {
 			generateWriteReviewPageForBook,
 			generateUserCompareBooksPage,
 			generateFavoriteAuthorsPage,
+			generateUserFavoriteAuthorsPage,
 			generateUserYearInBooksPage,
 		};
 	})();
