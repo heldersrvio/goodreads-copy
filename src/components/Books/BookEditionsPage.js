@@ -588,7 +588,9 @@ const BookEditionsPage = ({ match }) => {
 								previous.map((value, i) =>
 									i === index && editionObject.userRating !== undefined
 										? editionObject.userRating
-										: 0
+										: i === index
+										? 0
+										: value
 								)
 							)
 						}
@@ -611,7 +613,9 @@ const BookEditionsPage = ({ match }) => {
 								previous.map((value, i) =>
 									i === index && editionObject.userRating !== undefined
 										? editionObject.userRating
-										: 0
+										: i === index
+										? 0
+										: value
 								)
 							)
 						}
@@ -634,7 +638,9 @@ const BookEditionsPage = ({ match }) => {
 								previous.map((value, i) =>
 									i === index && editionObject.userRating !== undefined
 										? editionObject.userRating
-										: 0
+										: i === index
+										? 0
+										: value
 								)
 							)
 						}
@@ -657,7 +663,9 @@ const BookEditionsPage = ({ match }) => {
 								previous.map((value, i) =>
 									i === index && editionObject.userRating !== undefined
 										? editionObject.userRating
-										: 0
+										: i === index
+										? 0
+										: value
 								)
 							)
 						}
@@ -680,7 +688,9 @@ const BookEditionsPage = ({ match }) => {
 								previous.map((value, i) =>
 									i === index && editionObject.userRating !== undefined
 										? editionObject.userRating
-										: 0
+										: i === index
+										? 0
+										: value
 								)
 							)
 						}

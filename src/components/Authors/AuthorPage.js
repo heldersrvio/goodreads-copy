@@ -156,8 +156,10 @@ const AuthorPage = ({ match }) => {
 			twitter: 'camphalfblood',
 			genre: ['Children', 'Science Fiction & Fantasy'],
 			memberSince: new Date(2013, 8, 10),
-			description:
-				'Rick Riordan is the #1 New York Times bestselling author of many books, including the Percy Jackson series. You can follow him on Twitter and via his official website.',
+			description: `
+				Rick Riordan is the #1 New York Times bestselling author of many books, including the Percy Jackson series. You can follow him on Twitter and via his official website.
+				Riordan's first full-length novel was Big Red Tequila, which became the first book in the Tres Navarre series. His big breakthrough was The Lightning Thief (2005), the first novel in the five-volume Percy Jackson and the Olympians series, which placed a group of modern-day adolescents in a Greco-Roman mythological setting. Since then, Riordan has written The Kane Chronicles trilogy and The Heroes of Olympus series. The Kane Chronicles (2010-2012) focused on Egyptian mythology; The Heroes of Olympus was the sequel to the Percy Jackson series. Riordan also helped Scholastic Press develop The 39 Clues series and its spinoffs, and penned its first book, The Maze of Bones (2008). His most recent publications are three books in the Magnus Chase and the Gods of Asgard series, based on Norse mythology. The first book of his The Trials of Apollo series, The Hidden Oracle, was released in May 2016.
+				`,
 			profilePicture:
 				'https://images.gr-assets.com/authors/1608906571p5/15872.jpg',
 			numberOfRatings: 262,
@@ -920,7 +922,9 @@ const AuthorPage = ({ match }) => {
 								previous.map((value, i) =>
 									i === index && bookObject.userRating !== undefined
 										? bookObject.userRating
-										: 0
+										: i === index
+										? 0
+										: value
 								)
 							)
 						}
@@ -943,7 +947,9 @@ const AuthorPage = ({ match }) => {
 								previous.map((value, i) =>
 									i === index && bookObject.userRating !== undefined
 										? bookObject.userRating
-										: 0
+										: i === index
+										? 0
+										: value
 								)
 							)
 						}
@@ -966,7 +972,9 @@ const AuthorPage = ({ match }) => {
 								previous.map((value, i) =>
 									i === index && bookObject.userRating !== undefined
 										? bookObject.userRating
-										: 0
+										: i === index
+										? 0
+										: value
 								)
 							)
 						}
@@ -989,7 +997,9 @@ const AuthorPage = ({ match }) => {
 								previous.map((value, i) =>
 									i === index && bookObject.userRating !== undefined
 										? bookObject.userRating
-										: 0
+										: i === index
+										? 0
+										: value
 								)
 							)
 						}
@@ -1012,7 +1022,9 @@ const AuthorPage = ({ match }) => {
 								previous.map((value, i) =>
 									i === index && bookObject.userRating !== undefined
 										? bookObject.userRating
-										: 0
+										: i === index
+										? 0
+										: value
 								)
 							)
 						}
@@ -1424,12 +1436,17 @@ const AuthorPage = ({ match }) => {
 					authorInfo.dateOfBirth !== undefined ? (
 						<tr>
 							<th>Born</th>
-							{authorInfo.placeOfBirth !== undefined ? (
-								<td>{`in ${authorInfo.placeOfBirth}`}</td>
-							) : null}
-							{authorInfo.dateOfBirth !== undefined ? (
-								<td>{`${format(authorInfo.dateOfBirth, 'MMMM dd, yyyy')}`}</td>
-							) : null}
+							<td className="birth-info">
+								{authorInfo.placeOfBirth !== undefined ? (
+									<td>{`in ${authorInfo.placeOfBirth}`}</td>
+								) : null}
+								{authorInfo.dateOfBirth !== undefined ? (
+									<td>{`${format(
+										authorInfo.dateOfBirth,
+										'MMMM dd, yyyy'
+									)}`}</td>
+								) : null}
+							</td>
 						</tr>
 					) : null}
 					{authorInfo.website !== undefined ? (
@@ -1464,7 +1481,7 @@ const AuthorPage = ({ match }) => {
 												{genre}
 											</a>
 											{index !== authorInfo.genre.length - 1 ? (
-												<span>,</span>
+												<span>{', '}</span>
 											) : null}
 										</span>
 									);
@@ -1489,7 +1506,7 @@ const AuthorPage = ({ match }) => {
 												{influence.name}
 											</a>
 											{index !== authorInfo.influences.length - 1 ? (
-												<span>,</span>
+												<span>{', '}</span>
 											) : null}
 										</span>
 									);
@@ -1517,7 +1534,7 @@ const AuthorPage = ({ match }) => {
 					<button
 						className="author-description-show-more-button"
 						onClick={(_e) =>
-							setAuthorDescriptionShowMore((previous) => previous)
+							setAuthorDescriptionShowMore((previous) => !previous)
 						}
 					>
 						{authorDescriptionShowMore ? '(less)' : '...more'}
@@ -1531,159 +1548,157 @@ const AuthorPage = ({ match }) => {
 		<div className="author-page-author-books-section">
 			<span className="section-title">{`${authorName.toUpperCase()}'S BOOKS`}</span>
 			<div className="author-books-stats">
-				<span>{`Average rating: ${Math.round(
-					authorBooksAverageRating,
-					2
-				)}`}</span>
+				<span>{`Average rating: ${authorBooksAverageRating.toFixed(2)}`}</span>
 				<span className="separator">·</span>
 				<span>{`${authorBooksTotalRatings} ratings`}</span>
 				<span className="separator">·</span>
 				<span>{`${authorBooksNumberOfReviews} reviews`}</span>
 			</div>
 			<div className="author-book-list">
-				{authorInfo.booksByAuthor.map((book, index) => {
-					return (
-						<div className="author-book-card" key={index}>
-							<div className="left-section">
-								<a
-									className="book-cover-wrapper"
-									href={Firebase.pageGenerator.generateBookPage(
-										book.id,
-										book.title
-									)}
-								>
-									<img
-										src={
-											book.cover !== undefined
-												? book.cover
-												: 'https://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png'
-										}
-										alt={book.title}
-									/>
-								</a>
-								<div className="book-details-section">
+				{authorInfo.booksByAuthor
+					.filter((_book, index) => index <= 9)
+					.map((book, index) => {
+						return (
+							<div className="author-book-card" key={index}>
+								<div className="left-section">
 									<a
-										className="book-title-a"
+										className="book-cover-wrapper"
 										href={Firebase.pageGenerator.generateBookPage(
 											book.id,
 											book.title
 										)}
 									>
-										{book.series === undefined
-											? book.title
-											: `${book.title} (${book.series}, #${book.seriesInstance})`}
+										<img
+											src={
+												book.cover !== undefined
+													? book.cover
+													: 'https://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png'
+											}
+											alt={book.title}
+										/>
 									</a>
-									<span className="by-author-span">
-										by{' '}
+									<div className="book-details-section">
 										<a
-											className="author-book-card-author-a"
-											href={Firebase.pageGenerator.generateAuthorPage(
-												authorId,
-												authorName
+											className="book-title-a"
+											href={Firebase.pageGenerator.generateBookPage(
+												book.id,
+												book.title
 											)}
 										>
-											{authorName}
+											{book.series === undefined
+												? book.title
+												: `${book.title} (${book.series}, #${book.seriesInstance})`}
 										</a>
-										{authorInfo.GRMember ? (
-											<span className="book-card-goodreads-member-span">
-												{' '}
-												(Goodreads Author)
-											</span>
-										) : null}
-									</span>
-									<div className="author-book-card-stats">
-										<div className="author-page-general-rating">
-											<div className="author-page-general-rating-stars">
-												<div
-													className={
-														book.averageRating >= 1
-															? 'static-star small full'
-															: book.averageRating >= 0.5
-															? 'static-star small almost-full'
-															: book.averageRating > 0
-															? 'static-star small almost-empty'
-															: 'static-star small empty'
-													}
-												></div>
-												<div
-													className={
-														book.averageRating >= 2
-															? 'static-star small full'
-															: book.averageRating >= 1.5
-															? 'static-star small almost-full'
-															: book.averageRating > 1
-															? 'static-star small almost-empty'
-															: 'static-star small empty'
-													}
-												></div>
-												<div
-													className={
-														book.averageRating >= 3
-															? 'static-star small full'
-															: book.averageRating >= 2.5
-															? 'static-star small almost-full'
-															: book.averageRating > 2
-															? 'static-star small almost-empty'
-															: 'static-star small empty'
-													}
-												></div>
-												<div
-													className={
-														book.averageRating >= 4
-															? 'static-star small full'
-															: book.averageRating >= 3.5
-															? 'static-star small almost-full'
-															: book.averageRating > 3
-															? 'static-star small almost-empty'
-															: 'static-star small empty'
-													}
-												></div>
-												<div
-													className={
-														book.averageRating >= 5
-															? 'static-star small full'
-															: book.averageRating >= 4.5
-															? 'static-star small almost-full'
-															: book.averageRating > 4
-															? 'static-star small almost-empty'
-															: 'static-star small empty'
-													}
-												></div>
+										<span className="by-author-span">
+											<span>by </span>
+											<a
+												className="author-book-card-author-a"
+												href={Firebase.pageGenerator.generateAuthorPage(
+													authorId,
+													authorName
+												)}
+											>
+												{authorName}
+											</a>
+											{authorInfo.GRMember ? (
+												<span className="book-card-goodreads-member-span">
+													{' '}
+													(Goodreads Author)
+												</span>
+											) : null}
+										</span>
+										<div className="author-book-card-stats">
+											<div className="author-page-general-rating">
+												<div className="author-page-general-rating-stars">
+													<div
+														className={
+															book.averageRating >= 1
+																? 'static-star small full'
+																: book.averageRating >= 0.5
+																? 'static-star small almost-full'
+																: book.averageRating > 0
+																? 'static-star small almost-empty'
+																: 'static-star small empty'
+														}
+													></div>
+													<div
+														className={
+															book.averageRating >= 2
+																? 'static-star small full'
+																: book.averageRating >= 1.5
+																? 'static-star small almost-full'
+																: book.averageRating > 1
+																? 'static-star small almost-empty'
+																: 'static-star small empty'
+														}
+													></div>
+													<div
+														className={
+															book.averageRating >= 3
+																? 'static-star small full'
+																: book.averageRating >= 2.5
+																? 'static-star small almost-full'
+																: book.averageRating > 2
+																? 'static-star small almost-empty'
+																: 'static-star small empty'
+														}
+													></div>
+													<div
+														className={
+															book.averageRating >= 4
+																? 'static-star small full'
+																: book.averageRating >= 3.5
+																? 'static-star small almost-full'
+																: book.averageRating > 3
+																? 'static-star small almost-empty'
+																: 'static-star small empty'
+														}
+													></div>
+													<div
+														className={
+															book.averageRating >= 5
+																? 'static-star small full'
+																: book.averageRating >= 4.5
+																? 'static-star small almost-full'
+																: book.averageRating > 4
+																? 'static-star small almost-empty'
+																: 'static-star small empty'
+														}
+													></div>
+												</div>
+												<span>
+													<span>{`${book.averageRating.toFixed(
+														2
+													)} avg rating — ${book.ratings} ratings ${
+														book.publishedYear !== undefined
+															? `— published ${book.publishedYear}`
+															: ''
+													} —`}</span>
+													<a
+														href={Firebase.pageGenerator.generateBookEditionsPage(
+															book.id,
+															book.title
+														)}
+													>{` ${book.editions} editions`}</a>
+												</span>
 											</div>
-											<span>
-												<span>{`${Math.round(
-													book.averageRating,
-													2
-												)} avg rating — ${book.ratings} ratings ${
-													book.publishedYear !== undefined
-														? `— published ${book.publishedYear}`
-														: ''
-												} —`}</span>
-												<a
-													href={Firebase.pageGenerator.generateBookEditionsPage(
-														book.id,
-														book.title
-													)}
-												>{` ${book.editions} editions`}</a>
-											</span>
 										</div>
 									</div>
 								</div>
-							</div>
-							<div className="right-section">
-								<div
-									className={`want-to-read-button-and-options ${
-										book.userStatus !== undefined ? book.userStatus : ''
-									}`}
-								>
-									{generateAddToShelfButton(book, index)}
-									{generateBookOptionsDropdown(book, index)}
+								<div className="right-section">
+									<div
+										className={`want-to-read-button-and-options ${
+											book.userStatus !== undefined ? book.userStatus : ''
+										}`}
+									>
+										{generateAddToShelfButton(book, index)}
+										{generateBookOptionsDropdown(book, index)}
+									</div>
+									{generateRateBookSection(book, index)}
 								</div>
-								{generateRateBookSection(book, index)}
 							</div>
-						</div>
-					);
-				})}
+						);
+					})}
 			</div>
 		</div>
 	) : null;
