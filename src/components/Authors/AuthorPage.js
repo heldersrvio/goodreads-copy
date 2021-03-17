@@ -306,7 +306,7 @@ const AuthorPage = ({ match }) => {
 					'With great power... comes great need to take a nap. Wake me up later.',
 				bookTitle: 'The Last Olympian',
 				tags: ['nico'],
-				usersWhoLiked: ['kimberly', '3Vh4hNGoKqXx27fpUrsGalLOyU62'],
+				usersWhoLiked: ['kimberly'],
 			}),
 			favoriteAuthors: [
 				{
@@ -1708,123 +1708,125 @@ const AuthorPage = ({ match }) => {
 			<div className="author-page-author-series-section">
 				<span className="title-span">{`SERIES BY ${authorName.toUpperCase()}`}</span>
 				<div className="series-list">
-					{authorInfo.seriesByAuthor.map((series, index) => {
-						return (
-							<div className="author-page-series-card" key={index}>
-								<div className="series-card-left-section">
-									<div className="series-title">
-										<span className="bold-title">{series.title}</span>
-										<span className="number-of-books">{` (${series.books.length} books)`}</span>
-									</div>
-									<div className="series-authorship">
-										<span className="by-author-span">
-											by{' '}
-											<a
-												className="author-series-card-author-a"
-												href={Firebase.pageGenerator.generateAuthorPage(
-													authorId,
-													authorName
-												)}
-											>
-												{authorName}
-											</a>
-											{authorInfo.GRMember ? (
-												<span className="series-card-goodreads-member-span">
-													{' '}
-													(Goodreads Author)
-												</span>
-											) : null}
-										</span>
-										<div className="series-stats">
-											<div className="author-page-general-rating-stars">
-												<div
-													className={
-														series.averageRating >= 1
-															? 'static-star small full'
-															: series.averageRating >= 0.5
-															? 'static-star small almost-full'
-															: series.averageRating > 0
-															? 'static-star small almost-empty'
-															: 'static-star small empty'
-													}
-												></div>
-												<div
-													className={
-														series.averageRating >= 2
-															? 'static-star small full'
-															: series.averageRating >= 1.5
-															? 'static-star small almost-full'
-															: series.averageRating > 1
-															? 'static-star small almost-empty'
-															: 'static-star small empty'
-													}
-												></div>
-												<div
-													className={
-														series.averageRating >= 3
-															? 'static-star small full'
-															: series.averageRating >= 2.5
-															? 'static-star small almost-full'
-															: series.averageRating > 2
-															? 'static-star small almost-empty'
-															: 'static-star small empty'
-													}
-												></div>
-												<div
-													className={
-														series.averageRating >= 4
-															? 'static-star small full'
-															: series.averageRating >= 3.5
-															? 'static-star small almost-full'
-															: series.averageRating > 3
-															? 'static-star small almost-empty'
-															: 'static-star small empty'
-													}
-												></div>
-												<div
-													className={
-														series.averageRating >= 5
-															? 'static-star small full'
-															: series.averageRating >= 4.5
-															? 'static-star small almost-full'
-															: series.averageRating > 4
-															? 'static-star small almost-empty'
-															: 'static-star small empty'
-													}
-												></div>
-											</div>
-											<span className="stats-span">{`${series.averageRating} avg rating — ${series.numberOfRatings} ratings`}</span>
+					{authorInfo.seriesByAuthor
+						.filter((_series, index) => index <= 4)
+						.map((series, index) => {
+							return (
+								<div className="author-page-series-card" key={index}>
+									<div className="series-card-left-section">
+										<div className="series-title">
+											<span className="bold-title">{series.title}</span>
+											<span className="number-of-books">{` (${series.books.length} books)`}</span>
 										</div>
-									</div>
-								</div>
-								<div className="series-card-right-section">
-									{series.books
-										.sort((a, b) => a.seriesInstance - b.seriesInstance)
-										.map((book, i) => {
-											return (
+										<div className="series-authorship">
+											<span className="by-author-span">
+												by{' '}
 												<a
-													className="series-card-book-cover-wrapper"
-													key={i}
-													href={Firebase.pageGenerator.generateBookPage(
-														book.id,
-														book.title
+													className="author-series-card-author-a"
+													href={Firebase.pageGenerator.generateAuthorPage(
+														authorId,
+														authorName
 													)}
 												>
-													<img
-														src={
-															book.cover !== undefined
-																? book.cover
-																: 'https://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png'
-														}
-														alt={book.title}
-													/>
+													{authorName}
 												</a>
-											);
-										})}
+												{authorInfo.GRMember ? (
+													<span className="series-card-goodreads-member-span">
+														{' '}
+														(Goodreads Author)
+													</span>
+												) : null}
+											</span>
+											<div className="series-stats">
+												<div className="author-page-general-rating-stars">
+													<div
+														className={
+															series.averageRating >= 1
+																? 'static-star small full'
+																: series.averageRating >= 0.5
+																? 'static-star small almost-full'
+																: series.averageRating > 0
+																? 'static-star small almost-empty'
+																: 'static-star small empty'
+														}
+													></div>
+													<div
+														className={
+															series.averageRating >= 2
+																? 'static-star small full'
+																: series.averageRating >= 1.5
+																? 'static-star small almost-full'
+																: series.averageRating > 1
+																? 'static-star small almost-empty'
+																: 'static-star small empty'
+														}
+													></div>
+													<div
+														className={
+															series.averageRating >= 3
+																? 'static-star small full'
+																: series.averageRating >= 2.5
+																? 'static-star small almost-full'
+																: series.averageRating > 2
+																? 'static-star small almost-empty'
+																: 'static-star small empty'
+														}
+													></div>
+													<div
+														className={
+															series.averageRating >= 4
+																? 'static-star small full'
+																: series.averageRating >= 3.5
+																? 'static-star small almost-full'
+																: series.averageRating > 3
+																? 'static-star small almost-empty'
+																: 'static-star small empty'
+														}
+													></div>
+													<div
+														className={
+															series.averageRating >= 5
+																? 'static-star small full'
+																: series.averageRating >= 4.5
+																? 'static-star small almost-full'
+																: series.averageRating > 4
+																? 'static-star small almost-empty'
+																: 'static-star small empty'
+														}
+													></div>
+												</div>
+												<span className="stats-span">{`${series.averageRating} avg rating — ${series.numberOfRatings} ratings`}</span>
+											</div>
+										</div>
+									</div>
+									<div className="series-card-right-section">
+										{series.books
+											.sort((a, b) => a.seriesInstance - b.seriesInstance)
+											.map((book, i) => {
+												return (
+													<a
+														className="series-card-book-cover-wrapper"
+														key={i}
+														href={Firebase.pageGenerator.generateBookPage(
+															book.id,
+															book.title
+														)}
+													>
+														<img
+															src={
+																book.cover !== undefined
+																	? book.cover
+																	: 'https://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png'
+															}
+															alt={book.title}
+														/>
+													</a>
+												);
+											})}
+									</div>
 								</div>
-							</div>
-						);
-					})}
+							);
+						})}
 				</div>
 			</div>
 		) : null;
@@ -1834,34 +1836,49 @@ const AuthorPage = ({ match }) => {
 			<div className="author-page-related-news-section">
 				<span className="section-title">RELATED NEWS</span>
 				<div className="news-list">
-					{authorInfo.relatedNews.map((article, index) => {
-						return (
-							<div className="related-news-card" key={index}>
-								<div className="left-section">
-									<a
-										className="article-title"
-										href={Firebase.pageGenerator.generateArticlePage(
-											article.id,
-											article.title
-										)}
-									>
-										{article.title}
-									</a>
-									<p>{article.content}</p>
-									<a
-										className="article-read-more-a"
-										href={Firebase.pageGenerator.generateArticlePage(
-											article.id,
-											article.title
-										)}
-									>
-										Read more...
-									</a>
-									<span className="article-like-count">{`${article.numberOfLikes} likes`}</span>
+					{authorInfo.relatedNews
+						.filter((_article, index) => index <= 2)
+						.map((article, index) => {
+							return (
+								<div className="related-news-card" key={index}>
+									<div className="left-section">
+										<a
+											className="article-title"
+											href={Firebase.pageGenerator.generateArticlePage(
+												article.id,
+												article.title
+											)}
+										>
+											{article.title}
+										</a>
+										<p>{article.content}</p>
+										<a
+											className="article-read-more-a"
+											href={Firebase.pageGenerator.generateArticlePage(
+												article.id,
+												article.title
+											)}
+										>
+											Read more...
+										</a>
+										<span className="article-like-count">{`${article.numberOfLikes} likes`}</span>
+									</div>
+									{article.image !== undefined ? (
+										<div className="right-section">
+											<a
+												className="article-image-wrapper"
+												href={Firebase.pageGenerator.generateArticlePage(
+													article.id,
+													article.title
+												)}
+											>
+												<img src={article.image} alt={article.title} />
+											</a>
+										</div>
+									) : null}
 								</div>
-							</div>
-						);
-					})}
+							);
+						})}
 				</div>
 			</div>
 		) : null;
@@ -1872,7 +1889,7 @@ const AuthorPage = ({ match }) => {
 				<span className="section-title">{`QUOTES BY ${authorName.toUpperCase()}`}</span>
 				<div className="quote-list">
 					{authorInfo.quotes
-						.filter((quote, index) => index <= 2)
+						.filter((_quote, index) => index <= 2)
 						.map((quote, index) => {
 							return (
 								<div className="quote-card" key={index}>
@@ -1894,6 +1911,7 @@ const AuthorPage = ({ match }) => {
 																	href={Firebase.pageGenerator.generateQuotesTagPage(
 																		tag
 																	)}
+																	className="tag-list-tag-a"
 																>
 																	{tag}
 																</a>
@@ -1905,6 +1923,7 @@ const AuthorPage = ({ match }) => {
 																		href={Firebase.pageGenerator.generateQuotesTagPage(
 																			tag
 																		)}
+																		className="tag-list-tag-a"
 																	>
 																		{tag}
 																	</a>
