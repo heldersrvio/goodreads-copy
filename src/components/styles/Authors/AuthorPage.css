@@ -5,6 +5,7 @@
 	margin: 20px 155px;
 	display: flex;
 	flex-direction: row;
+	min-height: 450px;
 }
 
 .author-page-main-content a {
@@ -1034,4 +1035,37 @@
 
 .author-page-favorite-authors-section .bottom-section a:hover {
 	text-decoration: underline;
+}
+
+.author-page .author-now-in-favorites-message {
+	padding: 15px;
+	width: 95%;
+	background-color: rgb(242, 242, 242);
+	border-radius: 5px;
+	color: rgb(24, 24, 24);
+	font-family: var(--lato-font);
+	font-size: 16px;
+	line-height: 18px;
+	margin-bottom: 15px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.author-page .author-now-in-favorites-message .close-button {
+	width: 12px;
+	height: 12px;
+	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAW0lEQVR42n2S0QnAIAxE4w4JZGQ3cFy1LSLy6h3kw1weeEZ7lJl1VnP3YtD2I6KsQ3+LEPzdIPTr2c1Ab13pEyE1DEgMCwCZxLCGdGhC4jXgcQ8MCJ+rP4WvMwBiGWeEPqEUMgAAAABJRU5ErkJggg==');
+	background-size: 12px 12px;
+	background-repeat: no-repeat;
+	padding: 0;
+}
+
+.author-page .author-now-in-favorites-message .close-button:hover {
+	background-color: transparent;
+}
+
+.author-page .author-now-in-favorites-message b {
+	font-weight: bold;
 }

@@ -2443,10 +2443,13 @@ const Firebase = (() => {
 				? authorQuery.data().about.replace(/\\n/g, '\n')
 				: undefined;
 		const profilePicture = authorQuery.data().picture;
-		const userInstanceQuery = await database
-			.collection('userBooksInstances')
-			.where('userId', '==', userQuery.id)
-			.get();
+		const authorInstanceQuery =
+			userQuery !== undefined
+				? await database
+						.collection('userBooksInstances')
+						.where('userId', '==', userQuery.id)
+						.get()
+				: undefined;
 		const userInstanceRatingQuery =
 			userQuery !== undefined
 				? await database
@@ -2529,18 +2532,27 @@ const Firebase = (() => {
 				.where('favoriteAuthors', 'array-contains', authorId)
 				.get()
 		).docs.map((doc) => doc.id);
-		const numberOfReadBooks = userInstanceQuery.docs.filter(
-			(doc) => doc.data().status === 'read'
-		).length;
-		const numberOfToReadBooks = userInstanceQuery.docs.filter(
-			(doc) => doc.data().status === 'to-read'
-		).length;
-		const numberOfReadingBooks = userInstanceQuery.docs.filter(
-			(doc) => doc.data().status === 'reading'
-		).length;
-		const numberOfFavoriteBooks = userInstanceQuery.docs.filter(
-			(doc) => doc.data().favorite
-		).length;
+		const numberOfReadBooks =
+			authorInstanceQuery !== undefined
+				? authorInstanceQuery.docs.filter((doc) => doc.data().status === 'read')
+						.length
+				: undefined;
+		const numberOfToReadBooks =
+			authorInstanceQuery !== undefined
+				? authorInstanceQuery.docs.filter(
+						(doc) => doc.data().status === 'to-read'
+				  ).length
+				: null;
+		const numberOfReadingBooks =
+			authorInstanceQuery !== undefined
+				? authorInstanceQuery.docs.filter(
+						(doc) => doc.data().status === 'reading'
+				  ).length
+				: null;
+		const numberOfFavoriteBooks =
+			authorInstanceQuery !== undefined
+				? authorInstanceQuery.docs.filter((doc) => doc.data().favorite).length
+				: null;
 		const friends =
 			userQuery !== undefined
 				? await Promise.all(
