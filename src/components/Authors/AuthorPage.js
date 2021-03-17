@@ -6,6 +6,8 @@ import HomePageFootBar from '../Authentication/HomePageFootBar';
 import Firebase from '../../Firebase';
 import '../styles/Authors/AuthorPage.css';
 
+// TODO: Set author as favorite functionality, styling for top message
+
 const AuthorPage = ({ match }) => {
 	const history = useHistory();
 	const {
@@ -113,6 +115,7 @@ const AuthorPage = ({ match }) => {
                 title,
                 content,
                 numberOfLikes,
+				numberOfComments,
                 image,
             }],
             quotes: [{
@@ -154,7 +157,7 @@ const AuthorPage = ({ match }) => {
 			],
 			website: 'http://www.rickriordan.com/',
 			twitter: 'camphalfblood',
-			genre: ['Children', 'Science Fiction & Fantasy'],
+			genre: ['childre', 'science-fiction-&-fantasy'],
 			memberSince: new Date(2013, 8, 10),
 			description: `
 				Rick Riordan is the #1 New York Times bestselling author of many books, including the Percy Jackson series. You can follow him on Twitter and via his official website.
@@ -1225,8 +1228,12 @@ const AuthorPage = ({ match }) => {
 				{followButtonAndDropdown}
 			</div>
 			<div className="bottom-section">
-				<span>{`#${authorInfo.mostFollowedPosition} most followed`}</span>
-				<span>{`#${authorInfo.reviewerPosition} best reviewers`}</span>
+				{authorInfo.mostFollowedPosition !== undefined ? (
+					<span>{`#${authorInfo.mostFollowedPosition} most followed`}</span>
+				) : null}
+				{authorInfo.reviewerPosition !== undefined ? (
+					<span>{`#${authorInfo.reviewerPosition} best reviewers`}</span>
+				) : null}
 			</div>
 		</div>
 	) : null;
@@ -1478,7 +1485,14 @@ const AuthorPage = ({ match }) => {
 												key={index}
 												href={Firebase.pageGenerator.generateGenrePage(genre)}
 											>
-												{genre}
+												{genre
+													.split('-')
+													.map((string) =>
+														string.length > 1
+															? string[0].toUpperCase() + string.slice(1)
+															: string[0]
+													)
+													.join(' ')}
 											</a>
 											{index !== authorInfo.genre.length - 1 ? (
 												<span>{', '}</span>
@@ -1861,7 +1875,7 @@ const AuthorPage = ({ match }) => {
 										>
 											Read more...
 										</a>
-										<span className="article-like-count">{`${article.numberOfLikes} likes`}</span>
+										<span className="article-like-count">{`${article.numberOfLikes} likes · ${article.numberOfComments} comments`}</span>
 									</div>
 									{article.image !== undefined ? (
 										<div className="right-section">
