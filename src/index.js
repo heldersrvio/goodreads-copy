@@ -23,6 +23,7 @@ import BookTriviaPage from './components/Books/BookTriviaPage';
 import BookQuotesPage from './components/Books/BookQuotesPage';
 import BookListsPage from './components/Books/BookListsPage';
 import AuthorPage from './components/Authors/AuthorPage';
+import FavoriteAuthorsPage from './components/Authors/FavoriteAuthorsPage';
 
 const store = createStore(reducer.userReducer);
 
@@ -79,6 +80,7 @@ ReactDOM.render(
 					/>
 					<Route path="/list/book/:bookId" component={BookListsPage} />
 					<Route path="/author/show/:authorPageId" component={AuthorPage} />
+					<Route path="/favorite_authors" component={FavoriteAuthorsPage} />
 					<Route path="/" component={App} />
 				</Switch>
 			</BrowserRouter>
