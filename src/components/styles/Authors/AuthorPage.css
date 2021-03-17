@@ -102,6 +102,7 @@
 }
 
 .author-page-photo-and-stats-area .follow-author-dropdown-trigger {
+	cursor: pointer;
 	position: relative;
 	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAICAYAAADJEc7MAAAAAXNSR0IArs4c6QAAAPBJREFUGBljYACChoYGrr6+PiEQGx8AqQGpBalhAhHi4uJTOTk5z0+bNs0CxMcGQHIgNSC1IHnG7u5ubiDYw8jICNL0+9+/f+XZ2dn9yJqnTp1ayMTE1AkUY/3///+JV69eOTOCFKSlpbEaGBh0ADUXQTWs//HjRxKIzcHBMQ9IBYLYQE19Fy5cqJg1a9ZvsEaQIAgAnRMApOYDDRAA0k9BYkAgDdTwAeiShJycnI0QIaBTYQwYPXnyZEUWFpZNQL4OVOzKnz9//HJzc+/D1IBoDI0gQWDIsQED4QqI/fLlSx0g/xeITRQIDQ1lBmFcigEiIFGeIjnB4AAAAABJRU5ErkJggg==');
 	width: 14px;
