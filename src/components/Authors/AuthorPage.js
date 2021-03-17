@@ -48,338 +48,258 @@ const AuthorPage = ({ match }) => {
 	const [userLikedQuotes, setUserLikedQuotes] = useState([]);
 
 	const user = JSON.parse(localStorage.getItem('userState'));
-	/* 
-        authorInfo: {
-            GRMember,
-            placeOfBirth,
-            dateOfBirth,
-            influences: [{
-                id,
-                name,
-            }],
-            website,
-            twitter,
-            genre,
-            memberSince,
-            description,
-            profilePicture,
-            numberOfRatings,
-            numberOfReviews,
-            averageRating,
-            followers: [{
-                id,
-                name,
-                profilePicture,
-            }],
-            mostFollowedPosition,
-            reviewerPosition,
-            usersWhoHaveAsFavorite,
-            numberOfReadBooks,
-            numberOfToReadBooks,
-            numberOfReadingBooks,
-            numberOfFavoriteBooks,
-            friends: [{
-                id,
-                name,
-                profilePicture,
-                numberOfBooks,
-                numberOfFriends,
-            }],
-            booksByAuthor: [{
-                id,
-                title,
-                series,
-                seriesInstance,
-                cover,
-                userStatus,
-                userRating,
-                averageRating,
-                ratings,
-                publishedYear,
-                editions,
-                numberOfReviews,
-            }],
-            seriesByAuthor: [{
-                title,
-                books: [{
-                    id,
-                    title,
-                    seriesInstance,
-                    cover,
-                }],
-                averageRating,
-                numberOfRatings,
-            }],
-            relatedNews: [{
-                id,
-                title,
-                content,
-                numberOfLikes,
-				numberOfComments,
-                image,
-            }],
-            quotes: [{
-                id,
-                content,
-                bookTitle,
-                tags,
-                usersWhoLiked,
-            }],
-            favoriteAuthors: [{
-                id,
-                name,
-				image,
-                bestBookId,
-                bestBookTitle,
-            }],
-        }
-    */
 
 	useEffect(() => {
-		//const authorObject = await Firebase...
-		const authorObject = {
-			GRMember: true,
-			placeOfBirth: 'San Antonio, Texas, The United States',
-			dateOfBirth: new Date(1965, 10, 4),
-			influences: [
-				{
-					id: '132',
-					name: 'Charles Dickens',
-				},
-				{
-					id: '132',
-					name: 'J.K. Rowling',
-				},
-				{
-					id: '132',
-					name: 'Victor Hugo',
-				},
-			],
-			website: 'http://www.rickriordan.com/',
-			twitter: 'camphalfblood',
-			genre: ['childre', 'science-fiction-&-fantasy'],
-			memberSince: new Date(2013, 8, 10),
-			description: `
-				Rick Riordan is the #1 New York Times bestselling author of many books, including the Percy Jackson series. You can follow him on Twitter and via his official website.
-				Riordan's first full-length novel was Big Red Tequila, which became the first book in the Tres Navarre series. His big breakthrough was The Lightning Thief (2005), the first novel in the five-volume Percy Jackson and the Olympians series, which placed a group of modern-day adolescents in a Greco-Roman mythological setting. Since then, Riordan has written The Kane Chronicles trilogy and The Heroes of Olympus series. The Kane Chronicles (2010-2012) focused on Egyptian mythology; The Heroes of Olympus was the sequel to the Percy Jackson series. Riordan also helped Scholastic Press develop The 39 Clues series and its spinoffs, and penned its first book, The Maze of Bones (2008). His most recent publications are three books in the Magnus Chase and the Gods of Asgard series, based on Norse mythology. The first book of his The Trials of Apollo series, The Hidden Oracle, was released in May 2016.
-				`,
-			profilePicture:
-				'https://images.gr-assets.com/authors/1608906571p5/15872.jpg',
-			numberOfRatings: 262,
-			numberOfReviews: 182,
-			averageRating: 4.55098,
-			followers: [],
-			mostFollowedPosition: 5,
-			reviewerPosition: 30,
-			usersWhoHaveAsFavorite: ['kaasaa', 'aba', 'lua'],
-			numberOfReadBooks: 210,
-			numberOfToReadBooks: 0,
-			numberOfReadingBooks: 3,
-			numberOfFavoriteBooks: 40,
-			friends: [
-				{
-					id: '1256',
-					name: 'Mark Lawrence',
-					profilePicture:
-						'https://images.gr-assets.com/users/1442536170p2/4508542.jpg',
-					numberOfBooks: 888,
-					numberOfFriends: 3876,
-				},
-				{
-					id: '1256',
-					name: 'Neil Shusterman',
-					profilePicture:
-						'https://images.gr-assets.com/users/1442449838p2/5092518.jpg',
-					numberOfBooks: 97,
-					numberOfFriends: 1125,
-				},
-				{
-					id: '1256',
-					name: 'Geoff',
-					profilePicture:
-						'https://images.gr-assets.com/users/1409839406p2/10057468.jpg',
-					numberOfBooks: 11,
-					numberOfFriends: 64,
-				},
-				{
-					id: '1256',
-					name: 'Cinda',
-					profilePicture:
-						'https://images.gr-assets.com/users/1442456431p2/1258344.jpg',
-					numberOfBooks: 508,
-					numberOfFriends: 2034,
-				},
-				{
-					id: '1256',
-					name: 'Sarwat Chadda',
-					profilePicture:
-						'https://images.gr-assets.com/users/1579381881p2/108845495.jpg',
-					numberOfBooks: 46,
-					numberOfFriends: 134,
-				},
-				{
-					id: '1256',
-					name: 'Leigh Bardugo',
-					profilePicture:
-						'https://images.gr-assets.com/users/1534446092p2/657056.jpg',
-					numberOfBooks: 42,
-					numberOfFriends: 4937,
-				},
-				{
-					id: '1256',
-					name: 'Elizabeth',
-					profilePicture:
-						'https://images.gr-assets.com/users/1207771377p2/717971.jpg',
-					numberOfBooks: 270,
-					numberOfFriends: 716,
-				},
-				{
-					id: '1256',
-					name: 'Gennifer Choldenko',
-					numberOfBooks: 1,
-					numberOfFriends: 164,
-				},
-			],
-			booksByAuthor: Array(20).fill({
-				id: '456',
-				title: 'The Lightning Thief',
-				series: 'Percy Jackson and the Olympians',
-				seriesInstance: 1,
-				userStatus: 'read',
-				userRating: 3,
-				averageRating: 4.26,
-				ratings: 2106769,
-				publishedYear: 2005,
-				editions: 239,
-				numberOfReviews: 250,
-			}),
-			seriesByAuthor: Array(15).fill({
-				title: 'The Heroes of Olympus',
-				books: [
+		const getAuthorInfo = async () => {
+			const authorObject = await Firebase.getAuthorInfoForAuthorPage(
+				user !== null ? user.userUID : null,
+				authorId
+			);
+			/*const authorObject = {
+				GRMember: true,
+				placeOfBirth: 'San Antonio, Texas, The United States',
+				dateOfBirth: new Date(1965, 10, 4),
+				influences: [
 					{
-						id: '1',
-						title: 'The Son of Neptune',
-						seriesInstance: 2,
-						cover:
-							'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1464201114l/9520360._SY75_.jpg',
+						id: '132',
+						name: 'Charles Dickens',
 					},
 					{
-						id: '2',
-						title: 'The House of Hades',
-						seriesInstance: 4,
-						cover:
-							'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1464201430l/12127810._SY75_.jpg',
+						id: '132',
+						name: 'J.K. Rowling',
 					},
 					{
-						id: '3',
-						title: 'The Olympian Blood',
-						seriesInstance: 5,
-						cover:
-							'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1464201441l/18705209._SY75_.jpg',
-					},
-					{
-						id: '4',
-						title: 'The Lost Hero',
-						seriesInstance: 1,
-						cover:
-							'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1464201003l/7736182._SY75_.jpg',
-					},
-					{
-						id: '5',
-						title: 'The Mark of Athena',
-						seriesInstance: 3,
-						cover:
-							'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1464201354l/12127750._SY75_.jpg',
+						id: '132',
+						name: 'Victor Hugo',
 					},
 				],
-				averageRating: 4.32,
-				numberOfRatings: 5000000,
-			}),
-			relatedNews: Array(7).fill({
-				id: '24',
-				title: '7 Books Hitting Shelves This Week',
-				content:
-					"Need another excuse to go to the bookstore this week? We've got you covered with the buzziest new releases of the day.\nTo create our list, we focused on the books Goodreads members can't wait to read, which we measure by how many times a book has been added to Want to Read shelves. All these top titles are now available in the United States! Which ones catch your eye?",
-				numberOfLikes: 36,
-				image: 'https://images.gr-assets.com/blogs/1565145045p8/1673.jpg',
-			}),
-			quotes: Array(20).fill({
-				id: '15',
-				content:
-					'With great power... comes great need to take a nap. Wake me up later.',
-				bookTitle: 'The Last Olympian',
-				tags: ['nico'],
-				usersWhoLiked: ['kimberly'],
-			}),
-			favoriteAuthors: [
-				{
-					id: '20',
-					name: 'Suzane Collins',
-					bestBookId: '14',
-					bestBookTitle: 'The Hunger Games',
-				},
-				{
-					id: '20',
-					name: 'Jonathan Straud',
-					image: 'https://images.gr-assets.com/authors/1562922774p2/33467.jpg',
-					bestBookId: '14',
-					bestBookTitle: 'The Amulet',
-				},
-				{
-					id: '20',
-					name: 'Eoin Colfer',
-					image: 'https://images.gr-assets.com/authors/1254336426p2/10896.jpg',
-					bestBookId: '14',
-					bestBookTitle: 'Artemis Fowl',
-				},
-				{
-					id: '20',
-					name: 'Margareth Atwood',
-					bestBookId: '14',
-					bestBookTitle: 'The Handmaidens Tale',
-				},
-				{
-					id: '20',
-					name: 'Ridley Pearson',
-					image: 'https://images.gr-assets.com/authors/1263049167p2/6244.jpg',
-					bestBookId: '14',
-					bestBookTitle: 'Disney After Dark',
-				},
-				{
-					id: '20',
-					name: 'Mo Willems',
-					image: 'https://images.gr-assets.com/authors/1199684071p2/33274.jpg',
-					bestBookId: '14',
-					bestBookTitle: 'Dont let me go',
-				},
-				{
-					id: '20',
-					name: 'Erin Hunter',
-					image: 'https://images.gr-assets.com/authors/1318547591p2/27498.jpg',
-					bestBookId: '14',
-					bestBookTitle: 'Into the Unknown',
-				},
-			],
+				website: 'http://www.rickriordan.com/',
+				twitter: 'camphalfblood',
+				genre: ['childre', 'science-fiction-&-fantasy'],
+				memberSince: new Date(2013, 8, 10),
+				description: `
+					Rick Riordan is the #1 New York Times bestselling author of many books, including the Percy Jackson series. You can follow him on Twitter and via his official website.
+					Riordan's first full-length novel was Big Red Tequila, which became the first book in the Tres Navarre series. His big breakthrough was The Lightning Thief (2005), the first novel in the five-volume Percy Jackson and the Olympians series, which placed a group of modern-day adolescents in a Greco-Roman mythological setting. Since then, Riordan has written The Kane Chronicles trilogy and The Heroes of Olympus series. The Kane Chronicles (2010-2012) focused on Egyptian mythology; The Heroes of Olympus was the sequel to the Percy Jackson series. Riordan also helped Scholastic Press develop The 39 Clues series and its spinoffs, and penned its first book, The Maze of Bones (2008). His most recent publications are three books in the Magnus Chase and the Gods of Asgard series, based on Norse mythology. The first book of his The Trials of Apollo series, The Hidden Oracle, was released in May 2016.
+					`,
+				profilePicture:
+					'https://images.gr-assets.com/authors/1608906571p5/15872.jpg',
+				numberOfRatings: 262,
+				numberOfReviews: 182,
+				averageRating: 4.55098,
+				followers: [],
+				mostFollowedPosition: 5,
+				reviewerPosition: 30,
+				usersWhoHaveAsFavorite: ['kaasaa', 'aba', 'lua'],
+				numberOfReadBooks: 210,
+				numberOfToReadBooks: 0,
+				numberOfReadingBooks: 3,
+				numberOfFavoriteBooks: 40,
+				friends: [
+					{
+						id: '1256',
+						name: 'Mark Lawrence',
+						profilePicture:
+							'https://images.gr-assets.com/users/1442536170p2/4508542.jpg',
+						numberOfBooks: 888,
+						numberOfFriends: 3876,
+					},
+					{
+						id: '1256',
+						name: 'Neil Shusterman',
+						profilePicture:
+							'https://images.gr-assets.com/users/1442449838p2/5092518.jpg',
+						numberOfBooks: 97,
+						numberOfFriends: 1125,
+					},
+					{
+						id: '1256',
+						name: 'Geoff',
+						profilePicture:
+							'https://images.gr-assets.com/users/1409839406p2/10057468.jpg',
+						numberOfBooks: 11,
+						numberOfFriends: 64,
+					},
+					{
+						id: '1256',
+						name: 'Cinda',
+						profilePicture:
+							'https://images.gr-assets.com/users/1442456431p2/1258344.jpg',
+						numberOfBooks: 508,
+						numberOfFriends: 2034,
+					},
+					{
+						id: '1256',
+						name: 'Sarwat Chadda',
+						profilePicture:
+							'https://images.gr-assets.com/users/1579381881p2/108845495.jpg',
+						numberOfBooks: 46,
+						numberOfFriends: 134,
+					},
+					{
+						id: '1256',
+						name: 'Leigh Bardugo',
+						profilePicture:
+							'https://images.gr-assets.com/users/1534446092p2/657056.jpg',
+						numberOfBooks: 42,
+						numberOfFriends: 4937,
+					},
+					{
+						id: '1256',
+						name: 'Elizabeth',
+						profilePicture:
+							'https://images.gr-assets.com/users/1207771377p2/717971.jpg',
+						numberOfBooks: 270,
+						numberOfFriends: 716,
+					},
+					{
+						id: '1256',
+						name: 'Gennifer Choldenko',
+						numberOfBooks: 1,
+						numberOfFriends: 164,
+					},
+				],
+				booksByAuthor: Array(20).fill({
+					id: '456',
+					title: 'The Lightning Thief',
+					series: 'Percy Jackson and the Olympians',
+					seriesInstance: 1,
+					userStatus: 'read',
+					userRating: 3,
+					averageRating: 4.26,
+					ratings: 2106769,
+					publishedYear: 2005,
+					editions: 239,
+					numberOfReviews: 250,
+				}),
+				seriesByAuthor: Array(15).fill({
+					title: 'The Heroes of Olympus',
+					books: [
+						{
+							id: '1',
+							title: 'The Son of Neptune',
+							seriesInstance: 2,
+							cover:
+								'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1464201114l/9520360._SY75_.jpg',
+						},
+						{
+							id: '2',
+							title: 'The House of Hades',
+							seriesInstance: 4,
+							cover:
+								'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1464201430l/12127810._SY75_.jpg',
+						},
+						{
+							id: '3',
+							title: 'The Olympian Blood',
+							seriesInstance: 5,
+							cover:
+								'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1464201441l/18705209._SY75_.jpg',
+						},
+						{
+							id: '4',
+							title: 'The Lost Hero',
+							seriesInstance: 1,
+							cover:
+								'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1464201003l/7736182._SY75_.jpg',
+						},
+						{
+							id: '5',
+							title: 'The Mark of Athena',
+							seriesInstance: 3,
+							cover:
+								'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1464201354l/12127750._SY75_.jpg',
+						},
+					],
+					averageRating: 4.32,
+					numberOfRatings: 5000000,
+				}),
+				relatedNews: Array(7).fill({
+					id: '24',
+					title: '7 Books Hitting Shelves This Week',
+					content:
+						"Need another excuse to go to the bookstore this week? We've got you covered with the buzziest new releases of the day.\nTo create our list, we focused on the books Goodreads members can't wait to read, which we measure by how many times a book has been added to Want to Read shelves. All these top titles are now available in the United States! Which ones catch your eye?",
+					numberOfLikes: 36,
+					image: 'https://images.gr-assets.com/blogs/1565145045p8/1673.jpg',
+				}),
+				quotes: Array(20).fill({
+					id: '15',
+					content:
+						'With great power... comes great need to take a nap. Wake me up later.',
+					bookTitle: 'The Last Olympian',
+					tags: ['nico'],
+					usersWhoLiked: ['kimberly'],
+				}),
+				favoriteAuthors: [
+					{
+						id: '20',
+						name: 'Suzane Collins',
+						bestBookId: '14',
+						bestBookTitle: 'The Hunger Games',
+					},
+					{
+						id: '20',
+						name: 'Jonathan Straud',
+						image: 'https://images.gr-assets.com/authors/1562922774p2/33467.jpg',
+						bestBookId: '14',
+						bestBookTitle: 'The Amulet',
+					},
+					{
+						id: '20',
+						name: 'Eoin Colfer',
+						image: 'https://images.gr-assets.com/authors/1254336426p2/10896.jpg',
+						bestBookId: '14',
+						bestBookTitle: 'Artemis Fowl',
+					},
+					{
+						id: '20',
+						name: 'Margareth Atwood',
+						bestBookId: '14',
+						bestBookTitle: 'The Handmaidens Tale',
+					},
+					{
+						id: '20',
+						name: 'Ridley Pearson',
+						image: 'https://images.gr-assets.com/authors/1263049167p2/6244.jpg',
+						bestBookId: '14',
+						bestBookTitle: 'Disney After Dark',
+					},
+					{
+						id: '20',
+						name: 'Mo Willems',
+						image: 'https://images.gr-assets.com/authors/1199684071p2/33274.jpg',
+						bestBookId: '14',
+						bestBookTitle: 'Dont let me go',
+					},
+					{
+						id: '20',
+						name: 'Erin Hunter',
+						image: 'https://images.gr-assets.com/authors/1318547591p2/27498.jpg',
+						bestBookId: '14',
+						bestBookTitle: 'Into the Unknown',
+					},
+				],
+			};*/
+			setAuthorInfo(authorObject);
+			setSavingShelves(authorObject.booksByAuthor.map((_book) => false));
+			setAreAddShelfInputSectionsHidden(
+				authorObject.booksByAuthor.map((_book) => true)
+			);
+			setAddShelfInputs(authorObject.booksByAuthor.map((_book) => ''));
+			setExhibitedStarRatings(
+				authorObject.booksByAuthor.map((book) =>
+					book.userRating !== undefined ? book.userRating : 0
+				)
+			);
+			setAreShelfPopupsHidden(authorObject.booksByAuthor.map((_book) => true));
+			setAreShelfPopupsBottomHidden(
+				authorObject.booksByAuthor.map((_book) => true)
+			);
+			setShelfPopupReadingInputs(authorObject.booksByAuthor.map((_book) => ''));
+			setShelfPopupToReadInputs(authorObject.booksByAuthor.map((_book) => ''));
+			setLoaded(true);
 		};
-		setAuthorInfo(authorObject);
-		setSavingShelves(authorObject.booksByAuthor.map((_book) => false));
-		setAreAddShelfInputSectionsHidden(
-			authorObject.booksByAuthor.map((_book) => true)
-		);
-		setAddShelfInputs(authorObject.booksByAuthor.map((_book) => ''));
-		setExhibitedStarRatings(
-			authorObject.booksByAuthor.map((book) =>
-				book.userRating !== undefined ? book.userRating : 0
-			)
-		);
-		setAreShelfPopupsHidden(authorObject.booksByAuthor.map((_book) => true));
-		setAreShelfPopupsBottomHidden(
-			authorObject.booksByAuthor.map((_book) => true)
-		);
-		setShelfPopupReadingInputs(authorObject.booksByAuthor.map((_book) => ''));
-		setShelfPopupToReadInputs(authorObject.booksByAuthor.map((_book) => ''));
-		setLoaded(true);
-	}, []);
+		getAuthorInfo();
+	}, [authorId, user]);
 
 	useEffect(() => {
 		document.addEventListener('click', (event) => {
@@ -397,12 +317,20 @@ const AuthorPage = ({ match }) => {
 	}, []);
 
 	const authorBooksAverageRating =
-		loaded && authorInfo.booksByAuthor.length > 0
-			? authorInfo.booksByAuthor.reduce(
-					(previous, current) =>
-						previous + current.averageRating / authorInfo.booksByAuthor.length,
-					0
-			  )
+		loaded &&
+		authorInfo.booksByAuthor.filter((book) => book.averageRating !== 0).length >
+			0
+			? authorInfo.booksByAuthor
+					.filter((book) => book.averageRating !== 0)
+					.reduce(
+						(previous, current) =>
+							previous +
+							current.averageRating /
+								authorInfo.booksByAuthor.filter(
+									(book) => book.averageRating !== 0
+								).length,
+						0
+					)
 			: 0;
 	const authorBooksTotalRatings = loaded
 		? authorInfo.booksByAuthor.reduce(

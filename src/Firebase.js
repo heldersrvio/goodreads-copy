@@ -2495,22 +2495,21 @@ const Firebase = (() => {
 		const authorFollowerRankingQuery = (
 			await database.collection('authors').get()
 		).docs.sort((a, b) =>
-			a.data().followers === undefined || b.data().undefined
+			a.data().followers === undefined || b.data().followers === undefined
 				? b
 				: b.data().followers.length - a.data().followers.length
 		);
 		const mostFollowedPosition =
-			authorFollowerRankingQuery.docs.map((doc) => doc.id).indexOf(authorId) +
-			1;
+			authorFollowerRankingQuery.map((doc) => doc.id).indexOf(authorId) + 1;
 		const reviewerRankingQuery = await Promise.all(
 			(await database.collection('users').get()).docs
-				.map(async (user) => {
+				.map(async (doc) => {
 					return {
-						id: user,
+						id: doc.id,
 						score: (
 							await database
 								.collection('reviews')
-								.where('user', '==', user)
+								.where('user', '==', doc.id)
 								.where('rating', '>', 0)
 								.get()
 						).docs
@@ -2631,7 +2630,9 @@ const Firebase = (() => {
 						.map((doc) => doc.data().rating)
 						.reduce(
 							(previous, current) =>
-								current !== previous + current / ratingsQuery.length,
+								ratingsQuery.length !== 0
+									? previous + current / ratingsQuery.length
+									: 0,
 							0
 						),
 					ratings: ratingsQuery.length,
@@ -2688,7 +2689,7 @@ const Firebase = (() => {
 									id: bookQuery.docs[0].id,
 									title: bookQuery.docs[0].data().title,
 									seriesInstance: rootBook.data().seriesInstance,
-									cover: bookQuery.data().cover,
+									cover: bookQuery.docs[0].data().cover,
 								};
 							})
 						),
