@@ -26,72 +26,38 @@ const FavoriteAuthorsPage = () => {
 		numberOfFriends,
 	}
 	*/
+
 	const user = JSON.parse(localStorage.getItem('userState'));
 
 	useEffect(() => {
-		if (user.userUID === null || user.userUID === undefined) {
-			history.push({
-				pathname: '/user/sign_in',
-			});
-		} else {
-			const authorArray = [
-				{
-					name: 'Stephen King',
-					id: '123',
-					userId: '123',
-					bestBookId: '123',
-					bestBookTitle: 'The Shining',
-					profilePicture:
-						'https://images.gr-assets.com/authors/1362814142p3/3389.jpg',
-					numberOfBooks: 1768,
-					numberOfShelvedBooks: 15,
-					numberOfMemberReviews: 26710161,
-					numberOfFriends: 2476,
-				},
-				{
-					name: 'Jo Salmson',
-					id: 'ddc',
-					bestBookId: '123',
-					bestBookTitle: 'Tam Tiggarpojken',
-					profilePicture:
-						'https://images.gr-assets.com/authors/1513626882p3/4124390.jpg',
-					numberOfBooks: 43,
-					numberOfMemberReviews: 2213,
-				},
-				{
-					name: 'Rick Riordan',
-					id: 'abc',
-					userId: '123',
-					bestBookId: '123',
-					bestBookTitle: 'The Lightning Thief',
-					profilePicture:
-						'https://images.gr-assets.com/authors/1608906571p3/15872.jpg',
-					numberOfBooks: 151,
-					numberOfShelvedBooks: 424,
-					numberOfMemberReviews: 14676215,
-					numberOfFriends: 11,
-				},
-			];
+		const getAuthorsInfo = async () => {
+			const authorArray = await Firebase.fetchUserFavoriteAuthors(
+				user.userUID,
+				history
+			);
 			setAuthors(authorArray);
 			setOrderInputs(
 				authorArray.map((_author, index) => (index + 1).toString())
 			);
 			setLoaded(true);
-		}
+		};
+		getAuthorsInfo();
 	}, [user.userUID, history]);
 
 	useEffect(() => {
 		const saveFavoriteAuthorList = async () => {
-			setIsSaving(true);
-			await Firebase.changeFavoriteAuthors(
-				user.userUID,
-				authors.map((author) => author.id)
-			);
-			setIsSaving(false);
+			if (loaded) {
+				setIsSaving(true);
+				await Firebase.changeFavoriteAuthors(
+					user.userUID,
+					authors.map((author) => author.id)
+				);
+				setIsSaving(false);
+			}
 		};
 
 		saveFavoriteAuthorList();
-	}, [user.userUID, authors]);
+	}, [user.userUID, authors, loaded]);
 
 	const reorganizeFavoriteAuthorList = () => {
 		if (

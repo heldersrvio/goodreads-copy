@@ -225,3 +225,21 @@
 	line-height: 14px;
 	height: auto;
 }
+
+.favorite-authors-page .save-positions-button {
+	padding: 8px 12px;
+	width: 164.375px;
+	height: 32px;
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 14px;
+	color: var(--goodreads-black);
+	background-color: rgb(244, 241, 234);
+	border-radius: 3px;
+	border: 1px solid rgb(214, 208, 196);
+	margin: 15px 0 30px 0;
+}
+
+.favorite-authors-page .save-positions-button:hover {
+	background-color: rgb(237, 230, 214);
+}
