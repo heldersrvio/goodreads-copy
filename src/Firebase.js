@@ -2856,6 +2856,19 @@ const Firebase = (() => {
 		};
 	};
 
+	const changeFavoriteAuthors = async (userUID, newArray) => {
+		if (userUID !== null && userUID !== undefined) {
+			try {
+				await database
+					.collection('users')
+					.doc(userUID)
+					.set({ favoriteAuthors: newArray }, { merge: true });
+			} catch (error) {
+				console.log(error);
+			}
+		}
+	};
+
 	return {
 		pageGenerator,
 		getAlsoEnjoyedBooksDetailsForBook,
@@ -2901,6 +2914,7 @@ const Firebase = (() => {
 		getBookInfoForListsPage,
 		addRemoveAuthorToFavorites,
 		getAuthorInfoForAuthorPage,
+		changeFavoriteAuthors,
 	};
 })();
 

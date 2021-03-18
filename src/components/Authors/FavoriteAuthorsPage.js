@@ -10,6 +10,8 @@ const FavoriteAuthorsPage = () => {
 	const [loaded, setLoaded] = useState(false);
 	const [authors, setAuthors] = useState([]);
 	const [orderInputs, setOrderInputs] = useState([]);
+	const [isSaving, setIsSaving] = useState(false);
+	const [showingErrorMessage, setShowingErrorMessage] = useState(false);
 	/* 
 	author: {
 		name,
@@ -27,7 +29,7 @@ const FavoriteAuthorsPage = () => {
 	const user = JSON.parse(localStorage.getItem('userState'));
 
 	useEffect(() => {
-		if (user === null || user.userUID === null || user.userUID === undefined) {
+		if (user.userUID === null || user.userUID === undefined) {
 			history.push({
 				pathname: '/user/sign_in',
 			});
@@ -48,7 +50,7 @@ const FavoriteAuthorsPage = () => {
 				},
 				{
 					name: 'Jo Salmson',
-					id: '123',
+					id: 'ddc',
 					bestBookId: '123',
 					bestBookTitle: 'Tam Tiggarpojken',
 					profilePicture:
@@ -58,7 +60,7 @@ const FavoriteAuthorsPage = () => {
 				},
 				{
 					name: 'Rick Riordan',
-					id: '123',
+					id: 'abc',
 					userId: '123',
 					bestBookId: '123',
 					bestBookTitle: 'The Lightning Thief',
@@ -71,10 +73,68 @@ const FavoriteAuthorsPage = () => {
 				},
 			];
 			setAuthors(authorArray);
-			setOrderInputs(authorArray.map((_author, index) => index + 1));
+			setOrderInputs(
+				authorArray.map((_author, index) => (index + 1).toString())
+			);
 			setLoaded(true);
 		}
-	}, [user, history]);
+	}, [user.userUID, history]);
+
+	useEffect(() => {
+		const saveFavoriteAuthorList = async () => {
+			setIsSaving(true);
+			await Firebase.changeFavoriteAuthors(
+				user.userUID,
+				authors.map((author) => author.id)
+			);
+			setIsSaving(false);
+		};
+
+		saveFavoriteAuthorList();
+	}, [user.userUID, authors]);
+
+	const reorganizeFavoriteAuthorList = () => {
+		if (
+			orderInputs.some(
+				(input) => Number.isNaN(parseInt(input)) || parseInt(input) <= 0
+			)
+		) {
+			setShowingErrorMessage(true);
+			setOrderInputs((previous) =>
+				previous.map((_input, index) => (index + 1).toString())
+			);
+		} else {
+			setShowingErrorMessage(false);
+			setAuthors((previous) =>
+				previous
+					.map((_author, index) => index)
+					.sort((a, b) => orderInputs[a] - orderInputs[b])
+					.map((index) => previous[index])
+			);
+		}
+	};
+
+	const removeAuthor = (index) => {
+		if (
+			window.confirm(
+				`Are you sure you want remove ${authors[index].name} from your list of favorite authors?`
+			)
+		) {
+			setAuthors((previous) => previous.filter((_author, i) => i !== index));
+		}
+	};
+
+	const errorMessage = (
+		<div className="error-message-container">
+			<span className="error-message">
+				Please use positive whole numbers for positions.
+			</span>
+			<button
+				className="close-message-button"
+				onClick={(_e) => setShowingErrorMessage(false)}
+			/>
+		</div>
+	);
 
 	const pageHeader = (
 		<h1 className="favorite-authors-page-header">Your Favorite Authors</h1>
@@ -95,23 +155,48 @@ const FavoriteAuthorsPage = () => {
 
 	const generateAuthorCard = (author, index) => {
 		return (
-			<div className="favorite-authors-page-author-card" key={index}>
+			<div
+				className="favorite-authors-page-author-card"
+				key={index}
+				draggable="true"
+				onDragStart={(e) => {
+					e.dataTransfer.setData('index', index.toString());
+				}}
+				onDragOver={(e) => e.preventDefault()}
+				onDrop={(e) => {
+					e.preventDefault();
+					const newIndex = parseInt(e.dataTransfer.getData('index'));
+					if (!Number.isNaN(newIndex)) {
+						setAuthors((previous) =>
+							previous.map((author, i) =>
+								i === newIndex
+									? previous[index]
+									: i === index
+									? previous[newIndex]
+									: author
+							)
+						);
+					}
+				}}
+			>
 				<div className="left-section">
-					<input
-						type="text"
-						className="order-input"
-						value={orderInputs[index]}
-						onChange={(e) =>
-							setOrderInputs((previous) => {
+					{!isSaving ? (
+						<input
+							type="text"
+							className="order-input"
+							value={orderInputs[index]}
+							onChange={(e) => {
 								const newValue = e.target.value;
-								return previous.map((value, i) =>
-									i === index && !parseInt(newValue).isNaN()
-										? parseInt(newValue)
-										: value
-								);
-							})
-						}
-					></input>
+								setOrderInputs((previous) => {
+									return previous.map((value, i) =>
+										i === index ? newValue : value
+									);
+								});
+							}}
+						></input>
+					) : (
+						<div className="loading-spinner"></div>
+					)}
 					<div className="author-details">
 						<a
 							className="author-profile-picture-wrapper"
@@ -176,7 +261,12 @@ const FavoriteAuthorsPage = () => {
 					</div>
 				</div>
 				<div className="right-section">
-					<button className="remove-author-button">Remove</button>
+					<button
+						className="remove-author-button"
+						onClick={() => removeAuthor(index)}
+					>
+						Remove
+					</button>
 				</div>
 			</div>
 		);
@@ -190,7 +280,14 @@ const FavoriteAuthorsPage = () => {
 				<span>Author</span>
 			</div>
 			{authors.map((author, index) => generateAuthorCard(author, index))}
-			<button className="save-positions-button">Save Position Changes</button>
+			<button
+				className="save-positions-button"
+				onClick={() => {
+					reorganizeFavoriteAuthorList();
+				}}
+			>
+				Save Position Changes
+			</button>
 		</div>
 	) : null;
 
@@ -225,6 +322,7 @@ const FavoriteAuthorsPage = () => {
 	return (
 		<div className="favorite-authors-page">
 			<TopBar />
+			{showingErrorMessage ? errorMessage : null}
 			{mainContent}
 			<HomePageFootBar />
 		</div>

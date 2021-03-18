@@ -11,6 +11,14 @@
 	padding: 15px 5px 5px 0;
 }
 
+.favorite-authors-page-main-content-left-section {
+	width: 660px;
+}
+
+.favorite-authors-page-main-content-right-section {
+	width: 100px;
+}
+
 .favorite-authors-page h1 {
 	font-family: var(--merriweather-font);
 	color: var(--goodreads-brown);
@@ -19,13 +27,19 @@
 	line-height: 24px;
 }
 
-.favorite-authors-page .no-authors-yet-message {
+.favorite-authors-page .no-authors-yet-message,
+.favorite-authors-page .reorder-instruction-message {
 	display: block;
 	font-family: var(--lato-font);
 	color: rgb(24, 24, 24);
 	font-size: 14px;
 	line-height: 18px;
 	margin-top: 55px;
+}
+
+.favorite-authors-page .reorder-instruction-message {
+	margin-top: 25px;
+	margin-bottom: 40px;
 }
 
 .favorite-authors-page-main-content-right-section a {
@@ -39,4 +53,175 @@
 .favorite-authors-page-main-content-right-section a:hover {
 	background-color: transparent;
 	text-decoration: underline;
+}
+
+.favorite-authors-page .error-message-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	background-color: rgb(255, 204, 204);
+	width: 45%;
+	border: 2px solid rgb(255, 102, 102);
+	padding: 5px 10px;
+	margin-top: 15px;
+	margin-left: 155px;
+}
+
+.favorite-authors-page .error-message-container span {
+	color: rgb(0, 0, 0);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.favorite-authors-page .error-message-container button {
+	width: 10px;
+	height: 10px;
+	background-image: url('https://s.gr-assets.com/assets/layout/delete-a9a86f59648bf17079954ea50a673dbc.png');
+	background-repeat: no-repeat;
+	padding: 0;
+}
+
+.favorite-authors-page .error-message-container button:hover {
+	background-color: transparent;
+}
+
+.favorite-authors-page .favorite-authors-list .header {
+	width: 100%;
+	border-bottom: 1px solid rgb(215, 215, 215);
+	padding: 5px 0 5px 5px;
+}
+
+.favorite-authors-page .favorite-authors-list .header span {
+	margin-right: 45px;
+	color: var(--goodreads-brown);
+	font-family: var(--lato-font);
+	font-weight: bold;
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.favorite-authors-page-author-card {
+	padding: 20px 0;
+	cursor: move;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	border-bottom: 1px solid rgb(215, 215, 215);
+}
+
+.favorite-authors-page-author-card:hover {
+	background-color: rgb(255, 255, 224);
+}
+
+.favorite-authors-page-author-card a {
+	display: inline;
+	padding: 0;
+}
+
+.favorite-authors-page-author-card .left-section {
+	display: flex;
+	flex-direction: row;
+}
+
+.favorite-authors-page-author-card .left-section input {
+	margin-top: 20px;
+	margin-right: 45px;
+	width: 20px;
+	height: 17px;
+	padding: 4px;
+	border-radius: 3px;
+	border: 1px solid rgb(220, 214, 204);
+	color: var(--goodreads-black);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: normal;
+}
+
+.favorite-authors-page-author-card .left-section input:focus {
+	border-color: rgb(185, 173, 153);
+	box-shadow: rgba(185, 173, 153, 0.5) 0px 0px 4px 0px;
+}
+
+.favorite-authors-page-author-card .left-section .author-details {
+	display: flex;
+	flex-direction: row;
+}
+
+.favorite-authors-page-author-card .left-section .author-details .author-info {
+	display: flex;
+	flex-direction: column;
+}
+
+.favorite-authors-page-author-card
+	.left-section
+	.author-profile-picture-wrapper {
+	margin-right: 15px;
+	display: block;
+	border-radius: 100%;
+	width: 75px;
+	height: 75px;
+	overflow: hidden;
+}
+
+.favorite-authors-page-author-card
+	.left-section
+	.author-profile-picture-wrapper
+	img {
+	width: 75px;
+}
+
+.favorite-authors-page-author-card
+	.left-section
+	.author-details
+	.author-info
+	span {
+	color: rgb(119, 119, 119);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+	margin-bottom: 2px;
+}
+
+.favorite-authors-page-author-card
+	.left-section
+	.author-details
+	.author-info
+	a {
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.favorite-authors-page-author-card
+	.left-section
+	.author-details
+	.author-info
+	a:hover,
+.favorite-authors-page-author-card .right-section button:hover {
+	background-color: transparent;
+	text-decoration: underline;
+}
+
+.favorite-authors-page-author-card
+	.left-section
+	.author-details
+	.author-info
+	.author-name-a {
+	font-family: var(--merriweather-font);
+	color: var(--goodreads-teal);
+	font-size: 16px;
+	line-height: 18px;
+	font-weight: bold;
+}
+
+.favorite-authors-page-author-card .right-section button {
+	color: var(--goodreads-light-gray);
+	font-family: var(--lato-font);
+	padding: 0;
+	font-size: 11px;
+	line-height: 14px;
+	height: auto;
 }
