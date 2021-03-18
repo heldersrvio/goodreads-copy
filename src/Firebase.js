@@ -230,6 +230,12 @@ const Firebase = (() => {
 			return '/user/year_in_books/' + year + '/' + userId;
 		};
 
+		const generateUserFriendsPage = (userId, name) => {
+			return (
+				'/friend/user/' + userId + '-' + name.toLowerCase().replace(/ /g, '-')
+			);
+		};
+
 		return {
 			generateBookPage,
 			generateAddBookPage,
@@ -275,6 +281,7 @@ const Firebase = (() => {
 			generateFavoriteAuthorsPage,
 			generateUserFavoriteAuthorsPage,
 			generateUserYearInBooksPage,
+			generateUserFriendsPage,
 		};
 	})();
 

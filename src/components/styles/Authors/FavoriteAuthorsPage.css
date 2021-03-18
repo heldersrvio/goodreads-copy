@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+
+.favorite-authors-page-main-content {
+	min-height: 500px;
+	margin-left: 155px;
+	margin-right: 355px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	padding: 15px 5px 5px 0;
+}
+
+.favorite-authors-page h1 {
+	font-family: var(--merriweather-font);
+	color: var(--goodreads-brown);
+	font-size: 20px;
+	font-weight: bold;
+	line-height: 24px;
+}
+
+.favorite-authors-page .no-authors-yet-message {
+	display: block;
+	font-family: var(--lato-font);
+	color: rgb(24, 24, 24);
+	font-size: 14px;
+	line-height: 18px;
+	margin-top: 55px;
+}
+
+.favorite-authors-page-main-content-right-section a {
+	display: inline;
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.favorite-authors-page-main-content-right-section a:hover {
+	background-color: transparent;
+	text-decoration: underline;
+}
