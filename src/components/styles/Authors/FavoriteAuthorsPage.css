@@ -243,3 +243,10 @@
 .favorite-authors-page .save-positions-button:hover {
 	background-color: rgb(237, 230, 214);
 }
+
+.favorite-authors-page img.loading-spinner {
+	margin-top: 20px;
+	margin-right: 45px;
+	width: 16px;
+	height: 16px;
+}

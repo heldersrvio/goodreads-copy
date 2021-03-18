@@ -161,7 +161,13 @@ const FavoriteAuthorsPage = () => {
 							}}
 						></input>
 					) : (
-						<div className="loading-spinner"></div>
+						<img
+							className="loading-spinner"
+							src={
+								'https://s.gr-assets.com/assets/loading-45f04d682f1e9151cf1e6fb18a1bde21.gif'
+							}
+							alt="Loading"
+						/>
 					)}
 					<div className="author-details">
 						<a
