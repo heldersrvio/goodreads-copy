@@ -26,6 +26,7 @@ import AuthorPage from './components/Authors/AuthorPage';
 import FavoriteAuthorsPage from './components/Authors/FavoriteAuthorsPage';
 import FavoriteAuthorsForUserPage from './components/Authors/FavoriteAuthorsForUserPage';
 import NotificationsPage from './components/Dashboard/NotificationsPage';
+import AccountSettingsPage from './components/Dashboard/AccountSettingsPage';
 
 const store = createStore(reducer.userReducer);
 
@@ -88,6 +89,7 @@ ReactDOM.render(
 						component={FavoriteAuthorsForUserPage}
 					/>
 					<Route path="/notifications" component={NotificationsPage} />
+					<Route path="/user/edit" component={AccountSettingsPage} />
 					<Route path="/" component={App} />
 				</Switch>
 			</BrowserRouter>
