@@ -2937,10 +2937,22 @@ const Firebase = (() => {
 												.doc(authorQuery.data().user)
 												.get()
 									  ).data().friends.length,
+							numberOfFollowers:
+								authorQuery.data().followers === undefined
+									? 0
+									: authorQuery.data().followers.length,
 						};
 					})
 			);
 		}
+	};
+
+	const getUserInfoForFavoriteAuthorsForUserPage = async (userId) => {
+		const userQuery = await database.collection('users').doc(userId).get();
+		return {
+			firstName: userQuery.data().firstName,
+			authors: await fetchUserFavoriteAuthors(userId, null),
+		};
 	};
 
 	return {
@@ -2990,6 +3002,7 @@ const Firebase = (() => {
 		getAuthorInfoForAuthorPage,
 		changeFavoriteAuthors,
 		fetchUserFavoriteAuthors,
+		getUserInfoForFavoriteAuthorsForUserPage,
 	};
 })();
 
