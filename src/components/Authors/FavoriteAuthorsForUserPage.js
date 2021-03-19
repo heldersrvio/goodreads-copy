@@ -10,24 +10,6 @@ const FavoriteAuthorsForUserPage = ({ match }) => {
 	} = match;
 	const [loaded, setLoaded] = useState(false);
 	const [userInfo, setUserInfo] = useState({});
-	/*
-    userInfo: {
-        firstName,
-        authors: [{
-            profilePicture,
-            id,
-            userId,
-            name,
-            bestBookId,
-            bestBookTitle,
-            rootBookCount,
-            numberOfShelvedBooks,
-            numberOfFriends,
-            numberOfMemberReviews,
-            numberOfFollowers,
-        }]
-    }
-    */
 
 	const user = JSON.parse(localStorage.getItem('userState'));
 
@@ -36,56 +18,6 @@ const FavoriteAuthorsForUserPage = ({ match }) => {
 			setUserInfo(
 				await Firebase.getUserInfoForFavoriteAuthorsForUserPage(userId)
 			);
-			/*setUserInfo({
-                firstName: 'Rick',
-                authors: [
-                    {
-                        id: '1234',
-                        userId: '1234',
-                        name: 'Suzanne Collins',
-                        bestBookId: '123',
-                        bestBookTitle: 'The Hunger Games',
-                        rootBookCount: 31,
-                        numberOfMemberReviews: 16425835,
-                        numberOfFollowers: 86109,
-                    },
-                    {
-                        profilePicture: 'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/authors/1562922774i/33467._UX150_CR0,36,150,150_RO75,1,255,255,255,255,255,255,15_.jpg',
-                        id: '1234',
-                        userId: '1234',
-                        name: 'Jonathan Stroud',
-                        bestBookId: '123',
-                        bestBookTitle: 'The Amulet of Samarkand',
-                        rootBookCount: 49,
-                        numberOfShelvedBooks: 13,
-                        numberOfFriends: 0,
-                        numberOfMemberReviews: 699161,
-                        numberOfFollowers: 7970,
-                    },
-                    {
-                        profilePicture: 'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/authors/1254336426i/10896._UX150_CR0,37,150,150_RO75,1,255,255,255,255,255,255,15_.jpg',
-                        id: '1234',
-                        userId: '1234',
-                        name: 'Eoin Colfer',
-                        bestBookId: '123',
-                        bestBookTitle: 'Artemis Fowl',
-                        rootBookCount: 119,
-                        numberOfMemberReviews: 2284983,
-                        numberOfFollowers: 10235,
-                    },
-                    {
-                        profilePicture: 'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/authors/1263049167i/6244._UX150_CR0,37,150,150_RO75,1,255,255,255,255,255,255,15_.jpg',
-                        id: '1234',
-                        userId: '1234',
-                        name: 'Ridley Pearson',
-                        bestBookId: '123',
-                        bestBookTitle: 'Disney After Dark',
-                        rootBookCount: 117,
-                        numberOfMemberReviews: 510982,
-                        numberOfFollowers: 1748,
-                    },
-                ],
-            });*/
 			setLoaded(true);
 		};
 		getUserInfo();
