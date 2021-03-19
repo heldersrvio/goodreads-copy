@@ -2955,6 +2955,28 @@ const Firebase = (() => {
 		};
 	};
 
+	const getNotificationsForUser = async (userUID, history) => {
+		if (userUID === null || userUID === undefined) {
+			history.push({
+				pathname: '/user/sign_in',
+				state: { error: 'User not logged in' },
+			});
+			return [];
+		} else {
+			const userQuery = await database.collection('users').doc(userUID).get();
+			return userQuery.data().notifications.map((notification) => {
+				return {
+					anchorSrc: notification.anchorSrc,
+					content: notification.content,
+					image: notification.image,
+					name: notification.name,
+					nonAnchorContent: notification.nonAnchorContent,
+					time: notification.time.toDate(),
+				};
+			});
+		}
+	};
+
 	return {
 		pageGenerator,
 		getAlsoEnjoyedBooksDetailsForBook,
@@ -3003,6 +3025,7 @@ const Firebase = (() => {
 		changeFavoriteAuthors,
 		fetchUserFavoriteAuthors,
 		getUserInfoForFavoriteAuthorsForUserPage,
+		getNotificationsForUser,
 	};
 })();
 

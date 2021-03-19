@@ -1,14 +1,27 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { formatDistance } from 'date-fns';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 import Firebase from '../../Firebase';
+import '../styles/Dashboard/NotificationsPage.css';
 
 const NotificationsPage = () => {
+	const history = useHistory();
 	const [loaded, setLoaded] = useState(false);
 	const [notifications, setNotifications] = useState([]);
 
 	const user = JSON.parse(localStorage.getItem('userState'));
+
+	useEffect(() => {
+		const loadNotifications = async () => {
+			setNotifications(
+				await Firebase.getNotificationsForUser(user.userUID, history)
+			);
+			setLoaded(true);
+		};
+		loadNotifications();
+	}, [user.userUID, history]);
 
 	const pageHeader = (
 		<h1 className="notifications-page-header">Notifications</h1>
@@ -44,7 +57,7 @@ const NotificationsPage = () => {
 								)}
 							</span>
 							<span className="time-span">
-								{formatDistance(notification.time.toDate(), new Date(), {
+								{formatDistance(notification.time, new Date(), {
 									addSuffix: true,
 								})}
 							</span>
