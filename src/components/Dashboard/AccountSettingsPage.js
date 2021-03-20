@@ -5,6 +5,7 @@ import Firebase from '../../Firebase';
 import ProfileSettings from './ProfileSettings';
 import Settings from './Settings';
 import FeedUpdateSettings from './FeedUpdateSettings';
+import '../styles/Dashboard/AccountSettingsPage.css';
 
 const AccountSettingsPage = () => {
 	const [loaded, setLoaded] = useState(false);
@@ -133,7 +134,6 @@ const AccountSettingsPage = () => {
 	const mainContentTopSection =
 		loaded && user !== null ? (
 			<div className="account-settings-page-main-content-top-section">
-				{topMessage !== '' ? topMessageDiv : null}
 				{pageHeader}
 				<a
 					href={Firebase.pageGenerator.generateUserPage(
@@ -149,19 +149,19 @@ const AccountSettingsPage = () => {
 	const tabNavigationSection = (
 		<div className="tab-navigation-section">
 			<button
-				className="tab-navigation-button"
+				className={tab === 'profile' ? 'tab-navigation-button selected' : 'tab-navigation-button'}
 				onClick={(_e) => setTab('profile')}
 			>
 				Profile
 			</button>
 			<button
-				className="tab-navigation-button"
+				className={tab === 'settings' ? 'tab-navigation-button selected' : 'tab-navigation-button'}
 				onClick={(_e) => setTab('settings')}
 			>
 				Settings
 			</button>
 			<button
-				className="tab-navigation-button"
+				className={tab === 'feeds' ? 'tab-navigation-button selected' : 'tab-navigation-button'}
 				onClick={(_e) => setTab('feeds')}
 			>
 				Feeds
@@ -195,6 +195,7 @@ const AccountSettingsPage = () => {
 		<div className="account-settings-page">
 			<TopBar />
 			<div className="account-settings-page-main-content">
+				{topMessage !== '' ? topMessageDiv : null}
 				{mainContentTopSection}
 				{tabNavigationSection}
 				{mainForm}

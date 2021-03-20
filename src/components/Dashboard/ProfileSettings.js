@@ -1,9 +1,9 @@
 import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import Firebase from '../../Firebase';
+import '../styles/Dashboard/ProfileSettings.css';
 
 const ProfileSettings = (props) => {
-	// Problem with date inputs
 	const profilePictureFileInput = useRef();
 	const [firstNameInput, setFirstNameInput] = useState(props.firstName);
 	const [middleNameInput, setMiddleNameInput] = useState(props.middleName);
@@ -326,22 +326,26 @@ const ProfileSettings = (props) => {
 				></input>
 				<label htmlFor="show-last-name-preference">Show my last name to:</label>
 				<div className="show-last-name-preference">
-					<input
-						type="radio"
-						name="anyone-radio-input"
-						value="anyone"
-						checked={showLastNameToInput === 'anyone'}
-						onChange={(e) => setShowLastNameToInput(e.target.value)}
-					></input>
-					<label htmlFor="anyone-radio-input">Anyone</label>
-					<input
-						type="radio"
-						name="friends-radio-input"
-						value="friends"
-						checked={showLastNameToInput === 'friends'}
-						onChange={(e) => setShowLastNameToInput(e.target.value)}
-					></input>
-					<label htmlFor="friends-radio-input">Friends</label>
+					<div className="anyone-input-and-label">
+						<input
+							type="radio"
+							name="anyone-radio-input"
+							value="anyone"
+							checked={showLastNameToInput === 'anyone'}
+							onChange={(e) => setShowLastNameToInput(e.target.value)}
+						></input>
+						<label htmlFor="anyone-radio-input">Anyone</label>
+					</div>
+					<div className="friends-input-and-radio">
+						<input
+							type="radio"
+							name="friends-radio-input"
+							value="friends"
+							checked={showLastNameToInput === 'friends'}
+							onChange={(e) => setShowLastNameToInput(e.target.value)}
+						></input>
+						<label htmlFor="friends-radio-input">Friends</label>
+					</div>
 				</div>
 				<label htmlFor="gender">Gender</label>
 				<select
@@ -393,7 +397,7 @@ const ProfileSettings = (props) => {
 					this setting.
 				</span>
 				<label htmlFor="zip-code">
-					ZIP CODE <span className="small-text">(US only)</span>
+					ZIP Code <span className="small-text">(US only)</span>
 				</label>
 				<input
 					className="zip-code-input"
@@ -477,7 +481,7 @@ const ProfileSettings = (props) => {
 					>
 						<option value=""></option>
 						{Array(88)
-							.map((_value, index) => new Date().getFullYear() - 87 + index)
+							.fill(0).map((_value, index) => (new Date()).getFullYear() - 87 + index)
 							.map((year, index) => {
 								return (
 									<option value={year} key={index}>
@@ -489,7 +493,7 @@ const ProfileSettings = (props) => {
 					<select
 						className="birth-month-select"
 						value={
-							dateOfBirthInput !== undefined ? dateOfBirthInput.getMonth() : ''
+							dateOfBirthInput !== undefined ? monthList[dateOfBirthInput.getMonth()] : ''
 						}
 						onChange={(e) =>
 							setDateOfBirthInput((previous) =>
@@ -504,7 +508,7 @@ const ProfileSettings = (props) => {
 						}
 					>
 						<option value=""></option>
-						{Array(12)
+						{Array(12).fill(0)
 							.map((_value, index) => monthList[index])
 							.map((month, index) => {
 								return (
@@ -517,7 +521,7 @@ const ProfileSettings = (props) => {
 					<select
 						className="birth-day-select"
 						value={
-							dateOfBirthInput !== undefined ? dateOfBirthInput.getMonth() : ''
+							dateOfBirthInput !== undefined ? dateOfBirthInput.getDate() : ''
 						}
 						onChange={(e) =>
 							setDateOfBirthInput((previous) =>
@@ -532,7 +536,7 @@ const ProfileSettings = (props) => {
 						}
 					>
 						<option value=""></option>
-						{Array(31).map((_value, index) => (
+						{Array(31).fill(0).map((_value, index) => (
 							<option value={index + 1}>{index + 1}</option>
 						))}
 					</select>

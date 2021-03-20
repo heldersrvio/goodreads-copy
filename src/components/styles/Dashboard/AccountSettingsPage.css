@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+
+.account-settings-page-main-content {
+    margin: 0 155px;
+    padding-top: 15px;
+}
+
+.account-settings-page-main-content-top-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.account-settings-page-main-content-top-section a {
+    display: inline;
+    padding: 0;
+    color: var(--goodreads-teal);
+    font-family: var(--merriweather-font);
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 24px;
+}
+
+.account-settings-page-main-content-top-section a:hover {
+    background-color: transparent;
+    text-decoration: underline;
+}
+
+.account-settings-page h1 {
+    color: var(--goodreads-brown);
+    font-family: var(--merriweather-font);
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 24px;
+}
+
+.account-settings-page .tab-navigation-section {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    padding: 0 5px;
+    border-bottom: 1px solid rgb(216, 216, 216);
+}
+
+.account-settings-page .tab-navigation-section button {
+    color: var(--goodreads-brown);
+    font-family: var(--lato-font);
+    font-size: 14px;
+    line-height: 18px;
+    height: 30px;
+    padding: 5px 10px;
+    margin-right: 5px;
+    border-bottom: 2px solid transparent;
+}
+
+.account-settings-page .tab-navigation-section button:hover {
+    background-color: transparent;
+    border-bottom-color: rgb(0, 0, 0);
+}
+
+.account-settings-page .tab-navigation-section button.selected {
+    border-bottom-color: rgb(0, 0, 0);
+}
