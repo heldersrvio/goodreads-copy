@@ -240,6 +240,10 @@ const Firebase = (() => {
 			);
 		};
 
+		const generateChangePasswordPage = () => {
+			return '/user/change_password';
+		};
+
 		return {
 			generateBookPage,
 			generateAddBookPage,
@@ -287,6 +291,7 @@ const Firebase = (() => {
 			generateUserFavoriteAuthorsPage,
 			generateUserYearInBooksPage,
 			generateUserFriendsPage,
+			generateChangePasswordPage,
 		};
 	})();
 
