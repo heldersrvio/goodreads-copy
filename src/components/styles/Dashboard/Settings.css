@@ -1,0 +1,207 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+
+form.settings {
+	padding-top: 30px;
+}
+
+form.settings label {
+	display: block;
+	color: rgb(24, 24, 24);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+}
+
+form.settings b {
+	font-weight: bold;
+}
+
+form.settings h2 {
+	color: var(--goodreads-brown);
+	font-family: var(--lato-font);
+	font-size: 18px;
+	line-height: 18px;
+	margin-bottom: 20px;
+}
+
+form.settings a,
+form.settings button {
+	display: inline;
+	padding: 0;
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+	background-color: transparent;
+}
+
+form.settings a:hover,
+form.settings button:hover {
+	text-decoration: underline;
+}
+
+form.settings label .red-asterisk {
+	color: rgb(255, 0, 0);
+	font-size: 18px;
+}
+
+form.settings label .small-text {
+	color: var(--goodreads-light-gray);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+	margin-left: 20px;
+}
+
+form.settings input[type='text'] {
+	padding: 4px;
+	height: 17px;
+	border-radius: 3px;
+	border: 1px solid rgb(220, 214, 204);
+	color: rgb(51, 51, 51);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	margin-bottom: 20px;
+	margin-left: 3px;
+	margin-top: 3px;
+}
+
+form.settings input[type='text']:focus {
+	border-color: rgb(185, 173, 153);
+	box-shadow: rgba(185, 173, 153, 0.5) 0px 0px 4px 0px;
+}
+
+form.settings input[name='email'] {
+	width: 252px;
+}
+
+form.settings input[type='radio'] {
+	height: 12px;
+	width: 12px;
+}
+
+form.settings span.password {
+	display: flex;
+	flex-direction: row;
+	font-family: var(--lato-font);
+	font-size: 12px;
+	color: rgb(24, 24, 24);
+	line-height: 18px;
+	margin-bottom: 40px;
+}
+
+form.settings span.password a {
+	color: var(--goodreads-teal);
+	margin-left: 3px;
+}
+
+form.settings .privacy-info-span button {
+	width: 54px;
+	margin: 0;
+	color: var(--goodreads-teal);
+}
+
+form.settings .privacy-info-span button:hover {
+	text-decoration: underline;
+}
+
+form.settings .privacy-info-span,
+form.settings .friends-requests-info-span {
+	display: block;
+	width: 625px;
+	color: rgb(24, 24, 24);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+	margin-bottom: 20px;
+}
+
+form.settings .who-can-view-my-profile {
+	display: flex;
+	flex-direction: column;
+	padding-left: 10px;
+	margin-bottom: 20px;
+}
+
+form.settings .who-can-view-my-profile label,
+form.settings .email-visible-to label {
+	display: inline;
+	margin-left: 5px;
+}
+
+form.settings .email-visible-to {
+	padding-left: 3px;
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 40px;
+}
+
+form.settings .challenge-question-example-span {
+	color: var(--goodreads-light-gray);
+	font-family: var(--lato-font);
+	font-size: 11px;
+	line-height: 14px;
+}
+
+form.settings input[name='challenge-question'] {
+	display: block;
+	width: 172px;
+}
+
+form.settings .require-challenge-answer-button {
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+	margin-bottom: 20px;
+}
+
+form.settings label[for='challenge-answer'] {
+	margin-top: 50px;
+}
+
+form.settings .challenge-answer-span {
+	color: var(--goodreads-light-gray);
+	font-family: var(--lato-font);
+	font-size: 11px;
+	line-height: 14px;
+}
+
+form.settings input.challenge-answer-input {
+	display: block;
+	padding: 1px;
+	width: 130px;
+	height: 13px;
+	font-size: 11px;
+	line-height: normal;
+}
+
+form.settings input[type='submit'] {
+	display: block;
+	padding: 8px 12px;
+	width: 158px;
+	height: 32px;
+	border-radius: 3px;
+	border: 1px solid rgb(214, 208, 196);
+	background-color: rgb(244, 241, 234);
+	color: rgb(51, 51, 51);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 14px;
+	margin-top: 10px;
+	margin-bottom: 50px;
+}
+
+form.settings input[type='submit']:hover {
+	background-color: rgb(237, 230, 214);
+}
+
+form.settings .delete-account-a {
+	display: block;
+	color: rgb(255, 0, 0);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+	background-color: transparent;
+	margin-bottom: 30px;
+}

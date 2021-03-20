@@ -2,80 +2,251 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
 
 form.profile-settings {
-    padding-top: 30px;
+	padding-top: 30px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
 }
 
 form.profile-settings label {
-    display: block;
-    color: rgb(24, 24, 24);
-    font-family: var(--lato-font);
-    font-size: 12px;
-    line-height: 18px;
+	display: block;
+	color: rgb(24, 24, 24);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+}
+
+form.profile-settings img {
+	height: 89px;
 }
 
 form.profile-settings label .red-asterisk {
-    color: rgb(255, 0, 0);
-    font-size: 18px;
+	color: rgb(255, 0, 0);
+	font-size: 18px;
 }
 
-form.profile-settings input[type="text"] {
-    padding: 4px;
-    height: 17px;
-    border-radius: 3px;
-    border: 1px solid rgb(220, 214, 204);
-    color: rgb(51, 51, 51);
-    font-family: var(--lato-font);
-    font-size: 14px;
-    margin-bottom: 20px;
-    margin-left: 3px;
-    margin-top: 3px;
+form.profile-settings input[type='text'] {
+	padding: 4px;
+	height: 17px;
+	border-radius: 3px;
+	border: 1px solid rgb(220, 214, 204);
+	color: rgb(51, 51, 51);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	margin-bottom: 20px;
+	margin-left: 3px;
+	margin-top: 3px;
 }
 
-form.profile-settings input[type="text"]:focus {
-    border-color: rgb(185, 173, 153);
-    box-shadow: rgba(185, 173, 153, 0.5) 0px 0px 4px 0px;
+form.profile-settings input[type='text']:focus {
+	border-color: rgb(185, 173, 153);
+	box-shadow: rgba(185, 173, 153, 0.5) 0px 0px 4px 0px;
 }
 
-form.profile-settings input[type="radio"] {
-    height: 12px;
-    width: 12px;
-    margin-right: 5px;
-    margin-left: 3px;
-    margin-top: 3px;
+form.profile-settings input[type='radio'] {
+	height: 12px;
+	width: 12px;
+	margin-right: 5px;
+	margin-left: 3px;
+	margin-top: 3px;
 }
 
 form.profile-settings select {
-    height: 18px;
-    font-size: 11px;
-    margin-left: 3px;
-    margin-top: 3px;
+	height: 18px;
+	font-size: 11px;
+	margin-left: 3px;
+	margin-top: 3px;
 }
 
-form.profile-settings .first-name-input, form.profile-settings .middle-name-input, form.profile-settings .last-name-input, form.profile-settings .city-input {
-    width: 252px;
+form.profile-settings .first-name-input,
+form.profile-settings .middle-name-input,
+form.profile-settings .last-name-input,
+form.profile-settings .city-input,
+form.profile-settings .custom-gender-input {
+	width: 252px;
 }
 
 form.profile-settings .show-last-name-preference {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 20px;
 }
 
 form.profile-settings .show-last-name-preference label {
-    display: inline;
+	display: inline;
 }
 
 form.profile-settings .gender-select {
-    margin-bottom: 20px;
+	margin-bottom: 20px;
 }
 
 form.profile-settings .gender-privacy-note {
-    display: block;
-    color: rgb(118, 118, 118);
-    font-family: var(--lato-font);
-    font-size: 12px;
-    line-height: 13px;
-    margin-top: 3px;
-    margin-bottom: 20px;
-    margin-left: 3px;
+	display: block;
+	color: rgb(118, 118, 118);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 13px;
+	margin-top: 3px;
+	margin-bottom: 20px;
+	margin-left: 3px;
+}
+
+form.profile-settings .custom-gender-section {
+	margin-left: 5px;
+	padding-left: 15px;
+	border-left: 2px solid rgb(244, 241, 234);
+	margin-bottom: 15px;
+}
+
+form.profile-settings .zip-code-input {
+	width: 84px;
+}
+
+form.profile-settings .state-province-code-input {
+	width: 60px;
+}
+
+form.profile-settings .country-select,
+form.profile-settings .location-privacy-select {
+	margin-bottom: 20px;
+}
+
+form.profile-settings label .small-text,
+form.profile-settings label .set-birthday-to-blank-button {
+	display: inline;
+	padding: 0;
+	color: var(--goodreads-light-gray);
+	font-family: var(--lato-font);
+	font-size: 11px;
+	line-height: 14px;
+	background-color: transparent;
+}
+
+form.profile-settings label .set-birthday-to-blank-button {
+	margin-left: 3px;
+}
+
+form.profile-settings label .set-birthday-to-blank-button:hover {
+	text-decoration: underline;
+}
+
+form.profile-settings .date-of-birth,
+form.profile-settings .age-and-birthday-privacy-select {
+	margin-bottom: 20px;
+}
+
+form.profile-settings .date-of-birth select {
+	margin-right: 5px;
+}
+
+form.profile-settings .website-input,
+form.profile-settings .interests-input,
+form.profile-settings .type-of-books-input {
+	width: 500px;
+}
+
+form.profile-settings .interests-input {
+	display: block;
+}
+
+form.profile-settings .interests-note {
+	font-family: var(--lato-font);
+	color: rgb(24, 24, 24);
+	font-size: 11px;
+	line-height: 14px;
+}
+
+form.profile-settings textarea {
+	padding: 2px;
+	width: 500px;
+	height: 195px;
+	border: 1px solid rgb(220, 214, 204);
+	border-radius: 3px;
+	color: rgb(51, 51, 51);
+	font-family: var(--lato-font);
+	font-size: 11px;
+	line-height: normal;
+	margin-bottom: 40px;
+	margin-top: 5px;
+}
+
+form.profile-settings textarea:focus {
+	border-color: rgb(185, 173, 153);
+	box-shadow: rgba(185, 173, 153, 0.5) 0px 0px 4px 0px;
+}
+
+form.profile-settings input[type='submit'] {
+	display: block;
+	padding: 8px 12px;
+	width: 151px;
+	height: 32px;
+	border-radius: 3px;
+	border: 1px solid rgb(214, 208, 196);
+	background-color: rgb(244, 241, 234);
+	color: rgb(51, 51, 51);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 14px;
+	margin-bottom: 40px;
+}
+
+form.profile-settings input[type='submit']:hover,
+form.profile-settings .right-section .upload-photo-button:hover {
+	background-color: rgb(237, 230, 214);
+}
+
+form.profile-settings .right-section {
+	margin-right: 40px;
+}
+
+form.profile-settings .right-section a {
+	display: inline;
+	padding: 0;
+}
+
+form.profile-settings .right-section img {
+	margin-bottom: 10px;
+}
+
+form.profile-settings .right-section input {
+	font-size: 11px;
+}
+
+form.profile-settings .right-section .upload-photo-button {
+	padding: 4px 12px;
+	width: 92.4px;
+	height: 21px;
+	border-radius: 3px;
+	border: 1px solid rgb(214, 208, 196);
+	background-color: rgb(244, 241, 234);
+	color: rgb(51, 51, 51);
+	font-family: var(--lato-font);
+	font-size: 11px;
+	line-height: 11px;
+	margin: 10px 0;
+	margin-bottom: 20px;
+}
+
+form.profile-settings .delete-account-a {
+	color: rgb(255, 0, 0);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+	background-color: transparent;
+}
+
+form.profile-settings .delete-account-a:hover,
+form.profile-settings .delete-change-profile-picture-button:hover {
+	text-decoration: underline;
+}
+
+form.profile-settings .delete-change-profile-picture-button {
+	color: var(--goodreads-teal);
+	padding: 0;
+	height: auto;
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+	background-color: transparent;
+	margin-bottom: 20px;
 }

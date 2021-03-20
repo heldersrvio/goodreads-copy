@@ -2,63 +2,97 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
 
 .account-settings-page-main-content {
-    margin: 0 155px;
-    padding-top: 15px;
+	margin: 0 155px;
+	padding-top: 15px;
 }
 
 .account-settings-page-main-content-top-section {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
 }
 
 .account-settings-page-main-content-top-section a {
-    display: inline;
-    padding: 0;
-    color: var(--goodreads-teal);
-    font-family: var(--merriweather-font);
-    font-size: 14px;
-    font-weight: bold;
-    line-height: 24px;
+	display: inline;
+	padding: 0;
+	color: var(--goodreads-teal);
+	font-family: var(--merriweather-font);
+	font-size: 14px;
+	font-weight: bold;
+	line-height: 24px;
 }
 
 .account-settings-page-main-content-top-section a:hover {
-    background-color: transparent;
-    text-decoration: underline;
+	background-color: transparent;
+	text-decoration: underline;
 }
 
 .account-settings-page h1 {
-    color: var(--goodreads-brown);
-    font-family: var(--merriweather-font);
-    font-size: 20px;
-    font-weight: bold;
-    line-height: 24px;
+	color: var(--goodreads-brown);
+	font-family: var(--merriweather-font);
+	font-size: 20px;
+	font-weight: bold;
+	line-height: 24px;
 }
 
 .account-settings-page .tab-navigation-section {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: row;
-    padding: 0 5px;
-    border-bottom: 1px solid rgb(216, 216, 216);
+	margin-top: 20px;
+	display: flex;
+	flex-direction: row;
+	padding: 0 5px;
+	border-bottom: 1px solid rgb(216, 216, 216);
 }
 
 .account-settings-page .tab-navigation-section button {
-    color: var(--goodreads-brown);
-    font-family: var(--lato-font);
-    font-size: 14px;
-    line-height: 18px;
-    height: 30px;
-    padding: 5px 10px;
-    margin-right: 5px;
-    border-bottom: 2px solid transparent;
+	color: var(--goodreads-brown);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 18px;
+	height: 30px;
+	padding: 5px 10px;
+	margin-right: 5px;
+	border-bottom: 2px solid transparent;
 }
 
 .account-settings-page .tab-navigation-section button:hover {
-    background-color: transparent;
-    border-bottom-color: rgb(0, 0, 0);
+	background-color: transparent;
+	border-bottom-color: rgb(0, 0, 0);
 }
 
 .account-settings-page .tab-navigation-section button.selected {
-    border-bottom-color: rgb(0, 0, 0);
+	border-bottom-color: rgb(0, 0, 0);
+}
+
+.account-settings-saved-message {
+	padding: 5px 10px;
+	width: 600px;
+	height: 18px;
+	border: 2px solid;
+	color: rgb(81, 71, 33);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+	margin-bottom: 40px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.account-settings-saved-message button {
+	width: 10px;
+	height: 10px;
+	background-image: url('https://s.gr-assets.com/assets/layout/delete-a9a86f59648bf17079954ea50a673dbc.png');
+	padding: 0;
+	background-color: transparent;
+}
+
+.account-settings-saved-message.yellow {
+	background-color: rgb(255, 251, 217);
+	border-color: rgb(248, 227, 149);
+}
+
+.account-settings-saved-message.red {
+	background-color: rgb(255, 204, 204);
+	border-color: rgb(255, 102, 102);
 }

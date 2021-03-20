@@ -7,6 +7,8 @@ import Settings from './Settings';
 import FeedUpdateSettings from './FeedUpdateSettings';
 import '../styles/Dashboard/AccountSettingsPage.css';
 
+// Missing data fetching from database
+
 const AccountSettingsPage = () => {
 	const [loaded, setLoaded] = useState(false);
 	const [userInfo, setUserInfo] = useState({});
@@ -35,6 +37,8 @@ const AccountSettingsPage = () => {
 					locationViewableBy: 'everyone',
 					dateOfBirth: new Date(1991, 10, 12),
 					ageAndBirthdayPrivacy: 'age-no-one-birthday-no-one',
+					profilePicture:
+						'https://i.pinimg.com/originals/bb/ae/f4/bbaef4e552e27250bfd64aa25c24a8a7.jpg',
 					website: '',
 					interests: '',
 					typeOfBooks: '',
@@ -74,7 +78,7 @@ const AccountSettingsPage = () => {
 		if (
 			settings.friendChallengeAnswerInput.split(' ').length > 1 ||
 			settings.friendChallengeAnswerInput
-				.split()
+				.split('')
 				.some((character) =>
 					[',', '.', ':', '"', "'", '?', '!'].includes(character)
 				)
@@ -102,9 +106,11 @@ const AccountSettingsPage = () => {
 	};
 
 	const deleteProfilePicture = async () => {
-		await Firebase.deleteProfilePicture(user.userUID);
-		setTopMessage('Your photo has been deleted.');
-		setTopMessageType('yellow');
+		if (window.confirm('Are you sure?')) {
+			await Firebase.deleteProfilePicture(user.userUID);
+			setTopMessage('Your photo has been deleted.');
+			setTopMessageType('yellow');
+		}
 	};
 
 	const moveToProfileTab = () => {
@@ -149,19 +155,31 @@ const AccountSettingsPage = () => {
 	const tabNavigationSection = (
 		<div className="tab-navigation-section">
 			<button
-				className={tab === 'profile' ? 'tab-navigation-button selected' : 'tab-navigation-button'}
+				className={
+					tab === 'profile'
+						? 'tab-navigation-button selected'
+						: 'tab-navigation-button'
+				}
 				onClick={(_e) => setTab('profile')}
 			>
 				Profile
 			</button>
 			<button
-				className={tab === 'settings' ? 'tab-navigation-button selected' : 'tab-navigation-button'}
+				className={
+					tab === 'settings'
+						? 'tab-navigation-button selected'
+						: 'tab-navigation-button'
+				}
 				onClick={(_e) => setTab('settings')}
 			>
 				Settings
 			</button>
 			<button
-				className={tab === 'feeds' ? 'tab-navigation-button selected' : 'tab-navigation-button'}
+				className={
+					tab === 'feeds'
+						? 'tab-navigation-button selected'
+						: 'tab-navigation-button'
+				}
 				onClick={(_e) => setTab('feeds')}
 			>
 				Feeds

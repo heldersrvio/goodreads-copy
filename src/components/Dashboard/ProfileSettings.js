@@ -453,7 +453,10 @@ const ProfileSettings = (props) => {
 					<span>Date of Birth</span>
 					<button
 						className="set-birthday-to-blank-button"
-						onClick={(_e) => setDateOfBirthInput(undefined)}
+						onClick={(e) => {
+							e.preventDefault();
+							setDateOfBirthInput(undefined);
+						}}
 					>
 						{' '}
 						(set all to blank to remove)
@@ -481,7 +484,8 @@ const ProfileSettings = (props) => {
 					>
 						<option value=""></option>
 						{Array(88)
-							.fill(0).map((_value, index) => (new Date()).getFullYear() - 87 + index)
+							.fill(0)
+							.map((_value, index) => new Date().getFullYear() - 87 + index)
 							.map((year, index) => {
 								return (
 									<option value={year} key={index}>
@@ -493,7 +497,9 @@ const ProfileSettings = (props) => {
 					<select
 						className="birth-month-select"
 						value={
-							dateOfBirthInput !== undefined ? monthList[dateOfBirthInput.getMonth()] : ''
+							dateOfBirthInput !== undefined
+								? monthList[dateOfBirthInput.getMonth()]
+								: ''
 						}
 						onChange={(e) =>
 							setDateOfBirthInput((previous) =>
@@ -508,7 +514,8 @@ const ProfileSettings = (props) => {
 						}
 					>
 						<option value=""></option>
-						{Array(12).fill(0)
+						{Array(12)
+							.fill(0)
 							.map((_value, index) => monthList[index])
 							.map((month, index) => {
 								return (
@@ -536,9 +543,13 @@ const ProfileSettings = (props) => {
 						}
 					>
 						<option value=""></option>
-						{Array(31).fill(0).map((_value, index) => (
-							<option value={index + 1}>{index + 1}</option>
-						))}
+						{Array(31)
+							.fill(0)
+							.map((_value, index) => (
+								<option key={index} value={index + 1}>
+									{index + 1}
+								</option>
+							))}
 					</select>
 				</div>
 				<label htmlFor="age-and-birthday-privacy">
@@ -624,25 +635,25 @@ const ProfileSettings = (props) => {
 					onClick={(e) => {
 						e.preventDefault();
 						props.saveProfileSettings({
-							firstNameInput,
-							middleNameInput,
-							lastNameInput,
-							showLastNameToInput,
-							genderInput,
-							customGenderInput,
-							pronounsInput,
-							showGenderToInput,
-							zipCodeInput,
-							cityInput,
-							stateProvinceCodeInput,
-							countryInput,
-							locationViewableByInput,
-							dateOfBirthInput,
-							ageAndBirthdayPrivacyInput,
-							websiteInput,
-							interestsInput,
-							typeOfBooksInput,
-							aboutMeInput,
+							firstName: firstNameInput,
+							middleName: middleNameInput,
+							lastName: lastNameInput,
+							showLastNameTo: showLastNameToInput,
+							gender: genderInput,
+							customGender: customGenderInput,
+							pronouns: pronounsInput,
+							showGenderTo: showGenderToInput,
+							zipCode: zipCodeInput,
+							city: cityInput,
+							stateProvinceCode: stateProvinceCodeInput,
+							country: countryInput,
+							locationViewableBy: locationViewableByInput,
+							dateOfBirth: dateOfBirthInput,
+							ageAndBirthdayPrivacy: ageAndBirthdayPrivacyInput,
+							website: websiteInput,
+							interests: interestsInput,
+							typeOfBooks: typeOfBooksInput,
+							aboutMe: aboutMeInput,
 						});
 					}}
 				></input>
@@ -673,7 +684,8 @@ const ProfileSettings = (props) => {
 						<input type="file" ref={profilePictureFileInput}></input>
 						<button
 							className="upload-photo-button"
-							onClick={(_e) => {
+							onClick={(e) => {
+								e.preventDefault();
 								if (
 									profilePictureFileInput.current !== undefined &&
 									profilePictureFileInput.current !== null
@@ -683,7 +695,9 @@ const ProfileSettings = (props) => {
 									);
 								}
 							}}
-						></button>
+						>
+							Upload Photo
+						</button>
 					</div>
 				)}
 				<a

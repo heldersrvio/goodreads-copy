@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { format } from 'date-fns';
 import PropTypes from 'prop-types';
 import Firebase from '../../Firebase';
+import '../styles/Dashboard/Settings.css';
 
 const Settings = (props) => {
 	const [emailInput, setEmailInput] = useState(props.email);
@@ -38,9 +39,9 @@ const Settings = (props) => {
 				value={emailInput}
 				onChange={(e) => setEmailInput(e.target.value)}
 			></input>
-			<label htmlFor="password"></label>
+			<label htmlFor="password">Password</label>
 			<span className="password">
-				<span>{Array(props.passwordLength).map((_value) => '*')}</span>
+				<span>{Array(props.passwordLength).fill('*')}</span>
 				<a href={Firebase.pageGenerator.generateChangePasswordPage()}>
 					change password
 				</a>
@@ -72,53 +73,65 @@ const Settings = (props) => {
 					<b>Who Can View My Profile:</b>
 				</label>
 				<div className="who-can-view-my-profile">
-					<input
-						type="radio"
-						name="anyone"
-						value="anyone"
-						checked={whoCanViewMyProfileInput === 'anyone'}
-						onChange={(e) => setWhoCanViewMyProfileInput(e.target.value)}
-					></input>
-					<label htmlFor="anyone">anyone</label>
-					<input
-						type="radio"
-						name="goodreads-members"
-						value="goodreads-members"
-						checked={whoCanViewMyProfileInput === 'goodreads-members'}
-						onChange={(e) => setWhoCanViewMyProfileInput(e.target.value)}
-					></input>
-					<label htmlFor="goodreads-members">Goodreads members</label>
-					<input
-						type="radio"
-						name="just-my-friends"
-						value="just-my-friends"
-						checked={whoCanViewMyProfileInput === 'just-my-friends'}
-						onChange={(e) => setWhoCanViewMyProfileInput(e.target.value)}
-					></input>
-					<label htmlFor="just-my-friends">just-my-friends</label>
+					<div className="anyone-input-label">
+						<input
+							type="radio"
+							name="anyone"
+							value="anyone"
+							checked={whoCanViewMyProfileInput === 'anyone'}
+							onChange={(e) => setWhoCanViewMyProfileInput(e.target.value)}
+						></input>
+						<label htmlFor="anyone">anyone</label>
+					</div>
+					<div className="goodreads-members-input-label">
+						<input
+							type="radio"
+							name="goodreads-members"
+							value="goodreads-members"
+							checked={whoCanViewMyProfileInput === 'goodreads-members'}
+							onChange={(e) => setWhoCanViewMyProfileInput(e.target.value)}
+						></input>
+						<label htmlFor="goodreads-members">Goodreads members</label>
+					</div>
+					<div className="just-my-friends-input-label">
+						<input
+							type="radio"
+							name="just-my-friends"
+							value="just-my-friends"
+							checked={whoCanViewMyProfileInput === 'just-my-friends'}
+							onChange={(e) => setWhoCanViewMyProfileInput(e.target.value)}
+						></input>
+						<label htmlFor="just-my-friends">just-my-friends</label>
+					</div>
 				</div>
 				<label htmlFor="email-visible-to">
 					Make my email address visible to:
 				</label>
 				<div className="email-visible-to">
-					<input
-						type="radio"
-						name="friends-friends-requests"
-						value="friends-friends-requests"
-						checked={emailAddressVisibleToInput === 'friends-friends-requests'}
-						onChange={(e) => setEmailAddressVisibleToInput(e.target.value)}
-					></input>
-					<label htmlFor="friends-friends-requests">
-						{'Friends & friend requests'}
-					</label>
-					<input
-						type="radio"
-						name="no-one"
-						value="no-one"
-						checked={emailAddressVisibleToInput === 'no-one'}
-						onChange={(e) => setEmailAddressVisibleToInput(e.target.value)}
-					></input>
-					<label htmlFor="no-one">No one</label>
+					<div className="friends-friends-requests-input-label">
+						<input
+							type="radio"
+							name="friends-friends-requests"
+							value="friends-friends-requests"
+							checked={
+								emailAddressVisibleToInput === 'friends-friends-requests'
+							}
+							onChange={(e) => setEmailAddressVisibleToInput(e.target.value)}
+						></input>
+						<label htmlFor="friends-friends-requests">
+							{'Friends & friend requests'}
+						</label>
+					</div>
+					<div className="no-one-input-label">
+						<input
+							type="radio"
+							name="no-one"
+							value="no-one"
+							checked={emailAddressVisibleToInput === 'no-one'}
+							onChange={(e) => setEmailAddressVisibleToInput(e.target.value)}
+						></input>
+						<label htmlFor="no-one">No one</label>
+					</div>
 				</div>
 			</div>
 			<div className="friends-requests-section">
@@ -161,7 +174,10 @@ const Settings = (props) => {
 				) : null}
 				<button
 					className="require-challenge-answer-button"
-					onChange={(_e) => setHasChallengeAnswer((previous) => !previous)}
+					onClick={(e) => {
+						e.preventDefault();
+						setHasChallengeAnswer((previous) => !previous);
+					}}
 				>
 					{hasChallengeAnswer
 						? "Don't require a challenge answer"
@@ -175,11 +191,11 @@ const Settings = (props) => {
 				onClick={(e) => {
 					e.preventDefault();
 					props.saveAccountSettings({
-						emailInput,
-						whoCanViewMyProfileInput,
-						emailAddressVisibleToInput,
-						friendChallengeQuestionInput,
-						friendChallengeAnswerInput,
+						email: emailInput,
+						whoCanViewMyProfile: whoCanViewMyProfileInput,
+						emailAddressVisibleTo: emailAddressVisibleToInput,
+						friendChallengeQuestion: friendChallengeQuestionInput,
+						friendChallengeAnswer: friendChallengeAnswerInput,
 					});
 				}}
 			></input>
@@ -195,7 +211,7 @@ const Settings = (props) => {
 
 Settings.propTypes = {
 	email: PropTypes.string,
-	emailVerifiedDate: PropTypes.string,
+	emailVerifiedDate: PropTypes.instanceOf(Date),
 	passwordLength: PropTypes.number,
 	whoCanViewMyProfile: PropTypes.string,
 	emailAddressVisibleTo: PropTypes.string,
