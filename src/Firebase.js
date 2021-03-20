@@ -90,6 +90,10 @@ const Firebase = (() => {
 			return '/user/show/' + userId + '-' + firstName.toLowerCase();
 		};
 
+		const generateUserPhotoPage = (userId) => {
+			return '/photo/user' + userId;
+		};
+
 		const generateUserBooksPage = (userId) => {
 			return '/review/list/' + userId;
 		};
@@ -252,6 +256,7 @@ const Firebase = (() => {
 			generateListsLikedByUserPage,
 			generateListPage,
 			generateUserPage,
+			generateUserPhotoPage,
 			generateUserBooksPage,
 			generateUserRatingsPage,
 			generateUserReviewsPage,
