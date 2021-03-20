@@ -110,3 +110,5 @@ FeedUpdateSettings.propTypes = {
 	followAnAuthor: PropTypes.bool,
 	saveFeedSettings: PropTypes.func,
 };
+
+export default FeedUpdateSettings;

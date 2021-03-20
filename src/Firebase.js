@@ -244,6 +244,10 @@ const Firebase = (() => {
 			return '/user/change_password';
 		};
 
+		const generateDeleteAccountPage = () => {
+			return '/user/destroy';
+		};
+
 		return {
 			generateBookPage,
 			generateAddBookPage,
@@ -292,6 +296,7 @@ const Firebase = (() => {
 			generateUserYearInBooksPage,
 			generateUserFriendsPage,
 			generateChangePasswordPage,
+			generateDeleteAccountPage,
 		};
 	})();
 
@@ -2987,6 +2992,20 @@ const Firebase = (() => {
 		}
 	};
 
+	const saveUserSettings = async (userUID, settings) => {
+		await database
+			.collection('users')
+			.doc(userUID)
+			.set(settings, { merge: true });
+	};
+
+	const deleteProfilePicture = async (userUID) => {
+		await database
+			.collection('users')
+			.doc(userUID)
+			.update({ profileImage: firebase.firestore.FieldValue.delete() });
+	};
+
 	return {
 		pageGenerator,
 		getAlsoEnjoyedBooksDetailsForBook,
@@ -3036,6 +3055,8 @@ const Firebase = (() => {
 		fetchUserFavoriteAuthors,
 		getUserInfoForFavoriteAuthorsForUserPage,
 		getNotificationsForUser,
+		saveUserSettings,
+		deleteProfilePicture,
 	};
 })();
 

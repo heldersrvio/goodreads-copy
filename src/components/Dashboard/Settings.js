@@ -52,7 +52,7 @@ const Settings = (props) => {
 					information on the{' '}
 					<button
 						className="profile-tab-button"
-						onClick={props.moveToProfieTab()}
+						onClick={props.moveToProfileTab}
 					>
 						profile tab
 					</button>
@@ -61,7 +61,7 @@ const Settings = (props) => {
 					you can hide your last name using the setting on the{' '}
 					<button
 						className="profile-tab-button"
-						onClick={props.moveToProfieTab()}
+						onClick={props.moveToProfileTab}
 					>
 						profile tab
 					</button>
@@ -183,12 +183,12 @@ const Settings = (props) => {
 					});
 				}}
 			></input>
-			<button
-				className="delete-account-button"
-				onClick={(_e) => props.deleteAccount()}
+			<a
+				className="delete-account-a"
+				href={Firebase.pageGenerator.generateDeleteAccountPage()}
 			>
 				Delete my account
-			</button>
+			</a>
 		</form>
 	);
 };
@@ -202,8 +202,7 @@ Settings.propTypes = {
 	friendChallengeQuestion: PropTypes.string,
 	friendChallengeAnswer: PropTypes.string,
 	saveAccountSettings: PropTypes.func,
-	deleteAccount: PropTypes.func,
-	moveToProfieTab: PropTypes.func,
+	moveToProfileTab: PropTypes.func,
 };
 
 export default Settings;

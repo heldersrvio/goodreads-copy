@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import Firebase from '../../Firebase';
 
 const ProfileSettings = (props) => {
+	// Problem with date inputs
+	const profilePictureFileInput = useRef();
 	const [firstNameInput, setFirstNameInput] = useState(props.firstName);
 	const [middleNameInput, setMiddleNameInput] = useState(props.middleName);
 	const [lastNameInput, setLastNameInput] = useState(props.lastName);
@@ -34,7 +36,6 @@ const ProfileSettings = (props) => {
 	const [interestsInput, setInterestsInput] = useState(props.interests);
 	const [typeOfBooksInput, setTypeOfBooksInput] = useState(props.typeOfBooks);
 	const [aboutMeInput, setAboutMeInput] = useState(props.aboutMe);
-	const [profilePictureFileInput, setProfilePictureFileInput] = useState('');
 
 	const countryList = [
 		'United States',
@@ -665,25 +666,28 @@ const ProfileSettings = (props) => {
 					</button>
 				) : (
 					<div className="new-photo-section">
-						<input
-							type="file"
-							value={profilePictureFileInput}
-							onChange={(e) => setProfilePictureFileInput(e.target.value)}
-						></input>
+						<input type="file" ref={profilePictureFileInput}></input>
 						<button
 							className="upload-photo-button"
-							onClick={(_e) =>
-								props.saveProfilePicture(profilePictureFileInput)
-							}
+							onClick={(_e) => {
+								if (
+									profilePictureFileInput.current !== undefined &&
+									profilePictureFileInput.current !== null
+								) {
+									props.saveProfilePicture(
+										profilePictureFileInput.current.files[0]
+									);
+								}
+							}}
 						></button>
 					</div>
 				)}
-				<button
-					className="delete-account-button"
-					onClick={(_e) => props.deleteAccount()}
+				<a
+					className="delete-account-a"
+					href={Firebase.pageGenerator.generateDeleteAccountPage()}
 				>
 					Delete my account
-				</button>
+				</a>
 			</div>
 		</form>
 	);
@@ -714,7 +718,6 @@ ProfileSettings.propTypes = {
 	saveProfileSettings: PropTypes.func,
 	saveProfilePicture: PropTypes.func,
 	deleteProfilePicture: PropTypes.func,
-	deleteAccount: PropTypes.func,
 };
 
 export default ProfileSettings;
