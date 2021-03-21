@@ -240,6 +240,10 @@ const Firebase = (() => {
 			);
 		};
 
+		const generateAccountSettingsPage = () => {
+			return '/user/edit';
+		};
+
 		const generateChangePasswordPage = () => {
 			return '/user/change_password';
 		};
@@ -295,6 +299,7 @@ const Firebase = (() => {
 			generateUserFavoriteAuthorsPage,
 			generateUserYearInBooksPage,
 			generateUserFriendsPage,
+			generateAccountSettingsPage,
 			generateChangePasswordPage,
 			generateDeleteAccountPage,
 		};
@@ -3072,6 +3077,24 @@ const Firebase = (() => {
 		}
 	};
 
+	const checkIfPasswordsMatch = async (userUID, password) => {
+		return (
+			(await database.collection('users').doc(userUID).get()).data()
+				.password === password
+		);
+	};
+
+	const changePassword = async (userUID, newPassword, history) => {
+		await database
+			.collection('users')
+			.doc(userUID)
+			.set({ password: newPassword }, { merge: true });
+		history.push({
+			pathname: '/user/sign_in',
+			state: { message: 'Your password has been updated.' },
+		});
+	};
+
 	return {
 		pageGenerator,
 		getAlsoEnjoyedBooksDetailsForBook,
@@ -3124,6 +3147,8 @@ const Firebase = (() => {
 		saveUserSettings,
 		deleteProfilePicture,
 		getUserSettings,
+		checkIfPasswordsMatch,
+		changePassword,
 	};
 })();
 
