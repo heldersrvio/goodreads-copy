@@ -29,6 +29,7 @@ import NotificationsPage from './components/Dashboard/NotificationsPage';
 import AccountSettingsPage from './components/Dashboard/AccountSettingsPage';
 import ChangePassswordPage from './components/Dashboard/ChangePasswordPage';
 import DeleteAccountPage from './components/Dashboard/DeleteAccountPage';
+import EditFavoriteGenresPage from './components/Dashboard/EditFavoriteGenresPage';
 
 const store = createStore(reducer.userReducer);
 
@@ -94,6 +95,10 @@ ReactDOM.render(
 					<Route path="/user/edit" component={AccountSettingsPage} />
 					<Route path="/user/change_password" component={ChangePassswordPage} />
 					<Route path="/user/destroy" component={DeleteAccountPage} />
+					<Route
+						path="/user/edit_fav_genres"
+						component={EditFavoriteGenresPage}
+					/>
 					<Route path="/" component={App} />
 				</Switch>
 			</BrowserRouter>

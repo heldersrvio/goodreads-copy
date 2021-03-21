@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+
+.edit-favorite-genres-page-main-content {
+	margin: 0 155px;
+	padding: 20px 0;
+}
+
+.edit-favorite-genres-page-main-content h1 {
+	text-align: center;
+	color: var(--goodreads-brown);
+	font-family: var(--merriweather-font);
+	font-size: 20px;
+	font-weight: bold;
+	line-height: 24px;
+	margin-bottom: 20px;
+}
+
+.edit-favorite-genres-page-explanation-box {
+	color: rgb(24, 24, 24);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 18px;
+	width: 926px;
+	height: 64px;
+	text-align: center;
+	border-radius: 7px;
+	margin-left: calc(50% - 463px);
+	background-color: rgb(228, 244, 218);
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 20px;
+}
+
+.edit-favorite-genres-page-genre-selection-area .genre-boxes {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	margin-left: calc(50% - 463px);
+}
+
+.edit-favorite-genres-page-genre-selection-area .genre-box {
+	width: 160px;
+	height: 19px;
+	padding: 10px 10px 5px 10px;
+	background-color: rgb(247, 247, 247);
+	border: 1px solid rgb(237, 237, 237);
+	border-radius: 3px;
+	margin: 4px 2px 0 2px;
+}
+
+.edit-favorite-genres-page-genre-selection-area .genre-box.selected {
+	background-color: rgb(228, 244, 218);
+	border-color: rgb(193, 211, 184);
+}
+
+.edit-favorite-genres-page-genre-selection-area .genre-box:hover {
+	border-color: rgb(154, 154, 154);
+	background-color: rgb(237, 237, 237);
+}
+
+.edit-favorite-genres-page-genre-selection-area .genre-box.selected:hover {
+	background-color: rgb(228, 244, 218);
+}
+
+.edit-favorite-genres-page-genre-selection-area label {
+	color: rgb(24, 24, 24);
+	font-family: var(--lato-font);
+	font-size: 15px;
+	line-height: 18px;
+}
+
+.edit-favorite-genres-page-genre-selection-area input[type='checkbox'] {
+	width: 14px;
+	height: 14px;
+	margin-right: 10px;
+}

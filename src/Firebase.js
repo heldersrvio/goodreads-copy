@@ -252,6 +252,10 @@ const Firebase = (() => {
 			return '/user/destroy';
 		};
 
+		const generateEditFavoriteGenresPage = () => {
+			return '/user/edit_fav_genres';
+		};
+
 		return {
 			generateBookPage,
 			generateAddBookPage,
@@ -302,6 +306,7 @@ const Firebase = (() => {
 			generateAccountSettingsPage,
 			generateChangePasswordPage,
 			generateDeleteAccountPage,
+			generateEditFavoriteGenresPage,
 		};
 	})();
 
@@ -3117,6 +3122,26 @@ const Firebase = (() => {
 		});
 	};
 
+	const getFavoriteGenresForUser = async (userUID, history) => {
+		if (userUID === null || userUID === undefined) {
+			history.push({
+				pathname: '/user/sign_in',
+				state: { error: 'User not logged in' },
+			});
+			return [];
+		} else {
+			return (await database.collection('users').doc(userUID).get()).data()
+				.favoriteGenres;
+		}
+	};
+
+	const updateFavoriteGenresForUser = async (userUID, newGenres) => {
+		await database
+			.collection('users')
+			.doc(userUID)
+			.set({ favoriteGenres: newGenres }, { merge: true });
+	};
+
 	return {
 		pageGenerator,
 		getAlsoEnjoyedBooksDetailsForBook,
@@ -3172,6 +3197,8 @@ const Firebase = (() => {
 		checkIfPasswordsMatch,
 		changePassword,
 		deleteAccount,
+		getFavoriteGenresForUser,
+		updateFavoriteGenresForUser,
 	};
 })();
 
