@@ -3095,6 +3095,28 @@ const Firebase = (() => {
 		});
 	};
 
+	const deleteAccount = async (userUID, history) => {
+		const userInstanceQuery = await database
+			.collection('userBooksInstances')
+			.where('userId', '==', userUID)
+			.get();
+		userInstanceQuery.docs.map(async (doc) => {
+			await doc.delete();
+		});
+		const reviewQuery = await database
+			.collection('reviews')
+			.where('user', '==', userUID)
+			.get();
+		reviewQuery.docs.map(async (doc) => {
+			await doc.delete();
+		});
+		await database.collection('users').doc(userUID).delete();
+		history.push({
+			pathname: '/home',
+			state: { message: 'Your account will be permanently deleted.' },
+		});
+	};
+
 	return {
 		pageGenerator,
 		getAlsoEnjoyedBooksDetailsForBook,
@@ -3149,6 +3171,7 @@ const Firebase = (() => {
 		getUserSettings,
 		checkIfPasswordsMatch,
 		changePassword,
+		deleteAccount,
 	};
 })();
 

@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+
+.delete-account-page-main-content {
+	margin: 0 155px;
+	padding: 15px 0;
+	display: flex;
+	flex-direction: row;
+}
+
+.delete-account-page-main-content a {
+	display: inline;
+	padding: 0;
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 18px;
+}
+
+.delete-account-page-main-content a:hover {
+	background-color: transparent;
+	text-decoration: underline;
+}
+
+.delete-account-page-main-content h1 {
+	color: var(--goodreads-brown);
+	font-family: var(--merriweather-font);
+	font-size: 20px;
+	font-weight: bold;
+	line-height: 24px;
+	margin-bottom: 20px;
+}
+
+.delete-account-page-main-content-left-section {
+	width: 625px;
+}
+
+.delete-account-page-main-content-left-section span {
+	display: block;
+	color: rgb(24, 24, 24);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 18px;
+	margin-bottom: 40px;
+}
+
+.delete-account-page-main-content-left-section .bottom-section {
+	margin-bottom: 200px;
+}
+
+.delete-account-page-main-content-left-section input[type='submit'] {
+	padding: 8px 12px;
+	width: 145px;
+	height: 32px;
+	border-radius: 3px;
+	border: 1px solid rgb(214, 208, 196);
+	background-color: rgb(244, 241, 234);
+	color: rgb(51, 51, 51);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 14px;
+	margin-right: 20px;
+}
+
+.delete-account-page-main-content-left-section input[type='submit']:hover {
+	background-color: rgb(237, 230, 214);
+}
+
+.delete-account-page-main-content-left-section a {
+	font-size: 14px;
+}
+
+.delete-account-page-main-content-right-section {
+	padding-left: 15px;
+}
+
+.delete-account-page-main-content-right-section a {
+	font-size: 12px;
+}
