@@ -470,17 +470,18 @@ const ProfileSettings = (props) => {
 								? dateOfBirthInput.getFullYear()
 								: ''
 						}
-						onChange={(e) =>
-							setDateOfBirthInput((previous) =>
-								e.target.value === ''
+						onChange={(e) => {
+							const newValue = e.target.value;
+							setDateOfBirthInput((previous) => {
+								return newValue === ''
 									? undefined
 									: new Date(
-											parseInt(e.target.value),
-											previous.getMonth(),
-											previous.getDate()
-									  )
-							)
-						}
+											parseInt(newValue),
+											previous !== undefined ? previous.getMonth() : 0,
+											previous !== undefined ? previous.getDate() : 1
+									  );
+							});
+						}}
 					>
 						<option value=""></option>
 						{Array(88)
@@ -501,17 +502,18 @@ const ProfileSettings = (props) => {
 								? monthList[dateOfBirthInput.getMonth()]
 								: ''
 						}
-						onChange={(e) =>
-							setDateOfBirthInput((previous) =>
-								e.target.value === ''
+						onChange={(e) => {
+							const newValue = e.target.value;
+							setDateOfBirthInput((previous) => {
+								return newValue === ''
 									? undefined
 									: new Date(
-											previous.getFullYear(),
-											parseInt(e.target.value) - 1,
-											previous.getDate()
-									  )
-							)
-						}
+											previous !== undefined ? previous.getFullYear() : '',
+											monthList.indexOf(newValue),
+											previous !== undefined ? previous.getDate() : undefined
+									  );
+							});
+						}}
 					>
 						<option value=""></option>
 						{Array(12)
@@ -530,17 +532,18 @@ const ProfileSettings = (props) => {
 						value={
 							dateOfBirthInput !== undefined ? dateOfBirthInput.getDate() : ''
 						}
-						onChange={(e) =>
-							setDateOfBirthInput((previous) =>
-								e.target.value === ''
+						onChange={(e) => {
+							const newValue = e.target.value;
+							setDateOfBirthInput((previous) => {
+								return newValue === ''
 									? undefined
 									: new Date(
-											previous.getFullYear(),
-											monthList.indexOf(previous.getMonth()),
-											parseInt(e.target.value)
-									  )
-							)
-						}
+											previous !== undefined ? previous.getFullYear() : 1990,
+											previous !== undefined ? previous.getMonth() : 0,
+											parseInt(newValue)
+									  );
+							});
+						}}
 					>
 						<option value=""></option>
 						{Array(31)

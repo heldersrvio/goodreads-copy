@@ -3006,62 +3006,70 @@ const Firebase = (() => {
 			.update({ profileImage: firebase.firestore.FieldValue.delete() });
 	};
 
-	const getUserSettings = async (userUID) => {
-		const userQueryData = (
-			await database.collection('users').doc(userUID).get()
-		).data();
-		const tidyUpUserSettingForProps = (setting) => {
-			return setting !== undefined ? setting : '';
-		};
-		return {
-			profile: {
-				firstName: tidyUpUserSettingForProps(userQueryData.firstName),
-				middleName: tidyUpUserSettingForProps(userQueryData.middleName),
-				lastName: tidyUpUserSettingForProps(userQueryData.lastName),
-				showLastNameTo: userQueryData.showLastNameTo,
-				gender: tidyUpUserSettingForProps(userQueryData.gender),
-				customGender: tidyUpUserSettingForProps(userQueryData.customGender),
-				pronouns: userQueryData.pronouns,
-				showGenderTo: userQueryData.showGenderTo,
-				zipCode: tidyUpUserSettingForProps(userQueryData.zipCode),
-				city: tidyUpUserSettingForProps(userQueryData.city),
-				stateProvinceCode: tidyUpUserSettingForProps(
-					userQueryData.stateProvinceCode
-				),
-				country: tidyUpUserSettingForProps(userQueryData.country),
-				locationViewableBy: userQueryData.locationViewableBy,
-				dateOfBirth: userQueryData.dateOfBirth,
-				ageAndBirthdayPrivacy: userQueryData.ageAndBirthdayPrivacy,
-				profilePicture: userQueryData.profileImage,
-				website: tidyUpUserSettingForProps(userQueryData.website),
-				interests: tidyUpUserSettingForProps(userQueryData.interests),
-				typeOfBooks: tidyUpUserSettingForProps(userQueryData.typeOfBooks),
-				aboutMe: tidyUpUserSettingForProps(userQueryData.aboutMe),
-			},
-			account: {
-				email: tidyUpUserSettingForProps(userQueryData.email),
-				emailVerifiedDate: userQueryData.emailVerifiedDate,
-				passwordLength: tidyUpUserSettingForProps(userQueryData.password)
-					.length,
-				whoCanViewMyProfile: userQueryData.whoCanViewMyProfile,
-				emailAddressVisibleTo: userQueryData.emailAddressVisibleTo,
-				friendChallengeQuestion: tidyUpUserSettingForProps(
-					userQueryData.friendChallengeQuestion
-				),
-				friendChallengeAnswer: tidyUpUserSettingForProps(
-					userQueryData.friendChallengeAnswer
-				),
-			},
-			feed: {
-				addBookToShelves: userQueryData.addBookToShelves,
-				addAFriend: userQueryData.addAFriend,
-				voteForABookReview: userQueryData.voteForABookReview,
-				addAQuote: userQueryData.addAQuote,
-				recommendABook: userQueryData.recommendABook,
-				addANewStatusToBook: userQueryData.addANewStatusToBook,
-				followAnAuthor: userQueryData.followAnAuthor,
-			},
-		};
+	const getUserSettings = async (userUID, history) => {
+		if (userUID === null || userUID === undefined) {
+			history.push({
+				pathname: '/user/sign_in',
+				state: { error: 'User not logged in' },
+			});
+			return {};
+		} else {
+			const userQueryData = (
+				await database.collection('users').doc(userUID).get()
+			).data();
+			const tidyUpUserSettingForProps = (setting) => {
+				return setting !== undefined ? setting : '';
+			};
+			return {
+				profile: {
+					firstName: tidyUpUserSettingForProps(userQueryData.firstName),
+					middleName: tidyUpUserSettingForProps(userQueryData.middleName),
+					lastName: tidyUpUserSettingForProps(userQueryData.lastName),
+					showLastNameTo: userQueryData.showLastNameTo,
+					gender: tidyUpUserSettingForProps(userQueryData.gender),
+					customGender: tidyUpUserSettingForProps(userQueryData.customGender),
+					pronouns: userQueryData.pronouns,
+					showGenderTo: userQueryData.showGenderTo,
+					zipCode: tidyUpUserSettingForProps(userQueryData.zipCode),
+					city: tidyUpUserSettingForProps(userQueryData.city),
+					stateProvinceCode: tidyUpUserSettingForProps(
+						userQueryData.stateProvinceCode
+					),
+					country: tidyUpUserSettingForProps(userQueryData.country),
+					locationViewableBy: userQueryData.locationViewableBy,
+					dateOfBirth: userQueryData.dateOfBirth.toDate(),
+					ageAndBirthdayPrivacy: userQueryData.ageAndBirthdayPrivacy,
+					profilePicture: userQueryData.profileImage,
+					website: tidyUpUserSettingForProps(userQueryData.website),
+					interests: tidyUpUserSettingForProps(userQueryData.interests),
+					typeOfBooks: tidyUpUserSettingForProps(userQueryData.typeOfBooks),
+					aboutMe: tidyUpUserSettingForProps(userQueryData.aboutMe),
+				},
+				account: {
+					email: tidyUpUserSettingForProps(userQueryData.email),
+					emailVerifiedDate: userQueryData.emailVerifiedDate,
+					passwordLength: tidyUpUserSettingForProps(userQueryData.password)
+						.length,
+					whoCanViewMyProfile: userQueryData.whoCanViewMyProfile,
+					emailAddressVisibleTo: userQueryData.emailAddressVisibleTo,
+					friendChallengeQuestion: tidyUpUserSettingForProps(
+						userQueryData.friendChallengeQuestion
+					),
+					friendChallengeAnswer: tidyUpUserSettingForProps(
+						userQueryData.friendChallengeAnswer
+					),
+				},
+				feed: {
+					addBookToShelves: userQueryData.addBookToShelves,
+					addAFriend: userQueryData.addAFriend,
+					voteForABookReview: userQueryData.voteForABookReview,
+					addAQuote: userQueryData.addAQuote,
+					recommendABook: userQueryData.recommendABook,
+					addANewStatusToBook: userQueryData.addANewStatusToBook,
+					followAnAuthor: userQueryData.followAnAuthor,
+				},
+			};
+		}
 	};
 
 	return {

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 import Firebase from '../../Firebase';
@@ -7,9 +8,8 @@ import Settings from './Settings';
 import FeedUpdateSettings from './FeedUpdateSettings';
 import '../styles/Dashboard/AccountSettingsPage.css';
 
-// Missing data fetching from database
-
 const AccountSettingsPage = () => {
+	const history = useHistory();
 	const [loaded, setLoaded] = useState(false);
 	const [userInfo, setUserInfo] = useState({});
 	const [tab, setTab] = useState('profile');
@@ -19,54 +19,12 @@ const AccountSettingsPage = () => {
 	const user = JSON.parse(localStorage.getItem('userState'));
 
 	useEffect(() => {
-		const getUserInfo = () => {
-			setUserInfo({
-				profile: {
-					firstName: 'James',
-					middleName: 'Stuart',
-					lastName: 'Jacobson',
-					showLastNameTo: 'friends',
-					gender: 'm',
-					customGender: '',
-					pronouns: 'male',
-					showGenderTo: 'everyone',
-					zipCode: '',
-					city: 'Austin',
-					stateProvinceCode: 'TX',
-					country: 'United States',
-					locationViewableBy: 'everyone',
-					dateOfBirth: new Date(1991, 10, 12),
-					ageAndBirthdayPrivacy: 'age-no-one-birthday-no-one',
-					profilePicture:
-						'https://i.pinimg.com/originals/bb/ae/f4/bbaef4e552e27250bfd64aa25c24a8a7.jpg',
-					website: '',
-					interests: '',
-					typeOfBooks: '',
-					aboutMe: '',
-				},
-				account: {
-					email: 'jamessjacobson@gmail.com',
-					emailVerifiedDate: new Date(2017, 6, 20),
-					passwordLength: 10,
-					whoCanViewMyProfile: 'anyone',
-					emailAddressVisibleTo: 'friends-friends-requests',
-					friendChallengeQuestion: '',
-					friendChallengeAnswer: '',
-				},
-				feed: {
-					addBookToShelves: true,
-					addAFriend: true,
-					voteForABookReview: true,
-					addAQuote: true,
-					recommendABook: true,
-					addANewStatusToBook: true,
-					followAnAuthor: true,
-				},
-			});
+		const getUserInfo = async () => {
+			setUserInfo(await Firebase.getUserSettings(user.userUID, history));
 			setLoaded(true);
 		};
 		getUserInfo();
-	}, []);
+	}, [user.userUID, history]);
 
 	const saveProfileOrFeedSettings = async (settings) => {
 		await Firebase.saveUserSettings(user.userUID, settings);
@@ -76,8 +34,8 @@ const AccountSettingsPage = () => {
 
 	const saveAccountSettings = async (settings) => {
 		if (
-			settings.friendChallengeAnswerInput.split(' ').length > 1 ||
-			settings.friendChallengeAnswerInput
+			settings.friendChallengeAnswer.split(' ').length > 1 ||
+			settings.friendChallengeAnswer
 				.split('')
 				.some((character) =>
 					[',', '.', ':', '"', "'", '?', '!'].includes(character)
