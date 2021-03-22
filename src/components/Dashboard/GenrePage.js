@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 import Firebase from '../../Firebase';
+import '../styles/Dashboard/GenrePage.css';
 
 const GenrePage = ({ match }) => {
 	const {
@@ -58,6 +59,170 @@ const GenrePage = ({ match }) => {
 
 	const user = JSON.parse(localStorage.getItem('userState'));
 
+	useEffect(() => {
+		const getGenreInfo = () => {
+			setGenreInfo({
+				userFavoriteGenres: ['science-fiction', 'fantasy', 'contemporary'],
+				description:
+					'Fantasy is a genre that uses magic and other supernatural forms as a primary element of plot, theme, and/or setting. Fantasy is generally distinguished from science fiction and horror by the expectation that it steers clear of technological and macabre themes, respectively, though there is a great deal of overlap between the three (collectively known as speculative fiction or science fiction/fantasy)\nIn its broadest sense, fantasy comprises works by many writers, artists, filmmakers, and musicians, from ancient myths and legends to many recent works embraced by a wide audience today, including young adults, most of whom are represented by the works below.',
+				relatedGenres: [
+					'fiction',
+					'paranormal',
+					'urban-fantasy',
+					'magic',
+					'supernatural',
+					'mythology',
+					'high-fantasy',
+					'fairy-tales',
+					'epic-fantasy',
+					'dragons',
+					'dark-fantasy',
+					'low-fantasy',
+					'weird-fiction',
+					'heroic-fantasy',
+					'elves',
+					'unicorns',
+					'fantasy-of-manners',
+				],
+				parentGenre: 'fiction',
+				newReleases: [
+					{
+						id: '123',
+						cover:
+							'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1602570691l/53138095.jpg',
+						title: 'A Court of Silver Flames',
+					},
+					{
+						id: '123',
+						cover:
+							'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585578175l/40024121._SY475_.jpg',
+						title: 'The Gilded Ones',
+					},
+					{
+						id: '123',
+						cover:
+							'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1602570691l/53138095.jpg',
+						title: 'A Court of Silver Flames',
+					},
+					{
+						id: '123',
+						cover:
+							'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585578175l/40024121._SY475_.jpg',
+						title: 'The Gilded Ones',
+					},
+					{
+						id: '123',
+						cover:
+							'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1602570691l/53138095.jpg',
+						title: 'A Court of Silver Flames',
+					},
+					{
+						id: '123',
+						cover:
+							'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585578175l/40024121._SY475_.jpg',
+						title: 'The Gilded Ones',
+					},
+					{
+						id: '123',
+						cover:
+							'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1602570691l/53138095.jpg',
+						title: 'A Court of Silver Flames',
+					},
+					{
+						id: '123',
+						cover:
+							'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585578175l/40024121._SY475_.jpg',
+						title: 'The Gilded Ones',
+					},
+					{
+						id: '123',
+						cover:
+							'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1602570691l/53138095.jpg',
+						title: 'A Court of Silver Flames',
+					},
+					{
+						id: '123',
+						cover:
+							'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585578175l/40024121._SY475_.jpg',
+						title: 'The Gilded Ones',
+					},
+					{
+						id: '123',
+						cover:
+							'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1602570691l/53138095.jpg',
+						title: 'A Court of Silver Flames',
+					},
+					{
+						id: '123',
+						cover:
+							'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1585578175l/40024121._SY475_.jpg',
+						title: 'The Gilded Ones',
+					},
+				],
+				mostReadThisWeek: Array(15).fill({
+					id: '123',
+					cover:
+						'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1593892032l/51901147._SY475_.jpg',
+					title: 'The Ballad of Songbirds and Snakes',
+				}),
+				lists: Array(6).fill({
+					id: '123',
+					title: 'Hidden Gems: YA-Fantasy Novels',
+					bookCovers: [
+						'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1364170135l/367158._SX98_.jpg',
+						'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388793034l/142776._SX98_.jpg',
+						'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1330303462l/92717._SY160_.jpg',
+						'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1441373154l/195381._SX98_.jpg',
+						'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388849827l/245727._SX98_.jpg',
+					],
+					numberOfBooks: 1985,
+					numberOfVoters: 4318,
+				}),
+				genreBooks: Array(15).fill({
+					id: '123',
+					cover:
+						'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1571318786l/62291.jpg',
+					title: 'A Storm of Swords',
+				}),
+				relatedNews: [
+					{
+						id: '123',
+						image: 'https://images.gr-assets.com/blogs/1613753047p8/2039.jpg',
+						title: "Jeff VanderMeer's Climate Fiction Reading List",
+						content:
+							"Bestselling author Jeff VanderMeer is perhaps best known for his creepy sci-fi thriller Annihilation, which was made into a movie and kicked off the beloved Southern Reach trilogy. His latest novel, Hummingbird Salamander, publishes in the U.S. on April 6 and promises readers a thriller of dark conspiracy, endangered species, and the possible end of all things. Here, he's picked some of his favorite examples of climate fiction, from the plausible to the out-of-this-world.",
+					},
+				],
+				quotesTagged: [
+					{
+						id: '123',
+						content:
+							'I have stolen princesses back from sleeping barrow kings. I burned down the town of Trebon. I have spent the night with Felurian and left with both my sanity and my life. I was expelled from the University at a younger age than most people are allowed in. I tread paths by moonlight that others fear to speak of during day. I have talked to gods, loved women, and written songs that make the minstrels weep. You may have heard of me.',
+						numberOfLikes: 1195,
+						authorId: '123',
+						authorName: 'Patrick Rothfuss',
+						authorPicture:
+							'https://images.gr-assets.com/authors/1351307341p2/108424.jpg',
+						bookTitle: 'The Name of the Wind',
+					},
+					{
+						id: '123',
+						content:
+							'Fairies have to be one thing or the other, because being so small they unfortunately have room for one feeling only at a time.',
+						numberOfLikes: 944,
+						authorId: '123',
+						authorName: 'J.M. Barrie',
+						authorPicture:
+							'https://images.gr-assets.com/authors/1519029719p2/5255014.jpg',
+						bookTitle: 'Peter Pan',
+					},
+				],
+			});
+			setLoaded(true);
+		};
+		getGenreInfo();
+	}, []);
+
 	const capitalizeAndSeparate = (string) => {
 		return string
 			.split('-')
@@ -65,16 +230,6 @@ const GenrePage = ({ match }) => {
 				s.length === 1 ? s.toUpperCase() : s[0].toUpperCase() + s.slice(1)
 			)
 			.join(' ');
-	};
-
-	const lowerCaseAndJoinCustomGenres = (string) => {
-		return string
-			.split(',')
-			.map((s) =>
-				s[0] === ' '
-					? s.slice(1).toLowerCase().split(' ').join('-')
-					: s.toLowerCase().split(' ').join('-')
-			);
 	};
 
 	const addGenreToFavorites = async () => {
@@ -111,8 +266,12 @@ const GenrePage = ({ match }) => {
 				<span>Genres</span>
 				{genreInfo.parentGenre !== null ? <span>{'>'}</span> : null}
 				{genreInfo.parentGenre !== null ? (
-					<a href={Firebase.pageGenerator.generateGenrePage(genre.parentGenre)}>
-						{capitalizeAndSeparate(genre.parentGenre)}
+					<a
+						href={Firebase.pageGenerator.generateGenrePage(
+							genreInfo.parentGenre
+						)}
+					>
+						{capitalizeAndSeparate(genreInfo.parentGenre)}
 					</a>
 				) : null}
 			</div>
@@ -123,6 +282,11 @@ const GenrePage = ({ match }) => {
 					onMouseOver={(e) => {
 						if (genreInfo.userFavoriteGenres.includes(genre)) {
 							e.target.innerHTML = 'Unfavorite this Genre';
+						}
+					}}
+					onMouseLeave={(e) => {
+						if (genreInfo.userFavoriteGenres.includes(genre)) {
+							e.target.innerHTML = 'Favorited';
 						}
 					}}
 					onClick={(_e) => {
@@ -172,7 +336,7 @@ const GenrePage = ({ match }) => {
 							className="book-cover-wrapper"
 							href={Firebase.pageGenerator.generateBookPage(
 								book.id,
-								book.titke
+								book.title
 							)}
 						>
 							<img
@@ -201,7 +365,7 @@ const GenrePage = ({ match }) => {
 							className="book-cover-wrapper"
 							href={Firebase.pageGenerator.generateBookPage(
 								book.id,
-								book.titke
+								book.title
 							)}
 						>
 							<img
@@ -233,6 +397,7 @@ const GenrePage = ({ match }) => {
 										list.id,
 										list.title
 									)}
+									index={coverIndex}
 								>
 									<img src={cover} alt={'list book'} />
 								</a>
@@ -264,7 +429,7 @@ const GenrePage = ({ match }) => {
 					<a
 						key={index}
 						className="book-cover-wrapper"
-						href={Firebase.pageGenerator.generateBookPage(book.id, book.titke)}
+						href={Firebase.pageGenerator.generateBookPage(book.id, book.title)}
 					>
 						<img
 							src={

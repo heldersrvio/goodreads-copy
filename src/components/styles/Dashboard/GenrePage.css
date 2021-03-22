@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+
+.genre-page-main-content {
+	margin: 0 155px;
+	padding: 15px 0;
+	display: flex;
+	flex-direction: row;
+}
+
+.genre-page-main-content-left-section {
+	width: 643px;
+}
+
+.genre-page-main-content-right-section {
+	width: 300px;
+}
+
+.genre-page-main-content a {
+	padding: 0;
+	display: inline;
+	height: auto;
+	background-color: transparent;
+}
+
+.genre-page-header {
+	position: relative;
+	height: 60px;
+	margin-bottom: 20px;
+}
+
+.genre-page-header .page-indication {
+	display: flex;
+	flex-direction: row;
+	color: rgb(24, 24, 24);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.genre-page-header .page-indication span,
+.genre-page-header .page-indication a {
+	margin-right: 5px;
+}
+
+.genre-page-header .page-indication a {
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.genre-page-header .page-indication a:hover {
+	text-decoration: underline;
+}
+
+.genre-page-header h1 {
+	color: var(--goodreads-brown);
+	font-family: var(--merriweather-font);
+	font-size: 24px;
+	font-weight: bold;
+	line-height: 24px;
+	margin-bottom: 15px;
+	margin-top: 10px;
+}
+
+.genre-page-header button {
+	padding: 8px 12px;
+	width: 180px;
+	height: 32px;
+	border-radius: 3px;
+	background-color: rgb(244, 241, 234);
+	border: 1px solid rgb(214, 208, 196);
+	color: rgb(51, 51, 51);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 14px;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+}
+
+.genre-page-header button:hover {
+	background-color: rgb(237, 230, 214);
+	font-weight: bold;
+}
