@@ -9,6 +9,7 @@ const EditFavoriteGenresPage = () => {
 	const history = useHistory();
 	const [loaded, setLoaded] = useState(false);
 	const [favoriteGenres, setFavoriteGenres] = useState([]);
+	const [allGenres, setAllGenres] = useState([]);
 	const [
 		isShowingCustomGenresOption,
 		setIsShowingCustomGenresOption,
@@ -17,52 +18,9 @@ const EditFavoriteGenresPage = () => {
 
 	const user = JSON.parse(localStorage.getItem('userState'));
 
-	const standardGenreList = [
-		'contemporary',
-		'fantasy',
-		'fiction',
-		'graphic-novels',
-		'historical-fiction',
-		'manga',
-		'romance',
-		'science-fiction',
-		'thriller',
-		'young-adult',
-		'art',
-		'biography',
-		'business',
-		'chick-lit',
-		"children's",
-		'christian',
-		'classics',
-		'comics',
-		'cookbooks',
-		'crime',
-		'ebooks',
-		'gay-and-lesbian',
-		'history',
-		'horror',
-		'humor-and-comedy',
-		'memoir',
-		'music',
-		'mystery',
-		'non-fiction',
-		'paranoia',
-		'philosophy',
-		'poetry',
-		'psychology',
-		'religion',
-		'science',
-		'self-help',
-		'suspense',
-		'spirituality',
-		'sports',
-		'travel',
-	];
-
 	useEffect(() => {
-		const getFavoriteGenres = () => {
-			setFavoriteGenres([
+		const getFavoriteGenres = async () => {
+			const standardGenreList = [
 				'contemporary',
 				'fantasy',
 				'fiction',
@@ -73,11 +31,52 @@ const EditFavoriteGenresPage = () => {
 				'science-fiction',
 				'thriller',
 				'young-adult',
-			]);
+				'art',
+				'biography',
+				'business',
+				'chick-lit',
+				"children's",
+				'christian',
+				'classics',
+				'comics',
+				'cookbooks',
+				'crime',
+				'ebooks',
+				'gay-and-lesbian',
+				'history',
+				'horror',
+				'humor-and-comedy',
+				'memoir',
+				'music',
+				'mystery',
+				'non-fiction',
+				'paranoia',
+				'philosophy',
+				'poetry',
+				'psychology',
+				'religion',
+				'science',
+				'self-help',
+				'suspense',
+				'spirituality',
+				'sports',
+				'travel',
+			];
+
+			const userFavorites = await Firebase.getFavoriteGenresForUser(
+				user.userUID,
+				history
+			);
+			setFavoriteGenres(userFavorites);
+			setAllGenres(
+				userFavorites.concat(
+					standardGenreList.filter((genre) => !userFavorites.includes(genre))
+				)
+			);
 			setLoaded(true);
 		};
 		getFavoriteGenres();
-	}, []);
+	}, [user.userUID, history]);
 
 	const capitalizeAndSeparate = (string) => {
 		return string
@@ -89,7 +88,13 @@ const EditFavoriteGenresPage = () => {
 	};
 
 	const lowerCaseAndJoinCustomGenres = (string) => {
-		return string.split(',').map((s) => s.toLowerCase().split(' ').join('-'));
+		return string
+			.split(',')
+			.map((s) =>
+				s[0] === ' '
+					? s.slice(1).toLowerCase().split(' ').join('-')
+					: s.toLowerCase().split(' ').join('-')
+			);
 	};
 
 	const pageHeader = (
@@ -110,21 +115,32 @@ const EditFavoriteGenresPage = () => {
 	const genreSelectionArea = loaded ? (
 		<div className="edit-favorite-genres-page-genre-selection-area">
 			<div className="genre-boxes">
-				{favoriteGenres
-					.concat(
-						standardGenreList.filter((genre) => !favoriteGenres.includes(genre))
-					)
-					.map((genre, index) => {
-						return (
-							<div
-								className={
-									favoriteGenres.includes(genre)
-										? 'genre-box selected'
-										: 'genre-box'
+				{allGenres.map((genre, index) => {
+					return (
+						<div
+							className={
+								favoriteGenres.includes(genre)
+									? 'genre-box selected'
+									: 'genre-box'
+							}
+							key={index}
+							onClick={(e) => {
+								e.preventDefault();
+								if (favoriteGenres.includes(genre)) {
+									setFavoriteGenres((previous) =>
+										previous.filter((g) => g !== genre)
+									);
+								} else {
+									setFavoriteGenres((previous) => previous.concat(genre));
 								}
-								key={index}
+							}}
+						>
+							<input
+								type="checkbox"
+								name="genre-checkbox"
+								checked={favoriteGenres.includes(genre)}
 								onClick={(e) => {
-									e.preventDefault();
+									e.stopPropagation();
 									if (favoriteGenres.includes(genre)) {
 										setFavoriteGenres((previous) =>
 											previous.filter((g) => g !== genre)
@@ -133,18 +149,14 @@ const EditFavoriteGenresPage = () => {
 										setFavoriteGenres((previous) => previous.concat(genre));
 									}
 								}}
-							>
-								<input
-									type="checkbox"
-									name="genre-checkbox"
-									checked={favoriteGenres.includes(genre)}
-								></input>
-								<label htmlFor="genre-checkbox">
-									{capitalizeAndSeparate(genre)}
-								</label>
-							</div>
-						);
-					})}
+								readOnly={true}
+							></input>
+							<label htmlFor="genre-checkbox">
+								{capitalizeAndSeparate(genre)}
+							</label>
+						</div>
+					);
+				})}
 			</div>
 			{!isShowingCustomGenresOption ? (
 				<button
@@ -163,7 +175,7 @@ const EditFavoriteGenresPage = () => {
 						name="custom-genre"
 						placeholder="ex: Chess, Cooking, Hobbies"
 						value={customGenreInput}
-						onchange={(e) => setCustomGenreInput(e.target.value)}
+						onChange={(e) => setCustomGenreInput(e.target.value)}
 					></input>
 				</div>
 			)}

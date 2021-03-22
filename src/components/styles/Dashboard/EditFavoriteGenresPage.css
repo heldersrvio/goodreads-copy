@@ -77,3 +77,61 @@
 	height: 14px;
 	margin-right: 10px;
 }
+
+.edit-favorite-genres-page-main-content .custom-genres-button {
+	padding: 0;
+	background-color: transparent;
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 15px;
+	font-weight: bold;
+	line-height: 18px;
+	height: auto;
+	margin-left: calc(50% - 463px);
+	margin-top: 15px;
+}
+
+.edit-favorite-genres-page-main-content .custom-genres-button:hover {
+	text-decoration: underline;
+}
+
+.edit-favorite-genres-page-main-content .custom-genre-section {
+	margin-left: calc(50% - 463px);
+	margin-top: 15px;
+}
+
+.edit-favorite-genres-page-main-content .custom-genre-section input {
+	width: 300px;
+	height: 32px;
+	padding: 1px 1px 1px 10px;
+	border: 1px solid rgb(220, 214, 204);
+	border-radius: 3px;
+	color: rgb(51, 51, 51);
+	font-family: var(--lato-font);
+	font-size: 15px;
+}
+
+.edit-favorite-genres-page-main-content .custom-genre-section input:focus {
+	border-color: rgb(185, 173, 153);
+	box-shadow: rgba(185, 173, 153, 0.5) 0px 0px 4px 0px;
+}
+
+.edit-favorite-genres-page-main-content input[type='submit'] {
+	width: 350px;
+	height: 36px;
+	border-radius: 3px;
+	padding: 10px 0;
+	border: 1px solid rgb(214, 208, 196);
+	color: rgb(51, 51, 51);
+	font-family: var(--lato-font);
+	font-size: 16px;
+	line-height: 16px;
+	background-color: rgb(244, 241, 234);
+	margin-left: calc(50% - 175px);
+	margin-top: 15px;
+	margin-bottom: 30px;
+}
+
+.edit-favorite-genres-page-main-content input[type='submit']:hover {
+	background-color: rgb(237, 230, 214);
+}
