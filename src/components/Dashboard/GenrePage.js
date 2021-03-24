@@ -320,7 +320,7 @@ const GenrePage = ({ match }) => {
 					setDescriptionShowingMore((previous) => !previous);
 				}}
 			>
-				{descriptionShowingMore ? '...more' : '(less)'}
+				{descriptionShowingMore ? '(less)' : '...more'}
 			</button>
 		</div>
 	) : null;
@@ -386,36 +386,40 @@ const GenrePage = ({ match }) => {
 	const listsSection = loaded ? (
 		<div className="genre-page-lists-section">
 			<span className="section-title">LISTS</span>
-			{genreInfo.lists.map((list, index) => {
-				return (
-					<div className="list-card" key={index}>
-						{list.bookCovers.map((cover, coverIndex) => {
-							return (
-								<a
-									className="cover-wrapper"
-									href={Firebase.pageGenerator.generateListPage(
-										list.id,
-										list.title
-									)}
-									index={coverIndex}
-								>
-									<img src={cover} alt={'list book'} />
-								</a>
-							);
-						})}
-						<a
-							className="list-a"
-							href={Firebase.pageGenerator.generateListPage(
-								list.id,
-								list.title
-							)}
-						>
-							{list.title}
-						</a>
-						<span className="list-numbers">{`${list.numberOfBooks} books — ${list.numberOfVoters} voters`}</span>
-					</div>
-				);
-			})}
+			<div className="lists-list">
+				{genreInfo.lists.map((list, index) => {
+					return (
+						<div className="list-card" key={index}>
+							<div className="covers">
+								{list.bookCovers.map((cover, coverIndex) => {
+									return (
+										<a
+											className="cover-wrapper"
+											href={Firebase.pageGenerator.generateListPage(
+												list.id,
+												list.title
+											)}
+											index={coverIndex}
+										>
+											<img src={cover} alt={'list book'} />
+										</a>
+									);
+								})}
+							</div>
+							<a
+								className="list-a"
+								href={Firebase.pageGenerator.generateListPage(
+									list.id,
+									list.title
+								)}
+							>
+								{list.title}
+							</a>
+							<span className="list-numbers">{`${list.numberOfBooks} books — ${list.numberOfVoters} voters`}</span>
+						</div>
+					);
+				})}
+			</div>
 		</div>
 	) : null;
 
@@ -424,24 +428,29 @@ const GenrePage = ({ match }) => {
 			<span className="section-title">{`${capitalizeAndSeparate(
 				genre
 			).toUpperCase()} BOOKS`}</span>
-			{genreInfo.genreBooks.map((book, index) => {
-				return (
-					<a
-						key={index}
-						className="book-cover-wrapper"
-						href={Firebase.pageGenerator.generateBookPage(book.id, book.title)}
-					>
-						<img
-							src={
-								book.cover !== undefined
-									? book.cover
-									: 'https://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png'
-							}
-							alt={book.title}
-						/>
-					</a>
-				);
-			})}
+			<div className="book-list">
+				{genreInfo.genreBooks.map((book, index) => {
+					return (
+						<a
+							key={index}
+							className="book-cover-wrapper"
+							href={Firebase.pageGenerator.generateBookPage(
+								book.id,
+								book.title
+							)}
+						>
+							<img
+								src={
+									book.cover !== undefined
+										? book.cover
+										: 'https://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png'
+								}
+								alt={book.title}
+							/>
+						</a>
+					);
+				})}
+			</div>
 		</div>
 	) : null;
 
@@ -525,7 +534,7 @@ const GenrePage = ({ match }) => {
 			<div className="quotes-list">
 				{genreInfo.quotesTagged.map((quote, index) => {
 					return (
-						<div className="quote-card">
+						<div className="quote-card" key={index}>
 							<div className="quote-and-author-picture">
 								{quote.authorPicture !== undefined ? (
 									<a
@@ -539,7 +548,10 @@ const GenrePage = ({ match }) => {
 								) : null}
 								<span className="quote-content">{`“ ${quote.content} ”`}</span>
 							</div>
-							<span className="quote-authorship-span">{`― ${quote.authorName}, ${quote.bookTitle}`}</span>
+							<span className="quote-authorship-span">
+								<span>{'― '}</span>
+								<b>{`${quote.authorName}, ${quote.bookTitle}`}</b>
+							</span>
 							<a
 								className="quote-likes-a"
 								href={Firebase.pageGenerator.generateQuotePage(

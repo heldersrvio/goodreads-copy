@@ -14,6 +14,8 @@
 
 .genre-page-main-content-right-section {
 	width: 300px;
+	margin-left: 15px;
+	margin-top: 30px;
 }
 
 .genre-page-main-content a {
@@ -83,4 +85,270 @@
 .genre-page-header button:hover {
 	background-color: rgb(237, 230, 214);
 	font-weight: bold;
+}
+
+.genre-page-description-section {
+	margin-bottom: 20px;
+}
+
+.genre-page-description-section p {
+	color: rgb(24, 24, 24);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 18px;
+	max-height: 110px;
+	overflow: hidden;
+}
+
+.genre-page-description-section.more p {
+	max-height: none;
+}
+
+.genre-page-description-section button {
+	display: inline;
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 18px;
+	padding: 0;
+	margin: 0;
+	background-color: transparent;
+}
+
+.genre-page-description-section button:hover {
+	text-decoration: underline;
+}
+
+.genre-page-new-releases-section,
+.genre-page-new-most-read-this-week-section,
+.genre-page-lists-section {
+	margin-bottom: 20px;
+}
+
+.genre-page-new-releases-section .section-title,
+.genre-page-new-most-read-this-week-section .section-title,
+.genre-page-lists-section .section-title,
+.genre-page-genre-books-section .section-title,
+.genre-page-related-genres-section .section-title,
+.genre-page-related-news-section .section-title,
+.genre-page-quotes-section .section-title {
+	display: block;
+	width: 100%;
+	padding: 2px 0;
+	border-bottom: 1px solid rgb(216, 216, 216);
+	color: rgb(56, 33, 16);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 24px;
+	font-weight: bold;
+}
+
+.genre-page-new-releases-section .book-list,
+.genre-page-new-most-read-this-week-section .book-list,
+.genre-page-genre-books-section .book-list {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+
+.genre-page-new-releases-section .book-list .book-cover-wrapper,
+.genre-page-new-most-read-this-week-section .book-list .book-cover-wrapper,
+.genre-page-genre-books-section .book-list .book-cover-wrapper,
+.genre-page-new-releases-section .book-list img,
+.genre-page-new-most-read-this-week-section .book-list img,
+.genre-page-genre-books-section .book-list .book-cover-wrapper img {
+	width: 115px;
+	height: 180px;
+}
+
+.genre-page-new-releases-section .book-list .book-cover-wrapper,
+.genre-page-new-most-read-this-week-section .book-cover-wrapper,
+.genre-page-genre-books-section .book-cover-wrapper {
+	margin: 15px 5px;
+}
+
+.genre-page-lists-section .lists-list {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+
+.genre-page-lists-section .lists-list .cover-wrapper,
+.genre-page-lists-section .lists-list .cover-wrapper img {
+	width: 55px;
+	height: 80px;
+}
+
+.genre-page-lists-section .lists-list .cover-wrapper {
+	margin-right: 2px;
+}
+
+.genre-page-lists-section .lists-list .list-card {
+	margin: 10px 10px;
+}
+
+.genre-page-lists-section .lists-list .list-card .list-a {
+	margin-top: 5px;
+	display: block;
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	font-weight: bold;
+	line-height: 18px;
+	padding: 0;
+}
+
+.genre-page-lists-section .lists-list .list-card .list-a:hover {
+	text-decoration: underline;
+}
+
+.genre-page-lists-section .lists-list .list-card .list-numbers {
+	color: var(--goodreads-light-gray);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.genre-page-related-genres-section {
+	margin-bottom: 40px;
+}
+
+.genre-page-related-genres-section a {
+	display: block;
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+	height: auto;
+	width: auto;
+}
+
+.genre-page-related-genres-section a:hover,
+.genre-page-related-news-section .article-preview .article-title-a:hover,
+.genre-page-related-news-section .article-read-more-a:hover {
+	text-decoration: underline;
+}
+
+.genre-page-related-genres-section .related-genres-list {
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	height: 162px;
+	margin-top: 10px;
+}
+
+.genre-page-related-news-section .article-preview {
+	margin-top: 10px;
+}
+
+.genre-page-related-news-section .article-preview img {
+	width: 300px;
+}
+
+.genre-page-related-news-section .article-preview .article-title-a {
+	display: block;
+	color: var(--goodreads-teal);
+	font-family: var(--merriweather-font);
+	font-size: 16px;
+	font-weight: bold;
+	line-height: 18px;
+	margin: 15px 0;
+}
+
+.genre-page-related-news-section .article-preview p {
+	color: rgb(24, 24, 24);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 18px;
+	max-height: 72px;
+	overflow: hidden;
+}
+
+.genre-page-related-news-section .article-read-more-a {
+	display: block;
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	font-weight: bold;
+	line-height: 18px;
+	margin: 15px 0;
+}
+
+.genre-page-quotes-section {
+	position: relative;
+}
+
+.genre-page-quotes-section .section-title {
+	border-bottom: none;
+}
+
+.genre-page-quotes-section .section-title:hover {
+	text-decoration: underline;
+}
+
+.genre-page-quotes-section .quotes-list .quote-card {
+	position: relative;
+	border-top: 1px solid rgb(216, 216, 216);
+	padding-top: 20px;
+}
+
+.genre-page-quotes-section .quotes-list .quote-and-author-picture {
+	display: flex;
+	flex-direction: row;
+}
+
+.genre-page-quotes-section .quote-and-author-picture img {
+	width: 50px;
+	height: 66px;
+}
+
+.genre-page-quotes-section .quote-and-author-picture .quote-content {
+	color: rgb(24, 24, 24);
+	font-family: var(--merriweather-font);
+	font-size: 14px;
+	line-height: 21px;
+	margin-left: 10px;
+}
+
+.genre-page-quotes-section .quote-authorship-span {
+	display: block;
+	color: rgb(51, 51, 51);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 21px;
+	margin-left: 60px;
+	padding-bottom: 20px;
+}
+
+.genre-page-quotes-section .quote-authorship-span b {
+	font-weight: bold;
+}
+
+.genre-page-quotes-section .quote-likes-a {
+	position: absolute;
+	right: 0;
+	bottom: 10px;
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 11px;
+	line-height: 14px;
+}
+
+.genre-page-quotes-section .quote-likes-a:hover {
+	text-decoration: underline;
+}
+
+.genre-page-quotes-section .more-quotes-a {
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	font-weight: bold;
+	line-height: 18px;
+	position: absolute;
+	right: 0;
+	bottom: -20px;
+}
+
+.genre-page-quotes-section .more-quotes-a:hover {
+	text-decoration: underline;
 }
