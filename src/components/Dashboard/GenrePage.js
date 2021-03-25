@@ -11,51 +11,6 @@ const GenrePage = ({ match }) => {
 	const [loaded, setLoaded] = useState(false);
 	const [genreInfo, setGenreInfo] = useState({});
 	const [descriptionShowingMore, setDescriptionShowingMore] = useState(false);
-	/*
-    genreInfo: {
-        userFavoriteGenres,
-        description,
-        relatedGenres,
-        parentGenre,
-        newReleases: [{
-            id,
-            cover,
-            title,
-        }],
-        mostReadThisWeek: [{
-            id,
-            cover,
-            title,
-        }],
-        lists: [{
-            id,
-            title,
-            bookCovers,
-            numberOfBooks,
-            numberOfVoters,
-        }],
-        genreBooks: [{
-            id,
-            cover,
-            title,
-        }],
-        relatedNews: [{
-            id,
-            image,
-            title,
-            content
-        }],
-        quotesTagged: [{
-            id,
-            content,
-            numberOfLikes,
-            authorId,
-            authorName,
-            authorPicture,
-			bookTitle,
-        }],
-    }
-    */
 
 	const user = JSON.parse(localStorage.getItem('userState'));
 

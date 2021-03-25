@@ -257,6 +257,26 @@ const Firebase = (() => {
 			return '/user/edit_fav_genres';
 		};
 
+		const generateNewsPage = () => {
+			return '/news';
+		};
+
+		const generateAllStoriesNewsPage = () => {
+			return '/news?content_type=all';
+		};
+
+		const generateArticlesNewsPage = () => {
+			return '/news?content_type=articles';
+		};
+
+		const generateInterviewsNewsPage = () => {
+			return '/news?content_type=interviews';
+		};
+
+		const generateArticleLikesPage = (articleId) => {
+			return '/rating/voters/' + articleId + '?resource_type=Article';
+		};
+
 		return {
 			generateBookPage,
 			generateAddBookPage,
@@ -308,6 +328,11 @@ const Firebase = (() => {
 			generateChangePasswordPage,
 			generateDeleteAccountPage,
 			generateEditFavoriteGenresPage,
+			generateNewsPage,
+			generateAllStoriesNewsPage,
+			generateArticlesNewsPage,
+			generateInterviewsNewsPage,
+			generateArticleLikesPage,
 		};
 	})();
 

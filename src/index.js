@@ -31,6 +31,7 @@ import ChangePassswordPage from './components/Dashboard/ChangePasswordPage';
 import DeleteAccountPage from './components/Dashboard/DeleteAccountPage';
 import EditFavoriteGenresPage from './components/Dashboard/EditFavoriteGenresPage';
 import GenrePage from './components/Dashboard/GenrePage';
+import NewsPage from './components/News/NewsPage';
 
 const store = createStore(reducer.userReducer);
 
@@ -101,6 +102,7 @@ ReactDOM.render(
 						component={EditFavoriteGenresPage}
 					/>
 					<Route path="/genres/:genre" component={GenrePage} />
+					<Route path="/news" component={NewsPage} />
 					<Route path="/" component={App} />
 				</Switch>
 			</BrowserRouter>
