@@ -1,6 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
+import { differenceInDays } from 'date-fns';
 
 const Firebase = (() => {
 	const firebaseConfig = {
@@ -3142,6 +3143,198 @@ const Firebase = (() => {
 			.set({ favoriteGenres: newGenres }, { merge: true });
 	};
 
+	const getGenreInfo = async (userUID, genre) => {
+		const userFavoriteGenres =
+			userUID !== undefined && userUID !== null
+				? (await database.collection('users').doc(userUID).get()).data()
+						.favoriteGenres
+				: undefined;
+		const genreQuery = await database.collection('genres').doc(genre).get();
+		const description = genreQuery.data().description;
+		const relatedGenres = genreQuery.data().relatedGenres;
+		const parentGenre = genreQuery.data().parentGenre;
+		const shelfQuery = await database
+			.collection('shelves')
+			.where('genre', '==', genre)
+			.get();
+		const allRootBooksOfGenre = shelfQuery.docs.reduce((previous, current) => {
+			const newArray = previous;
+			current.data().rootBooks.forEach((rootBook) => {
+				if (!newArray.includes(rootBook)) {
+					newArray.push(rootBook);
+				}
+			});
+			return newArray;
+		}, []);
+		const allBookDocsOfGenre = [].concat.apply(
+			[],
+			await Promise.all(
+				allRootBooksOfGenre.map(async (rootBook) => {
+					return (
+						await database
+							.collection('books')
+							.where('rootBook', '==', rootBook)
+							.get()
+					).docs;
+				})
+			)
+		);
+		const newReleases = allBookDocsOfGenre
+			.sort((a, b) =>
+				a.data().publishedDate === undefined
+					? b
+					: b.data().publishedDate === undefined
+					? a
+					: b.data().publishedDate.toDate() - a.data().publishedDate.toDate()
+			)
+			.map((release) => {
+				return {
+					id: release.id,
+					cover: release.data().cover,
+					title: release.data().title,
+				};
+			});
+		newReleases.length = Math.min(newReleases.length, 15);
+		const userUpdatesQuery = await database
+			.collection('userBooksUpdates')
+			.get();
+		const mostReadThisWeek = await Promise.all(
+			Object.entries(
+				userUpdatesQuery.docs
+					.filter(
+						(doc) =>
+							differenceInDays(new Date(), doc.data().date.toDate()) <= 7 &&
+							allBookDocsOfGenre
+								.map((bookDoc) => bookDoc.id)
+								.includes(doc.data().book) &&
+							doc.data().action === 'add-book' &&
+							(doc.data().shelf === 'read' || doc.data().shelf === 'reading')
+					)
+					.reduce((previous, current) => {
+						if (previous[current.data().book] === undefined) {
+							previous[current.data().book] = 1;
+						} else {
+							previous[current.data().book] += 1;
+						}
+						return previous;
+					}, {})
+			)
+				.sort((a, b) => b[1] - a[1])
+				.map(async (bookValuePair) => {
+					const bookQuery = await database
+						.collection('books')
+						.doc(bookValuePair[0])
+						.get();
+					return {
+						id: bookValuePair[0],
+						cover: bookQuery.data().cover,
+						title: bookQuery.data().cover,
+					};
+				})
+		);
+		mostReadThisWeek.length = Math.min(mostReadThisWeek.length, 15);
+		const lists = await Promise.all(
+			(
+				await database
+					.collection('lists')
+					.where('tags', 'array-contains', genre)
+					.get()
+			).docs.map(async (doc) => {
+				return {
+					id: doc.id,
+					title: doc.data().title,
+					bookCovers: await Promise.all(
+						doc
+							.data()
+							.books.filter((_b, index) => index < 5)
+							.map(async (book) => {
+								const cover = (
+									await database.collection('books').doc(book).get()
+								).data().cover;
+								return cover !== undefined
+									? cover
+									: 'https://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png';
+							})
+					),
+					numberOfBooks: doc.data().books.length,
+					numberOfVoters: doc.data().userVotes.length,
+				};
+			})
+		);
+		const genreBooks = allBookDocsOfGenre
+			.filter((_d, index) => index < 15)
+			.map((doc) => {
+				return {
+					id: doc.id,
+					cover: doc.data().cover,
+					title: doc.data().title,
+				};
+			});
+		const relatedNews = (await database.collection('articles').get()).docs
+			.filter(
+				(doc) =>
+					doc.data().featuredBooks !== undefined &&
+					doc
+						.data()
+						.featuredBooks.some((rootBook) =>
+							allRootBooksOfGenre.includes(rootBook)
+						)
+			)
+			.sort(
+				(a, b) =>
+					b.data().datePublished.toDate() - a.data().datePublished.toDate()
+			)
+			.map((doc) => {
+				return {
+					id: doc.id,
+					image: doc.data().image,
+					title: doc.data().title,
+					content: doc.data().content,
+				};
+			});
+		relatedNews.length = Math.min(relatedNews.length, 1);
+		const quotesTagged = await Promise.all(
+			(
+				await database
+					.collection('quotes')
+					.where('tags', 'array-contains', genre)
+					.get()
+			).docs.map(async (doc) => {
+				const authorQuery = await database
+					.collection('authors')
+					.doc(doc.data().authorId)
+					.get();
+				const bookQuery = await database
+					.collection('books')
+					.where('rootBook', '==', doc.data().rootBook)
+					.where('mainEdition', '==', true)
+					.get();
+				return {
+					id: doc.id,
+					content: doc.data().text,
+					numberOfLikes: doc.data().usersWhoLiked.length,
+					authorId: doc.data().authorId,
+					authorName: authorQuery.data().name,
+					authorPicture: authorQuery.data().picture,
+					bookTitle: bookQuery.docs[0].data().title,
+				};
+			})
+		);
+
+		return {
+			userFavoriteGenres,
+			description,
+			relatedGenres,
+			parentGenre,
+			newReleases,
+			mostReadThisWeek,
+			lists,
+			genreBooks,
+			relatedNews,
+			quotesTagged,
+		};
+	};
+
 	return {
 		pageGenerator,
 		getAlsoEnjoyedBooksDetailsForBook,
@@ -3199,6 +3392,7 @@ const Firebase = (() => {
 		deleteAccount,
 		getFavoriteGenresForUser,
 		updateFavoriteGenresForUser,
+		getGenreInfo,
 	};
 })();
 

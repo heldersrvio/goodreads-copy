@@ -300,6 +300,7 @@
 .genre-page-quotes-section .quote-and-author-picture img {
 	width: 50px;
 	height: 66px;
+	margin-right: 10px;
 }
 
 .genre-page-quotes-section .quote-and-author-picture .quote-content {
@@ -316,7 +317,6 @@
 	font-family: var(--lato-font);
 	font-size: 14px;
 	line-height: 21px;
-	margin-left: 60px;
 	padding-bottom: 20px;
 }
 
