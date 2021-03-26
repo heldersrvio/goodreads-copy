@@ -6,6 +6,7 @@
 	background-color: rgb(249, 248, 244);
 	display: flex;
 	flex-direction: row;
+	min-height: 400px;
 }
 
 .news-page-main-content .page-header-a {
@@ -52,6 +53,7 @@
 
 .news-page-news-list-section {
 	margin-top: 15px;
+	position: relative;
 }
 
 .news-page-news-list-section .featured-article {
@@ -158,4 +160,37 @@
 .news-page-main-content .main-section .other-articles .likes-area {
 	position: absolute;
 	bottom: 10px;
+}
+
+.news-page-main-content .page-navigation-section {
+	display: flex;
+	flex-direction: row;
+	position: absolute;
+	right: 0;
+}
+
+.news-page-main-content .page-navigation-section span {
+	color: rgb(24, 24, 24);
+	font-family: var(--merriweather-font);
+	font-size: 14px;
+	line-height: 21px;
+	margin-right: 5px;
+}
+
+.news-page-main-content .page-navigation-section a {
+	color: var(--goodreads-teal);
+	font-family: var(--merriweather-font);
+	font-size: 14px;
+	line-height: 21px;
+	padding: 0;
+	margin-right: 5px;
+}
+
+.news-page-main-content .page-navigation-section a:hover {
+	background-color: transparent;
+	text-decoration: underline;
+}
+
+.news-page-main-content .page-navigation-section span em {
+	font-style: italic;
 }
