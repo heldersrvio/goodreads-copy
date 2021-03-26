@@ -3379,6 +3379,57 @@ const Firebase = (() => {
 		});
 	};
 
+	const likeUnlikeArticle = async (userUID, articleId, history) => {
+		if (userUID === null || userUID === undefined) {
+			history.push({
+				pathname: '/user/sign_in',
+				state: { error: 'User not logged in' },
+			});
+		} else {
+			const articleQuery = await database
+				.collection('articles')
+				.doc(articleId)
+				.get();
+			if (articleQuery.data().usersWhoLiked.includes(userUID)) {
+				await database
+					.collection('articles')
+					.doc(articleId)
+					.set(
+						{
+							usersWhoLiked: articleQuery
+								.data()
+								.usersWhoLiked.filter((user) => user !== userUID),
+						},
+						{ merge: true }
+					);
+			} else {
+				await database
+					.collection('articles')
+					.doc(articleId)
+					.set(
+						{
+							usersWhoLiked: articleQuery.data().usersWhoLiked.concat(userUID),
+						},
+						{ merge: true }
+					);
+			}
+		}
+	};
+
+	const getInfoForArticle = async (articleId) => {
+		const articleQuery = await database
+			.collection('articles')
+			.doc(articleId)
+			.get();
+		return {
+			authorName: articleQuery.data().authorName,
+			date: articleQuery.data().datePublished.toDate(),
+			likes: articleQuery.data().usersWhoLiked,
+			image: articleQuery.data().image,
+			content: articleQuery.data().content,
+		};
+	};
+
 	return {
 		pageGenerator,
 		getAlsoEnjoyedBooksDetailsForBook,
@@ -3438,6 +3489,8 @@ const Firebase = (() => {
 		updateFavoriteGenresForUser,
 		getGenreInfo,
 		getNews,
+		likeUnlikeArticle,
+		getInfoForArticle,
 	};
 })();
 

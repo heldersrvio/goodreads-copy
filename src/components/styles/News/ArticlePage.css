@@ -1,0 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+
+.article-page-main-content {
+	margin: 15px 329px;
+}
+
+.article-page-main-content a {
+	padding: 0;
+	height: auto;
+	background-color: transparent;
+}
+
+.article-page-main-content img {
+	width: 625px;
+}
+
+.article-page-header {
+	padding-bottom: 20px;
+}
+
+.article-page-header .news-and-interviews-a {
+	color: var(--goodreads-teal);
+	font-family: var(--merriweather-font);
+	font-size: 14px;
+	line-height: 21px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.article-page-header .news-and-interviews-a:hover,
+.article-page-top-likes-area a:hover {
+	text-decoration: underline;
+}
+
+.article-page-header .news-and-interviews-a .icon-side-arrow {
+	background-image: url('https://s.gr-assets.com/assets/gr/icons/icon_side_arrow.svg');
+	background-repeat: no-repeat;
+	background-position: center;
+	width: 14px;
+	height: 14px;
+	margin-left: 3px;
+}
+
+.article-page-header h1 {
+	color: var(--goodreads-brown);
+	font-family: var(--merriweather-font);
+	font-size: 20px;
+	font-weight: bold;
+	line-height: 24px;
+	margin: 15px 0;
+}
+
+.article-page-header .authorship-and-date {
+	color: var(--goodreads-light-gray);
+	font-family: var(--merriweather-font);
+	font-size: 14px;
+	line-height: 24px;
+}
+
+.article-page-top-likes-area,
+.article-page-bottom-likes-area {
+	padding: 13px 0;
+	border-bottom: 1px solid rgb(232, 232, 232);
+	border-top: 1px solid rgb(238, 238, 238);
+}
+
+.article-page-top-likes-area a {
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 21px;
+}
+
+.article-page-article-content-section {
+	padding: 15px 0;
+}
+
+.article-page-article-content-section p {
+	margin: 20px 0;
+	color: rgb(24, 24, 24);
+	font-family: var(--merriweather-font);
+	font-size: 14px;
+	line-height: 20px;
+}
+
+.article-page-bottom-likes-area {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.article-page-bottom-likes-area button {
+	min-width: 46px;
+	height: 21px;
+	padding: 4px 12px;
+	border-radius: 3px;
+	border: 1px solid rgb(214, 208, 196);
+	background-color: rgb(244, 241, 234);
+	color: rgb(51, 51, 51);
+	font-family: var(--lato-font);
+	font-size: 11px;
+	line-height: 11px;
+}
+
+.article-page-bottom-likes-area button:hover {
+	background-color: rgb(237, 230, 214);
+}
+
+.article-page-bottom-likes-area a {
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 21px;
+}
+
+.article-page-bottom-likes-area .separator {
+	margin: 0 5px;
+}
+
+.article-page-bottom-likes-area a:hover {
+	text-decoration: underline;
+}
+
+.article-page-bottom-likes-area .loading-spinner {
+	width: 16px;
+	height: 16px;
+}
