@@ -66,6 +66,10 @@
 	padding: 0;
 }
 
+.news-page-news-list-section .featured-article img {
+	width: 700px;
+}
+
 .news-page-news-list-section .featured-article .bottom-section {
 	padding: 7px 12px 12px 12px;
 }

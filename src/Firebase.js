@@ -3360,6 +3360,25 @@ const Firebase = (() => {
 		};
 	};
 
+	const getNews = async () => {
+		const newsQuery = await database
+			.collection('articles')
+			.orderBy('datePublished', 'desc')
+			.get();
+		return newsQuery.docs.map((doc) => {
+			return {
+				id: doc.id,
+				image: doc.data().image,
+				type: doc.data().type,
+				title: doc.data().title,
+				date: doc.data().datePublished.toDate(),
+				numberOfLikes: doc.data().usersWhoLiked.length,
+				content: doc.data().content,
+				featured: doc.data().isFeatured,
+			};
+		});
+	};
+
 	return {
 		pageGenerator,
 		getAlsoEnjoyedBooksDetailsForBook,
@@ -3418,6 +3437,7 @@ const Firebase = (() => {
 		getFavoriteGenresForUser,
 		updateFavoriteGenresForUser,
 		getGenreInfo,
+		getNews,
 	};
 })();
 

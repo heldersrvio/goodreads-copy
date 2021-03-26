@@ -18,48 +18,10 @@ const NewsPage = () => {
 			: Firebase.pageGenerator.generateNewsPage() + '?';
 	const [loaded, setLoaded] = useState(false);
 	const [news, setNews] = useState([]);
-	/*
-    news: [{
-        id,
-        image,
-        type,
-        title,
-        date,
-        numberOfLikes,
-        content,
-        featured,
-    }]
-    */
 
 	useEffect(() => {
-		const getNewsInfo = () => {
-			setNews(
-				Array(21)
-					.fill({
-						id: '123',
-						image: 'https://images.gr-assets.com/blogs/1615830014p8/2018.jpg',
-						type: 'article',
-						title: '6 Great Books Hitting Shelves This Week',
-						date: new Date(2021, 2, 23),
-						numberOfLikes: 35,
-						content:
-							"Need another excuse to treat yourself to a new book this week? We've got you covered with the buzziest new releases of the day.\nTo create our list, we focused on the books Goodreads members can't wait to read, which we measure by how many times a book has been added to Want to Read shelves. All these top titles are now available in the United States! Which ones catch your eye?",
-						featured: false,
-					})
-					.concat([
-						{
-							id: '123',
-							image: 'https://images.gr-assets.com/blogs/1613413008p8/2012.jpg',
-							type: 'article',
-							title: "Meet the Authors of Spring's Biggest Mysteries",
-							date: new Date(2021, 2, 2),
-							numberOfLikes: 131,
-							content:
-								"If you ask us, it's always the perfect time to lose yourself in a page-turning mystery. To help you sleuth out a new read, we asked the authors of seven of this spring's most anticipated mysteries and thrillers to tell you about their new books and share their best recommendations for the perfect whodunit.",
-							featured: true,
-						},
-					])
-			);
+		const getNewsInfo = async () => {
+			setNews(await Firebase.getNews());
 			setLoaded(true);
 		};
 		getNewsInfo();
