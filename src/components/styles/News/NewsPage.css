@@ -1,0 +1,161 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+
+.news-page-main-content .main-section {
+	padding: 0 155px;
+	background-color: rgb(249, 248, 244);
+	display: flex;
+	flex-direction: row;
+}
+
+.news-page-main-content .page-header-a {
+	text-align: center;
+	color: var(--goodreads-brown);
+	font-family: var(--merriweather-font);
+	font-size: 36px;
+	line-height: 18px;
+	padding-top: 32.5px;
+	height: 50.5px;
+	background-color: rgb(255, 255, 255);
+	border-bottom: 1px solid rgb(216, 216, 216);
+}
+
+.news-page-main-content .main-section .browsing-type-content-area {
+	margin-top: 15px;
+	width: 197px;
+}
+
+.news-page-main-content .main-section .browsing-type-content-area a {
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 18px;
+	height: auto;
+	width: auto;
+	padding: 0;
+	background-color: transparent;
+	margin-bottom: 10px;
+}
+
+.news-page-main-content .main-section .browsing-type-content-area a:hover {
+	text-decoration: underline;
+}
+
+.news-page-news-list-section {
+	width: 702px;
+}
+
+.news-page-main-content .main-section .browsing-type-content-area a.selected {
+	color: rgb(51, 51, 51);
+	font-weight: bold;
+}
+
+.news-page-news-list-section {
+	margin-top: 15px;
+}
+
+.news-page-news-list-section .featured-article {
+	border: 1px solid rgb(216, 216, 216);
+	border-radius: 2px;
+	background-color: rgb(255, 255, 255);
+}
+
+.news-page-main-content .main-section .article-image-wrapper {
+	padding: 0;
+}
+
+.news-page-news-list-section .featured-article .bottom-section {
+	padding: 7px 12px 12px 12px;
+}
+
+.news-page-main-content .main-section .bottom-section a {
+	padding: 0;
+	height: auto;
+}
+
+.news-page-main-content .main-section .bottom-section .type-and-date {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.news-page-main-content .main-section .bottom-section .type-and-date span {
+	color: rgb(118, 118, 118);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	font-weight: bold;
+	line-height: 13px;
+}
+
+.news-page-main-content .main-section .bottom-section .type-and-date a {
+	color: rgb(118, 118, 118);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 13px;
+}
+
+.news-page-main-content .main-section .bottom-section .type-and-date a:hover,
+.news-page-main-content .main-section .bottom-section a.article-title-a:hover,
+.news-page-main-content .main-section .bottom-section .read-more-a:hover,
+.news-page-main-content .main-section .likes-area a:hover {
+	background-color: transparent;
+	text-decoration: underline;
+}
+
+.news-page-main-content .main-section .bottom-section a.article-title-a {
+	color: rgb(51, 51, 51);
+	font-family: var(--merriweather-font);
+	font-size: 16px;
+	font-weight: bold;
+	line-height: normal;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.news-page-main-content .main-section .bottom-section .article-content-preview {
+	color: rgb(118, 118, 118);
+	font-family: var(--merriweather-font);
+	font-size: 14px;
+	line-height: 18px;
+}
+
+.news-page-main-content .main-section .bottom-section .read-more-a {
+	display: inline;
+	color: var(--goodreads-teal);
+	font-family: var(--merriweather-font);
+	font-size: 14px;
+	line-height: 18px;
+	margin-left: 5px;
+}
+
+.news-page-main-content .main-section .likes-area a {
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 18px;
+	padding: 0;
+	margin-top: 10px;
+}
+
+.news-page-main-content .main-section .other-articles .article-card {
+	position: relative;
+	height: 170px;
+	display: flex;
+	flex-direction: row;
+	background-color: rgb(255, 255, 255);
+	border: 1px solid rgb(216, 216, 216);
+	margin: 15px 0;
+}
+
+.news-page-main-content .main-section .other-articles img {
+	width: 324px;
+}
+
+.news-page-main-content .main-section .other-articles .bottom-section {
+	padding: 7px 12px 12px 12px;
+}
+
+.news-page-main-content .main-section .other-articles .likes-area {
+	position: absolute;
+	bottom: 10px;
+}
