@@ -33,6 +33,7 @@ import EditFavoriteGenresPage from './components/Dashboard/EditFavoriteGenresPag
 import GenrePage from './components/Dashboard/GenrePage';
 import NewsPage from './components/News/NewsPage';
 import ArticlePage from './components/News/ArticlePage';
+import ArticleLikedByPage from './components/News/ArticleLikedByPage';
 
 const store = createStore(reducer.userReducer);
 
@@ -105,6 +106,10 @@ ReactDOM.render(
 					<Route path="/genres/:genre" component={GenrePage} />
 					<Route path="/news" component={NewsPage} />
 					<Route path="/blog/show/:articlePageId" component={ArticlePage} />
+					<Route
+						path="/rating/voters/:articleId"
+						component={ArticleLikedByPage}
+					/>
 					<Route path="/" component={App} />
 				</Switch>
 			</BrowserRouter>
