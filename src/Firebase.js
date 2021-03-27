@@ -277,6 +277,10 @@ const Firebase = (() => {
 			return '/rating/voters/' + articleId + '?resource_type=Article';
 		};
 
+		const generateAddAsFriendPage = (userId) => {
+			return '/friend/add_as_friend/' + userId;
+		};
+
 		return {
 			generateBookPage,
 			generateAddBookPage,
@@ -333,6 +337,7 @@ const Firebase = (() => {
 			generateArticlesNewsPage,
 			generateInterviewsNewsPage,
 			generateArticleLikesPage,
+			generateAddAsFriendPage,
 		};
 	})();
 
