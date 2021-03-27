@@ -3430,6 +3430,35 @@ const Firebase = (() => {
 		};
 	};
 
+	const getArticleTitle = async (articleId) => {
+		return (await database.collection('articles').doc(articleId).get()).data()
+			.title;
+	};
+
+	const getUsersWhoLikedArticle = async (articleId) => {
+		const articleQuery = await database
+			.collection('articles')
+			.doc(articleId)
+			.get();
+		return await Promise.all(
+			articleQuery.data().usersWhoLiked.map(async (user) => {
+				const userQuery = await database.collection('users').doc(user).get();
+				return {
+					id: userQuery.id,
+					name: userQuery.data().firstName,
+					profilePicture: userQuery.data().profileImage,
+					numberOfBooks: (
+						await database
+							.collection('userBooksInstances')
+							.where('userId', '==', user)
+							.get()
+					).docs.length,
+					numberOfFriends: userQuery.data().friends.length,
+				};
+			})
+		);
+	};
+
 	return {
 		pageGenerator,
 		getAlsoEnjoyedBooksDetailsForBook,
@@ -3491,6 +3520,8 @@ const Firebase = (() => {
 		getNews,
 		likeUnlikeArticle,
 		getInfoForArticle,
+		getArticleTitle,
+		getUsersWhoLikedArticle,
 	};
 })();
 
