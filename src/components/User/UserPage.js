@@ -33,6 +33,7 @@ const UserPage = ({ match }) => {
 	] = useState([]);
 	const [addShelfInputs, setAddShelfInputs] = useState([]);
 	const [exhibitedStarRatings, setExhibitedStarRatings] = useState([]);
+	const [userLikedQuotes, setUserLikedQuotes] = useState([]);
 
 	const location = loaded
 		? userInfo.city !== undefined &&
@@ -110,16 +111,31 @@ const UserPage = ({ match }) => {
         recentUpdates: [{
             type,
             date,
+			rating,
+			newFriendId,
+			newFriendName,
+			newFriendPicture,
+			numberOfReviewVoters,
+			reviewText,
+			quoteId,
+			quoteContent,
+			recommendedUserId,
+			recommendedUserName,
             authorInfo: {
                 id,
                 name,
                 picture,
                 isMember,
                 userIsFollowing,
+				bestBookId,
+				bestBookTitle,
+				bestBookSeries,
+				bestBookSeriesInstance,
             },
             bookInfo: {
                 id,
                 title,
+				cover,
                 mainAuthorId,
                 mainAuthorName,
                 mainAuthorIsMember,
@@ -153,6 +169,13 @@ const UserPage = ({ match }) => {
             name,
         }],
         numberOfFollowers,
+		favoriteAuthors: [{
+			id,
+			name,
+			bestBookId,
+			bestBookTitle,
+			picture,
+		}]
         votedLists: [{
             id,
             title,
@@ -210,8 +233,7 @@ const UserPage = ({ match }) => {
 														recentUpdate.type === 'add-book'
 												)
 												.indexOf(update) +
-												previous.currentlyReadingBooks.length -
-												1 ===
+												previous.currentlyReadingBooks.length ===
 											index
 										) {
 											return {
@@ -276,8 +298,7 @@ const UserPage = ({ match }) => {
 														recentUpdate.type === 'add-book'
 												)
 												.indexOf(update) +
-												previous.currentlyReadingBooks.length -
-												1 ===
+												previous.currentlyReadingBooks.length ===
 											index
 										) {
 											return {
@@ -339,8 +360,7 @@ const UserPage = ({ match }) => {
 														recentUpdate.type === 'add-book'
 												)
 												.indexOf(update) +
-												previous.currentlyReadingBooks.length -
-												1 ===
+												previous.currentlyReadingBooks.length ===
 											index
 										) {
 											return {
@@ -408,8 +428,7 @@ const UserPage = ({ match }) => {
 														recentUpdate.type === 'add-book'
 												)
 												.indexOf(update) +
-												previous.currentlyReadingBooks.length -
-												1 ===
+												previous.currentlyReadingBooks.length ===
 											index
 										) {
 											return {
@@ -687,8 +706,7 @@ const UserPage = ({ match }) => {
 																					recentUpdate.type === 'add-book'
 																			)
 																			.indexOf(update) +
-																			previous.currentlyReadingBooks.length -
-																			1 ===
+																			previous.currentlyReadingBooks.length ===
 																		index
 																	) {
 																		return {
@@ -1026,6 +1044,11 @@ const UserPage = ({ match }) => {
 									e.target.innerHTML = 'Unfollow';
 								}
 							}}
+							onMouseOut={(e) => {
+								if (userInfo.isFollowedByUser) {
+									e.target.innerHTML = 'Following';
+								}
+							}}
 						>
 							{userInfo.isFollowedByUser ? (
 								<span>
@@ -1320,7 +1343,554 @@ const UserPage = ({ match }) => {
 
 	const userRecentUpdatesSection = loaded ? (
 		<div className="user-recent-updates-section">
-			<a className="section-title">{`${firstName.toUpperCase()}'S RECENT UPDATES`}</a>
+			<span className="section-title">{`${firstName.toUpperCase()}'S RECENT UPDATES`}</span>
+			{userInfo.recentUpdates.map((update, index) => {
+				return (
+					<div className="update-card" key={index}>
+						<span className="update-description">
+							<a
+								href={Firebase.pageGenerator.generateUserPage(
+									userId,
+									firstName
+								)}
+							>
+								{firstName + ' ' + userInfo.lastName}
+							</a>
+							{update.type === 'rate-book' ? (
+								<span>
+									rated a book{' '}
+									<div className="rating-stars">
+										<div
+											className={
+												update.rating >= 1
+													? 'static-star small full'
+													: update.rating >= 0.5
+													? 'static-star small almost-full'
+													: update.rating > 0
+													? 'static-star small almost-empty'
+													: 'static-star small empty'
+											}
+										></div>
+										<div
+											className={
+												update.rating >= 2
+													? 'static-star small full'
+													: update.rating >= 1.5
+													? 'static-star small almost-full'
+													: update.rating > 1
+													? 'static-star small almost-empty'
+													: 'static-star small empty'
+											}
+										></div>
+										<div
+											className={
+												update.rating >= 3
+													? 'static-star small full'
+													: update.rating >= 2.5
+													? 'static-star small almost-full'
+													: update.rating > 2
+													? 'static-star small almost-empty'
+													: 'static-star small empty'
+											}
+										></div>
+										<div
+											className={
+												update.rating >= 4
+													? 'static-star small full'
+													: update.rating >= 3.5
+													? 'static-star small almost-full'
+													: update.rating > 3
+													? 'static-star small almost-empty'
+													: 'static-star small empty'
+											}
+										></div>
+										<div
+											className={
+												update.rating >= 5
+													? 'static-star small full'
+													: update.rating >= 4.5
+													? 'static-star small almost-full'
+													: update.rating > 4
+													? 'static-star small almost-empty'
+													: 'static-star small empty'
+											}
+										></div>
+									</div>
+								</span>
+							) : update.type === 'add-book-to-read' ? (
+								<span>wants to read</span>
+							) : update.type === 'add-book-read' ? (
+								<span>finished reading</span>
+							) : update.type === 'add-book-reading' ? (
+								<span>is currently reading</span>
+							) : update.type === 'add-friend' ? (
+								<span>
+									<span>is now friends with </span>
+									<a
+										href={Firebase.pageGenerator.generateUserPage(
+											update.newFriendId,
+											update.newFriendName
+										)}
+									>
+										{update.newFriendName}
+									</a>
+								</span>
+							) : update.type === 'vote-for-book-review' ? (
+								<span>
+									<span>{`and ${
+										update.numberOfReviewVoters - 1
+									} other people liked `}</span>
+									<a
+										href={Firebase.pageGenerator.generateUserPage(
+											update.authorInfo.id,
+											update.authorInfo.name
+										)}
+									>{`${update.authorInfo.name}'s`}</a>
+									<span> review of </span>
+									<a
+										href={Firebase.pageGenerator.generateBookPage(
+											update.bookInfo.id,
+											update.bookInfo.title
+										)}
+									>
+										{update.bookInfo.title}
+									</a>
+								</span>
+							) : update.type === 'add-a-quote' ? (
+								<span>
+									<span>liked a</span>
+									<a
+										href={Firebase.pageGenerator.generateQuotePage(
+											update.quoteId,
+											update.quoteContent
+										)}
+									>
+										quote
+									</a>
+								</span>
+							) : update.type === 'recommend-book' ? (
+								<span>
+									<span> recommended</span>
+									<a
+										href={Firebase.pageGenerator.generateBookPage(
+											update.bookInfo.id,
+											update.bookInfo.title
+										)}
+									>
+										{' '}
+										{update.bookInfo.title}{' '}
+									</a>
+									<span>to </span>
+									<a
+										href={Firebase.pageGenerator.generateUserPage(
+											update.recommendedToUserId,
+											update.recommendedToUserName
+										)}
+									>
+										{update.recommendedToUserName}
+									</a>
+								</span>
+							) : (
+								<span> is now following</span>
+							)}
+						</span>
+						{update.type === 'add-book-to-read' ||
+						update.type === 'add-book-reading' ||
+						update.type === 'add-book-read' ||
+						update.type === 'rate-book' ||
+						update.type === 'recommend-book' ? (
+							<div className="update-book-section">
+								<div className="left-section">
+									<a
+										className="book-cover-a"
+										href={Firebase.pageGenerator.generateBookPage(
+											update.bookInfo.id,
+											update.bookInfo.title
+										)}
+									>
+										<img
+											alt={update.bookInfo.title}
+											src={
+												update.bookInfo.cover !== undefined
+													? update.bookInfo.cover
+													: 'https://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png'
+											}
+										/>
+									</a>
+									<div className="book-update-info">
+										<a
+											className="book-title-a"
+											href={Firebase.pageGenerator.generateBookPage(
+												update.bookInfo.id,
+												update.bookInfo.title
+											)}
+										>
+											{update.bookInfo.title}
+										</a>
+										<span className="book-authorship-span">
+											<span>by </span>
+											<a
+												href={Firebase.pageGenerator.generateAuthorPage(
+													update.bookInfo.mainAuthorId,
+													update.bookInfo.mainAuthorName
+												)}
+											>
+												{update.bookInfo.mainAuthorName}
+											</a>
+											{update.bookInfo.mainAuthorIsMember ? (
+												<span className="goodreads-member-span">
+													(Goodreads Author)
+												</span>
+											) : null}
+										</span>
+									</div>
+								</div>
+								<div className="right-section">
+									<div className="add-to-shelf-button-and-dropdown">
+										{generateAddToShelfButton(update.bookInfo, index)}
+										{generateBookOptionsDropdown(update.bookInfo, index)}
+									</div>
+									{generateRateBookSection(update.bookInfo, index)}
+								</div>
+							</div>
+						) : null}
+						{update.type === 'add-friend' ? (
+							<a
+								className="friend-profile-picture-a"
+								href={Firebase.pageGenerator.generateUserPage(
+									update.newFriendId,
+									update.newFriendName
+								)}
+							>
+								<img
+									src={
+										update.newFriendPicture !== undefined
+											? update.newFriendPicture
+											: 'https://s.gr-assets.com/assets/nophoto/user/u_100x100-259587f1619f5253426a4fa6fb508831.png'
+									}
+									alt={update.newFriendName}
+								/>
+							</a>
+						) : null}
+						{update.type === 'vote-for-book-review' ? (
+							<div className="book-review-preview">
+								<a
+									href={Firebase.pageGenerator.generateBookPage(
+										update.bookInfo.id,
+										update.bookInfo.title
+									)}
+								>
+									<img
+										src={
+											update.bookInfo.cover !== undefined
+												? update.bookInfo.cover
+												: 'https://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png'
+										}
+										alt={update.bookInfo.title}
+									/>
+								</a>
+								<span className="review-text-span">{`"${update.reviewText.slice(
+									0,
+									250
+								)}"`}</span>
+							</div>
+						) : null}
+						{update.type === 'add-quote' ? (
+							<div className="quote-area">
+								<a
+									href={Firebase.pageGenerator.generateBookPage(
+										update.bookInfo.id,
+										update.bookInfo.title
+									)}
+								>
+									<img
+										src={
+											update.bookInfo.cover !== undefined
+												? update.bookInfo.cover
+												: 'https://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png'
+										}
+										alt={update.bookInfo.title}
+									/>
+								</a>
+								<div className="quote-content-and-authorship">
+									<span>{`“${update.quoteContent}”`}</span>
+									<a
+										href={Firebase.pageGenerator.generateAuthorPage(
+											update.authorInfo.id,
+											update.authorInfo.name
+										)}
+									>
+										{update.authorInfo.name}
+									</a>
+								</div>
+							</div>
+						) : null}
+						{update.type === 'follow-author' ? (
+							<div className="authorInfo-section">
+								<a
+									className="author-profile-picture-wrapper"
+									href={Firebase.pageGenerator.generateAuthorPage(
+										update.authorInfo.id,
+										update.authorInfo.name
+									)}
+								>
+									<img
+										src={
+											update.authorInfo.picture !== undefined
+												? update.authorInfo.picture
+												: 'https://s.gr-assets.com/assets/nophoto/user/u_100x100-259587f1619f5253426a4fa6fb508831.png'
+										}
+										alt={update.authorInfo.name}
+									/>
+								</a>
+								<span className="author-name-span">
+									<a
+										href={Firebase.pageGenerator.generateAuthorPage(
+											update.authorInfo.id,
+											update.authorInfo.name
+										)}
+									>
+										{update.authorInfo.name}
+									</a>
+									{update.authorInfo.isMember ? (
+										<div className="goodreads-badge"></div>
+									) : null}
+								</span>
+								<span className="author-best-book-span">
+									<span>Author of </span>
+									<a
+										href={Firebase.pageGenerator.generateBookPage(
+											update.authorInfo.bestBookId,
+											update.authorInfo.bestBookTitle
+										)}
+									>
+										{update.authorInfo.bestBookSeries === undefined
+											? update.authorInfo.bestBookTitle
+											: `${update.authorInfo.bestBookTitle} (${update.authorInfo.bestBookSeries}, #${update.authorInfo.bestBookSeriesInstance})`}
+									</a>
+									<button
+										className="follow-author-button"
+										onMouseOver={(e) => {
+											if (update.authorInfo.userIsFollowing) {
+												e.target.innerHTML = 'Unfollow';
+											}
+										}}
+										onMouseOut={(e) => {
+											if (update.authorInfo.userIsFollowing) {
+												e.target.innerHTML = 'Following';
+											}
+										}}
+									>
+										{update.authorInfo.userIsFollowing ? 'Following' : 'Follow'}
+									</button>
+								</span>
+							</div>
+						) : null}
+						<span className="update-date-span">
+							{format(update.date, 'MMM dd, yyyy HH:mma..aa')}
+						</span>
+					</div>
+				);
+			})}
+		</div>
+	) : null;
+
+	const userQuotesSection =
+		loaded && userInfo.quotes.length > 0 ? (
+			<div className="user-page-quotes-section">
+				<span className="sectiont-tile">{`${firstName.toUpperCase()}'S QUOTES`}</span>
+				{userInfo.quotes.map((quote, index) => {
+					return (
+						<div className="user-page-quote-card" key={index}>
+							<div className="left-section">
+								<a
+									href={Firebase.pageGenerator.generateAuthorPage(
+										quote.authorId,
+										quote.authorName
+									)}
+								>
+									<img
+										src={
+											quote.authorProfilePicture !== undefined
+												? quote.authorProfilePicture
+												: 'https://s.gr-assets.com/assets/nophoto/user/u_100x100-259587f1619f5253426a4fa6fb508831.png'
+										}
+										alt={quote.authorName}
+									/>
+								</a>
+								<div className="actual-quote-section">
+									<span className="quote">{`“${quote.content}”`}</span>
+									<span className="quote-authorship">
+										<span className="dash">― </span>
+										{`${quote.authorName}, ${quote.bookTitle}`}
+									</span>
+								</div>
+							</div>
+							<div className="right-section">
+								{user.userUID === null || !quote.likedByUser ? (
+									<button>Like</button>
+								) : userLikedQuotes.includes(index) ? (
+									<a
+										className="quote-a"
+										href={Firebase.pageGenerator.generateQuotePage(
+											quote.id,
+											quote.content
+										)}
+									>
+										View quote
+									</a>
+								) : (
+									<a
+										className="quote-a"
+										href={Firebase.pageGenerator.generateQuotePage(
+											quote.id,
+											quote.content
+										)}
+									>
+										In my quotes
+									</a>
+								)}
+								<a
+									className="number-of-likes-a"
+									href={Firebase.pageGenerator.generateQuotePage(
+										quote.id,
+										quote.content
+									)}
+								>{`${quote.numberOfLikes} likes`}</a>
+							</div>
+						</div>
+					);
+				})}
+			</div>
+		) : null;
+
+	const mainContentLeftSection = (
+		<div className="user-page-main-content-left-section">
+			{introduction}
+			{userToReadShelfSection}
+			{userBookShelvesSection}
+			{userCurrentlyReadingSection}
+			{userRecentUpdatesSection}
+			{userQuotesSection}
+		</div>
+	);
+
+	const userYearInBooksSection = (
+		<div className="user-page-year-in-books-section">
+			<a
+				className="section-title"
+				href={Firebase.pageGenerator.generateUserYearInBooksPage(
+					new Date().getFullYear(),
+					userId
+				)}
+			>{`${firstName.toUpperCase()}'S YEAR IN BOOKS`}</a>
+			<div className="inner-content">
+				<a
+					className="image-wrapper"
+					href={Firebase.pageGenerator.generateUserYearInBooksPage(
+						new Date().getFullYear(),
+						userId
+					)}
+				>
+					<img
+						src={
+							'https://s.gr-assets.com/assets/yyib/yearly/yyib_badge-58c13ce9eeb35da7dda8dcf63aba2962.jpg'
+						}
+						alt="Year in books"
+					/>
+				</a>
+				<div className="year-in-books-right-section">
+					<span>
+						<b>{`${firstName}'s ${new Date().getFullYear()} Year in Books`}</b>
+					</span>
+					<span>{`Take a look at ${firstName}'s Year in Books. The long, the short—it’s all here.`}</span>
+					<a
+						href={Firebase.pageGenerator.generateUserYearInBooksPage(
+							new Date().getFullYear(),
+							userId
+						)}
+					>{`See ${firstName}'s ${new Date().getFullYear()} Year in Books`}</a>
+				</div>
+			</div>
+		</div>
+	);
+
+	const userFriendsSection =
+		loaded && userInfo.friends.length > 0 ? (
+			<div className="user-page-friends-section">
+				<span className="section-title">{`${firstName.toUpperCase()}'S FRIENDS`}</span>
+				<div className="friend-list">
+					{userInfo.friends.map((friend, index) => {
+						return (
+							<div className="friend-card" key={index}>
+								<a
+									className="profile-picture-wrapper"
+									href={Firebase.pageGenerator.generateAuthorPage(
+										friend.id,
+										friend.name
+									)}
+								>
+									<img
+										src={
+											friend.picture !== undefined
+												? friend.picture
+												: 'https://www.goodreads.com/assets/nophoto/user/u_60x60-267f0ca0ea48fd3acfd44b95afa64f01.png'
+										}
+										alt={friend.name}
+									/>
+								</a>
+								<div className="right-section">
+									<a
+										href={Firebase.pageGenerator.generateAuthorPage(
+											friend.id,
+											friend.name
+										)}
+									>
+										{friend.name}
+									</a>
+									<div className="friend-stats">
+										<span>{`${friend.numberOfBooks} books`}</span>
+										<span className="separator">|</span>
+										<span>{`${friend.numberOfFriends} friends`}</span>
+									</div>
+								</div>
+							</div>
+						);
+					})}
+				</div>
+			</div>
+		) : null;
+
+	const userFollowingSection = loaded ? (
+		<div className="user-page-following-section">
+			<span className="section-title">{`PEOPLE ${firstName.toUpperCase()} IS FOLLOWING`}</span>
+			{userInfo.following.length > 0 ? (
+				<div className="following-list">
+					{userInfo.following.map((followingUser, index) => {
+						return (
+							<a
+								href={Firebase.pageGenerator.generateUserPage(
+									followingUser.id,
+									followingUser.name
+								)}
+								key={index}
+							>
+								<img
+									src={
+										followingUser.picture !== undefined
+											? followingUser.picture
+											: 'https://www.goodreads.com/assets/nophoto/user/u_60x60-267f0ca0ea48fd3acfd44b95afa64f01.png'
+									}
+									alt={followingUser.name}
+								/>
+							</a>
+						);
+					})}
+				</div>
+			) : (
+				<span className="no-following-span">None yet.</span>
+			)}
+			<span className="number-of-followers-span">{`${userInfo.numberOfFollowers} people are following ${firstName}`}</span>
 		</div>
 	) : null;
 };
