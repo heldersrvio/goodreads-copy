@@ -189,6 +189,44 @@ const UserPage = ({ match }) => {
 
 	const user = JSON.parse(localStorage.getItem('userState'));
 
+	useEffect(() => {
+		const getUserInfo = () => {
+			setUserInfo({
+				isFollowedByUser: false,
+				isUserFriend: false,
+				lastName: 'Collins',
+				showGenderTo: 'everyone',
+				gender: 'male',
+				locationViewableBy: 'everyone',
+				country: 'United Kingdom',
+				stateProvinceCode: undefined,
+				city: 'Manchester',
+				website: 'www.somewebsite.com',
+				lastActiveDate: new Date(2021, 1, 15),
+				joinedDate: new Date(2015, 4, 4),
+				interests: 'Drinking tea and playing cricket',
+				favoriteBooks: 'The Hobbit and The Catcher in the Rye',
+				about: 'Just a random guy who likes to read.',
+				profilePicture:
+					'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/users/1205952131i/360673._UX100_CR0,0,100,100_.jpg',
+				numberOfRatings: 120,
+				averageRating: 3.5,
+				numberOfReviews: 11,
+			});
+			setLoaded(true);
+		};
+		getUserInfo();
+	}, []);
+
+	const capitalizeAndSeparate = (string) => {
+		return string
+			.split('-')
+			.map((s) =>
+				s.length === 1 ? s.toUpperCase() : s[0].toUpperCase() + s.slice(1)
+			)
+			.join(' ');
+	};
+
 	const displayRemoveBookConfirm = () => {
 		return window.confirm(
 			'Removing a book deletes your rating, review, etc. Remove this book from all your shelves?'
@@ -1893,6 +1931,191 @@ const UserPage = ({ match }) => {
 			<span className="number-of-followers-span">{`${userInfo.numberOfFollowers} people are following ${firstName}`}</span>
 		</div>
 	) : null;
+
+	const userFavoriteAuthorsSection =
+		loaded && userInfo.favoriteAuthors.length > 0 ? (
+			<div className="user-page-favorite-authors-section">
+				<span className="section-title">{`${firstName.toUpperCase()}'S FAVORITE AUTHORS`}</span>
+				<div className="favorite-author-list">
+					{userInfo.favoriteAuthors.map((author, index) => {
+						return (
+							<div className="favorite-author-card" key={index}>
+								<a
+									className="favorite-author-picture-wrapper"
+									href={Firebase.pageGenerator.generateAuthorPage(
+										author.id,
+										author.name
+									)}
+								>
+									<img
+										src={
+											author.picture !== undefined
+												? author.picture
+												: 'https://www.goodreads.com/assets/nophoto/user/u_60x60-267f0ca0ea48fd3acfd44b95afa64f01.png'
+										}
+										alt={author.name}
+									/>
+								</a>
+								<div className="right-section">
+									<a
+										className="author-name-a"
+										href={Firebase.pageGenerator.generateAuthorPage(
+											author.id,
+											author.name
+										)}
+									>
+										{author.name}
+									</a>
+									<span>
+										<span>author of: </span>
+										<a
+											className="favorite-author-best-book-a"
+											href={Firebase.pageGenerator.generateBookPage(
+												author.bestBookId,
+												author.bestBookTitle
+											)}
+										>
+											{author.bestBookTitle}
+										</a>
+									</span>
+								</div>
+							</div>
+						);
+					})}
+				</div>
+			</div>
+		) : null;
+
+	const userListopiaSection =
+		loaded && userInfo.votedLists.length > 0 ? (
+			<div className="user-page-listopia-section">
+				<a
+					className="section-title"
+					href={Firebase.pageGenerator.generateListsVotedByUserPage(
+						userId,
+						firstName
+					)}
+				>
+					LISTOPIA VOTES
+				</a>
+				<div className="lists-list">
+					{userInfo.votedLists.map((list, index) => {
+						return (
+							<div className="list-card" key={index}>
+								<div className="covers">
+									{list.bookCovers.map((cover, i) => {
+										return (
+											<a
+												className="list-book-cover-wrapper"
+												href={Firebase.pageGenerator.generateListPage(
+													list.id,
+													list.title
+												)}
+												key={i}
+											>
+												<img src={cover} alt={list.title} />
+											</a>
+										);
+									})}
+								</div>
+								<a
+									className="list-title-a"
+									href={Firebase.pageGenerator.generateListPage(
+										list.id,
+										list.title
+									)}
+								>
+									{list.title}
+								</a>
+								<span className="list-stats-span">{`${list.numberOfBooks} books — ${list.numberOfVoters} voters`}</span>
+							</div>
+						);
+					})}
+				</div>
+				<a
+					className="more-lists-a"
+					href={Firebase.pageGenerator.generateListsVotedByUserPage(
+						userId,
+						firstName
+					)}
+				>
+					More...
+				</a>
+			</div>
+		) : null;
+
+	const userFavoriteGenresSection =
+		loaded && userInfo.favoriteGenres.length > 0 ? (
+			<div className="user-page-favorite-genres-section">
+				<span className="section-title">FAVORITE GENRES</span>
+				<span className="favorite-genres-span">
+					{userInfo.favoriteGenres.map((genre, index) => {
+						if (index === userInfo.favoriteGenres.length - 1) {
+							return (
+								<a href={Firebase.pageGenerator.generateGenrePage(genre)}>
+									{capitalizeAndSeparate(genre)}
+								</a>
+							);
+						} else if (index === userInfo.favoriteGenres.length - 2) {
+							return (
+								<span>
+									<a href={Firebase.pageGenerator.generateGenrePage(genre)}>
+										{capitalizeAndSeparate(genre)}
+									</a>
+									<span>, and </span>
+								</span>
+							);
+						}
+						return (
+							<span>
+								<a href={Firebase.pageGenerator.generateGenrePage(genre)}>
+									{capitalizeAndSeparate(genre)}
+								</a>
+								<span>, </span>
+							</span>
+						);
+					})}
+				</span>
+			</div>
+		) : null;
+
+	const mainContentRightSectionBottomLinks = (
+		<div className="user-page-main-content-right-section-bottom-links">
+			<a
+				href={Firebase.pageGenerator.generateListsLikedByUserPage(
+					userId,
+					firstName
+				)}
+			>{`Lists liked by ${firstName}`}</a>
+		</div>
+	);
+
+	const mainContentRightSection = (
+		<div className="user-page-main-content-right-section">
+			{userYearInBooksSection}
+			{userFriendsSection}
+			{userFollowingSection}
+			{userFavoriteAuthorsSection}
+			{userListopiaSection}
+			{userFavoriteGenresSection}
+			{mainContentRightSectionBottomLinks}
+		</div>
+	);
+
+	const mainContent = (
+		<div className="user-page-main-content">
+			{mainContentLeftSection}
+			{mainContentRightSection}
+		</div>
+	);
+
+	return (
+		<div className="user-page">
+			<TopBar />
+			{mainContent}
+			<HomePageFootBar />
+		</div>
+	);
 };
 
 export default UserPage;
