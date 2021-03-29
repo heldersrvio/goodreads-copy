@@ -236,7 +236,8 @@
 	height: 75px;
 }
 
-.user-page-to-read-shelf-section .more-books-a {
+.user-page-to-read-shelf-section .more-books-a,
+.user-page-bookshelves-section .more-a {
 	float: right;
 	color: var(--goodreads-teal);
 	font-family: var(--lato-font);
@@ -245,7 +246,8 @@
 	line-height: 18px;
 }
 
-.user-page-to-read-shelf-section .more-books-a:hover {
+.user-page-to-read-shelf-section .more-books-a:hover,
+.user-page-bookshelves-section .more-a:hover {
 	text-decoration: underline;
 }
 
@@ -275,4 +277,209 @@
 
 .user-page-bookshelves-section .bookshelves-list a:hover {
 	text-decoration: underline;
+}
+
+.user-page-currently-reading-section {
+	margin-top: 40px;
+}
+
+.user-page-currently-reading-section .section-title {
+	border: none;
+}
+
+.user-page-currently-reading-section .currently-reading-list .book-update {
+	border-top: 1px solid rgb(216, 216, 216);
+	padding: 15px 0;
+	display: flex;
+	flex-direction: row;
+}
+
+.user-page-currently-reading-section
+	.currently-reading-list
+	.book-update
+	.left-section {
+	display: flex;
+	flex-direction: row;
+}
+
+.user-page-currently-reading-section
+	.currently-reading-list
+	.book-update
+	.left-section
+	img {
+	width: 65px;
+	height: 98px;
+	margin-right: 15px;
+}
+
+.user-page-currently-reading-section
+	.currently-reading-list
+	.book-update
+	.left-section
+	.book-update-info {
+	display: flex;
+	flex-direction: column;
+}
+
+.user-page-currently-reading-section
+	.currently-reading-list
+	.book-update
+	.left-section
+	.book-update-info
+	span,
+.user-page-currently-reading-section
+	.currently-reading-list
+	.book-update
+	.left-section
+	.book-update-info
+	a {
+	display: inline;
+}
+
+.user-page-currently-reading-section
+	.currently-reading-list
+	.book-update
+	.left-section
+	.book-update-info
+	.currently-reading-span {
+	color: var(--goodreads-brown);
+	font-family: var(--lato-font);
+	font-size: 13px;
+	line-height: 18px;
+	margin-bottom: 5px;
+}
+
+.user-page-currently-reading-section
+	.currently-reading-list
+	.book-update
+	.left-section
+	.book-update-info
+	.currently-reading-span
+	a {
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 13px;
+	font-weight: bold;
+	line-height: 18px;
+}
+
+.user-page-currently-reading-section
+	.currently-reading-list
+	.book-update
+	.left-section
+	.book-update-info
+	.currently-reading-span
+	a:hover,
+.user-page-currently-reading-section
+	.currently-reading-list
+	.book-update
+	.left-section
+	.book-update-info
+	.book-title-a:hover,
+.user-page-currently-reading-section
+	.currently-reading-list
+	.book-update
+	.left-section
+	.book-update-info
+	.book-authorship-span
+	a:hover {
+	text-decoration: underline;
+}
+
+.user-page-currently-reading-section
+	.currently-reading-list
+	.book-update
+	.left-section
+	.book-update-info
+	.book-title-a {
+	color: rgb(51, 51, 51);
+	font-family: var(--merriweather-font);
+	font-size: 15.6px;
+	font-weight: bold;
+	line-height: 20px;
+}
+
+.user-page-currently-reading-section
+	.currently-reading-list
+	.book-update
+	.left-section
+	.book-update-info
+	.book-authorship-span {
+	color: rgb(0, 0, 0);
+	font-family: var(--lato-font);
+	font-size: 11px;
+	line-height: 14px;
+}
+
+.user-page-currently-reading-section
+	.currently-reading-list
+	.book-update
+	.left-section
+	.book-update-info
+	.book-authorship-span
+	a {
+	color: rgb(51, 51, 51);
+	font-family: var(--merriweather-font);
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.user-page-currently-reading-section
+	.currently-reading-list
+	.book-update
+	.left-section
+	.book-update-info
+	.goodreads-member-span {
+	color: var(--goodreads-light-gray);
+	font-family: var(--lato-font);
+	font-size: 13px;
+	line-height: 18px;
+	margin-left: 3px;
+}
+
+.user-page-currently-reading-section
+	.currently-reading-list
+	.book-update
+	.left-section
+	.book-update-info
+	.bookshelves-span {
+	color: var(--goodreads-brown);
+	font-family: var(--lato-font);
+	font-size: 13px;
+	line-height: 18px;
+}
+
+.user-page-currently-reading-section
+	.currently-reading-list
+	.book-update
+	.left-section
+	.book-update-info
+	.bookshelves-span
+	a {
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 13px;
+	line-height: 18px;
+}
+
+.user-page-currently-reading-section
+	.currently-reading-list
+	.book-update
+	.left-section
+	.book-update-info
+	.bookshelves-span
+	a:hover {
+	text-decoration: underline;
+}
+
+.user-page-currently-reading-section
+	.currently-reading-list
+	.book-update
+	.left-section
+	.update-date-span {
+	margin-top: 15px;
+	color: var(--goodreads-light-gray);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 18px;
 }

@@ -1620,7 +1620,7 @@ const UserPage = ({ match }) => {
 										/>
 									</a>
 									<div className="book-update-info">
-										<span>
+										<span className="currently-reading-span">
 											<a
 												href={Firebase.pageGenerator.generateUserPage(
 													userId,
@@ -1658,21 +1658,25 @@ const UserPage = ({ match }) => {
 											<span>bookshelves: </span>
 											{book.bookshelves.map((shelf, i) => {
 												return (
-													<a
-														href={Firebase.pageGenerator.generateUserShelfPage(
-															userId,
-															firstName,
-															shelf
-														)}
-														key={i}
-													>
-														{shelf}
-													</a>
+													<span key={i}>
+														<a
+															href={Firebase.pageGenerator.generateUserShelfPage(
+																userId,
+																firstName,
+																shelf
+															)}
+														>
+															{shelf}
+														</a>
+														{i !== book.bookshelves.length - 1 ? (
+															<span>, </span>
+														) : null}
+													</span>
 												);
 											})}
 										</span>
 										<span className="update-date-span">
-											{format(book.updateDate, 'MMM dd, yyyy HH:mma..aa')}
+											{format(book.updateDate, 'MMM dd, yyyy HH:mma')}
 										</span>
 									</div>
 								</div>
