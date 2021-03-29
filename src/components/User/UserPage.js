@@ -4,6 +4,7 @@ import { format } from 'date-fns';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 import Firebase from '../../Firebase';
+import '../styles/User/UserPage.css';
 
 const UserPage = ({ match }) => {
 	const {
@@ -86,7 +87,7 @@ const UserPage = ({ match }) => {
         numberOfRatings,
         averageRating,
         numberOfReviews,
-        bookShelves: [{
+        bookshelves: [{
             name,
             numberOfBooks,
         }],
@@ -139,7 +140,6 @@ const UserPage = ({ match }) => {
                 mainAuthorId,
                 mainAuthorName,
                 mainAuthorIsMember,
-                updateDate,
                 userStatus,
                 userRating,
                 userProgress,
@@ -191,7 +191,7 @@ const UserPage = ({ match }) => {
 
 	useEffect(() => {
 		const getUserInfo = () => {
-			setUserInfo({
+			const userInfoObject = {
 				isFollowedByUser: false,
 				isUserFriend: false,
 				lastName: 'Collins',
@@ -212,8 +212,310 @@ const UserPage = ({ match }) => {
 				numberOfRatings: 120,
 				averageRating: 3.5,
 				numberOfReviews: 11,
-			});
+				bookshelves: Array(20).fill({
+					name: 'nice-books',
+					numberOfBooks: 30,
+				}),
+				toReadBooks: Array(15).fill({
+					id: '123',
+					title: 'Rich Dad, Poor Dad',
+					cover:
+						'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388211242i/69571._SY180_.jpg',
+				}),
+				currentlyReadingBooks: Array(6).fill({
+					id: '123',
+					title: 'En droppe i rymden',
+					mainAuthorId: '123',
+					mainAuthorName: 'Lisa Rodebrand',
+					mainAuthorIsMember: true,
+					bookshelves: ['reading', 'space'],
+					updateDate: new Date(2021, 2, 4),
+				}),
+				recentUpdates: [
+					{
+						type: 'add-friend',
+						date: new Date(2021, 1, 3),
+						newFriendId: '123',
+						newFriendName: 'Josephine',
+						newFriendPicture:
+							'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/users/1581273216i/109220153._UX60_CR0,0,60,60_.jpg',
+					},
+					{
+						type: 'add-book-to-read',
+						date: new Date(2021, 1, 4),
+						bookInfo: {
+							id: '123',
+							title: 'The Count of Monte Cristo',
+							cover:
+								'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1611834134l/7126.jpg',
+							mainAuthorId: '123',
+							mainAuthorName: 'Alexandre Dumas',
+							mainAuthorIsMember: false,
+							userStatus: 'reading',
+							userProgress: 30,
+						},
+					},
+					{
+						type: 'add-book-reading',
+						date: new Date(2021, 1, 5),
+						bookInfo: {
+							id: '123',
+							title: 'The Count of Monte Cristo',
+							cover:
+								'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1611834134l/7126.jpg',
+							mainAuthorId: '123',
+							mainAuthorName: 'Alexandre Dumas',
+							mainAuthorIsMember: false,
+							userStatus: 'reading',
+							userProgress: 30,
+						},
+					},
+					{
+						type: 'add-book-read',
+						date: new Date(2021, 1, 6),
+						bookInfo: {
+							id: '123',
+							title: 'The Count of Monte Cristo',
+							cover:
+								'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1611834134l/7126.jpg',
+							mainAuthorId: '123',
+							mainAuthorName: 'Alexandre Dumas',
+							mainAuthorIsMember: false,
+							userStatus: 'reading',
+							userProgress: 30,
+						},
+					},
+					{
+						type: 'rate-book',
+						date: new Date(2021, 1, 7),
+						rating: 3,
+						bookInfo: {
+							id: '123',
+							title: 'Anna Karenina',
+							cover:
+								'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1601352433l/15823480._SY475_.jpg',
+							mainAuthorId: '123',
+							mainAuthorName: 'Leo Tolstoy',
+							mainAuthorIsMember: false,
+							userStatus: 'to-read',
+						},
+					},
+					{
+						type: 'rate-book',
+						date: new Date(2021, 1, 7),
+						rating: 4,
+						bookInfo: {
+							id: '123',
+							title: 'Eugene Onegin',
+							cover:
+								'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388373138l/27822.jpg',
+							mainAuthorId: '123',
+							mainAuthorName: 'Alexander Pushkin',
+							mainAuthorIsMember: true,
+							userStatus: 'read',
+							userRating: 5,
+						},
+					},
+					{
+						type: 'recommend-book',
+						date: new Date(2021, 1, 8),
+						recommendedToUserId: '123',
+						recommendedToUserName: 'Mark',
+						bookInfo: {
+							id: '123',
+							title: 'Eugene Onegin',
+							cover:
+								'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388373138l/27822.jpg',
+							mainAuthorId: '123',
+							mainAuthorName: 'Alexander Pushkin',
+							mainAuthorIsMember: true,
+							userStatus: 'read',
+							userRating: 5,
+						},
+					},
+					{
+						type: 'add-quote',
+						date: new Date(2021, 1, 9),
+						quoteId: '123',
+						quoteContent: 'Nothing stays',
+						bookInfo: {
+							id: '123',
+							title: 'Eugene Onegin',
+							cover:
+								'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388373138l/27822.jpg',
+							mainAuthorId: '123',
+							mainAuthorName: 'Alexander Pushkin',
+							mainAuthorIsMember: true,
+							userStatus: 'read',
+							userRating: 5,
+						},
+						authorInfo: {
+							id: '123',
+							name: 'Alexander Pushkin',
+							picture:
+								'https://images.gr-assets.com/authors/1207346296p5/16070.jpg',
+							isMember: true,
+							userIsFollowing: false,
+							bestBookId: '123',
+							bestBookTitle: 'The Captains Daughter',
+							bestBookSeries: 'Unknown',
+							bestBookSeriesInstance: 2,
+						},
+					},
+					{
+						type: 'follow-author',
+						date: new Date(2021, 1, 10),
+						authorInfo: {
+							id: '123',
+							name: 'Johann Wolfgang von Goethe',
+							picture:
+								'https://images.gr-assets.com/authors/1532614109p5/285217.jpg',
+							isMember: true,
+							userIsFollowing: true,
+							bestBookId: '123',
+							bestBookTitle: 'The Sorrows of Young Werther',
+							bestBookSeries: 'Goethe Titles',
+							bestBookSeriesInstance: 2,
+						},
+					},
+					{
+						type: 'follow-author',
+						date: new Date(2021, 1, 10),
+						authorInfo: {
+							id: '123',
+							name: 'Johann Wolfgang von Goethe',
+							picture:
+								'https://images.gr-assets.com/authors/1532614109p5/285217.jpg',
+							isMember: true,
+							userIsFollowing: true,
+							bestBookId: '123',
+							bestBookTitle: 'The Sorrows of Young Werther',
+							bestBookSeries: 'Goethe Titles',
+							bestBookSeriesInstance: 2,
+						},
+					},
+					{
+						type: 'vote-for-book-review',
+						date: new Date(2021, 1, 11),
+						numberOfReviewVoters: 10,
+						reviewText:
+							'This book and author - big love. I love Patti Callahan Henry’s contemporary titles, as well as her newer historical fiction titles, and this is a book I’ve been looking forward to since I first heard about it. The Pulaski shipwreck was recently disc',
+						authorInfo: {
+							id: '123',
+							name: 'Johann Wolfgang von Goethe',
+							picture:
+								'https://images.gr-assets.com/authors/1532614109p5/285217.jpg',
+							isMember: true,
+							userIsFollowing: true,
+							bestBookId: '123',
+							bestBookTitle: 'The Sorrows of Young Werther',
+							bestBookSeries: 'Goethe Titles',
+							bestBookSeriesInstance: 2,
+						},
+						bookInfo: {
+							id: '123',
+							title: 'Eugene Onegin',
+							cover:
+								'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388373138l/27822.jpg',
+							mainAuthorId: '123',
+							mainAuthorName: 'Alexander Pushkin',
+							mainAuthorIsMember: true,
+							userStatus: 'read',
+							userRating: 5,
+						},
+					},
+				],
+				quotes: Array(10).fill({
+					id: '123',
+					content: '自業自得',
+					authorId: '123',
+					authorName: '飳資歷',
+					bookTitle: 'A Random Book',
+					numberOfLikes: 12,
+					likedByUser: false,
+				}),
+				friends: Array(30).fill({
+					id: '123',
+					name: 'Mark',
+					picture: 'https://images.gr-assets.com/users/1205686211p6/996581.jpg',
+					numberOfBooks: 30,
+					numberOfFriends: 50,
+				}),
+				following: Array(40).fill({
+					id: '234',
+					picture:
+						'https://images.gr-assets.com/users/1234633606p2/2031490.jpg',
+					name: 'Daniel',
+				}),
+				numberOfFollowers: 24,
+				favoriteAuthors: Array(15).fill({
+					id: '123',
+					name: 'William Gibson',
+					bestBookId: '123',
+					bestBookTitle: 'Neuromancer',
+					picture: 'https://images.gr-assets.com/authors/1373826214p2/9226.jpg',
+				}),
+				votedLists: Array(8).fill({
+					id: '123',
+					title: 'Best summer books',
+					bookCovers: [
+						'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1574743332l/48889993._SX98_.jpg',
+						'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1557181911l/43923951._SX98_.jpg',
+						'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1594059624l/52339313._SX98_.jpg',
+					],
+					numberOfBooks: 112,
+					numberOfVoters: 2345,
+				}),
+				favoriteGenres: [
+					'science-fiction',
+					'fantasy',
+					'paranormal',
+					'drama',
+					'comedy',
+					'history',
+				],
+			};
+			setUserInfo(userInfoObject);
 			setLoaded(true);
+			const numberOfInteractiveBookCards =
+				userInfoObject.currentlyReadingBooks.length +
+				userInfoObject.recentUpdates.filter(
+					(update) =>
+						update.type === 'add-book-to-read' ||
+						update.type === 'add-book-read' ||
+						update.type === 'add-book-reading' ||
+						update.type === 'rate-book'
+				).length;
+			setSavingShelves(Array(numberOfInteractiveBookCards).fill(false));
+			setAreShelfPopupsHidden(Array(numberOfInteractiveBookCards).fill(true));
+			setAreShelfPopupsBottomHidden(
+				Array(numberOfInteractiveBookCards).fill(true)
+			);
+			setShelfPopupReadingInputs(Array(numberOfInteractiveBookCards).fill(''));
+			setShelfPopupToReadInputs(Array(numberOfInteractiveBookCards).fill(''));
+			setAreAddShelfInputSectionsHidden(
+				Array(numberOfInteractiveBookCards).fill(true)
+			);
+			setAddShelfInputs(Array(numberOfInteractiveBookCards).fill(''));
+			setExhibitedStarRatings(
+				userInfoObject.currentlyReadingBooks
+					.map((book) => (book.userRating === undefined ? 0 : book.userRating))
+					.concat(
+						userInfoObject.recentUpdates
+							.filter(
+								(update) =>
+									update.type === 'add-book-to-read' ||
+									update.type === 'add-book-read' ||
+									update.type === 'add-book-reading' ||
+									update.type === 'rate-book'
+							)
+							.map((update) =>
+								update.bookInfo.userRating === undefined
+									? 0
+									: update.bookInfo.userRating
+							)
+					)
+			);
 		};
 		getUserInfo();
 	}, []);
@@ -1064,6 +1366,7 @@ const UserPage = ({ match }) => {
 					)} avg)`}</button>
 				</span>
 				<a
+					className="number-of-reviews-a"
 					href={Firebase.pageGenerator.generateUserReviewsPage(userId)}
 				>{`${userInfo.numberOfReviews} reviews`}</a>
 			</div>
@@ -1099,7 +1402,7 @@ const UserPage = ({ match }) => {
 						</button>
 						<a
 							className="add-as-friend-a"
-							href={Firebase.pageGenerator.generateAddAsFriendPage}
+							href={Firebase.pageGenerator.generateAddAsFriendPage(userId)}
 						>
 							Add friend
 						</a>
@@ -1109,7 +1412,11 @@ const UserPage = ({ match }) => {
 						>
 							<span>More</span>
 							<div className="downwards-arrow"></div>
-							<div className="more-dropdown">
+							<div
+								className={
+									showingMoreDropdown ? 'more-dropdown' : 'more-dropdown hidden'
+								}
+							>
 								<ul>
 									<li>
 										<a
@@ -1149,7 +1456,9 @@ const UserPage = ({ match }) => {
 						{userInfo.website !== undefined ? (
 							<tr>
 								<th>Website</th>
-								<td>{userInfo.website}</td>
+								<td>
+									<a href={userInfo.website}>{userInfo.website}</a>
+								</td>
 							</tr>
 						) : null}
 						<tr>
@@ -1212,27 +1521,29 @@ const UserPage = ({ match }) => {
 				className="section-title"
 			>{`${firstName.toUpperCase()}'S TO-READ SHELF`}</a>
 			<div className="book-list">
-				{userInfo.toReadBooks.map((book, index) => {
-					return (
-						<a
-							className="book-a"
-							href={Firebase.pageGenerator.generateBookPage(
-								book.id,
-								book.title
-							)}
-							key={index}
-						>
-							<img
-								src={
-									book.cover !== undefined
-										? book.cover
-										: 'https://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png'
-								}
-								alt={book.title}
-							/>
-						</a>
-					);
-				})}
+				{userInfo.toReadBooks
+					.filter((_b, index) => index < 11)
+					.map((book, index) => {
+						return (
+							<a
+								className="book-a"
+								href={Firebase.pageGenerator.generateBookPage(
+									book.id,
+									book.title
+								)}
+								key={index}
+							>
+								<img
+									src={
+										book.cover !== undefined
+											? book.cover
+											: 'https://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png'
+									}
+									alt={book.title}
+								/>
+							</a>
+						);
+					})}
 			</div>
 			<a
 				className="more-books-a"
@@ -1247,7 +1558,7 @@ const UserPage = ({ match }) => {
 		</div>
 	) : null;
 
-	const userBookShelvesSection = loaded ? (
+	const userBookshelvesSection = loaded ? (
 		<div className="user-page-bookshelves-section">
 			<a
 				className="section-title"
@@ -1806,7 +2117,7 @@ const UserPage = ({ match }) => {
 		<div className="user-page-main-content-left-section">
 			{introduction}
 			{userToReadShelfSection}
-			{userBookShelvesSection}
+			{userBookshelvesSection}
 			{userCurrentlyReadingSection}
 			{userRecentUpdatesSection}
 			{userQuotesSection}
@@ -2052,13 +2363,16 @@ const UserPage = ({ match }) => {
 					{userInfo.favoriteGenres.map((genre, index) => {
 						if (index === userInfo.favoriteGenres.length - 1) {
 							return (
-								<a href={Firebase.pageGenerator.generateGenrePage(genre)}>
+								<a
+									href={Firebase.pageGenerator.generateGenrePage(genre)}
+									key={index}
+								>
 									{capitalizeAndSeparate(genre)}
 								</a>
 							);
 						} else if (index === userInfo.favoriteGenres.length - 2) {
 							return (
-								<span>
+								<span key={index}>
 									<a href={Firebase.pageGenerator.generateGenrePage(genre)}>
 										{capitalizeAndSeparate(genre)}
 									</a>
@@ -2067,7 +2381,7 @@ const UserPage = ({ match }) => {
 							);
 						}
 						return (
-							<span>
+							<span key={index}>
 								<a href={Firebase.pageGenerator.generateGenrePage(genre)}>
 									{capitalizeAndSeparate(genre)}
 								</a>
