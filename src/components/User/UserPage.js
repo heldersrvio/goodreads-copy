@@ -152,6 +152,7 @@ const UserPage = ({ match }) => {
             authorId,
             authorName,
             authorProfilePicture,
+			bookId,
             bookTitle,
             numberOfLikes,
             likedByUser,
@@ -387,7 +388,7 @@ const UserPage = ({ match }) => {
 							picture:
 								'https://images.gr-assets.com/authors/1532614109p5/285217.jpg',
 							isMember: true,
-							userIsFollowing: true,
+							userIsFollowing: false,
 							bestBookId: '123',
 							bestBookTitle: 'The Sorrows of Young Werther',
 							bestBookSeries: 'Goethe Titles',
@@ -430,9 +431,10 @@ const UserPage = ({ match }) => {
 					content: '自業自得',
 					authorId: '123',
 					authorName: '飳資歷',
+					bookId: '123',
 					bookTitle: 'A Random Book',
 					numberOfLikes: 12,
-					likedByUser: false,
+					likedByUser: true,
 				}),
 				friends: Array(30).fill({
 					id: '123',
@@ -2104,7 +2106,7 @@ const UserPage = ({ match }) => {
 										>
 											{update.authorInfo.userIsFollowing
 												? 'Following'
-												: 'Follow'}
+												: 'Follow Author'}
 										</button>
 									</span>
 								</div>
@@ -2122,69 +2124,79 @@ const UserPage = ({ match }) => {
 	const userQuotesSection =
 		loaded && userInfo.quotes.length > 0 ? (
 			<div className="user-page-quotes-section">
-				<span className="sectiont-tile">{`${firstName.toUpperCase()}'S QUOTES`}</span>
-				{userInfo.quotes.map((quote, index) => {
-					return (
-						<div className="user-page-quote-card" key={index}>
-							<div className="left-section">
-								<a
-									href={Firebase.pageGenerator.generateAuthorPage(
-										quote.authorId,
-										quote.authorName
+				<span className="section-title">{`${firstName.toUpperCase()}'S QUOTES`}</span>
+				{userInfo.quotes
+					.filter((_q, index) => index < 5)
+					.map((quote, index) => {
+						return (
+							<div className="user-page-quote-card" key={index}>
+								<div className="left-section">
+									<a
+										href={Firebase.pageGenerator.generateAuthorPage(
+											quote.authorId,
+											quote.authorName
+										)}
+									>
+										<img
+											src={
+												quote.authorProfilePicture !== undefined
+													? quote.authorProfilePicture
+													: 'https://s.gr-assets.com/assets/nophoto/user/u_100x100-259587f1619f5253426a4fa6fb508831.png'
+											}
+											alt={quote.authorName}
+										/>
+									</a>
+									<div className="actual-quote-section">
+										<span className="quote">{`“${quote.content}”`}</span>
+										<span className="quote-authorship">
+											<span className="dash">― </span>
+											<span>{`${quote.authorName}, `}</span>
+											<a
+												href={Firebase.pageGenerator.generateAddBookPage(
+													quote.bookId,
+													quote.bookTitle
+												)}
+											>
+												{quote.bookTitle}
+											</a>
+										</span>
+									</div>
+								</div>
+								<div className="right-section">
+									{user.userUID === null || !quote.likedByUser ? (
+										<button>Like</button>
+									) : userLikedQuotes.includes(index) ? (
+										<a
+											className="quote-a"
+											href={Firebase.pageGenerator.generateQuotePage(
+												quote.id,
+												quote.content
+											)}
+										>
+											View quote
+										</a>
+									) : (
+										<a
+											className="quote-a"
+											href={Firebase.pageGenerator.generateQuotePage(
+												quote.id,
+												quote.content
+											)}
+										>
+											In my quotes
+										</a>
 									)}
-								>
-									<img
-										src={
-											quote.authorProfilePicture !== undefined
-												? quote.authorProfilePicture
-												: 'https://s.gr-assets.com/assets/nophoto/user/u_100x100-259587f1619f5253426a4fa6fb508831.png'
-										}
-										alt={quote.authorName}
-									/>
-								</a>
-								<div className="actual-quote-section">
-									<span className="quote">{`“${quote.content}”`}</span>
-									<span className="quote-authorship">
-										<span className="dash">― </span>
-										{`${quote.authorName}, ${quote.bookTitle}`}
-									</span>
+									<a
+										className="number-of-likes-a"
+										href={Firebase.pageGenerator.generateQuotePage(
+											quote.id,
+											quote.content
+										)}
+									>{`${quote.numberOfLikes} likes`}</a>
 								</div>
 							</div>
-							<div className="right-section">
-								{user.userUID === null || !quote.likedByUser ? (
-									<button>Like</button>
-								) : userLikedQuotes.includes(index) ? (
-									<a
-										className="quote-a"
-										href={Firebase.pageGenerator.generateQuotePage(
-											quote.id,
-											quote.content
-										)}
-									>
-										View quote
-									</a>
-								) : (
-									<a
-										className="quote-a"
-										href={Firebase.pageGenerator.generateQuotePage(
-											quote.id,
-											quote.content
-										)}
-									>
-										In my quotes
-									</a>
-								)}
-								<a
-									className="number-of-likes-a"
-									href={Firebase.pageGenerator.generateQuotePage(
-										quote.id,
-										quote.content
-									)}
-								>{`${quote.numberOfLikes} likes`}</a>
-							</div>
-						</div>
-					);
-				})}
+						);
+					})}
 			</div>
 		) : null;
 
@@ -2242,53 +2254,57 @@ const UserPage = ({ match }) => {
 	const userFriendsSection =
 		loaded && userInfo.friends.length > 0 ? (
 			<div className="user-page-friends-section">
-				<span className="section-title">{`${firstName.toUpperCase()}'S FRIENDS`}</span>
+				<span className="section-title">{`${firstName.toUpperCase()}'S FRIENDS (${
+					userInfo.friends.length
+				})`}</span>
 				<div className="friend-list">
-					{userInfo.friends.map((friend, index) => {
-						return (
-							<div className="friend-card" key={index}>
-								<a
-									className="profile-picture-wrapper"
-									href={Firebase.pageGenerator.generateAuthorPage(
-										friend.id,
-										friend.name
-									)}
-								>
-									<img
-										src={
-											friend.picture !== undefined
-												? friend.picture
-												: 'https://www.goodreads.com/assets/nophoto/user/u_60x60-267f0ca0ea48fd3acfd44b95afa64f01.png'
-										}
-										alt={friend.name}
-									/>
-								</a>
-								<div className="right-section">
+					{userInfo.friends
+						.filter((_f, index) => index < 8)
+						.map((friend, index) => {
+							return (
+								<div className="friend-card" key={index}>
 									<a
+										className="profile-picture-wrapper"
 										href={Firebase.pageGenerator.generateAuthorPage(
 											friend.id,
 											friend.name
 										)}
 									>
-										{friend.name}
+										<img
+											src={
+												friend.picture !== undefined
+													? friend.picture
+													: 'https://www.goodreads.com/assets/nophoto/user/u_60x60-267f0ca0ea48fd3acfd44b95afa64f01.png'
+											}
+											alt={friend.name}
+										/>
 									</a>
-									<div className="friend-stats">
-										<span>{`${friend.numberOfBooks} books`}</span>
-										<span className="separator">|</span>
-										<span>{`${friend.numberOfFriends} friends`}</span>
+									<div className="right-section">
+										<a
+											href={Firebase.pageGenerator.generateAuthorPage(
+												friend.id,
+												friend.name
+											)}
+										>
+											{friend.name}
+										</a>
+										<div className="friend-stats">
+											<span>{`${friend.numberOfBooks} books`}</span>
+											<span className="separator">|</span>
+											<span>{`${friend.numberOfFriends} friends`}</span>
+										</div>
 									</div>
 								</div>
-							</div>
-						);
-					})}
+							);
+						})}
 				</div>
 			</div>
 		) : null;
 
-	const userFollowingSection = loaded ? (
-		<div className="user-page-following-section">
-			<span className="section-title">{`PEOPLE ${firstName.toUpperCase()} IS FOLLOWING`}</span>
-			{userInfo.following.length > 0 ? (
+	const userFollowingSection =
+		loaded && userInfo.following.length > 0 ? (
+			<div className="user-page-following-section">
+				<span className="section-title">{`PEOPLE ${firstName.toUpperCase()} IS FOLLOWING`}</span>
 				<div className="following-list">
 					{userInfo.following.map((followingUser, index) => {
 						return (
@@ -2311,63 +2327,62 @@ const UserPage = ({ match }) => {
 						);
 					})}
 				</div>
-			) : (
-				<span className="no-following-span">None yet.</span>
-			)}
-			<span className="number-of-followers-span">{`${userInfo.numberOfFollowers} people are following ${firstName}`}</span>
-		</div>
-	) : null;
+				<span className="number-of-followers-span">{`${userInfo.numberOfFollowers} people are following ${firstName}`}</span>
+			</div>
+		) : null;
 
 	const userFavoriteAuthorsSection =
 		loaded && userInfo.favoriteAuthors.length > 0 ? (
 			<div className="user-page-favorite-authors-section">
 				<span className="section-title">{`${firstName.toUpperCase()}'S FAVORITE AUTHORS`}</span>
 				<div className="favorite-author-list">
-					{userInfo.favoriteAuthors.map((author, index) => {
-						return (
-							<div className="favorite-author-card" key={index}>
-								<a
-									className="favorite-author-picture-wrapper"
-									href={Firebase.pageGenerator.generateAuthorPage(
-										author.id,
-										author.name
-									)}
-								>
-									<img
-										src={
-											author.picture !== undefined
-												? author.picture
-												: 'https://www.goodreads.com/assets/nophoto/user/u_60x60-267f0ca0ea48fd3acfd44b95afa64f01.png'
-										}
-										alt={author.name}
-									/>
-								</a>
-								<div className="right-section">
+					{userInfo.favoriteAuthors
+						.filter((_a, index) => index < 6)
+						.map((author, index) => {
+							return (
+								<div className="favorite-author-card" key={index}>
 									<a
-										className="author-name-a"
+										className="favorite-author-picture-wrapper"
 										href={Firebase.pageGenerator.generateAuthorPage(
 											author.id,
 											author.name
 										)}
 									>
-										{author.name}
+										<img
+											src={
+												author.picture !== undefined
+													? author.picture
+													: 'https://www.goodreads.com/assets/nophoto/user/u_60x60-267f0ca0ea48fd3acfd44b95afa64f01.png'
+											}
+											alt={author.name}
+										/>
 									</a>
-									<span>
-										<span>author of: </span>
+									<div className="right-section">
 										<a
-											className="favorite-author-best-book-a"
-											href={Firebase.pageGenerator.generateBookPage(
-												author.bestBookId,
-												author.bestBookTitle
+											className="author-name-a"
+											href={Firebase.pageGenerator.generateAuthorPage(
+												author.id,
+												author.name
 											)}
 										>
-											{author.bestBookTitle}
+											{author.name}
 										</a>
-									</span>
+										<span>
+											<span>author of: </span>
+											<a
+												className="favorite-author-best-book-a"
+												href={Firebase.pageGenerator.generateBookPage(
+													author.bestBookId,
+													author.bestBookTitle
+												)}
+											>
+												{author.bestBookTitle}
+											</a>
+										</span>
+									</div>
 								</div>
-							</div>
-						);
-					})}
+							);
+						})}
 				</div>
 			</div>
 		) : null;
@@ -2385,38 +2400,40 @@ const UserPage = ({ match }) => {
 					LISTOPIA VOTES
 				</a>
 				<div className="lists-list">
-					{userInfo.votedLists.map((list, index) => {
-						return (
-							<div className="list-card" key={index}>
-								<div className="covers">
-									{list.bookCovers.map((cover, i) => {
-										return (
-											<a
-												className="list-book-cover-wrapper"
-												href={Firebase.pageGenerator.generateListPage(
-													list.id,
-													list.title
-												)}
-												key={i}
-											>
-												<img src={cover} alt={list.title} />
-											</a>
-										);
-									})}
+					{userInfo.votedLists
+						.filter((_l, index) => index < 2)
+						.map((list, index) => {
+							return (
+								<div className="list-card" key={index}>
+									<div className="covers">
+										{list.bookCovers.map((cover, i) => {
+											return (
+												<a
+													className="list-book-cover-wrapper"
+													href={Firebase.pageGenerator.generateListPage(
+														list.id,
+														list.title
+													)}
+													key={i}
+												>
+													<img src={cover} alt={list.title} />
+												</a>
+											);
+										})}
+									</div>
+									<a
+										className="list-title-a"
+										href={Firebase.pageGenerator.generateListPage(
+											list.id,
+											list.title
+										)}
+									>
+										{list.title}
+									</a>
+									<span className="list-stats-span">{`${list.numberOfBooks} books — ${list.numberOfVoters} voters`}</span>
 								</div>
-								<a
-									className="list-title-a"
-									href={Firebase.pageGenerator.generateListPage(
-										list.id,
-										list.title
-									)}
-								>
-									{list.title}
-								</a>
-								<span className="list-stats-span">{`${list.numberOfBooks} books — ${list.numberOfVoters} voters`}</span>
-							</div>
-						);
-					})}
+							);
+						})}
 				</div>
 				<a
 					className="more-lists-a"
@@ -2451,7 +2468,7 @@ const UserPage = ({ match }) => {
 									<a href={Firebase.pageGenerator.generateGenrePage(genre)}>
 										{capitalizeAndSeparate(genre)}
 									</a>
-									<span>, and </span>
+									<span>{', and '}</span>
 								</span>
 							);
 						}

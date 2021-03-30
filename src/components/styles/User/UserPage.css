@@ -21,6 +21,8 @@
 
 .user-page-main-content-right-section {
 	width: 300px;
+	margin-top: 20px;
+	margin-left: 5px;
 }
 
 .user-page-introduction {
@@ -805,4 +807,510 @@
 	img {
 	width: 50px;
 	height: 66px;
+}
+
+.user-page
+	.user-recent-updates-section
+	.author-info-section
+	.author-actual-info-section {
+	margin-left: 10px;
+}
+
+.user-page .user-recent-updates-section .author-info-section .author-name-span {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.user-page
+	.user-recent-updates-section
+	.author-info-section
+	.author-name-span
+	a {
+	color: rgb(51, 51, 51);
+	font-family: var(--lato-font);
+	font-size: 15px;
+	line-height: 18px;
+	font-weight: bold;
+}
+
+.user-page
+	.user-recent-updates-section
+	.author-info-section
+	.author-name-span
+	a:hover,
+.user-page
+	.user-recent-updates-section
+	.author-info-section
+	.author-best-book-span
+	a:hover {
+	text-decoration: underline;
+}
+
+.user-page
+	.user-recent-updates-section
+	.author-info-section
+	.author-name-span
+	.goodreads-badge {
+	display: block;
+	margin-left: 5px;
+	width: 15px;
+	height: 15.6px;
+	background-size: 15px 15.6px;
+	background-image: url('https://s.gr-assets.com/assets/icons/gr-author-badge_20x21.png');
+}
+
+.user-page
+	.user-recent-updates-section
+	.author-info-section
+	.author-best-book-span {
+	display: block;
+	margin-top: 4px;
+	color: rgb(24, 24, 24);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 18px;
+}
+
+.user-page
+	.user-recent-updates-section
+	.author-info-section
+	.author-best-book-span
+	a {
+	display: inline;
+	color: rgb(51, 51, 51);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 18px;
+	font-weight: bold;
+}
+
+.user-page
+	.user-recent-updates-section
+	.author-info-section
+	.follow-author-button {
+	margin-top: 10px;
+	background-color: rgb(244, 241, 234);
+	border: 1px solid rgb(214, 208, 196);
+	border-radius: 3px;
+	color: rgb(51, 51, 51);
+	font-family: var(--lato-font);
+	font-size: 11px;
+	line-height: 11px;
+	height: 21px;
+}
+
+.user-page
+	.user-recent-updates-section
+	.author-info-section
+	.follow-author-button:hover {
+	background-color: rgb(237, 230, 214);
+}
+
+.user-page .user-recent-updates-section .book-review-preview {
+	display: flex;
+	flex-direction: row;
+}
+
+.user-page .user-recent-updates-section .book-review-preview a,
+.user-page .user-recent-updates-section .book-review-preview img {
+	width: 50px;
+	height: 75px;
+}
+
+.user-page .user-recent-updates-section .book-review-preview .review-text-span {
+	margin-left: 10px;
+	color: rgb(24, 24, 24);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 18px;
+}
+
+.user-page-quotes-section {
+	margin-top: 30px;
+}
+
+.user-page-quotes-section .section-title {
+	border: none;
+}
+
+.user-page-quotes-section .user-page-quote-card {
+	border-top: 1px solid rgb(216, 216, 216);
+	padding: 15px 0;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	position: relative;
+}
+
+.user-page-quotes-section .user-page-quote-card .left-section {
+	display: flex;
+	flex-direction: row;
+}
+
+.user-page-quotes-section .user-page-quote-card .left-section > a,
+.user-page-quotes-section .user-page-quote-card .left-section > a img {
+	width: 50px;
+	height: 66px;
+}
+
+.user-page-quotes-section
+	.user-page-quote-card
+	.left-section
+	.actual-quote-section {
+	margin-left: 10px;
+	display: flex;
+	flex-direction: column;
+}
+
+.user-page-quotes-section
+	.user-page-quote-card
+	.left-section
+	.actual-quote-section
+	.quote-authorship,
+.user-page-quotes-section
+	.user-page-quote-card
+	.left-section
+	.actual-quote-section
+	.quote-authorship
+	a {
+	display: inline;
+	color: rgb(51, 51, 51);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	font-weight: bold;
+	line-height: 21px;
+}
+
+.user-page-quotes-section
+	.user-page-quote-card
+	.left-section
+	.actual-quote-section
+	.quote-authorship
+	a:hover {
+	text-decoration: underline;
+}
+
+.user-page-quotes-section
+	.user-page-quote-card
+	.left-section
+	.actual-quote-section
+	.quote,
+.user-page-quotes-section
+	.user-page-quote-card
+	.left-section
+	.actual-quote-section
+	.dash {
+	color: rgb(24, 24, 24);
+	font-family: var(--merriweather-font);
+	font-size: 14px;
+	line-height: 21px;
+}
+
+.user-page-quotes-section .user-page-quote-card .right-section button {
+	background-color: rgb(244, 241, 234);
+	border: 1px solid rgb(214, 208, 196);
+	border-radius: 3px;
+	color: rgb(51, 51, 51);
+	font-family: var(--lato-font);
+	font-size: 11px;
+	line-height: 11px;
+	padding: 4px 12px;
+	width: 45px;
+	height: 21px;
+}
+
+.user-page-quotes-section .user-page-quote-card .right-section button:hover {
+	background-color: rgb(237, 230, 214);
+}
+
+.user-page-quotes-section .user-page-quote-card .right-section {
+	margin-right: 50px;
+}
+
+.user-page-quotes-section
+	.user-page-quote-card
+	.right-section
+	.number-of-likes-a {
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 11px;
+	line-height: 14px;
+	position: absolute;
+	bottom: 10px;
+	right: 95px;
+}
+
+.user-page-quotes-section
+	.user-page-quote-card
+	.right-section
+	.number-of-likes-a:hover,
+.user-page-quote-card .right-section .quote-a:hover {
+	text-decoration: underline;
+}
+
+.user-page-quote-card .right-section .quote-a {
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 11px;
+	line-height: 14px;
+}
+
+.user-page-year-in-books-section .inner-content {
+	margin-top: 10px;
+	display: flex;
+	flex-direction: row;
+}
+
+.user-page-year-in-books-section .image-wrapper,
+.user-page-year-in-books-section .image-wrapper img {
+	width: 108.19px;
+	height: 128px;
+}
+
+.user-page-year-in-books-section .inner-content .year-in-books-right-section {
+	margin-left: 10px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.user-page-year-in-books-section
+	.inner-content
+	.year-in-books-right-section
+	span {
+	color: rgb(24, 24, 24);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.user-page-year-in-books-section .inner-content .year-in-books-right-section a {
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+	color: var(--goodreads-teal);
+}
+
+.user-page-year-in-books-section
+	.inner-content
+	.year-in-books-right-section
+	a:hover {
+	text-decoration: underline;
+}
+
+.user-page-year-in-books-section .inner-content .year-in-books-right-section b {
+	font-weight: bold;
+}
+
+.user-page-friends-section {
+	margin-top: 30px;
+}
+
+.user-page-friends-section .friend-list {
+	margin-top: 10px;
+}
+
+.user-page-friends-section .friend-list .friend-card {
+	display: flex;
+	flex-direction: row;
+	margin-bottom: 10px;
+}
+
+.user-page-friends-section .friend-list .friend-card .profile-picture-wrapper,
+.user-page-friends-section
+	.friend-list
+	.friend-card
+	.profile-picture-wrapper
+	img {
+	width: 50px;
+	height: 66px;
+}
+
+.user-page-friends-section .friend-list .friend-card .right-section {
+	margin-left: 10px;
+}
+
+.user-page-friends-section .friend-list .friend-card .right-section a {
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.user-page-friends-section .friend-list .friend-card .right-section a:hover {
+	text-decoration: underline;
+}
+
+.user-page-friends-section .friend-list .friend-card .right-section span {
+	color: rgb(24, 24, 24);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.user-page-friends-section .friend-list .friend-card .right-section .separator {
+	color: var(--goodreads-light-gray);
+	margin: 0 3px;
+}
+
+.user-page-following-section .following-list {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+
+.user-page-following-section .following-list a {
+	width: 25px;
+	height: 33px;
+	margin: 5px 5px 5px 0;
+}
+
+.user-page-following-section .following-list img {
+	width: 25px;
+	height: 33px;
+}
+
+.user-page-following-section .number-of-followers-span {
+	display: block;
+	margin-top: 30px;
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+	color: var(--goodreads-brown);
+}
+
+.user-page-favorite-authors-section {
+	margin-top: 20px;
+}
+
+.user-page-favorite-authors-section .favorite-author-list {
+	margin-top: 10px;
+}
+
+.user-page-favorite-authors-section .favorite-author-card {
+	padding: 10px 0;
+	margin-bottom: 1px solid rgb(215, 215, 215);
+	display: flex;
+	flex-direction: row;
+}
+
+.user-page-favorite-authors-section .favorite-author-card .right-section {
+	display: flex;
+	flex-direction: column;
+	margin-left: 10px;
+}
+
+.user-page-favorite-authors-section .favorite-author-card .right-section span {
+	color: rgb(24, 24, 24);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.user-page-favorite-authors-section .favorite-author-card .right-section a {
+	display: inline;
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.user-page-favorite-authors-section
+	.favorite-author-card
+	.right-section
+	a:hover {
+	text-decoration: underline;
+}
+
+.user-page-listopia-section {
+	position: relative;
+}
+
+.user-page-listopia-section .lists-list {
+	margin-top: 10px;
+}
+
+.user-page-listopia-section .lists-list .list-card {
+	margin-top: 10px;
+}
+
+.user-page-listopia-section .lists-list .list-card .covers {
+	display: flex;
+	flex-direction: row;
+}
+
+.user-page-listopia-section .lists-list .list-card .covers img {
+	width: 55px;
+	height: 80px;
+	margin-right: 2px;
+}
+
+.user-page-listopia-section .lists-list .list-card .list-title-a {
+	margin-top: 5px;
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	font-weight: bold;
+	line-height: 18px;
+}
+
+.user-page-listopia-section .lists-list .list-card .list-title-a:hover {
+	text-decoration: underline;
+}
+
+.user-page-listopia-section .lists-list .list-card .list-stats-span {
+	color: var(--goodreads-light-gray);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.user-page-listopia-section .more-lists-a {
+	position: absolute;
+	right: 0;
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 13px;
+	font-weight: bold;
+	line-height: 18px;
+}
+
+.user-page-listopia-section .more-lists-a:hover {
+	text-decoration: underline;
+}
+
+.user-page-favorite-genres-section {
+	margin-top: 60px;
+}
+
+.user-page-favorite-genres-section .favorite-genres-span {
+	display: block;
+	margin-top: 10px;
+	color: rgb(24, 24, 24);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.user-page-favorite-genres-section .favorite-genres-span a {
+	color: var(--goodreads-teal);
+	display: inline;
+	line-height: 18px;
+}
+
+.user-page-favorite-genres-section .favorite-genres-span a:hover,
+.user-page-main-content-right-section-bottom-links a:hover {
+	text-decoration: underline;
+}
+
+.user-page-main-content-right-section-bottom-links {
+	margin-top: 50px;
+}
+
+.user-page-main-content-right-section-bottom-links a {
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
 }
