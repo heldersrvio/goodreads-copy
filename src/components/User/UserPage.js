@@ -507,7 +507,8 @@ const UserPage = ({ match }) => {
 									update.type === 'add-book-to-read' ||
 									update.type === 'add-book-read' ||
 									update.type === 'add-book-reading' ||
-									update.type === 'rate-book'
+									update.type === 'rate-book' ||
+									update.type === 'recommend-book'
 							)
 							.map((update) =>
 								update.bookInfo.userRating === undefined
@@ -519,6 +520,10 @@ const UserPage = ({ match }) => {
 		};
 		getUserInfo();
 	}, []);
+
+	useEffect(() => {
+		console.log(exhibitedStarRatings);
+	}, [exhibitedStarRatings]);
 
 	const capitalizeAndSeparate = (string) => {
 		return string
@@ -560,8 +565,9 @@ const UserPage = ({ match }) => {
 							? previous.recentUpdates
 							: previous.recentUpdates.map((update, i) => {
 									if (
-										update.type !== 'add-book' &&
-										update.type !== 'rate-book'
+										!update.type.includes('add-book') &&
+										update.type !== 'rate-book' &&
+										update.type !== 'recommend-book'
 									) {
 										return update;
 									} else {
@@ -570,7 +576,8 @@ const UserPage = ({ match }) => {
 												.filter(
 													(recentUpdate) =>
 														recentUpdate.type === 'rate-book' ||
-														recentUpdate.type === 'add-book'
+														recentUpdate.type.includes('add-book') ||
+														recentUpdate.type === 'recommend-book'
 												)
 												.indexOf(update) +
 												previous.currentlyReadingBooks.length ===
@@ -625,8 +632,9 @@ const UserPage = ({ match }) => {
 							? previous.recentUpdates
 							: previous.recentUpdates.map((update, i) => {
 									if (
-										update.type !== 'add-book' &&
-										update.type !== 'rate-book'
+										!update.type.includes('add-book') &&
+										update.type !== 'rate-book' &&
+										update.type !== 'recommend-book'
 									) {
 										return update;
 									} else {
@@ -635,7 +643,8 @@ const UserPage = ({ match }) => {
 												.filter(
 													(recentUpdate) =>
 														recentUpdate.type === 'rate-book' ||
-														recentUpdate.type === 'add-book'
+														recentUpdate.type.includes('add-book') ||
+														recentUpdate.type === 'recommend-book'
 												)
 												.indexOf(update) +
 												previous.currentlyReadingBooks.length ===
@@ -687,8 +696,9 @@ const UserPage = ({ match }) => {
 							? previous.recentUpdates
 							: previous.recentUpdates.map((update, i) => {
 									if (
-										update.type !== 'add-book' &&
-										update.type !== 'rate-book'
+										!update.type.includes('add-book') &&
+										update.type !== 'rate-book' &&
+										update.type !== 'recommend-book'
 									) {
 										return update;
 									} else {
@@ -697,7 +707,8 @@ const UserPage = ({ match }) => {
 												.filter(
 													(recentUpdate) =>
 														recentUpdate.type === 'rate-book' ||
-														recentUpdate.type === 'add-book'
+														recentUpdate.type.includes('add-book') ||
+														recentUpdate.type === 'recommend-book'
 												)
 												.indexOf(update) +
 												previous.currentlyReadingBooks.length ===
@@ -755,8 +766,9 @@ const UserPage = ({ match }) => {
 							? previous.recentUpdates
 							: previous.recentUpdates.map((update, i) => {
 									if (
-										update.type !== 'add-book' &&
-										update.type !== 'rate-book'
+										!update.type.includes('add-book') &&
+										update.type !== 'rate-book' &&
+										update.type !== 'recommend-book'
 									) {
 										return update;
 									} else {
@@ -765,7 +777,8 @@ const UserPage = ({ match }) => {
 												.filter(
 													(recentUpdate) =>
 														recentUpdate.type === 'rate-book' ||
-														recentUpdate.type === 'add-book'
+														recentUpdate.type.includes('add-book') ||
+														recentUpdate.type === 'recommend-book'
 												)
 												.indexOf(update) +
 												previous.currentlyReadingBooks.length ===
@@ -1033,8 +1046,9 @@ const UserPage = ({ match }) => {
 														? previous.recentUpdates
 														: previous.recentUpdates.map((update, i) => {
 																if (
-																	update.type !== 'add-book' &&
-																	update.type !== 'rate-book'
+																	!update.type.includes('add-book') &&
+																	update.type !== 'rate-book' &&
+																	update.type !== 'recommend-book'
 																) {
 																	return update;
 																} else {
@@ -1043,7 +1057,10 @@ const UserPage = ({ match }) => {
 																			.filter(
 																				(recentUpdate) =>
 																					recentUpdate.type === 'rate-book' ||
-																					recentUpdate.type === 'add-book'
+																					recentUpdate.type.includes(
+																						'add-book'
+																					) ||
+																					recentUpdate.type === 'recommend-book'
 																			)
 																			.indexOf(update) +
 																			previous.currentlyReadingBooks.length ===
@@ -1699,7 +1716,14 @@ const UserPage = ({ match }) => {
 			<span className="section-title">{`${firstName.toUpperCase()}'S RECENT UPDATES`}</span>
 			{userInfo.recentUpdates.map((update, index) => {
 				return (
-					<div className="update-card" key={index}>
+					<div
+						className={
+							index === userInfo.recentUpdates.length - 1
+								? 'update-card'
+								: 'update-card bordered'
+						}
+						key={index}
+					>
 						<span className="update-description">
 							<a
 								href={Firebase.pageGenerator.generateUserPage(
@@ -1709,8 +1733,9 @@ const UserPage = ({ match }) => {
 							>
 								{firstName + ' ' + userInfo.lastName}
 							</a>
+							<span> </span>
 							{update.type === 'rate-book' ? (
-								<span>
+								<span className="rated-book-span">
 									rated a book{' '}
 									<div className="rating-stars">
 										<div
@@ -1809,9 +1834,9 @@ const UserPage = ({ match }) => {
 										{update.bookInfo.title}
 									</a>
 								</span>
-							) : update.type === 'add-a-quote' ? (
+							) : update.type === 'add-quote' ? (
 								<span>
-									<span>liked a</span>
+									<span>liked a </span>
 									<a
 										href={Firebase.pageGenerator.generateQuotePage(
 											update.quoteId,
@@ -1900,10 +1925,52 @@ const UserPage = ({ match }) => {
 								</div>
 								<div className="right-section">
 									<div className="add-to-shelf-button-and-dropdown">
-										{generateAddToShelfButton(update.bookInfo, index)}
-										{generateBookOptionsDropdown(update.bookInfo, index)}
+										{generateAddToShelfButton(
+											update.bookInfo,
+											userInfo.currentlyReadingBooks.length +
+												userInfo.recentUpdates
+													.filter((update) =>
+														[
+															'add-book-to-read',
+															'add-book-read',
+															'add-book-reading',
+															'recommend-book',
+															'rate-book',
+														].includes(update.type)
+													)
+													.indexOf(update)
+										)}
+										{generateBookOptionsDropdown(
+											update.bookInfo,
+											userInfo.currentlyReadingBooks.length +
+												userInfo.recentUpdates
+													.filter((update) =>
+														[
+															'add-book-to-read',
+															'add-book-read',
+															'add-book-reading',
+															'recommend-book',
+															'rate-book',
+														].includes(update.type)
+													)
+													.indexOf(update)
+										)}
 									</div>
-									{generateRateBookSection(update.bookInfo, index)}
+									{generateRateBookSection(
+										update.bookInfo,
+										userInfo.currentlyReadingBooks.length +
+											userInfo.recentUpdates
+												.filter((update) =>
+													[
+														'add-book-to-read',
+														'add-book-read',
+														'add-book-reading',
+														'recommend-book',
+														'rate-book',
+													].includes(update.type)
+												)
+												.indexOf(update)
+									)}
 								</div>
 							</div>
 						) : null}
@@ -1979,7 +2046,7 @@ const UserPage = ({ match }) => {
 							</div>
 						) : null}
 						{update.type === 'follow-author' ? (
-							<div className="authorInfo-section">
+							<div className="author-info-section">
 								<a
 									className="author-profile-picture-wrapper"
 									href={Firebase.pageGenerator.generateAuthorPage(
@@ -1996,51 +2063,55 @@ const UserPage = ({ match }) => {
 										alt={update.authorInfo.name}
 									/>
 								</a>
-								<span className="author-name-span">
-									<a
-										href={Firebase.pageGenerator.generateAuthorPage(
-											update.authorInfo.id,
-											update.authorInfo.name
-										)}
-									>
-										{update.authorInfo.name}
-									</a>
-									{update.authorInfo.isMember ? (
-										<div className="goodreads-badge"></div>
-									) : null}
-								</span>
-								<span className="author-best-book-span">
-									<span>Author of </span>
-									<a
-										href={Firebase.pageGenerator.generateBookPage(
-											update.authorInfo.bestBookId,
-											update.authorInfo.bestBookTitle
-										)}
-									>
-										{update.authorInfo.bestBookSeries === undefined
-											? update.authorInfo.bestBookTitle
-											: `${update.authorInfo.bestBookTitle} (${update.authorInfo.bestBookSeries}, #${update.authorInfo.bestBookSeriesInstance})`}
-									</a>
-									<button
-										className="follow-author-button"
-										onMouseOver={(e) => {
-											if (update.authorInfo.userIsFollowing) {
-												e.target.innerHTML = 'Unfollow';
-											}
-										}}
-										onMouseOut={(e) => {
-											if (update.authorInfo.userIsFollowing) {
-												e.target.innerHTML = 'Following';
-											}
-										}}
-									>
-										{update.authorInfo.userIsFollowing ? 'Following' : 'Follow'}
-									</button>
-								</span>
+								<div className="author-actual-info-section">
+									<span className="author-name-span">
+										<a
+											href={Firebase.pageGenerator.generateAuthorPage(
+												update.authorInfo.id,
+												update.authorInfo.name
+											)}
+										>
+											{update.authorInfo.name}
+										</a>
+										{update.authorInfo.isMember ? (
+											<div className="goodreads-badge"></div>
+										) : null}
+									</span>
+									<span className="author-best-book-span">
+										<span>Author of </span>
+										<a
+											href={Firebase.pageGenerator.generateBookPage(
+												update.authorInfo.bestBookId,
+												update.authorInfo.bestBookTitle
+											)}
+										>
+											{update.authorInfo.bestBookSeries === undefined
+												? update.authorInfo.bestBookTitle
+												: `${update.authorInfo.bestBookTitle} (${update.authorInfo.bestBookSeries}, #${update.authorInfo.bestBookSeriesInstance})`}
+										</a>
+										<button
+											className="follow-author-button"
+											onMouseOver={(e) => {
+												if (update.authorInfo.userIsFollowing) {
+													e.target.innerHTML = 'Unfollow';
+												}
+											}}
+											onMouseOut={(e) => {
+												if (update.authorInfo.userIsFollowing) {
+													e.target.innerHTML = 'Following';
+												}
+											}}
+										>
+											{update.authorInfo.userIsFollowing
+												? 'Following'
+												: 'Follow'}
+										</button>
+									</span>
+								</div>
 							</div>
 						) : null}
 						<span className="update-date-span">
-							{format(update.date, 'MMM dd, yyyy HH:mma..aa')}
+							{format(update.date, 'MMM dd, yyyy HH:mma')}
 						</span>
 					</div>
 				);
