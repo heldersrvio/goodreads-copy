@@ -135,6 +135,7 @@
 }
 
 .user-page-introduction .right-section .more-dropdown-trigger {
+	position: relative;
 	display: flex;
 	flex-direction: row;
 	align-items: center;
@@ -1318,4 +1319,38 @@
 	font-family: var(--lato-font);
 	font-size: 12px;
 	line-height: 18px;
+}
+
+.user-page .more-dropdown {
+	position: absolute;
+	top: 25px;
+	width: 200px;
+	border: 1px solid rgb(216, 216, 216);
+	box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 10px 0px;
+	background-color: rgb(255, 255, 255);
+}
+
+.user-page .more-dropdown li {
+	display: block;
+	width: 176px;
+	padding: 12px;
+	color: rgb(0, 0, 0);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 18px;
+	margin: 0;
+}
+
+.user-page .more-dropdown li a {
+	color: rgb(0, 0, 0);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	padding: 0;
+	line-height: 18px;
+	height: auto;
+	text-align: left;
+}
+
+.user-page .more-dropdown li a:hover {
+	text-decoration: underline;
 }
