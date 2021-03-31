@@ -99,6 +99,7 @@ const UserPage = ({ match }) => {
         currentlyReadingBooks: [{
             id,
             title,
+			cover,
             mainAuthorId,
             mainAuthorName,
             mainAuthorIsMember,
@@ -113,15 +114,15 @@ const UserPage = ({ match }) => {
             type,
             date,
 			rating,
-			newFriendId,
-			newFriendName,
-			newFriendPicture,
 			numberOfReviewVoters,
 			reviewText,
 			quoteId,
 			quoteContent,
-			recommendedUserId,
-			recommendedUserName,
+			userInfo: {
+				id,
+				name,
+				picture,
+			},
             authorInfo: {
                 id,
                 name,
@@ -137,9 +138,6 @@ const UserPage = ({ match }) => {
                 id,
                 title,
 				cover,
-                mainAuthorId,
-                mainAuthorName,
-                mainAuthorIsMember,
                 userStatus,
                 userRating,
                 userProgress,
@@ -236,10 +234,12 @@ const UserPage = ({ match }) => {
 					{
 						type: 'add-friend',
 						date: new Date(2021, 1, 3),
-						newFriendId: '123',
-						newFriendName: 'Josephine',
-						newFriendPicture:
-							'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/users/1581273216i/109220153._UX60_CR0,0,60,60_.jpg',
+						userInfo: {
+							id: '123',
+							name: 'Josephine',
+							picture:
+								'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/users/1581273216i/109220153._UX60_CR0,0,60,60_.jpg',
+						},
 					},
 					{
 						type: 'add-book-to-read',
@@ -249,11 +249,13 @@ const UserPage = ({ match }) => {
 							title: 'The Count of Monte Cristo',
 							cover:
 								'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1611834134l/7126.jpg',
-							mainAuthorId: '123',
-							mainAuthorName: 'Alexandre Dumas',
-							mainAuthorIsMember: false,
 							userStatus: 'reading',
 							userProgress: 30,
+						},
+						authorInfo: {
+							id: '123',
+							name: 'Alexandre Dumas',
+							isMember: false,
 						},
 					},
 					{
@@ -264,11 +266,13 @@ const UserPage = ({ match }) => {
 							title: 'The Count of Monte Cristo',
 							cover:
 								'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1611834134l/7126.jpg',
-							mainAuthorId: '123',
-							mainAuthorName: 'Alexandre Dumas',
-							mainAuthorIsMember: false,
 							userStatus: 'reading',
 							userProgress: 30,
+						},
+						authorInfo: {
+							id: '123',
+							name: 'Alexandre Dumas',
+							isMember: false,
 						},
 					},
 					{
@@ -279,11 +283,13 @@ const UserPage = ({ match }) => {
 							title: 'The Count of Monte Cristo',
 							cover:
 								'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1611834134l/7126.jpg',
-							mainAuthorId: '123',
-							mainAuthorName: 'Alexandre Dumas',
-							mainAuthorIsMember: false,
 							userStatus: 'reading',
 							userProgress: 30,
+						},
+						authorInfo: {
+							id: '123',
+							name: 'Alexandre Dumas',
+							isMember: false,
 						},
 					},
 					{
@@ -295,10 +301,12 @@ const UserPage = ({ match }) => {
 							title: 'Anna Karenina',
 							cover:
 								'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1601352433l/15823480._SY475_.jpg',
-							mainAuthorId: '123',
-							mainAuthorName: 'Leo Tolstoy',
-							mainAuthorIsMember: false,
 							userStatus: 'to-read',
+						},
+						authorInfo: {
+							id: '123',
+							name: 'Leo Tolstoy',
+							isMember: false,
 						},
 					},
 					{
@@ -310,26 +318,27 @@ const UserPage = ({ match }) => {
 							title: 'Eugene Onegin',
 							cover:
 								'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388373138l/27822.jpg',
-							mainAuthorId: '123',
-							mainAuthorName: 'Alexander Pushkin',
-							mainAuthorIsMember: true,
 							userStatus: 'read',
 							userRating: 5,
+						},
+						authorInfo: {
+							id: '123',
+							name: 'Alexander Pushkin',
+							isMember: true,
 						},
 					},
 					{
 						type: 'recommend-book',
 						date: new Date(2021, 1, 8),
-						recommendedToUserId: '123',
-						recommendedToUserName: 'Mark',
+						userInfo: {
+							id: '123',
+							name: 'Mark',
+						},
 						bookInfo: {
 							id: '123',
 							title: 'Eugene Onegin',
 							cover:
 								'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388373138l/27822.jpg',
-							mainAuthorId: '123',
-							mainAuthorName: 'Alexander Pushkin',
-							mainAuthorIsMember: true,
 							userStatus: 'read',
 							userRating: 5,
 						},
@@ -344,9 +353,6 @@ const UserPage = ({ match }) => {
 							title: 'Eugene Onegin',
 							cover:
 								'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388373138l/27822.jpg',
-							mainAuthorId: '123',
-							mainAuthorName: 'Alexander Pushkin',
-							mainAuthorIsMember: true,
 							userStatus: 'read',
 							userRating: 5,
 						},
@@ -401,26 +407,17 @@ const UserPage = ({ match }) => {
 						numberOfReviewVoters: 10,
 						reviewText:
 							'This book and author - big love. I love Patti Callahan Henry’s contemporary titles, as well as her newer historical fiction titles, and this is a book I’ve been looking forward to since I first heard about it. The Pulaski shipwreck was recently disc',
-						authorInfo: {
+						userInfo: {
 							id: '123',
 							name: 'Johann Wolfgang von Goethe',
 							picture:
 								'https://images.gr-assets.com/authors/1532614109p5/285217.jpg',
-							isMember: true,
-							userIsFollowing: true,
-							bestBookId: '123',
-							bestBookTitle: 'The Sorrows of Young Werther',
-							bestBookSeries: 'Goethe Titles',
-							bestBookSeriesInstance: 2,
 						},
 						bookInfo: {
 							id: '123',
 							title: 'Eugene Onegin',
 							cover:
 								'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388373138l/27822.jpg',
-							mainAuthorId: '123',
-							mainAuthorName: 'Alexander Pushkin',
-							mainAuthorIsMember: true,
 							userStatus: 'read',
 							userRating: 5,
 						},
@@ -1808,11 +1805,11 @@ const UserPage = ({ match }) => {
 									<span>is now friends with </span>
 									<a
 										href={Firebase.pageGenerator.generateUserPage(
-											update.newFriendId,
-											update.newFriendName
+											update.userInfo.id,
+											update.userInfo.name
 										)}
 									>
-										{update.newFriendName}
+										{update.userInfo.name}
 									</a>
 								</span>
 							) : update.type === 'vote-for-book-review' ? (
@@ -1822,10 +1819,10 @@ const UserPage = ({ match }) => {
 									} other people liked `}</span>
 									<a
 										href={Firebase.pageGenerator.generateUserPage(
-											update.authorInfo.id,
-											update.authorInfo.name
+											update.userInfo.id,
+											update.userInfo.name
 										)}
-									>{`${update.authorInfo.name}'s`}</a>
+									>{`${update.userInfo.name}'s`}</a>
 									<span> review of </span>
 									<a
 										href={Firebase.pageGenerator.generateBookPage(
@@ -1863,11 +1860,11 @@ const UserPage = ({ match }) => {
 									<span>to </span>
 									<a
 										href={Firebase.pageGenerator.generateUserPage(
-											update.recommendedToUserId,
-											update.recommendedToUserName
+											update.userInfo.id,
+											update.userInfo.name
 										)}
 									>
-										{update.recommendedToUserName}
+										{update.userInfo.name}
 									</a>
 								</span>
 							) : (
@@ -1911,13 +1908,13 @@ const UserPage = ({ match }) => {
 											<span>by </span>
 											<a
 												href={Firebase.pageGenerator.generateAuthorPage(
-													update.bookInfo.mainAuthorId,
-													update.bookInfo.mainAuthorName
+													update.authorInfo.id,
+													update.authorInfo.name
 												)}
 											>
-												{update.bookInfo.mainAuthorName}
+												{update.authorInfo.name}
 											</a>
-											{update.bookInfo.mainAuthorIsMember ? (
+											{update.authorInfo.isMember ? (
 												<span className="goodreads-member-span">
 													(Goodreads Author)
 												</span>
@@ -1980,17 +1977,17 @@ const UserPage = ({ match }) => {
 							<a
 								className="friend-profile-picture-a"
 								href={Firebase.pageGenerator.generateUserPage(
-									update.newFriendId,
-									update.newFriendName
+									update.userInfo.id,
+									update.userInfo.name
 								)}
 							>
 								<img
 									src={
-										update.newFriendPicture !== undefined
-											? update.newFriendPicture
+										update.userInfo.picture !== undefined
+											? update.userInfo.picture
 											: 'https://s.gr-assets.com/assets/nophoto/user/u_100x100-259587f1619f5253426a4fa6fb508831.png'
 									}
-									alt={update.newFriendName}
+									alt={update.userInfo.name}
 								/>
 							</a>
 						) : null}
