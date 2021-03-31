@@ -3879,6 +3879,57 @@ const Firebase = (() => {
 		};
 	};
 
+	const followUser = async (userUID, userToFollowUID, history) => {
+		if (userUID === null || userUID === undefined) {
+			history.push({
+				pathname: '/user/sign_in',
+				state: { error: 'User not logged in' },
+			});
+		} else {
+			const userToFollowQuery = await database
+				.collection('users')
+				.doc(userToFollowUID)
+				.get();
+			await database
+				.collection('users')
+				.doc(userToFollowUID)
+				.set(
+					{
+						followers:
+							userToFollowQuery.data().followers === undefined
+								? [userUID]
+								: userToFollowQuery.data().followers.concat(userUID),
+					},
+					{ merge: true }
+				);
+		}
+	};
+
+	const unfollowUser = async (userUID, userToFollowUID, history) => {
+		if (userUID === null || userUID === undefined) {
+			history.push({
+				pathname: '/user/sign_in',
+				state: { error: 'User not logged in' },
+			});
+		} else {
+			const userToFollowQuery = await database
+				.collection('users')
+				.doc(userToFollowUID)
+				.get();
+			await database
+				.collection('users')
+				.doc(userToFollowUID)
+				.set(
+					{
+						followers: userToFollowQuery
+							.data()
+							.followers.filter((follower) => follower !== userUID),
+					},
+					{ merge: true }
+				);
+		}
+	};
+
 	return {
 		pageGenerator,
 		getAlsoEnjoyedBooksDetailsForBook,
@@ -3943,6 +3994,8 @@ const Firebase = (() => {
 		getArticleTitle,
 		getUsersWhoLikedArticle,
 		getUserInfoForUserPage,
+		followUser,
+		unfollowUser,
 	};
 })();
 

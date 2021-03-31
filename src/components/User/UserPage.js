@@ -8,7 +8,6 @@ import '../styles/User/UserPage.css';
 
 /*
 TODO:
-	- Follow functionality
 	- User ratings chart
 	- Privacy settings
 	- User's own page extra functions
@@ -578,10 +577,6 @@ const UserPage = ({ match }) => {
 			/*user.userUID, userId */
 		]
 	);
-
-	useEffect(() => {
-		console.log(exhibitedStarRatings);
-	}, [exhibitedStarRatings]);
 
 	const capitalizeAndSeparate = (string) => {
 		return string
@@ -1455,19 +1450,56 @@ const UserPage = ({ match }) => {
 									? 'follow-button following'
 									: 'follow-button'
 							}
-							onMouseOver={(e) => {
+							onMouseOver={(_e) => {
 								if (userInfo.isFollowedByUser) {
-									e.target.innerHTML = 'Unfollow';
+									const outerSpan = document.querySelector(
+										'span.followed-by-user-span'
+									);
+									outerSpan.innerHTML = 'Unfollow';
 								}
 							}}
-							onMouseOut={(e) => {
+							onMouseOut={(_e) => {
 								if (userInfo.isFollowedByUser) {
-									e.target.innerHTML = 'Following';
+									const checkmark = document.createElement('div');
+									checkmark.classList.add('following-checkmark');
+									const span = document.createElement('span');
+									span.innerHTML = 'Following';
+									const outerSpan = document.querySelector(
+										'span.followed-by-user-span'
+									);
+									outerSpan.innerHTML = '';
+									outerSpan.appendChild(checkmark);
+									outerSpan.appendChild(span);
+								}
+							}}
+							onClick={async (_e) => {
+								if (userInfo.isFollowedByUser) {
+									setSavingFollow(true);
+									await Firebase.unfollowUser(user.userUID, userId, history);
+									setSavingFollow(false);
+									setUserInfo((previous) => {
+										return {
+											...previous,
+											isFollowedByUser: false,
+											numberOfFollowers: previous.numberOfFollowers - 1,
+										};
+									});
+								} else {
+									setSavingFollow(true);
+									await Firebase.followUser(user.userUID, userId, history);
+									setSavingFollow(false);
+									setUserInfo((previous) => {
+										return {
+											...previous,
+											isFollowedByUser: true,
+											numberOfFollowers: previous.numberOfFollowers + 1,
+										};
+									});
 								}
 							}}
 						>
 							{userInfo.isFollowedByUser ? (
-								<span>
+								<span className="followed-by-user-span">
 									<div className="following-checkmark"></div>
 									<span>Following</span>
 								</span>
