@@ -1386,3 +1386,112 @@
 .user-page .more-dropdown li a:hover {
 	text-decoration: underline;
 }
+
+.user-page .dark-page-cover,
+.user-page .user-page-unfollow-user-modal {
+	display: none;
+}
+
+.user-page .user-page-unfollow-user-modal {
+	border-radius: 4px;
+	border: 1px solid rgb(0, 0, 0);
+}
+
+.user-page .user-page-unfollow-user-modal.visible .close-button {
+	position: absolute;
+	top: 10px;
+	right: 0;
+	width: 13px;
+	height: 15px;
+	background-image: url('http://s.gr-assets.com/assets/gr/icons/icon_close-63734f04e7baaa77fbad796225e5724c.svg');
+	background-repeat: no-repeat;
+	background-color: transparent;
+}
+
+.user-page .user-page-unfollow-user-modal h1 {
+	color: rgb(51, 51, 51);
+	font-family: var(--merriweather-font);
+	font-size: 22px;
+	font-weight: bold;
+	line-height: 27px;
+}
+
+.user-page .user-page-unfollow-user-modal span {
+	display: block;
+	margin-top: 20px;
+	color: rgb(24, 24, 24);
+	font-family: var(--lato-font);
+	font-size: 16px;
+	line-height: 18px;
+}
+
+.user-page .user-page-unfollow-user-modal .buttons {
+	display: flex;
+	flex-direction: row;
+	margin-top: 40px;
+}
+
+.user-page .user-page-unfollow-user-modal .buttons .confirm-button {
+	width: 107px;
+	height: 42px;
+	padding: 12px 24px;
+	border-radius: 3px;
+	background-color: var(--goodreads-brown);
+	border: 1px solid rgb(56, 33, 16);
+	color: rgb(255, 255, 255);
+	font-family: var(--lato-font);
+	font-size: 16px;
+	line-height: 16px;
+}
+
+.user-page .user-page-unfollow-user-modal .buttons .confirm-button:hover {
+	background-color: rgb(88, 55, 31);
+}
+
+.user-page .user-page-unfollow-user-modal .buttons .cancel-button {
+	width: 97px;
+	height: 42px;
+	padding: 12px 24px;
+	background-color: rgb(244, 241, 234);
+	border: 1px solid rgb(214, 208, 196);
+	border-radius: 3px;
+	color: rgb(51, 51, 51);
+	font-family: var(--lato-font);
+	font-size: 16px;
+	line-height: 16px;
+	margin-left: 20px;
+}
+
+.user-page .user-page-unfollow-user-modal .buttons .cancel-button:hover {
+	background-color: rgb(237, 230, 214);
+}
+
+.user-page .dark-page-cover.visible {
+	display: block;
+	position: absolute;
+	width: 100%;
+	height: 100vh;
+	background-color: rgba(0, 0, 0, 0.7);
+	z-index: 11;
+}
+
+.user-page .user-page-unfollow-user-modal.visible {
+	display: block;
+	position: absolute;
+	width: 584px;
+	padding: 32px;
+	top: 120px;
+	left: calc(50% - 325px);
+	background-color: rgb(255, 255, 255);
+	z-index: 12;
+}
+
+.user-page.disabled-scrolling {
+	height: 100vh;
+	overflow: hidden;
+}
+
+.user-page #loadingSpinner {
+	left: 0;
+	top: 5px;
+}

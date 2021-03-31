@@ -44,6 +44,7 @@ const UserPage = ({ match }) => {
 	const [addShelfInputs, setAddShelfInputs] = useState([]);
 	const [exhibitedStarRatings, setExhibitedStarRatings] = useState([]);
 	const [userLikedQuotes, setUserLikedQuotes] = useState([]);
+	const [unfollowModalVisible, setUnfollowModalVisible] = useState(false);
 
 	const location = loaded
 		? userInfo.city !== undefined &&
@@ -1474,16 +1475,7 @@ const UserPage = ({ match }) => {
 							}}
 							onClick={async (_e) => {
 								if (userInfo.isFollowedByUser) {
-									setSavingFollow(true);
-									await Firebase.unfollowUser(user.userUID, userId, history);
-									setSavingFollow(false);
-									setUserInfo((previous) => {
-										return {
-											...previous,
-											isFollowedByUser: false,
-											numberOfFollowers: previous.numberOfFollowers - 1,
-										};
-									});
+									setUnfollowModalVisible(true);
 								} else {
 									setSavingFollow(true);
 									await Firebase.followUser(user.userUID, userId, history);
@@ -1542,7 +1534,12 @@ const UserPage = ({ match }) => {
 						</button>
 					</div>
 				) : (
-					<div className="follow-loading-spinner"></div>
+					<div id="loadingSpinner">
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>
+					</div>
 				)}
 				<table className="user-misc">
 					<tbody>
@@ -2598,15 +2595,72 @@ const UserPage = ({ match }) => {
 		</div>
 	);
 
+	const unfollowUserModal = (
+		<div
+			className={
+				unfollowModalVisible
+					? 'user-page-unfollow-user-modal visible'
+					: 'user-page-unfollow-user-modal'
+			}
+		>
+			<button
+				className="close-button"
+				onClick={(_e) => setUnfollowModalVisible(false)}
+			></button>
+			<h1>{`Unfollow ${
+				userInfo.lastName !== undefined && userInfo.lastName.length > 0
+					? firstName + ' ' + userInfo.lastName
+					: firstName
+			}?`}</h1>
+			<span>{`This will remove ${firstName}'s activity from your updates feed.`}</span>
+			<div className="buttons">
+				<button
+					className="confirm-button"
+					onClick={async (_e) => {
+						setUnfollowModalVisible(false);
+						setSavingFollow(true);
+						await Firebase.unfollowUser(user.userUID, userId, history);
+						setSavingFollow(false);
+						setUserInfo((previous) => {
+							return {
+								...previous,
+								isFollowedByUser: false,
+								numberOfFollowers: previous.numberOfFollowers - 1,
+							};
+						});
+					}}
+				>
+					Confirm
+				</button>
+				<button
+					className="cancel-button"
+					onClick={(_e) => setUnfollowModalVisible(false)}
+				>
+					Cancel
+				</button>
+			</div>
+		</div>
+	);
+
 	const mainContent = (
 		<div className="user-page-main-content">
 			{mainContentLeftSection}
 			{mainContentRightSection}
+			{unfollowUserModal}
 		</div>
 	);
 
 	return (
-		<div className="user-page">
+		<div
+			className={
+				unfollowModalVisible ? 'user-page disabled-scrolling' : 'user-page'
+			}
+		>
+			<div
+				className={
+					unfollowModalVisible ? 'dark-page-cover visible' : 'dark-page-cover'
+				}
+			></div>
 			<TopBar />
 			{mainContent}
 			<HomePageFootBar />
