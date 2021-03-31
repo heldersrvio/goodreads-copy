@@ -1201,6 +1201,11 @@
 	margin-left: 10px;
 }
 
+.user-page-favorite-authors-section .favorite-author-card img {
+	width: 50px;
+	height: 66px;
+}
+
 .user-page-favorite-authors-section .favorite-author-card .right-section span {
 	color: rgb(24, 24, 24);
 	font-family: var(--lato-font);

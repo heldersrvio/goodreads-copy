@@ -3466,10 +3466,6 @@ const Firebase = (() => {
 
 	const getUserInfoForUserPage = async (userUID, loggedInUserUID) => {
 		const userQuery = await database.collection('users').doc(userUID).get();
-		const loggedInUserQuery = await database
-			.collection('users')
-			.doc(loggedInUserUID)
-			.get();
 		const userUpdatesQuery = await database
 			.collection('userBooksUpdates')
 			.where('user', '==', userUID)
@@ -3482,7 +3478,6 @@ const Firebase = (() => {
 			.collection('reviews')
 			.where('user', '==', userUID)
 			.get();
-
 		return {
 			isFollowedByUser:
 				userQuery.data().followers !== undefined &&
@@ -3520,7 +3515,7 @@ const Firebase = (() => {
 				.reduce(
 					(previous, current) =>
 						previous +
-						current /
+						current.data().rating /
 							userInstanceQuery.docs.filter(
 								(doc) =>
 									doc.data().rating !== undefined && doc.data().rating !== 0
@@ -3554,7 +3549,15 @@ const Firebase = (() => {
 			),
 			currentlyReadingBooks: await Promise.all(
 				userInstanceQuery.docs
-					.filter((doc) => doc.data().status === 'reading')
+					.filter(
+						(doc) =>
+							doc.data().status === 'reading' &&
+							userUpdatesQuery.docs.some(
+								(updateDoc) =>
+									updateDoc.data().book === doc.data().bookId &&
+									updateDoc.data().action === 'add-book'
+							)
+					)
 					.map(async (doc) => {
 						const bookQuery = await database
 							.collection('books')
@@ -3591,7 +3594,9 @@ const Firebase = (() => {
 									: doc.data().genre
 							),
 							updateDate: userUpdatesQuery.docs
-								.filter((doc) => doc.data().book === doc.data().bookId)
+								.filter(
+									(updateDoc) => updateDoc.data().book === doc.data().bookId
+								)
 								.sort(
 									(a, b) => b.data().date.toDate() - a.data().date.toDate()
 								)[0]
@@ -3621,13 +3626,6 @@ const Firebase = (() => {
 					.sort((a, b) => b.data().date.toDate() - a.data().date.toDate())
 					.filter((doc, index) => index < 10)
 					.map(async (doc) => {
-						const newFriendQuery =
-							doc.data().action === 'add-friend'
-								? await database
-										.collection('users')
-										.doc(doc.data().newFriendId)
-										.get()
-								: null;
 						const reviewQuery =
 							doc.data().action === 'vote-for-book-review'
 								? await database
@@ -3639,6 +3637,14 @@ const Firebase = (() => {
 							doc.data().book !== undefined
 								? await database.collection('books').doc(doc.data().book).get()
 								: undefined;
+						const loggedInUserQuery =
+							doc.data().book !== undefined
+								? await database
+										.collection('userBooksInstances')
+										.where('userId', '==', loggedInUserUID)
+										.where('bookId', '==', doc.data().book)
+										.get()
+								: { docs: [] };
 						const rootBookQuery =
 							bookQuery !== undefined
 								? await database
@@ -3646,25 +3652,230 @@ const Firebase = (() => {
 										.doc(bookQuery.data().rootBook)
 										.get()
 								: undefined;
-						/*const authorId =  doc.data().action === 'follow-author' ? doc.data().author : doc.data().action === 'add-book' || doc.data().action === 'recommend-book' ? rootBookQuery.authorId : doc.data().action === 'vote-for-book-review' ? reviewQuery.user
-				const authorQuery = doc.data().action === 'follow-author' ? await database.collection('authors').doc(doc.data().author).get() : doc.data().action === 'add-book' || doc.data().action === 'recommend-book' ? await database.collection('authors')
-				return {
-					type: doc.data().action !== 'add-book' ? doc.data().action : 'add-book-' + doc.data().shelf,
-					date: doc.data().date.toDate(),
-					rating: doc.data().rating === undefined ? 0 : doc.data().rating,
-					newFriendId: doc.data().newFriendId,
-					newFriendName: newFriendQuery !== null ? newFriendQuery.data().firstName : undefined,
-					newFriendPicture: newFriendQuery !== null ? newFriendQuery.data().profileImage : undefined,
-					numberOfReviewVoters: reviewQuery !== null ? reviewQuery.data().usersWhoLiked.length : undefined,
-					reviewText: reviewQuery !== null ? reviewQuery.data().text : undefined,
-					quoteId: doc.data().quote,
-					quoteContent: doc.data().quote !== undefined ? (await database.collection('quotes').doc(doc.data().quote).get()).data().text : undefined,
-					recommendedUserId: doc.data().recommendedUserId,
-					recommendedUserName: doc.data().recommendedUserId !== undefined ? (await database.collection('users').doc(doc.data().recommendedUserId).get()).data().firstName : undefined,
-					authorInfo
-				};*/
+						const authorId =
+							doc.data().action === 'follow-author'
+								? doc.data().author
+								: doc.data().action === 'add-book' ||
+								  doc.data().action === 'recommend-book' ||
+								  doc.data().action === 'rate-book'
+								? rootBookQuery.data().authorId
+								: undefined;
+						const authorQuery =
+							authorId !== undefined
+								? await database.collection('authors').doc(authorId).get()
+								: undefined;
+						const otherUserId =
+							doc.data().action === 'add-friend'
+								? doc.data().newFriendId
+								: doc.data().action === 'vote-for-book-review'
+								? reviewQuery.data().user
+								: undefined;
+						const otherUserQuery =
+							otherUserId !== undefined
+								? await database.collection('users').doc(otherUserId).get()
+								: undefined;
+						const bestBookId =
+							authorId !== undefined
+								? await getAuthorBestBook(authorId)
+								: undefined;
+						const bestBookQuery =
+							bestBookId !== undefined
+								? await database.collection('books').doc(bestBookId).get()
+								: undefined;
+						const bestBookRootBookQuery =
+							bestBookQuery !== undefined
+								? await database
+										.collection('rootBooks')
+										.doc(bestBookQuery.data().rootBook)
+										.get()
+								: undefined;
+						return {
+							type:
+								doc.data().action !== 'add-book'
+									? doc.data().action
+									: 'add-book-' + doc.data().shelf,
+							date: doc.data().date.toDate(),
+							rating: doc.data().rating === undefined ? 0 : doc.data().rating,
+							newFriendId: doc.data().newFriendId,
+							numberOfReviewVoters:
+								reviewQuery !== null
+									? reviewQuery.data().usersWhoLiked.length
+									: undefined,
+							reviewText:
+								reviewQuery !== null ? reviewQuery.data().text : undefined,
+							quoteId: doc.data().quote,
+							quoteContent:
+								doc.data().quote !== undefined
+									? (
+											await database
+												.collection('quotes')
+												.doc(doc.data().quote)
+												.get()
+									  ).data().text
+									: undefined,
+							userInfo:
+								otherUserQuery !== undefined
+									? {
+											id: otherUserQuery.id,
+											name: otherUserQuery.data().firstName,
+											picture: otherUserQuery.data().profileImage,
+									  }
+									: undefined,
+							authorInfo:
+								authorQuery !== undefined
+									? {
+											id: authorId,
+											name: authorQuery.data().name,
+											isMember: authorQuery.data().GRMember,
+											bestBookId: bestBookId,
+											bestBookTitle: bestBookQuery.data().title,
+											bestBookSeries: (
+												await database
+													.collection('series')
+													.doc(bestBookRootBookQuery.data().series)
+													.get()
+											).name,
+											bestBookSeriesInstance: bestBookRootBookQuery.data()
+												.seriesInstance,
+									  }
+									: undefined,
+							bookInfo:
+								bookQuery !== undefined
+									? {
+											id: bookQuery.id,
+											title: bookQuery.data().title,
+											cover: bookQuery.data().cover,
+											userStatus:
+												loggedInUserQuery.docs.length === 0
+													? undefined
+													: loggedInUserQuery.docs[0].data().status,
+											userRating:
+												loggedInUserQuery.docs.length === 0
+													? undefined
+													: loggedInUserQuery.docs[0].data().rating,
+											userProgress:
+												loggedInUserQuery.docs.length === 0
+													? undefined
+													: loggedInUserQuery.docs[0].data().progress,
+											userToReadPosition:
+												loggedInUserQuery.docs.length === 0
+													? undefined
+													: loggedInUserQuery.docs[0].data().position,
+									  }
+									: undefined,
+						};
 					})
 			),
+			quotes: await Promise.all(
+				(
+					await database
+						.collection('quotes')
+						.where('usersWhoLiked', 'array-contains', userUID)
+						.get()
+				).docs.map(async (doc) => {
+					const authorQuery = await database
+						.collection('authors')
+						.doc(doc.data().authorId)
+						.get();
+					const quoteBookDoc = (
+						await database
+							.collection('books')
+							.where('rootBook', '==', doc.data().rootBook)
+							.where('mainEdition', '==', true)
+							.get()
+					).docs[0];
+					return {
+						id: doc.id,
+						content: doc.data().text,
+						authorId: doc.data().authorId,
+						authorName: authorQuery.data().name,
+						authorProfilePicture: authorQuery.data().picture,
+						bookId: quoteBookDoc.id,
+						bookTitle: quoteBookDoc.data().title,
+						numberOfLikes: doc.data().usersWhoLiked.length,
+						likedByUser: doc.data().usersWhoLiked.includes(loggedInUserUID),
+					};
+				})
+			),
+			friends: await Promise.all(
+				userQuery.data().friends.map(async (friend) => {
+					const friendUserQuery = await database
+						.collection('users')
+						.doc(friend)
+						.get();
+					return {
+						id: friend,
+						name: friendUserQuery.data().firstName,
+						picture: friendUserQuery.data().profileImage,
+						numberOfBooks: (
+							await database
+								.collection('userBooksInstances')
+								.where('userId', '==', friend)
+								.get()
+						).docs.length,
+						numberOfFriends: friendUserQuery.data().friends.length,
+					};
+				})
+			),
+			following: (
+				await database
+					.collection('users')
+					.where('followers', 'array-contains', userUID)
+					.get()
+			).docs.map((doc) => {
+				return {
+					id: doc.id,
+					picture: doc.data().profileImage,
+					name: doc.data().firstName,
+				};
+			}),
+			numberOfFollowers:
+				userQuery.data().followers === undefined
+					? 0
+					: userQuery.data().followers.length,
+			favoriteAuthors: await Promise.all(
+				userQuery.data().favoriteAuthors.map(async (author) => {
+					const authorQuery = await database
+						.collection('authors')
+						.doc(author)
+						.get();
+					const bestBookId = await getAuthorBestBook(author);
+					return {
+						id: author,
+						name: authorQuery.data().name,
+						picture: authorQuery.data().picture,
+						bestBookId,
+						bestBookTitle: (
+							await database.collection('books').doc(bestBookId).get()
+						).data().title,
+					};
+				})
+			),
+			votedLists: await Promise.all(
+				(await database.collection('lists').get()).docs
+					.filter((doc) =>
+						doc.data().userVotes.some((vote) => vote.user === userUID)
+					)
+					.map(async (doc) => {
+						return {
+							id: doc.id,
+							title: doc.data().title,
+							bookCovers: await Promise.all(
+								doc
+									.data()
+									.userVotes.filter((vote) => vote.user === userUID)[0]
+									.books.map(async (book) => {
+										return (
+											await database.collection('books').doc(book).get()
+										).data().cover;
+									})
+							),
+							numberOfBooks: doc.data().books.length,
+							numberOfVoters: doc.data().userVotes.length,
+						};
+					})
+			),
+			favoriteGenres: userQuery.data().favoriteGenres,
 		};
 	};
 
@@ -3731,6 +3942,7 @@ const Firebase = (() => {
 		getInfoForArticle,
 		getArticleTitle,
 		getUsersWhoLikedArticle,
+		getUserInfoForUserPage,
 	};
 })();
 

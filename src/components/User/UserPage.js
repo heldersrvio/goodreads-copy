@@ -38,21 +38,33 @@ const UserPage = ({ match }) => {
 
 	const location = loaded
 		? userInfo.city !== undefined &&
+		  userInfo.city !== '' &&
 		  userInfo.stateProvinceCode !== undefined &&
-		  userInfo.country !== undefined
+		  userInfo.stateProvinceCode !== '' &&
+		  userInfo.country !== undefined &&
+		  userInfo.country !== ''
 			? `${userInfo.city}, ${userInfo.stateProvinceCode}, ${userInfo.country}`
-			: userInfo.city !== undefined && userInfo.stateProvinceCode !== undefined
+			: userInfo.city !== undefined &&
+			  userInfo.city !== '' &&
+			  userInfo.stateProvinceCode !== undefined &&
+			  userInfo.stateProvinceCode !== ''
 			? `${userInfo.city}, ${userInfo.stateProvinceCode}`
-			: userInfo.city !== undefined && userInfo.country !== undefined
+			: userInfo.city !== undefined &&
+			  userInfo.city !== '' &&
+			  userInfo.country !== undefined &&
+			  userInfo.country !== ''
 			? `${userInfo.city}, ${userInfo.country}`
 			: userInfo.stateProvinceCode !== undefined &&
-			  userInfo.country !== undefined
+			  userInfo.stateProvinceCode !== '' &&
+			  userInfo.country !== undefined &&
+			  userInfo.country !== ''
 			? `${userInfo.stateProvinceCode}, ${userInfo.country}`
-			: userInfo.city !== undefined
+			: userInfo.city !== undefined && userInfo.city !== ''
 			? userInfo.city
-			: userInfo.stateProvinceCode !== undefined
+			: userInfo.stateProvinceCode !== undefined &&
+			  userInfo.stateProvinceCode !== ''
 			? userInfo.stateProvinceCode
-			: userInfo.country !== undefined
+			: userInfo.country !== undefined && userInfo.country !== ''
 			? userInfo.country
 			: ''
 		: '';
@@ -189,8 +201,8 @@ const UserPage = ({ match }) => {
 	const user = JSON.parse(localStorage.getItem('userState'));
 
 	useEffect(() => {
-		const getUserInfo = () => {
-			const userInfoObject = {
+		const getUserInfo = async () => {
+			/*const userInfoObject = {
 				isFollowedByUser: false,
 				isUserFriend: false,
 				lastName: 'Collins',
@@ -473,7 +485,11 @@ const UserPage = ({ match }) => {
 					'comedy',
 					'history',
 				],
-			};
+			};*/
+			const userInfoObject = await Firebase.getUserInfoForUserPage(
+				userId,
+				user.userUID
+			);
 			setUserInfo(userInfoObject);
 			setLoaded(true);
 			const numberOfInteractiveBookCards =
@@ -518,7 +534,7 @@ const UserPage = ({ match }) => {
 			);
 		};
 		getUserInfo();
-	}, []);
+	}, [user.userUID, userId]);
 
 	useEffect(() => {
 		console.log(exhibitedStarRatings);
@@ -1469,7 +1485,7 @@ const UserPage = ({ match }) => {
 								</td>
 							</tr>
 						) : null}
-						{userInfo.website !== undefined ? (
+						{userInfo.website !== undefined && userInfo.website.length > 0 ? (
 							<tr>
 								<th>Website</th>
 								<td>
@@ -1799,7 +1815,7 @@ const UserPage = ({ match }) => {
 							) : update.type === 'add-book-read' ? (
 								<span>finished reading</span>
 							) : update.type === 'add-book-reading' ? (
-								<span>is currently reading</span>
+								<span>started reading</span>
 							) : update.type === 'add-friend' ? (
 								<span>
 									<span>is now friends with </span>
