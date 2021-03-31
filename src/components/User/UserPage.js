@@ -5,6 +5,7 @@ import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 import Firebase from '../../Firebase';
 import '../styles/User/UserPage.css';
+import RatingsChart from './RatingsChart';
 
 /*
 TODO:
@@ -45,6 +46,7 @@ const UserPage = ({ match }) => {
 	const [exhibitedStarRatings, setExhibitedStarRatings] = useState([]);
 	const [userLikedQuotes, setUserLikedQuotes] = useState([]);
 	const [unfollowModalVisible, setUnfollowModalVisible] = useState(false);
+	const [userRatingsChartVisible, setUserRatingsChartVisible] = useState(false);
 
 	const location = loaded
 		? userInfo.city !== undefined &&
@@ -107,6 +109,11 @@ const UserPage = ({ match }) => {
         about,
         profilePicture,
         numberOfRatings,
+		fiveRatings,
+		fourRatings,
+		threeRatings,
+		twoRatings,
+		oneRatings,
         averageRating,
         numberOfReviews,
         bookshelves: [{
@@ -1432,9 +1439,26 @@ const UserPage = ({ match }) => {
 					<a
 						href={Firebase.pageGenerator.generateUserRatingsPage(userId)}
 					>{`${userInfo.numberOfRatings} ratings`}</a>
-					<button className="show-stats-window-button">{`(${userInfo.averageRating.toFixed(
-						2
-					)} avg)`}</button>
+					<button
+						className="show-stats-window-button"
+						onClick={(_e) => setUserRatingsChartVisible(true)}
+					>{`(${userInfo.averageRating.toFixed(2)} avg)`}</button>
+					<div
+						className={
+							userRatingsChartVisible
+								? 'user-ratings-chart visible'
+								: 'user-ratings-chart'
+						}
+					>
+						<RatingsChart
+							fiveRatings={userInfo.fiveRatings}
+							fourRatings={userInfo.fourRatings}
+							threeRatings={userInfo.threeRatings}
+							twoRatings={userInfo.twoRatings}
+							oneRatings={userInfo.oneRatings}
+							closeChart={() => setUserRatingsChartVisible(false)}
+						/>
+					</div>
 				</span>
 				<a
 					className="number-of-reviews-a"
