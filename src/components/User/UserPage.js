@@ -9,7 +9,6 @@ import RatingsChart from './RatingsChart';
 
 /*
 TODO:
-	- User ratings chart
 	- Privacy settings
 	- User's own page extra functions
 */
@@ -48,6 +47,8 @@ const UserPage = ({ match }) => {
 	const [unfollowModalVisible, setUnfollowModalVisible] = useState(false);
 	const [userRatingsChartVisible, setUserRatingsChartVisible] = useState(false);
 
+	const user = JSON.parse(localStorage.getItem('userState'));
+
 	const location = loaded
 		? userInfo.city !== undefined &&
 		  userInfo.city !== '' &&
@@ -80,6 +81,18 @@ const UserPage = ({ match }) => {
 			? userInfo.country
 			: ''
 		: '';
+	const showProfile =
+		loaded &&
+		(userInfo.whoCanViewUserProfile === 'anyone' ||
+			(userInfo.whoCanViewUserProfile === 'goodreads-members' &&
+				user.userUID !== null &&
+				user.userUID !== undefined) ||
+			(userInfo.whoCanViewUserProfile === 'just-my-friends' &&
+				userInfo.isUserFriend));
+	const showLastName =
+		loaded &&
+		(userInfo.showLastNameTo === 'anyone' ||
+			(userInfo.showLastNameTo === 'friends' && userInfo.isUserFriend));
 	const showGender =
 		loaded &&
 		userInfo.gender !== '' &&
@@ -90,17 +103,43 @@ const UserPage = ({ match }) => {
 		location !== '' &&
 		(userInfo.locationViewableBy === 'everyone' ||
 			(userInfo.locationViewableBy === 'friendOnly' && userInfo.isUserFriend));
+	const showAge =
+		loaded &&
+		(([
+			'age-members-birthday-members',
+			'age-members-birthday-no-one',
+			'age-members-birthday-friends',
+		].includes(userInfo.ageAndBirthdayPrivacy) &&
+			user.userUID !== null &&
+			user.userUID !== undefined) ||
+			(['age-friends-birthday-friends', 'age-friends-birthday-no-one'].includes(
+				userInfo.ageAndBirthdayPrivacy
+			) &&
+				userInfo.isUserFriend));
 	/*
     userInfo: {
+		whoCanViewUserProfile,
+		feedSettings: {
+			addBookToShelves,
+			addAFriend,
+			voteForABookReview,
+			addAQuote,
+			recommendABook,
+			addANewStatusToBook,
+			followAnAuthor,
+		},
         isFollowedByUser,
         isUserFriend,
         lastName,
+		showLastNameTo,
         showGenderTo,
         gender,
         locationViewableBy,
         country,
         stateProvinceCode,
         city,
+		ageAndBirthdayPrivacy,
+		birthday,
         website,
         lastActiveDate,
         joinedDate,
@@ -215,8 +254,6 @@ const UserPage = ({ match }) => {
     }
     */
 
-	const user = JSON.parse(localStorage.getItem('userState'));
-
 	useLayoutEffect(() => {
 		document.addEventListener('click', (event) => {
 			if (
@@ -238,15 +275,28 @@ const UserPage = ({ match }) => {
 		() => {
 			const getUserInfo = async () => {
 				const userInfoObject = {
+					whoCanViewUserProfile: 'anyone',
+					feedSettings: {
+						addBookToShelves: true,
+						addAFriend: true,
+						voteForABookReview: false,
+						addAQuote: false,
+						recommendABook: false,
+						addANewStatusToBook: false,
+						followAnAuthor: true,
+					},
 					isFollowedByUser: false,
 					isUserFriend: false,
 					lastName: 'Collins',
+					showLastNameTo: 'friends',
 					showGenderTo: 'everyone',
 					gender: 'male',
 					locationViewableBy: 'everyone',
 					country: 'United Kingdom',
 					stateProvinceCode: undefined,
 					city: 'Manchester',
+					ageAndBirthdayPrivacy: 'age-members-birthday-friends',
+					birthday: new Date(2000, 3, 12),
 					website: 'www.somewebsite.com',
 					lastActiveDate: new Date(2021, 1, 15),
 					joinedDate: new Date(2015, 4, 4),
@@ -256,6 +306,11 @@ const UserPage = ({ match }) => {
 					profilePicture:
 						'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/users/1205952131i/360673._UX100_CR0,0,100,100_.jpg',
 					numberOfRatings: 120,
+					fiveRatings: 5,
+					fourRatings: 2,
+					threeRatings: 5,
+					twoRatings: 1,
+					oneRatings: 0,
 					averageRating: 3.5,
 					numberOfReviews: 11,
 					bookshelves: Array(20).fill({
@@ -2275,7 +2330,35 @@ const UserPage = ({ match }) => {
 								</div>
 								<div className="right-section">
 									{user.userUID === null || !quote.likedByUser ? (
-										<button>Like</button>
+										<button
+											onClick={async (_e) => {
+												await Firebase.likeQuote(
+													user.userUID,
+													quote.id,
+													history
+												);
+												setUserInfo((previous) => {
+													return {
+														...previous,
+														quotes: previous.quotes.map((q, i) => {
+															if (i === index) {
+																return {
+																	...quote,
+																	likedByUser: true,
+																};
+															} else {
+																return quote;
+															}
+														}),
+													};
+												});
+												setUserLikedQuotes((previous) =>
+													previous.concat(index)
+												);
+											}}
+										>
+											Like
+										</button>
 									) : userLikedQuotes.includes(index) ? (
 										<a
 											className="quote-a"

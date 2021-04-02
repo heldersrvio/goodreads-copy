@@ -3479,17 +3479,30 @@ const Firebase = (() => {
 			.where('user', '==', userUID)
 			.get();
 		return {
+			whoCanViewUserProfile: userQuery.data().whoCanViewMyProfile,
+			feedSettings: {
+				addBookToShelves: userQuery.data().addBookToShelves,
+				addAFriend: userQuery.data().addAFriend,
+				voteForABookReview: userQuery.data().voteForABookReview,
+				addAQuote: userQuery.data().addAQuote,
+				recommendABook: userQuery.data().recommendABook,
+				addANewStatusToBook: userQuery.data().addANewStatusToBook,
+				followAnAuthor: userQuery.data().followAnAuthor,
+			},
 			isFollowedByUser:
 				userQuery.data().followers !== undefined &&
 				userQuery.data().followers.includes(loggedInUserUID),
 			isUserFriend: userQuery.data().friends.includes(loggedInUserUID),
 			lastName: userQuery.data().lastName,
+			showLastNameTo: userQuery.data().showLastNameTo,
 			showGenderTo: userQuery.data().showGenderTo,
 			gender: userQuery.data().gender,
 			locationViewableBy: userQuery.data().locationViewableBy,
 			country: userQuery.data().country,
 			stateProvinceCode: userQuery.data().stateProvinceCode,
 			city: userQuery.data().city,
+			ageAndBirthdayPrivacy: userQuery.data().ageAndBirthdayPrivacy,
+			birthday: userQuery.data().dateOfBirth.toDate(),
 			website: userQuery.data().website,
 			lastActiveDate:
 				userUpdatesQuery.docs.length > 0

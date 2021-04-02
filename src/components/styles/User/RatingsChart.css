@@ -1,0 +1,43 @@
+.user-page .ratings-chart {
+	position: absolute;
+	background-color: rgb(255, 255, 255);
+	width: 550px;
+	height: 120px;
+	padding: 5px;
+	box-shadow: rgba(0, 0, 0, 0.15) 0px 1px 2px 0px;
+}
+
+.user-page .ratings-chart button.rating-chart-close-button {
+	position: absolute;
+	right: 5px;
+	color: var(--goodreads-light-gray);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+	height: auto;
+	padding: 0;
+}
+
+.user-page .ratings-chart tr {
+	display: flex;
+	align-items: flex-start;
+	width: 90%;
+}
+
+.user-page .ratings-chart th {
+	display: flex;
+	flex-direction: row;
+	align-items: flex-end;
+}
+
+.user-page .ratings-chart th span {
+	margin-right: 3px;
+}
+
+.user-page .ratings-chart td.green-bar-container {
+	margin-right: 15px;
+}
+
+.user-page .ratings-chart .rating-percentage-and-absolute {
+	color: rgb(24, 24, 24);
+}

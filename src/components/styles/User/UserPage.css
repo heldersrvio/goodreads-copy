@@ -45,6 +45,7 @@
 }
 
 .user-page-introduction .left-section .ratings-stats {
+	position: relative;
 	margin-top: 5px;
 }
 
@@ -1494,4 +1495,12 @@
 .user-page #loadingSpinner {
 	left: 0;
 	top: 5px;
+}
+
+.user-page .user-ratings-chart {
+	display: none;
+}
+
+.user-page .user-ratings-chart.visible {
+	display: block;
 }

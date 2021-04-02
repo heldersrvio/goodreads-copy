@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import '../styles/User/RatingsChart.css';
 
 const RatingsChart = (props) => {
 	const ratingCount = Math.max(
@@ -30,7 +31,8 @@ const RatingsChart = (props) => {
 				<tbody>
 					<tr>
 						<th width="25" className="rating-and-star">
-							5<div className="static-star small full"></div>
+							<span>5</span>
+							<div className="static-star small full"></div>
 						</th>
 						<td className="green-bar-container">
 							<div
@@ -53,7 +55,8 @@ const RatingsChart = (props) => {
 					</tr>
 					<tr>
 						<th width="25" className="rating-and-star">
-							4<div className="static-star small full"></div>
+							<span>4</span>
+							<div className="static-star small full"></div>
 						</th>
 						<td className="green-bar-container">
 							<div
@@ -76,7 +79,8 @@ const RatingsChart = (props) => {
 					</tr>
 					<tr>
 						<th width="25" className="rating-and-star">
-							3<div className="static-star small full"></div>
+							<span>3</span>
+							<div className="static-star small full"></div>
 						</th>
 						<td className="green-bar-container">
 							<div
@@ -99,7 +103,8 @@ const RatingsChart = (props) => {
 					</tr>
 					<tr>
 						<th width="25" className="rating-and-star">
-							2<div className="static-star small full"></div>
+							<span>2</span>
+							<div className="static-star small full"></div>
 						</th>
 						<td className="green-bar-container">
 							<div
@@ -122,7 +127,8 @@ const RatingsChart = (props) => {
 					</tr>
 					<tr>
 						<th width="25" className="rating-and-star">
-							1<div className="static-star small full"></div>
+							<span>1</span>
+							<div className="static-star small full"></div>
 						</th>
 						<td className="green-bar-container">
 							<div
