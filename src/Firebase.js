@@ -3721,6 +3721,7 @@ const Firebase = (() => {
 										.get()
 								: undefined;
 						return {
+							id: doc.id,
 							type:
 								doc.data().action !== 'add-book'
 									? doc.data().action
@@ -3961,6 +3962,10 @@ const Firebase = (() => {
 		}
 	};
 
+	const deleteUpdate = async (updateId) => {
+		await database.collection('userBooksUpdates').doc(updateId).delete();
+	};
+
 	return {
 		pageGenerator,
 		getAlsoEnjoyedBooksDetailsForBook,
@@ -4027,6 +4032,7 @@ const Firebase = (() => {
 		getUserInfoForUserPage,
 		followUser,
 		unfollowUser,
+		deleteUpdate,
 	};
 })();
 

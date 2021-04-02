@@ -69,7 +69,8 @@
 
 .user-page-introduction .left-section .ratings-stats a:hover,
 .user-page-introduction .left-section .ratings-stats button:hover,
-.user-page-introduction .left-section .number-of-reviews-a:hover {
+.user-page-introduction .left-section .number-of-reviews-a:hover,
+.user-page-introduction .right-section h1 a:hover {
 	text-decoration: underline;
 }
 
@@ -89,6 +90,16 @@
 	line-height: 26px;
 	padding-bottom: 5px;
 	border-bottom: 1px solid rgb(216, 216, 216);
+}
+
+.user-page-introduction .right-section h1 a {
+	display: inline;
+	margin-left: 5px;
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 11px;
+	font-weight: bold;
+	line-height: 14px;
 }
 
 .user-page-introduction .right-section .follow-friends-buttons {
@@ -246,7 +257,9 @@
 }
 
 .user-page-main-content .section-title {
-	display: block;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
 	width: 100%;
 	padding: 2px 0;
 	color: var(--goodreads-brown);
@@ -258,8 +271,18 @@
 	border-bottom: 1px solid rgb(216, 216, 216);
 }
 
-.user-page-main-content a.section-title:hover {
+.user-page-main-content a.section-title:hover,
+.user-page-main-content .section-title a:hover {
 	text-decoration: underline;
+}
+
+.user-page-main-content .section-title a {
+	padding: 0;
+	color: rgb(118, 118, 118);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 24px;
+	font-weight: normal;
 }
 
 .user-page-to-read-shelf-section {
@@ -608,6 +631,7 @@
 }
 
 .user-page .user-recent-updates-section .update-card {
+	position: relative;
 	padding: 10px 0 15px 0;
 }
 
@@ -1599,4 +1623,16 @@
 
 .user-page .private-profile .main-section .right-section a:hover {
 	background-color: rgb(237, 230, 214);
+}
+
+.user-page .delete-update-button {
+	width: 10px;
+	height: 10px;
+	background-image: url('https://s.gr-assets.com/assets/layout/delete-a9a86f59648bf17079954ea50a673dbc.png');
+	background-repeat: no-repeat;
+	padding: 0;
+	background-color: transparent;
+	position: absolute;
+	right: 0;
+	bottom: 20px;
 }
