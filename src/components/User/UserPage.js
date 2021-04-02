@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
-import { format } from 'date-fns';
+import { format, differenceInYears } from 'date-fns';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 import Firebase from '../../Firebase';
@@ -9,8 +9,12 @@ import RatingsChart from './RatingsChart';
 
 /*
 TODO:
-	- Privacy settings
-	- User's own page extra functions
+	- User's own page extra functions:
+		- edit profile link
+		- delete status updates buttons
+		- replace name by your in year in books section
+		- edit favorite authors page link
+		- edit favorite genres page link
 */
 
 const UserPage = ({ match }) => {
@@ -83,7 +87,8 @@ const UserPage = ({ match }) => {
 		: '';
 	const showProfile =
 		loaded &&
-		(userInfo.whoCanViewUserProfile === 'anyone' ||
+		(userId === user.userUID ||
+			userInfo.whoCanViewUserProfile === 'anyone' ||
 			(userInfo.whoCanViewUserProfile === 'goodreads-members' &&
 				user.userUID !== null &&
 				user.userUID !== undefined) ||
@@ -91,6 +96,8 @@ const UserPage = ({ match }) => {
 				userInfo.isUserFriend));
 	const showLastName =
 		loaded &&
+		userInfo.lastName !== '' &&
+		userInfo.lastName !== undefined &&
 		(userInfo.showLastNameTo === 'anyone' ||
 			(userInfo.showLastNameTo === 'friends' && userInfo.isUserFriend));
 	const showGender =
@@ -105,6 +112,7 @@ const UserPage = ({ match }) => {
 			(userInfo.locationViewableBy === 'friendOnly' && userInfo.isUserFriend));
 	const showAge =
 		loaded &&
+		userInfo.birthday !== undefined &&
 		(([
 			'age-members-birthday-members',
 			'age-members-birthday-no-one',
@@ -116,18 +124,28 @@ const UserPage = ({ match }) => {
 				userInfo.ageAndBirthdayPrivacy
 			) &&
 				userInfo.isUserFriend));
+	const showBirthday =
+		loaded &&
+		userInfo.birthday !== undefined &&
+		((['age-members-birthday-members', 'age-no-one-birthday-members'].includes(
+			userInfo.ageAndBirthdayPrivacy
+		) &&
+			user.userUID !== null &&
+			user.userUID !== undefined) ||
+			([
+				'age-members-birthday-friends',
+				'age-friends-birthday-friends',
+				'age-no-one-birthday-friends',
+			].includes(userInfo.ageAndBirthdayPrivacy) &&
+				userInfo.isUserFriend));
+
+	const userAge =
+		loaded && userInfo.birthday !== undefined
+			? differenceInYears(new Date(), userInfo.birthday)
+			: 0;
 	/*
     userInfo: {
 		whoCanViewUserProfile,
-		feedSettings: {
-			addBookToShelves,
-			addAFriend,
-			voteForABookReview,
-			addAQuote,
-			recommendABook,
-			addANewStatusToBook,
-			followAnAuthor,
-		},
         isFollowedByUser,
         isUserFriend,
         lastName,
@@ -275,27 +293,18 @@ const UserPage = ({ match }) => {
 		() => {
 			const getUserInfo = async () => {
 				const userInfoObject = {
-					whoCanViewUserProfile: 'anyone',
-					feedSettings: {
-						addBookToShelves: true,
-						addAFriend: true,
-						voteForABookReview: false,
-						addAQuote: false,
-						recommendABook: false,
-						addANewStatusToBook: false,
-						followAnAuthor: true,
-					},
+					whoCanViewUserProfile: 'just-my-friends',
 					isFollowedByUser: false,
 					isUserFriend: false,
 					lastName: 'Collins',
 					showLastNameTo: 'friends',
 					showGenderTo: 'everyone',
 					gender: 'male',
-					locationViewableBy: 'everyone',
+					locationViewableBy: 'no-one',
 					country: 'United Kingdom',
 					stateProvinceCode: undefined,
 					city: 'Manchester',
-					ageAndBirthdayPrivacy: 'age-members-birthday-friends',
+					ageAndBirthdayPrivacy: 'age-members-birthday-members',
 					birthday: new Date(2000, 3, 12),
 					website: 'www.somewebsite.com',
 					lastActiveDate: new Date(2021, 1, 15),
@@ -584,9 +593,9 @@ const UserPage = ({ match }) => {
 					],
 				};
 				/*const userInfoObject = await Firebase.getUserInfoForUserPage(
-				userId,
-				user.userUID
-			);*/
+					userId,
+					user.userUID
+				);*/
 				setUserInfo(userInfoObject);
 				setLoaded(true);
 				const numberOfInteractiveBookCards =
@@ -1477,17 +1486,14 @@ const UserPage = ({ match }) => {
 						className="user-photo-a"
 						href={Firebase.pageGenerator.generateUserPhotoPage(userId)}
 					>
-						<img
-							src={userInfo.profilePicture}
-							alt={firstName + ' ' + userInfo.lastName}
-						/>
+						<img src={userInfo.profilePicture} alt={firstName} />
 					</a>
 				) : (
 					<img
 						src={
 							'https://s.gr-assets.com/assets/nophoto/user/u_225x300-c928cbb998d4ac6dd1f0f66f31f74b81.png'
 						}
-						alt={firstName + ' ' + userInfo.lastName}
+						alt={firstName}
 					/>
 				)}
 				<span className="ratings-stats">
@@ -1521,7 +1527,9 @@ const UserPage = ({ match }) => {
 				>{`${userInfo.numberOfReviews} reviews`}</a>
 			</div>
 			<div className="right-section">
-				<h1>{firstName + ' ' + userInfo.lastName}</h1>
+				<h1>
+					{showLastName ? firstName + ' ' + userInfo.lastName : firstName}
+				</h1>
 				{!savingFollow ? (
 					<div className="follow-friends-buttons">
 						<button
@@ -1622,11 +1630,25 @@ const UserPage = ({ match }) => {
 				)}
 				<table className="user-misc">
 					<tbody>
-						{showGender || showLocation ? (
-							<tr>
-								<th>Details</th>
+						<tr>
+							<th>Details</th>
+							{showGender || showLocation || showAge ? (
 								<td>
-									{showGender && showLocation
+									{showAge && showGender && showLocation
+										? `Age ${userAge}, ${
+												userInfo.gender[0].toUpperCase() +
+												userInfo.gender.slice(1)
+										  }, ${location}`
+										: showAge && showGender
+										? `Age ${userAge}, ${
+												userInfo.gender[0].toUpperCase() +
+												userInfo.gender.slice(1)
+										  }`
+										: showAge && showLocation
+										? `Age ${userAge}, ${location}`
+										: showAge
+										? `Age ${userAge}`
+										: showGender && showLocation
 										? `${
 												userInfo.gender[0].toUpperCase() +
 												userInfo.gender.slice(1)
@@ -1636,6 +1658,14 @@ const UserPage = ({ match }) => {
 										  userInfo.gender.slice(1)
 										: location}
 								</td>
+							) : (
+								<td>{`${firstName} hasn't added any details yet`}</td>
+							)}
+						</tr>
+						{showBirthday ? (
+							<tr>
+								<th>Birthday</th>
+								<td>{format(userInfo.birthday, 'MMMM dd, yyyy')}</td>
 							</tr>
 						) : null}
 						{userInfo.website !== undefined && userInfo.website.length > 0 ? (
@@ -1811,7 +1841,11 @@ const UserPage = ({ match }) => {
 													userId,
 													firstName
 												)}
-											>{`${firstName + ' ' + userInfo.lastName}`}</a>
+											>{`${
+												showLastName
+													? firstName + ' ' + userInfo.lastName
+													: firstName
+											}`}</a>
 											<span> is currently reading</span>
 										</span>
 										<a
@@ -1899,7 +1933,7 @@ const UserPage = ({ match }) => {
 									firstName
 								)}
 							>
-								{firstName + ' ' + userInfo.lastName}
+								{showLastName ? firstName + ' ' + userInfo.lastName : firstName}
 							</a>
 							<span> </span>
 							{update.type === 'rate-book' ? (
@@ -2715,9 +2749,7 @@ const UserPage = ({ match }) => {
 				onClick={(_e) => setUnfollowModalVisible(false)}
 			></button>
 			<h1>{`Unfollow ${
-				userInfo.lastName !== undefined && userInfo.lastName.length > 0
-					? firstName + ' ' + userInfo.lastName
-					: firstName
+				showLastName ? firstName + ' ' + userInfo.lastName : firstName
 			}?`}</h1>
 			<span>{`This will remove ${firstName}'s activity from your updates feed.`}</span>
 			<div className="buttons">
@@ -2749,13 +2781,65 @@ const UserPage = ({ match }) => {
 		</div>
 	);
 
-	const mainContent = (
-		<div className="user-page-main-content">
-			{mainContentLeftSection}
-			{mainContentRightSection}
-			{unfollowUserModal}
+	const privateProfileSection = loaded ? (
+		<div className="private-profile">
+			<h1>{`${firstName}'s profile`}</h1>
+			<div className="main-section">
+				<div className="left-section">
+					<img
+						src="https://s.gr-assets.com/assets/nophoto/user/u_225x300-c928cbb998d4ac6dd1f0f66f31f74b81.png"
+						alt="Private profile"
+					/>
+					<span>{`${userInfo.numberOfRatings} ratings | ${userInfo.numberOfReviews} reviews`}</span>
+					<button
+						className="show-stats-window-button"
+						onClick={(_e) => setUserRatingsChartVisible(true)}
+					>{`avg rating: ${userInfo.averageRating.toFixed(2)}`}</button>
+					<div
+						className={
+							userRatingsChartVisible
+								? 'user-ratings-chart visible'
+								: 'user-ratings-chart'
+						}
+					>
+						<RatingsChart
+							fiveRatings={userInfo.fiveRatings}
+							fourRatings={userInfo.fourRatings}
+							threeRatings={userInfo.threeRatings}
+							twoRatings={userInfo.twoRatings}
+							oneRatings={userInfo.oneRatings}
+							closeChart={() => setUserRatingsChartVisible(false)}
+						/>
+					</div>
+				</div>
+				<div className="right-section">
+					<span className="introduction-span">{`${firstName}'s profile data is set to private.`}</span>
+					<span>You can view profiles for:</span>
+					<ul>
+						<li>direct friends (if you are signed in)</li>
+						<li>users who have made their profile public</li>
+					</ul>
+					<a
+						className="add-as-friend-a"
+						href={Firebase.pageGenerator.generateAddAsFriendPage(userId)}
+					>
+						Add friend
+					</a>
+				</div>
+			</div>
 		</div>
-	);
+	) : null;
+
+	const mainContent =
+		loaded && showProfile ? (
+			<div className="user-page-main-content">
+				{mainContentLeftSection}
+				{mainContentRightSection}
+				{unfollowUserModal}
+			</div>
+		) : (
+			privateProfileSection
+		);
 
 	return (
 		<div

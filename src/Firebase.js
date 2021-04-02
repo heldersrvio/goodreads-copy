@@ -3480,15 +3480,6 @@ const Firebase = (() => {
 			.get();
 		return {
 			whoCanViewUserProfile: userQuery.data().whoCanViewMyProfile,
-			feedSettings: {
-				addBookToShelves: userQuery.data().addBookToShelves,
-				addAFriend: userQuery.data().addAFriend,
-				voteForABookReview: userQuery.data().voteForABookReview,
-				addAQuote: userQuery.data().addAQuote,
-				recommendABook: userQuery.data().recommendABook,
-				addANewStatusToBook: userQuery.data().addANewStatusToBook,
-				followAnAuthor: userQuery.data().followAnAuthor,
-			},
 			isFollowedByUser:
 				userQuery.data().followers !== undefined &&
 				userQuery.data().followers.includes(loggedInUserUID),
@@ -3496,7 +3487,14 @@ const Firebase = (() => {
 			lastName: userQuery.data().lastName,
 			showLastNameTo: userQuery.data().showLastNameTo,
 			showGenderTo: userQuery.data().showGenderTo,
-			gender: userQuery.data().gender,
+			gender:
+				userQuery.data().gender === 'm'
+					? 'Male'
+					: userQuery.data().gender === 'f'
+					? 'Female'
+					: userQuery.data().gender === 'c'
+					? userQuery.data().customGender
+					: '',
 			locationViewableBy: userQuery.data().locationViewableBy,
 			country: userQuery.data().country,
 			stateProvinceCode: userQuery.data().stateProvinceCode,
@@ -3636,8 +3634,28 @@ const Firebase = (() => {
 			),
 			recentUpdates: await Promise.all(
 				userUpdatesQuery.docs
+					.filter(
+						(doc) =>
+							(userQuery.data().addBookToShelves &&
+								doc.data().action === 'add-book' &&
+								!['reading', 'to-read', 'read'].includes(doc.data().shelf)) ||
+							(userQuery.data().addAFriend &&
+								doc.data().action === 'add-friend') ||
+							(userQuery.data().voteForABookReview &&
+								doc.data().action === 'vote-for-book-review') ||
+							(userQuery.data().addAQuote &&
+								doc.data().action === 'add-quote') ||
+							(userQuery.data().recommendABook &&
+								doc.data().action === 'recommend-book') ||
+							(userQuery.data().addANewStatusToBook &&
+								((doc.data().action === 'add-book' &&
+									['read', 'reading', 'to-read'].includes(doc.data().shelf)) ||
+									doc.data().action === 'rate-book')) ||
+							(userQuery.data().followAnAuthor &&
+								doc.data().action === 'follow-author')
+					)
 					.sort((a, b) => b.data().date.toDate() - a.data().date.toDate())
-					.filter((doc, index) => index < 10)
+					.filter((_doc, index) => index < 10)
 					.map(async (doc) => {
 						const reviewQuery =
 							doc.data().action === 'vote-for-book-review'

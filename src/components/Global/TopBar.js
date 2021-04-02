@@ -226,7 +226,11 @@ const TopBar = () => {
 						<div id="profile-drop-down-bottom-section">
 							<ul>
 								<li>
-									<a href="/">Account settings</a>
+									<a
+										href={Firebase.pageGenerator.generateAccountSettingsPage()}
+									>
+										Account settings
+									</a>
 								</li>
 								<li>
 									<a href="/">Help</a>
