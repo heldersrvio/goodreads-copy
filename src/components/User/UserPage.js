@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { format, differenceInYears } from 'date-fns';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
@@ -12,6 +12,7 @@ const UserPage = ({ match }) => {
 		params: { userPageId },
 	} = match;
 	const history = useHistory();
+	const pageLocation = useLocation();
 	const moreDropdown = useRef();
 	const moreDropdownTrigger = useRef();
 	const userId = userPageId.split('-')[0];
@@ -41,6 +42,7 @@ const UserPage = ({ match }) => {
 	const [unfollowModalVisible, setUnfollowModalVisible] = useState(false);
 	const [userRatingsChartVisible, setUserRatingsChartVisible] = useState(false);
 	const [updatesBeingDeleted, setUpdatesBeingDeleted] = useState([]);
+	const [topMessage, setTopMessage] = useState('');
 
 	const user = JSON.parse(localStorage.getItem('userState'));
 
@@ -62,11 +64,20 @@ const UserPage = ({ match }) => {
 	});
 
 	useEffect(() => {
+		if (pageLocation.state !== undefined && pageLocation.state.addedFriend) {
+			setTopMessage(
+				'A friend request has been sent to Entien. After confirmation has been made, you will be notified by email.'
+			);
+		}
+	}, [pageLocation.state]);
+
+	useEffect(() => {
 		const getUserInfo = async () => {
 			const userInfoObject = await Firebase.getUserInfoForUserPage(
 				userId,
 				user.userUID
 			);
+			userInfoObject.isUserFriend = true;
 			setUserInfo(userInfoObject);
 			setLoaded(true);
 			const numberOfInteractiveBookCards =
@@ -855,7 +866,11 @@ const UserPage = ({ match }) => {
 							<input
 								className="dropdown-add-shelf-input"
 								type="text"
-								value={addShelfInputs[index]}
+								value={
+									addShelfInputs[index] !== undefined
+										? addShelfInputs[index]
+										: ''
+								}
 								onChange={(e) => {
 									const newValue = e.target.value;
 									setAddShelfInputs((previous) =>
@@ -1036,6 +1051,17 @@ const UserPage = ({ match }) => {
 		);
 	};
 
+	const topMessageSection =
+		loaded && topMessage.length > 0 ? (
+			<div className="top-message-div yellow">
+				<span>{topMessage}</span>
+				<button
+					className="close-button"
+					onClick={(_e) => setTopMessage('')}
+				></button>
+			</div>
+		) : null;
+
 	const introduction = loaded ? (
 		<div className="user-page-introduction">
 			<div className="left-section">
@@ -1093,67 +1119,111 @@ const UserPage = ({ match }) => {
 						</a>
 					) : null}
 				</h1>
-				{!savingFollow ? (
+				{!savingFollow && !isLoggedInUser ? (
 					<div className="follow-friends-buttons">
-						<button
+						{!userInfo.isUserFriend ? (
+							<button
+								className={
+									userInfo.isFollowedByUser
+										? 'follow-button following'
+										: 'follow-button'
+								}
+								onMouseOver={(_e) => {
+									if (userInfo.isFollowedByUser) {
+										const outerSpan = document.querySelector(
+											'span.followed-by-user-span'
+										);
+										outerSpan.innerHTML = 'Unfollow';
+									}
+								}}
+								onMouseOut={(_e) => {
+									if (userInfo.isFollowedByUser) {
+										const checkmark = document.createElement('div');
+										checkmark.classList.add('following-checkmark');
+										const span = document.createElement('span');
+										span.innerHTML = 'Following';
+										const outerSpan = document.querySelector(
+											'span.followed-by-user-span'
+										);
+										outerSpan.innerHTML = '';
+										outerSpan.appendChild(checkmark);
+										outerSpan.appendChild(span);
+									}
+								}}
+								onClick={async (_e) => {
+									if (userInfo.isFollowedByUser) {
+										setUnfollowModalVisible(true);
+									} else {
+										setSavingFollow(true);
+										await Firebase.followUser(user.userUID, userId, history);
+										setSavingFollow(false);
+										setUserInfo((previous) => {
+											return {
+												...previous,
+												isFollowedByUser: true,
+												numberOfFollowers: previous.numberOfFollowers + 1,
+											};
+										});
+									}
+								}}
+							>
+								{userInfo.isFollowedByUser ? (
+									<span className="followed-by-user-span">
+										<div className="following-checkmark"></div>
+										<span>Following</span>
+									</span>
+								) : (
+									<span>Follow</span>
+								)}
+							</button>
+						) : null}
+						<a
 							className={
-								userInfo.isFollowedByUser
-									? 'follow-button following'
-									: 'follow-button'
+								userInfo.hasPendingFriendRequestFromUser
+									? 'add-as-friend-a pending'
+									: 'add-as-friend-a'
 							}
+							disabled={userInfo.hasPendingFriendRequestFromUser}
+							href={Firebase.pageGenerator.generateAddAsFriendPage(userId)}
 							onMouseOver={(_e) => {
-								if (userInfo.isFollowedByUser) {
+								if (userInfo.isUserFriend) {
 									const outerSpan = document.querySelector(
-										'span.followed-by-user-span'
+										'span.friends-with-user-span'
 									);
-									outerSpan.innerHTML = 'Unfollow';
+									outerSpan.innerHTML = 'Unfriend';
 								}
 							}}
 							onMouseOut={(_e) => {
-								if (userInfo.isFollowedByUser) {
+								if (userInfo.isUserFriend) {
 									const checkmark = document.createElement('div');
 									checkmark.classList.add('following-checkmark');
 									const span = document.createElement('span');
-									span.innerHTML = 'Following';
+									span.innerHTML = 'Friends';
 									const outerSpan = document.querySelector(
-										'span.followed-by-user-span'
+										'span.friends-with-user-span'
 									);
 									outerSpan.innerHTML = '';
 									outerSpan.appendChild(checkmark);
 									outerSpan.appendChild(span);
 								}
 							}}
-							onClick={async (_e) => {
-								if (userInfo.isFollowedByUser) {
+							onClick={(e) => {
+								if (userInfo.isUserFriend) {
+									e.preventDefault();
 									setUnfollowModalVisible(true);
-								} else {
-									setSavingFollow(true);
-									await Firebase.followUser(user.userUID, userId, history);
-									setSavingFollow(false);
-									setUserInfo((previous) => {
-										return {
-											...previous,
-											isFollowedByUser: true,
-											numberOfFollowers: previous.numberOfFollowers + 1,
-										};
-									});
 								}
 							}}
 						>
-							{userInfo.isFollowedByUser ? (
-								<span className="followed-by-user-span">
+							{userInfo.isUserFriend ? (
+								<span className="friends-with-user-span">
 									<div className="following-checkmark"></div>
-									<span>Following</span>
+									<span>Friends</span>
 								</span>
+							) : userInfo.hasPendingFriendRequestFromUser ? (
+								<span className="pending-span">Pending</span>
 							) : (
-								<span>Follow</span>
+								<span>Add friend</span>
 							)}
-						</button>
-						<a
-							className="add-as-friend-a"
-							href={Firebase.pageGenerator.generateAddAsFriendPage(userId)}
-						>
-							Add friend
 						</a>
 						<button
 							ref={moreDropdownTrigger}
@@ -1183,14 +1253,14 @@ const UserPage = ({ match }) => {
 							</div>
 						</button>
 					</div>
-				) : (
+				) : savingFollow ? (
 					<div id="loadingSpinner">
 						<div></div>
 						<div></div>
 						<div></div>
 						<div></div>
 					</div>
-				)}
+				) : null}
 				<table className="user-misc">
 					<tbody>
 						<tr>
@@ -2035,6 +2105,7 @@ const UserPage = ({ match }) => {
 
 	const mainContentLeftSection = (
 		<div className="user-page-main-content-left-section">
+			{topMessageSection}
 			{introduction}
 			{userToReadShelfSection}
 			{userBookshelvesSection}
@@ -2361,7 +2432,7 @@ const UserPage = ({ match }) => {
 		</div>
 	);
 
-	const unfollowUserModal = (
+	const unfollowUserModal = loaded ? (
 		<div
 			className={
 				unfollowModalVisible
@@ -2373,17 +2444,25 @@ const UserPage = ({ match }) => {
 				className="close-button"
 				onClick={(_e) => setUnfollowModalVisible(false)}
 			></button>
-			<h1>{`Unfollow ${
+			<h1>{`${userInfo.isUserFriend ? 'Unfollow' : 'Unfriend'} ${
 				showLastName ? firstName + ' ' + userInfo.lastName : firstName
 			}?`}</h1>
-			<span>{`This will remove ${firstName}'s activity from your updates feed.`}</span>
+			<span>
+				{userInfo.isUserFriend
+					? `This will remove ${firstName}'s activity from your updates feed, and your own activity will stop appearing in their updates feed. ${firstName} will not be notified.`
+					: `This will remove ${firstName}'s activity from your updates feed.`}
+			</span>
 			<div className="buttons">
 				<button
 					className="confirm-button"
 					onClick={async (_e) => {
 						setUnfollowModalVisible(false);
 						setSavingFollow(true);
-						await Firebase.unfollowUser(user.userUID, userId, history);
+						if (userInfo.isUserFriend) {
+							await Firebase.unfriendUser(user.userUID, userId, history);
+						} else {
+							await Firebase.unfollowUser(user.userUID, userId, history);
+						}
 						setSavingFollow(false);
 						setUserInfo((previous) => {
 							return {
@@ -2404,7 +2483,7 @@ const UserPage = ({ match }) => {
 				</button>
 			</div>
 		</div>
-	);
+	) : null;
 
 	const privateProfileSection = loaded ? (
 		<div className="private-profile">

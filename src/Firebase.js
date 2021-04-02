@@ -3484,6 +3484,12 @@ const Firebase = (() => {
 				userQuery.data().followers !== undefined &&
 				userQuery.data().followers.includes(loggedInUserUID),
 			isUserFriend: userQuery.data().friends.includes(loggedInUserUID),
+			hasPendingFriendResquestFromUser:
+				userQuery
+					.data()
+					.newFriendsRequests.filter(
+						(request) => request.sender === loggedInUserUID
+					).length > 0,
 			lastName: userQuery.data().lastName,
 			showLastNameTo: userQuery.data().showLastNameTo,
 			showGenderTo: userQuery.data().showGenderTo,
@@ -3518,6 +3524,21 @@ const Firebase = (() => {
 			profilePicture: userQuery.data().profileImage,
 			numberOfRatings: userInstanceQuery.docs.filter(
 				(doc) => doc.data().rating !== undefined && doc.data().rating !== 0
+			).length,
+			fiveRatings: userInstanceQuery.docs.filter(
+				(doc) => doc.data().rating !== undefined && doc.data().rating === 5
+			).length,
+			fourRatings: userInstanceQuery.docs.filter(
+				(doc) => doc.data().rating !== undefined && doc.data().rating === 4
+			).length,
+			threeRatings: userInstanceQuery.docs.filter(
+				(doc) => doc.data().rating !== undefined && doc.data().rating === 3
+			).length,
+			twoRatings: userInstanceQuery.docs.filter(
+				(doc) => doc.data().rating !== undefined && doc.data().rating === 2
+			).length,
+			oneRatings: userInstanceQuery.docs.filter(
+				(doc) => doc.data().rating !== undefined && doc.data().rating === 1
 			).length,
 			averageRating: userInstanceQuery.docs
 				.filter(
@@ -3962,6 +3983,43 @@ const Firebase = (() => {
 		}
 	};
 
+	const unfriendUser = async (userUID, friendId, history) => {
+		if (userUID === null || userUID === undefined) {
+			history.push({
+				pathname: '/user/sign_in',
+				state: { error: 'User not logged in' },
+			});
+		} else {
+			const userQuery = await database.collection('users').doc(userUID).get();
+			const friendQuery = await database
+				.collection('users')
+				.doc(friendId)
+				.get();
+			await database
+				.collection('users')
+				.doc(userUID)
+				.set(
+					{
+						friends: userQuery
+							.data()
+							.friends.filter((friend) => friend !== friendId),
+					},
+					{ merge: true }
+				);
+			await database
+				.collection('users')
+				.doc(friendId)
+				.set(
+					{
+						friends: friendQuery
+							.data()
+							.friends.filter((friend) => friend !== userUID),
+					},
+					{ merge: true }
+				);
+		}
+	};
+
 	const deleteUpdate = async (updateId) => {
 		await database.collection('userBooksUpdates').doc(updateId).delete();
 	};
@@ -4032,6 +4090,7 @@ const Firebase = (() => {
 		getUserInfoForUserPage,
 		followUser,
 		unfollowUser,
+		unfriendUser,
 		deleteUpdate,
 	};
 })();
