@@ -281,6 +281,14 @@ const Firebase = (() => {
 			return '/friend/add_as_friend/' + userId;
 		};
 
+		const generateGiveRecommendationPage = () => {
+			return '/recommendations/new';
+		};
+
+		const generateGiveRecommendationToUserPage = (userId) => {
+			return '/recommendation/new?recommendation%5Bto_user_id%5D=' + userId;
+		};
+
 		return {
 			generateBookPage,
 			generateAddBookPage,
@@ -338,6 +346,8 @@ const Firebase = (() => {
 			generateInterviewsNewsPage,
 			generateArticleLikesPage,
 			generateAddAsFriendPage,
+			generateGiveRecommendationPage,
+			generateGiveRecommendationToUserPage,
 		};
 	})();
 
