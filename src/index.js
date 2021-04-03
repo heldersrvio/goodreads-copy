@@ -35,6 +35,7 @@ import NewsPage from './components/News/NewsPage';
 import ArticlePage from './components/News/ArticlePage';
 import ArticleLikedByPage from './components/News/ArticleLikedByPage';
 import UserPage from './components/User/UserPage';
+import UserCompareBooksPage from './components/User/UserCompareBooksPage';
 
 const store = createStore(reducer.userReducer);
 
@@ -112,6 +113,10 @@ ReactDOM.render(
 						component={ArticleLikedByPage}
 					/>
 					<Route path="/user/show/:userPageId" component={UserPage} />
+					<Route
+						path="/user/compare/:userId"
+						component={UserCompareBooksPage}
+					/>
 					<Route path="/" component={App} />
 				</Switch>
 			</BrowserRouter>
