@@ -1,0 +1,359 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+
+.user-compare-books-page-main-content {
+	margin: 0 155px;
+	padding-top: 15px;
+	display: flex;
+	flex-direction: row;
+}
+
+.user-compare-books-page-main-content a {
+	background-color: transparent;
+	height: auto;
+	padding: 0;
+}
+
+.user-compare-books-page-main-content-left-section {
+	width: 625px;
+	padding-left: 8px;
+	padding-right: 10px;
+}
+
+.user-compare-books-page-main-content-right-section {
+	width: 300px;
+}
+
+.user-compare-books-page-header span,
+.user-compare-books-page-header a {
+	font-family: var(--merriweather-font);
+	font-size: 20px;
+	font-weight: bold;
+	line-height: 24px;
+	display: inline;
+}
+
+.user-compare-books-page-header a {
+	color: var(--goodreads-teal);
+}
+
+.user-compare-books-page-header a:hover {
+	text-decoration: underline;
+}
+
+.user-compare-books-page-comparison-chart-section {
+	margin-top: 20px;
+}
+
+.user-compare-books-page-comparison-chart-section .top-section {
+	display: flex;
+	flex-direction: row;
+	height: 100px;
+}
+
+.user-compare-books-page-comparison-chart-section span,
+.user-compare-books-page-comparison-chart-section .top-section a {
+	color: rgb(24, 24, 24);
+	font-family: var(--merriweather-font);
+	font-size: 14px;
+	line-height: 21px;
+}
+
+.user-compare-books-page-comparison-chart-section .top-section a {
+	display: inline;
+	color: var(--goodreads-teal);
+}
+
+.user-compare-books-page-comparison-chart-section .top-section a:hover {
+	text-decoration: underline;
+}
+
+.user-compare-books-page-comparison-chart-section
+	.top-section
+	.other-user-chart-color-block {
+	width: 7px;
+	height: 7px;
+	background-color: rgb(102, 187, 102);
+	display: inline-block;
+	margin-right: 5px;
+	margin-bottom: 3px;
+}
+
+.user-compare-books-page-comparison-chart-section
+	.top-section
+	.books-in-common-chart-color-block {
+	width: 7px;
+	height: 7px;
+	background-color: rgb(50, 78, 136);
+	display: inline-block;
+	margin-right: 5px;
+	margin-bottom: 3px;
+}
+
+.user-compare-books-page-comparison-chart-section
+	.top-section
+	.logged-in-user-chart-color-block {
+	width: 7px;
+	height: 7px;
+	background-color: rgb(102, 102, 187);
+	display: inline-block;
+	margin-right: 5px;
+	margin-bottom: 3px;
+}
+
+.user-compare-books-page-comparison-chart-section .bottom-section {
+	margin-top: 10px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	position: relative;
+}
+
+.user-compare-books-page-comparison-chart-section .bottom-section > span {
+	margin-top: 5px;
+}
+
+.user-compare-books-page-comparison-chart-section
+	.bottom-section
+	.sort-explanation-popup {
+	position: absolute;
+	right: -270px;
+	bottom: -115px;
+	width: 250px;
+	height: 254px;
+	background-color: rgb(248, 244, 202);
+	border-radius: 6px;
+	border: 6px solid rgb(235, 228, 180);
+}
+
+.user-compare-books-page-comparison-chart-section
+	.bottom-section
+	.sort-explanation-popup
+	.title-area {
+	background-color: rgb(253, 237, 174);
+	padding: 5px;
+}
+
+.user-compare-books-page-comparison-chart-section
+	.bottom-section
+	.sort-explanation-popup
+	.title-area
+	span {
+	color: var(--goodreads-brown);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+	font-weight: bold;
+}
+
+.user-compare-books-page-comparison-chart-section
+	.bottom-section
+	.sort-explanation-popup
+	.title-area
+	.close-button {
+	background-image: url('https://s.gr-assets.com/assets/prototip/styles/creamy/close.png');
+	background-color: rgb(235, 228, 180);
+	width: 19px;
+	height: 15px;
+	position: absolute;
+	top: 5px;
+	right: 5px;
+}
+
+.user-compare-books-page-comparison-chart-section
+	.bottom-section
+	.sort-explanation-popup
+	.explanation {
+	padding: 5px;
+}
+
+.user-compare-books-page-comparison-chart-section
+	.bottom-section
+	.sort-explanation-popup
+	.explanation
+	span
+	b {
+	margin-top: 20px;
+	display: block;
+	color: rgb(81, 71, 33);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+	font-weight: bold;
+}
+
+.user-compare-books-page-comparison-chart-section
+	.bottom-section
+	.sort-explanation-popup
+	.explanation
+	p {
+	color: rgb(81, 71, 33);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.user-compare-books-page-comparison-chart-section
+	.bottom-section
+	.sort-explanation-popup
+	.left-tip {
+	position: absolute;
+	width: 0;
+	height: 0;
+	border-top: 7px solid transparent;
+	border-bottom: 7px solid transparent;
+	border-right: 7px solid rgb(235, 228, 180);
+	left: -13px;
+	top: calc(50% - 3.5px);
+}
+
+.user-compare-books-page-comparison-chart-section
+	.bottom-section
+	.sort-explanation-popup.hidden {
+	display: none;
+}
+
+.user-compare-books-page-comparison-chart-section .bottom-section label {
+	margin-right: 5px;
+}
+
+.user-compare-books-page-comparison-chart-section .bottom-section select {
+	font-size: 11px;
+	margin-right: 5px;
+}
+
+.user-compare-books-page-comparison-chart-section
+	.bottom-section
+	.sort-area
+	button {
+	display: inline-block;
+	padding: 0;
+	color: var(--goodreads-light-gray);
+	font-family: var(--lato-font);
+	font-size: 11px;
+	line-height: 14px;
+	height: auto;
+	width: auto;
+	background-color: transparent;
+}
+
+.user-compare-books-page-comparison-chart-section
+	.bottom-section
+	.sort-area
+	button:hover {
+	text-decoration: underline;
+}
+
+.user-compare-books-page .books-in-common-table {
+	width: 100%;
+	margin-top: 20px;
+}
+
+.user-compare-books-page .books-in-common-table td {
+	vertical-align: top;
+	padding: 5px;
+}
+
+.user-compare-books-page .books-in-common-table .top-row {
+	width: 100%;
+	border-bottom: 2px solid rgb(235, 232, 213);
+}
+
+.user-compare-books-page .books-in-common-table .top-row th {
+	padding: 5px 6px 3px 0;
+	text-align: left;
+	color: rgb(56, 33, 16);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	font-weight: bold;
+	line-height: 18px;
+}
+
+.user-compare-books-page .books-in-common-table .book-cover-a {
+	width: 25px;
+	height: 38px;
+	padding: 0;
+	margin-right: 10px;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+}
+
+.user-compare-books-page .books-in-common-table img {
+	width: 25px;
+	height: 38px;
+}
+
+.user-compare-books-page .books-in-common-table td .book-title-area {
+	display: flex;
+	flex-direction: row;
+}
+
+.user-compare-books-page
+	.books-in-common-table
+	td
+	.book-title-area
+	.book-title-a {
+	color: rgb(51, 51, 51);
+	font-family: var(--merriweather-font);
+	font-size: 14.4px;
+	font-weight: bold;
+	line-height: 18px;
+}
+
+.user-compare-books-page
+	.books-in-common-table
+	td
+	.book-title-area
+	.book-title-a:hover,
+.user-compare-books-page
+	.books-in-common-table
+	td
+	.book-title-area
+	.authorship-span
+	a:hover {
+	text-decoration: underline;
+}
+
+.user-compare-books-page
+	.books-in-common-table
+	td
+	.book-title-area
+	.authorship-span {
+	color: rgb(0, 0, 0);
+	font-family: var(--lato-font);
+	font-size: 13px;
+	line-height: 18px;
+}
+
+.user-compare-books-page
+	.books-in-common-table
+	td
+	.book-title-area
+	.authorship-span
+	a {
+	display: inline;
+	color: rgb(51, 51, 51);
+	font-family: var(--merriweather-font);
+	font-size: 11px;
+	line-height: 16.5px;
+}
+
+.user-compare-books-page .books-in-common-table td .rating-stars {
+	display: flex;
+	flex-direction: row;
+}
+
+.user-compare-books-page-rate-other-books-area {
+	margin-top: 50px;
+}
+
+.user-compare-books-page-rate-other-books-area
+	.rate-other-books-explanation-span {
+	color: rgb(24, 24, 24);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 18px;
+	margin-bottom: 40px;
+	display: block;
+}
