@@ -921,6 +921,14 @@ const UserCompareBooksPage = ({ match }) => {
 				)}
 			>{`back to ${userBooksInfo.otherUserFirstName}'s profile »`}</a>
 			<a
+				href={Firebase.pageGenerator.generateBookCompatibilityTestPage(
+					userId,
+					userBooksInfo.otherUserFirstName
+				)}
+			>
+				book compatibility test
+			</a>
+			<a
 				href={Firebase.pageGenerator.generateGiveRecommendationToUserPage(
 					userId
 				)}

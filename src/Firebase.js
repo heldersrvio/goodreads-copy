@@ -289,6 +289,15 @@ const Firebase = (() => {
 			return '/recommendation/new?recommendation%5Bto_user_id%5D=' + userId;
 		};
 
+		const generateBookCompatibilityTestPage = (userId, name) => {
+			return (
+				'/book/compatibility_results?id=' +
+				userId +
+				'-' +
+				name.toLowerCase().replace(/ /g, '-')
+			);
+		};
+
 		return {
 			generateBookPage,
 			generateAddBookPage,
@@ -348,6 +357,7 @@ const Firebase = (() => {
 			generateAddAsFriendPage,
 			generateGiveRecommendationPage,
 			generateGiveRecommendationToUserPage,
+			generateBookCompatibilityTestPage,
 		};
 	})();
 

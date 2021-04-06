@@ -36,6 +36,7 @@ import ArticlePage from './components/News/ArticlePage';
 import ArticleLikedByPage from './components/News/ArticleLikedByPage';
 import UserPage from './components/User/UserPage';
 import UserCompareBooksPage from './components/User/UserCompareBooksPage';
+import BookCompatibilityTestPage from './components/User/BookCompatibilityTestPage';
 
 const store = createStore(reducer.userReducer);
 
@@ -116,6 +117,10 @@ ReactDOM.render(
 					<Route
 						path="/user/compare/:userId"
 						component={UserCompareBooksPage}
+					/>
+					<Route
+						path="/book/compatibility_results"
+						component={BookCompatibilityTestPage}
 					/>
 					<Route path="/" component={App} />
 				</Switch>
