@@ -654,6 +654,11 @@
 	width: 75%;
 }
 
+.user-compare-books-page-main-content-right-section .common-shelves-area select,
+.user-compare-books-page-main-content-right-section .your-shelves-area select {
+	width: 123px;
+}
+
 .user-compare-books-page-main-content-right-section .their-shelves-area {
 	margin-top: 5px;
 	width: 90%;

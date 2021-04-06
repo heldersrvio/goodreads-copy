@@ -29,125 +29,29 @@ const UserCompareBooksPage = ({ match }) => {
 	const [reviewShowMore, setReviewShowMore] = useState(false);
 
 	const user = JSON.parse(localStorage.getItem('userState'));
-	/*
-    userBooksInfo: {
-        otherUserId,
-        otherUserFirstName,
-        otherUserLastName,
-        otherUserPronouns,
-        loggedInUserBooks: [{
-            id,
-            rootId,
-            title,
-            cover,
-            status,
-            rating,
-            popularityScore,
-            averageRating,
-            authorId,
-            authorName,
-            bookshelves,
-            review,
-        }],
-        otherUserBooks: [{
-            id,
-            rootId,
-            title,
-            cover,
-            status,
-            rating,
-            popularityScore,
-            averageRating,
-            authorId,
-            authorName,
-            bookshelves,
-            review,
-        }],
-    },
-    */
 
 	useEffect(() => {
-		const userBooksObject = {
-			otherUserId: '123',
-			otherUserFirstName: 'Mark',
-			otherUserLastName: 'Coleman',
-			otherUserPronouns: 'his',
-			loggedInUserBooks: [
-				{
-					id: '123',
-					rootId: '1',
-					title: 'Il cavaliere del sole nero',
-					cover:
-						'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1437435124l/36159._SY475_.jpg',
-					status: 'read',
-					rating: 4,
-					popularityScore: 20,
-					averageRating: 3.5,
-					authorId: '123',
-					authorName: 'C.S. Friedman',
-					bookshelves: ['fantasy', 'science-fiction'],
-				},
-				{
-					id: '123',
-					rootId: '2',
-					title: 'Thirteen',
-					cover:
-						'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1505068558l/36217425._SY475_.jpg',
-					status: 'read',
-					rating: 3,
-					popularityScore: 243,
-					averageRating: 3.98,
-					authorId: '123',
-					authorName: 'Steve Cavanagh',
-					bookshelves: ['thriller', 'mystery'],
-				},
-				{
-					id: '123',
-					rootId: '3',
-					title: 'Airman',
-					cover:
-						'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327967233l/2049993.jpg',
-					status: 'read',
-					rating: 4,
-					popularityScore: 45,
-					averageRating: 3.0,
-					authorId: '123',
-					authorName: 'Eoin Colfer',
-					bookshelves: ['science-fiction', 'steampunk'],
-				},
-				{
-					id: '123',
-					rootId: '4',
-					title: 'The Wives',
-					cover:
-						'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1555189290l/43263004.jpg',
-					status: 'reading',
-					popularityScore: 18,
-					averageRating: 4.4,
-					authorId: '123',
-					authorName: 'Tarryn Fisher',
-					bookshelves: ['adult', 'romance'],
-				},
-				{
-					id: '123',
-					rootId: '8',
-					title:
-						'Restoring the Soul of Business: Staying Human in the Age of Data',
-					cover:
-						'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1562426921l/44442008.jpg',
-					status: 'to-read',
-					popularityScore: 2,
-					averageRating: 3.5,
-					authorId: '123',
-					authorName: 'Rishad T.',
-					bookshelves: ['business', 'non-fiction'],
-				},
-			],
-			otherUserBooks: [],
+		const getUserBooksInfo = async () => {
+			if (user.userUID === userId) {
+				history.push({
+					pathname: Firebase.pageGenerator.generateUserPage(
+						userId,
+						user.userInfo.firstName
+					),
+					state: "You can't compare books with yourself",
+				});
+			} else {
+				const userBooksObject = await Firebase.getInfoForCompareBooksPage(
+					user.userUID,
+					userId,
+					history
+				);
+				setUserBooksInfo(userBooksObject);
+				setLoaded(true);
+			}
 		};
-		setUserBooksInfo(userBooksObject);
-		setLoaded(true);
-	}, []);
+		getUserBooksInfo();
+	}, [user.userUID, userId, history, user.userInfo.firstName]);
 
 	useEffect(() => {
 		if (userBooksInfo.loggedInUserBooks !== undefined) {
@@ -192,18 +96,22 @@ const UserCompareBooksPage = ({ match }) => {
 		otherUserBookshelves.includes(bookshelf)
 	);
 
-	const otherUserFilteredBooks = userBooksInfo.otherUserBooks.filter(
-		(book) =>
-			friendShelf === 'all' ||
-			book.bookshelves.includes(friendShelf) ||
-			book.status === friendShelf
-	);
-	const loggedInUserFilteredBooks = userBooksInfo.loggedInUserBooks.filter(
-		(book) =>
-			userShelf === 'all' ||
-			book.bookshelves.includes(userShelf) ||
-			book.status === userShelf
-	);
+	const otherUserFilteredBooks = loaded
+		? userBooksInfo.otherUserBooks.filter(
+				(book) =>
+					friendShelf === 'all' ||
+					book.bookshelves.includes(friendShelf) ||
+					book.status === friendShelf
+		  )
+		: [];
+	const loggedInUserFilteredBooks = loaded
+		? userBooksInfo.loggedInUserBooks.filter(
+				(book) =>
+					userShelf === 'all' ||
+					book.bookshelves.includes(userShelf) ||
+					book.status === userShelf
+		  )
+		: [];
 
 	const otherUserNumberOfBooks = loaded ? otherUserFilteredBooks.length : 0;
 	const otherUserNumberOfUniqueBooks = loaded
@@ -302,7 +210,7 @@ const UserCompareBooksPage = ({ match }) => {
 		<h1 className="user-compare-books-page-header">
 			<a
 				href={Firebase.pageGenerator.generateUserPage(
-					userBooksInfo.otherUserId,
+					userId,
 					userBooksInfo.otherUserFirstName
 				)}
 			>
@@ -340,11 +248,13 @@ const UserCompareBooksPage = ({ match }) => {
 					{numberOfBooksInCommon !== 0 ? (
 						<div className="books-in-common">
 							<div className="books-in-common-chart-color-block"></div>
-							<span>{`Books in common: ${numberOfBooksInCommon} (${
+							<span>{`Books in common: ${numberOfBooksInCommon} (${(
 								percentageOfLoggedInUserBooksInCommon * 100
-							}% of your library and ${
+							).toFixed(0)}% of your library and ${(
 								percentageOfOtherUserBooksInCommon * 100
-							}% of ${userBooksInfo.otherUserPronouns} library)`}</span>
+							).toFixed(0)}% of ${
+								userBooksInfo.otherUserPronouns
+							} library)`}</span>
 						</div>
 					) : null}
 					<div className="logged-in-user">
@@ -978,7 +888,7 @@ const UserCompareBooksPage = ({ match }) => {
 						<span>{`You have ${numberOfBooksInCommon} books in common with ${userBooksInfo.otherUserFirstName}. Based on these ratings your tastes are ${similarityOfTastesIndex}% similar.`}</span>
 						<a
 							href={Firebase.pageGenerator.generateUserPage(
-								userBooksInfo.otherUserId,
+								userId,
 								userBooksInfo.otherUserFirstName
 							)}
 						>{`back to ${userBooksInfo.otherUserFirstName}'s profile`}</a>
@@ -987,7 +897,7 @@ const UserCompareBooksPage = ({ match }) => {
 			</div>
 		) : null;
 
-	const mainContentLeftSection = (
+	const mainContentLeftSection = loaded ? (
 		<div className="user-compare-books-page-main-content-left-section">
 			{pageHeader}
 			{userBooksInfo.otherUserBooks.length > 0 ? (
@@ -1000,13 +910,13 @@ const UserCompareBooksPage = ({ match }) => {
 				<span className="no-books-added-span">{`${userBooksInfo.otherUserFirstName} hasn't added any books.`}</span>
 			)}
 		</div>
-	);
+	) : null;
 
 	const mainContentRightSection = loaded ? (
 		<div className="user-compare-books-page-main-content-right-section">
 			<a
 				href={Firebase.pageGenerator.generateUserPage(
-					userBooksInfo.otherUserId,
+					userId,
 					userBooksInfo.otherUserFirstName
 				)}
 			>{`back to ${userBooksInfo.otherUserFirstName}'s profile »`}</a>

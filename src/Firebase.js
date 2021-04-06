@@ -4034,6 +4034,127 @@ const Firebase = (() => {
 		await database.collection('userBooksUpdates').doc(updateId).delete();
 	};
 
+	const getInfoForCompareBooksPage = async (userUID, otherUserUID, history) => {
+		const getUserInfoForCompareBooksPage = async (user) => {
+			return await Promise.all(
+				(
+					await database
+						.collection('userBooksInstances')
+						.where('userId', '==', user)
+						.get()
+				).docs.map(async (bookInstanceDoc) => {
+					const bookQuery = await database
+						.collection('books')
+						.doc(bookInstanceDoc.data().bookId)
+						.get();
+					const rootBookQuery = await database
+						.collection('rootBooks')
+						.doc(bookQuery.data().rootBook)
+						.get();
+					const bookEditionIds = (
+						await database
+							.collection('books')
+							.where('rootBook', '==', rootBookQuery.id)
+							.get()
+					).docs.map((doc) => doc.id);
+					const authorQuery = await database
+						.collection('authors')
+						.doc(rootBookQuery.data().authorId)
+						.get();
+					const allUserInstancesOfBook = await database
+						.collection('userBooksInstances')
+						.where('bookId', 'in', bookEditionIds)
+						.get();
+					const allUserInstancesOfBookWithRating = allUserInstancesOfBook.docs.filter(
+						(doc) => doc.data().rating !== undefined && doc.data().rating !== 0
+					);
+					const shelvesQuery = await database
+						.collection('shelves')
+						.where('rootBooks', 'array-contains', rootBookQuery.id)
+						.where('user', '==', user)
+						.get();
+					const reviewQuery = await database
+						.collection('reviews')
+						.where('bookEdition', '==', bookQuery.id)
+						.where('user', '==', user)
+						.get();
+					return {
+						id: bookInstanceDoc.data().bookId,
+						rootId: bookQuery.data().rootBook,
+						title: bookQuery.data().title,
+						cover: bookQuery.data().cover,
+						status: bookInstanceDoc.data().status,
+						rating: bookInstanceDoc.data().rating,
+						popularityScore:
+							100 -
+							(allUserInstancesOfBook.docs.length /
+								(await database.collection('userBooksInstances').get()).docs
+									.length) *
+								100,
+						averageRating: allUserInstancesOfBookWithRating.reduce(
+							(previous, current) => {
+								if (
+									current.data().rating === undefined ||
+									current.data().rating === 0
+								) {
+									return previous;
+								}
+								return (
+									previous +
+									current.data().rating /
+										allUserInstancesOfBookWithRating.length
+								);
+							},
+							0
+						),
+						authorId: rootBookQuery.data().authorId,
+						authorName: authorQuery.data().name,
+						bookshelves: shelvesQuery.docs.map((shelfDoc) =>
+							shelfDoc.data().genre !== null &&
+							shelfDoc.data().genre !== undefined
+								? shelfDoc.data().genre
+								: shelfDoc.data().name
+						),
+						review:
+							reviewQuery.docs.length > 0
+								? reviewQuery.docs[0].data().text
+								: undefined,
+					};
+				})
+			);
+		};
+
+		if (userUID === null || userUID === undefined) {
+			history.push({
+				pathname: '/user/sign_in',
+				state: { error: 'User not logged in' },
+			});
+		} else {
+			const otherUserQuery = await database
+				.collection('users')
+				.doc(otherUserUID)
+				.get();
+
+			return {
+				otherUserFirstName: otherUserQuery.data().firstName,
+				otherUserLastName:
+					otherUserQuery.data().showLastNameTo === 'anyone' ||
+					(otherUserQuery.data().showLastNameTo === 'friends' &&
+						otherUserQuery.data().friends.includes(userUID))
+						? otherUserQuery.data().lastName
+						: undefined,
+				otherUserPronouns:
+					otherUserQuery.data().pronouns === 'male'
+						? 'his'
+						: otherUserQuery.data().pronouns === 'female'
+						? 'her'
+						: 'their',
+				loggedInUserBooks: await getUserInfoForCompareBooksPage(userUID),
+				otherUserBooks: await getUserInfoForCompareBooksPage(otherUserUID),
+			};
+		}
+	};
+
 	return {
 		pageGenerator,
 		getAlsoEnjoyedBooksDetailsForBook,
@@ -4102,6 +4223,7 @@ const Firebase = (() => {
 		unfollowUser,
 		unfriendUser,
 		deleteUpdate,
+		getInfoForCompareBooksPage,
 	};
 })();
 
