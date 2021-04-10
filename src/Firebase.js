@@ -241,6 +241,10 @@ const Firebase = (() => {
 			);
 		};
 
+		const generateInviteFriendsPage = () => {
+			return '/friend/invite';
+		};
+
 		const generateAccountSettingsPage = () => {
 			return '/user/edit';
 		};
@@ -349,6 +353,7 @@ const Firebase = (() => {
 			generateUserFavoriteAuthorsPage,
 			generateUserYearInBooksPage,
 			generateUserFriendsPage,
+			generateInviteFriendsPage,
 			generateAccountSettingsPage,
 			generateChangePasswordPage,
 			generateDeleteAccountPage,
