@@ -4228,6 +4228,153 @@ const Firebase = (() => {
 		};
 	};
 
+	const getUsersInfoForCompatibilityTestPage = async (
+		popularBooksRootIds,
+		classicsBooksRootIds,
+		popularFictionBooksRootIds,
+		thrillersBooksRootIds,
+		nonFictionBooksRootIds,
+		fantasyBooksRootIds,
+		romanceBooksRootIds,
+		scienceFictionBooksRootIds,
+		womensFictionBooksRootIds,
+		userUID,
+		otherUserUID
+	) => {
+		const getUserBooksInCategory = async (rootIdsArray, allUserBookDocs) => {
+			return (
+				await Promise.all(
+					allUserBookDocs.map(async (doc) => {
+						const bookQuery = await database
+							.collection('books')
+							.doc(doc.data().bookId)
+							.get();
+						return rootIdsArray.includes(bookQuery.data().rootBook)
+							? {
+									rootId: bookQuery.data().rootBook,
+									status: doc.data().status,
+									rating: doc.data().rating,
+							  }
+							: null;
+					})
+				)
+			).filter((obj) => obj !== null);
+		};
+
+		const loggedInUserQuery = await database
+			.collection('users')
+			.doc(userUID)
+			.get();
+		const otherUserQuery = await database
+			.collection('users')
+			.doc(otherUserUID)
+			.get();
+
+		const loggedInUserAllBooks = (
+			await database
+				.collection('userBooksInstances')
+				.where('userId', '==', userUID)
+				.get()
+		).docs;
+		const otherUserAllBooks = (
+			await database
+				.collection('userBooksInstances')
+				.where('userId', '==', otherUserUID)
+				.get()
+		).docs;
+
+		return {
+			loggedInUser: {
+				profilePicture: loggedInUserQuery.data().profileImage,
+				friends: await Promise.all(
+					loggedInUserQuery.data().friends.map(async (friendId) => {
+						return {
+							id: friendId,
+							name: (
+								await database.collection('users').doc(friendId).get()
+							).data().firstName,
+						};
+					})
+				),
+				popularBooks: await getUserBooksInCategory(
+					popularBooksRootIds,
+					loggedInUserAllBooks
+				),
+				classicsBooks: await getUserBooksInCategory(
+					classicsBooksRootIds,
+					loggedInUserAllBooks
+				),
+				popularFictionBooks: await getUserBooksInCategory(
+					popularFictionBooksRootIds,
+					loggedInUserAllBooks
+				),
+				thrillersBooks: await getUserBooksInCategory(
+					thrillersBooksRootIds,
+					loggedInUserAllBooks
+				),
+				nonFictionBooks: await getUserBooksInCategory(
+					nonFictionBooksRootIds,
+					loggedInUserAllBooks
+				),
+				fantasyBooks: await getUserBooksInCategory(
+					fantasyBooksRootIds,
+					loggedInUserAllBooks
+				),
+				romanceBooks: await getUserBooksInCategory(
+					romanceBooksRootIds,
+					loggedInUserAllBooks
+				),
+				scienceFictionBooks: await getUserBooksInCategory(
+					scienceFictionBooksRootIds,
+					loggedInUserAllBooks
+				),
+				womensFictionBooks: await getUserBooksInCategory(
+					womensFictionBooksRootIds,
+					loggedInUserAllBooks
+				),
+			},
+			otherUser: {
+				profilePicture: otherUserQuery.data().profileImage,
+				popularBooks: await getUserBooksInCategory(
+					popularBooksRootIds,
+					otherUserAllBooks
+				),
+				classicsBooks: await getUserBooksInCategory(
+					classicsBooksRootIds,
+					otherUserAllBooks
+				),
+				popularFictionBooks: await getUserBooksInCategory(
+					popularFictionBooksRootIds,
+					otherUserAllBooks
+				),
+				thrillersBooks: await getUserBooksInCategory(
+					thrillersBooksRootIds,
+					otherUserAllBooks
+				),
+				nonFictionBooks: await getUserBooksInCategory(
+					nonFictionBooksRootIds,
+					otherUserAllBooks
+				),
+				fantasyBooks: await getUserBooksInCategory(
+					fantasyBooksRootIds,
+					otherUserAllBooks
+				),
+				romanceBooks: await getUserBooksInCategory(
+					romanceBooksRootIds,
+					otherUserAllBooks
+				),
+				scienceFictionBooks: await getUserBooksInCategory(
+					scienceFictionBooksRootIds,
+					otherUserAllBooks
+				),
+				womensFictionBooks: await getUserBooksInCategory(
+					womensFictionBooksRootIds,
+					otherUserAllBooks
+				),
+			},
+		};
+	};
+
 	return {
 		pageGenerator,
 		getAlsoEnjoyedBooksDetailsForBook,
@@ -4298,6 +4445,7 @@ const Firebase = (() => {
 		deleteUpdate,
 		getInfoForCompareBooksPage,
 		getBooksInfoForBookCompatibilityTestPage,
+		getUsersInfoForCompatibilityTestPage,
 	};
 })();
 

@@ -278,3 +278,35 @@ h1.book-compatibility-test-page-header {
 	font-size: 12px;
 	line-height: 18px;
 }
+
+.book-compatibility-test-page-main-content-right-section .top-links {
+	margin-bottom: 20px;
+}
+
+.book-compatibility-test-page-main-content-right-section .top-links a {
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.book-compatibility-test-page-main-content-right-section .top-links a:hover {
+	text-decoration: underline;
+}
+
+.book-compatibility-test-page-main-content-right-section
+	.compare-with-friends-section
+	h2 {
+	color: var(--goodreads-brown);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 18px;
+	display: block;
+	margin-bottom: 10px;
+}
+
+.book-compatibility-test-page-main-content-right-section
+	.compare-with-friends-section
+	select {
+	font-size: 11px;
+}

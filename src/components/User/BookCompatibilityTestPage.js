@@ -99,168 +99,6 @@ const BookCompatibilityTestPage = () => {
 
 	const user = JSON.parse(localStorage.getItem('userState'));
 
-	/*
-	usersInfo: {
-		loggedInUser: {
-			profilePicture,
-			friends: [{
-				id,
-				name,
-			}],
-			popularBooks: [{
-				rootId,
-				status,
-				rating,
-			}],
-			classicsBooks: [{
-				rootId,
-				status,
-				rating,
-			}],
-			popularFictionBooks: [{
-				rootId,
-				status,
-				rating,
-			}],
-			thrillersBooks: [{
-				rootId,
-				status,
-				rating
-			}],
-			nonfictionBooks: [{
-				rootId,
-				status,
-				rating,
-			}],
-			fantasyBooks: [{
-				rootId,
-				status,
-				rating,
-			}],
-			romanceBooks: [{
-				rootId,
-				status,
-				rating,
-			}],
-			scienceFictionBooks: [{
-				rootId,
-				status,
-				rating,
-			}],
-			womensFictionBooks: [{
-				rootId,
-				status,
-				rating,
-			}],
-		},
-		otherUser: {
-			profilePicture,
-			popularBooks: [{
-				rootId,
-				status,
-				rating,
-			}],
-			classicsBooks: [{
-				rootId,
-				status,
-				rating,
-			}],
-			popularFictionBooks: [{
-				rootId,
-				status,
-				rating,
-			}],
-			thrillersBooks: [{
-				rootId,
-				status,
-				rating
-			}],
-			nonFictionBooks: [{
-				rootId,
-				status,
-				rating,
-			}],
-			fantasyBooks: [{
-				rootId,
-				status,
-				rating,
-			}],
-			romanceBooks: [{
-				rootId,
-				status,
-				rating,
-			}],
-			scienceFictionBooks: [{
-				rootId,
-				status,
-				rating,
-			}],
-			womensFictionBooks: [{
-				rootId,
-				status,
-				rating,
-			}],
-		},
-	}
-
-	booksInfo: {
-		popularBooks: [{
-			id,
-			title,
-			authorId,
-			authorName,
-		}],
-		classicsBooks: [{
-			id,
-			title,
-			authorId,
-			authorName,
-		}],
-		popularFictionBooks: [{
-			id,
-			title,
-			authorId,
-			authorName,
-		}],
-		thrillersBooks: [{
-			id,
-			title,
-			authorId,
-			authorName
-		}],
-		nonFictionBooks: [{
-			id,
-			title,
-			authorId,
-			authorName,
-		}],
-		fantasyBooks: [{
-			id,
-			title,
-			authorId,
-			authorName,
-		}],
-		romanceBooks: [{
-			id,
-			title,
-			authorId,
-			authorName,
-		}],
-		scienceFictionBooks: [{
-			id,
-			title,
-			authorId,
-			authorName,
-		}],
-		womensFictionBooks: [{
-			id,
-			title,
-			authorId,
-			authorName,
-		}],
-	}
-	*/
-
 	useEffect(() => {
 		const getInfo = async () => {
 			setBooksInfo(
@@ -276,92 +114,21 @@ const BookCompatibilityTestPage = () => {
 					womensFictionBooksIds
 				)
 			);
-			setUsersInfo({
-				loggedInUser: {
-					profilePicture:
-						'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/nophoto/user/m_700x933._UX150_CR0,25,150,150_RO75,1,255,255,255,255,255,255,15_.png',
-					friends: [
-						{
-							id: '123',
-							name: 'Edson',
-						},
-						{
-							id: '123',
-							name: 'Clara',
-						},
-						{
-							id: '123',
-							name: 'Victor',
-						},
-					],
-					popularBooks: [
-						{
-							rootId: 'JdE1oE1zeZYOVU8PYyy7',
-							status: 'to-read',
-						},
-						{
-							rootId: 'Fctu87S2XLy2RA5Wcr6H',
-							status: 'read',
-							rating: 2,
-						},
-					],
-					classicsBooks: [
-						{
-							rootId: '6490z4ij4qsGAIBoeBMK',
-							status: 'read',
-							rating: 5,
-						},
-					],
-					popularFictionBooks: [],
-					thrillersBooks: [],
-					nonFictionBooks: [],
-					fantasyBooks: [],
-					romanceBooks: [],
-					scienceFictionBooks: [],
-					womensFictionBooks: [],
-				},
-				otherUser: {
-					profilePicture:
-						'https://images.gr-assets.com/users/1612195247p2/2863914.jpg',
-					popularBooks: [
-						{
-							rootId: 'JdE1oE1zeZYOVU8PYyy7',
-							status: 'read',
-							rating: 1,
-						},
-						{
-							rootId: 'Fctu87S2XLy2RA5Wcr6H',
-							status: 'read',
-							rating: 4,
-						},
-					],
-					classicsBooks: [
-						{
-							rootId: '6490z4ij4qsGAIBoeBMK',
-							status: 'read',
-							rating: 2,
-						},
-					],
-					popularFictionBooks: [],
-					thrillersBooks: [],
-					nonFictionBooks: [
-						{
-							rootId: 'bzRUzMqsdgjKD75Jxosn',
-							status: 'reading',
-						},
-					],
-					fantasyBooks: [],
-					romanceBooks: [],
-					scienceFictionBooks: [],
-					womensFictionBooks: [
-						{
-							rootId: 'unRbEhtsd1vcMxpSvDKI',
-							status: 'read',
-							rating: 4,
-						},
-					],
-				},
-			});
+			setUsersInfo(
+				await Firebase.getUsersInfoForCompatibilityTestPage(
+					popularBooksIds,
+					classicsBooksIds,
+					popularFictionBooksIds,
+					thrillersBooksIds,
+					nonFictionBooksIds,
+					fantasyBooksIds,
+					romanceBooksIds,
+					scienceFictionBooksIds,
+					womensFictionBooksIds,
+					user.userUID,
+					userId
+				)
+			);
 			setLoaded(true);
 		};
 		getInfo();
@@ -375,6 +142,8 @@ const BookCompatibilityTestPage = () => {
 		scienceFictionBooksIds,
 		nonFictionBooksIds,
 		romanceBooksIds,
+		user.userUID,
+		userId,
 	]);
 
 	const calculateMatchForCategory = (
@@ -514,8 +283,8 @@ const BookCompatibilityTestPage = () => {
 			>
 				<img
 					src={
-						user.userInfo.profilePicture !== undefined
-							? user.userInfo.profilePicture
+						usersInfo.loggedInUser.profilePicture !== undefined
+							? usersInfo.loggedInUser.profilePicture
 							: noPictureImageUrl
 					}
 					alt={user.userInfo.firstName}
@@ -913,6 +682,7 @@ const BookCompatibilityTestPage = () => {
 				</a>
 			</div>
 			<div className="compare-with-friends-section">
+				<h2>Compare with Friends</h2>
 				<select
 					value={friendSelectInput}
 					onChange={(e) => {
