@@ -126,7 +126,8 @@ const BookCompatibilityTestPage = () => {
 					scienceFictionBooksIds,
 					womensFictionBooksIds,
 					user.userUID,
-					userId
+					userId,
+					history
 				)
 			);
 			setLoaded(true);
@@ -144,6 +145,7 @@ const BookCompatibilityTestPage = () => {
 		romanceBooksIds,
 		user.userUID,
 		userId,
+		history,
 	]);
 
 	const calculateMatchForCategory = (
