@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
@@ -17,19 +17,81 @@ const BookCompatibilityTestPage = () => {
 					.map((name) => name[0].toUpperCase() + name.splice(1))
 					.join(' ')
 			: null;
+	const userFirstName = userName !== null ? userName.split(' ')[0] : null;
 	const [loaded, setLoaded] = useState(false);
 	const [usersInfo, setUsersInfo] = useState({});
 	const [booksInfo, setBooksInfo] = useState({});
+	const [friendSelectInput, setFriendSelectInput] = useState(0);
 
-	const popularBooksIds = Array(10).fill('1');
-	const classicsBooksIds = Array(10).fill('1');
-	const popularFictionBooksIds = Array(10).fill('1');
-	const thrillersBooksIds = Array(10).fill('1');
-	const nonFictionBooksIds = Array(9).fill('1');
-	const fantasyBooksIds = Array(5).fill('1');
-	const romanceBooksIds = Array(10).fill('1');
-	const scienceFictionBooksIds = Array(10).fill('1');
-	const womensFictionBooksIds = Array(10).fill('1');
+	const popularBooksIds = useMemo(
+		() => [
+			'JdE1oE1zeZYOVU8PYyy7',
+			'Fctu87S2XLy2RA5Wcr6H',
+			'0Ahlt0lmj06b0rKaD7qJ',
+			'24P8kxLmS4LmtcDSPkvl',
+		],
+		[]
+	);
+	const classicsBooksIds = useMemo(
+		() => [
+			'6490z4ij4qsGAIBoeBMK',
+			'Djx2P7Egc9cJgfdwwF37',
+			'H1xRvYEIDyk54H68QssS',
+			'HfkmwYPOfQ4MtpLnLNlq',
+		],
+		[]
+	);
+	const popularFictionBooksIds = useMemo(
+		() => ['JQBwpf6G3ND5pKXDYNlx', 'JdE1oE1zeZYOVU8PYyy7'],
+		[]
+	);
+	const thrillersBooksIds = useMemo(
+		() => [
+			'VYSVKcKAKYwDq2PhV2cJ',
+			'VncumXL1QTrVaGdhvM4O',
+			'aJSCUT07kmUQqUlTegRv',
+		],
+		[]
+	);
+	const nonFictionBooksIds = useMemo(
+		() => [
+			'aJy9OMGHhUQ8GPZGRn6C',
+			'bzRUzMqsdgjKD75Jxosn',
+			'dDSxgc4Af87DFYEsiTxq',
+			'e7wTYJTr4dSkJLaEXWEO',
+		],
+		[]
+	);
+	const fantasyBooksIds = useMemo(
+		() => [
+			'hx124Fx58u2xRqWUaxlv',
+			'ljpqnZKAKgZSjbmrO6sF',
+			'nSpJeOPwkgFKg45uc164',
+			'oJ2euLQwJOn944VBu1tl',
+		],
+		[]
+	);
+	const romanceBooksIds = useMemo(
+		() => ['pe83n32WlbIWRmYwyLiD', 'pttjrCHmNS16f2lhOU9e'],
+		[]
+	);
+	const scienceFictionBooksIds = useMemo(
+		() => [
+			'qNejPAmYF2xlTdbnhH41',
+			'qUe7SD2Jba5MbybZNUj5',
+			'sBVe4XtgS9K0HldzfRBN',
+		],
+		[]
+	);
+	const womensFictionBooksIds = useMemo(
+		() => [
+			't8AF9o4IHodXuusb62ws',
+			'uBI55trKgMJpRohAtxry',
+			'unRbEhtsd1vcMxpSvDKI',
+			'zCikj4mmQyZlyVNyP7cF',
+		],
+		[]
+	);
 
 	const noPictureImageUrl =
 		'https://s.gr-assets.com/assets/nophoto/user/u_100x100-259587f1619f5253426a4fa6fb508831.png';
@@ -41,7 +103,7 @@ const BookCompatibilityTestPage = () => {
 		loggedInUser: {
 			profilePicture,
 			friends: [{
-				rootId,
+				id,
 				name,
 			}],
 			popularBooks: [{
@@ -112,7 +174,7 @@ const BookCompatibilityTestPage = () => {
 				status,
 				rating
 			}],
-			nonfictionBooks: [{
+			nonFictionBooks: [{
 				rootId,
 				status,
 				rating,
@@ -142,52 +204,177 @@ const BookCompatibilityTestPage = () => {
 
 	booksInfo: {
 		popularBooks: [{
+			id,
 			title,
 			authorId,
 			authorName,
 		}],
 		classicsBooks: [{
+			id,
 			title,
 			authorId,
 			authorName,
 		}],
 		popularFictionBooks: [{
+			id,
 			title,
 			authorId,
 			authorName,
 		}],
 		thrillersBooks: [{
+			id,
 			title,
 			authorId,
 			authorName
 		}],
-		nonfictionBooks: [{
+		nonFictionBooks: [{
+			id,
 			title,
 			authorId,
 			authorName,
 		}],
 		fantasyBooks: [{
+			id,
 			title,
 			authorId,
 			authorName,
 		}],
 		romanceBooks: [{
+			id,
 			title,
 			authorId,
 			authorName,
 		}],
 		scienceFictionBooks: [{
+			id,
 			title,
 			authorId,
 			authorName,
 		}],
 		womensFictionBooks: [{
+			id,
 			title,
 			authorId,
 			authorName,
 		}],
 	}
 	*/
+
+	useEffect(() => {
+		const getInfo = async () => {
+			setBooksInfo(
+				await Firebase.getBooksInfoForBookCompatibilityTestPage(
+					popularBooksIds,
+					classicsBooksIds,
+					popularFictionBooksIds,
+					thrillersBooksIds,
+					nonFictionBooksIds,
+					fantasyBooksIds,
+					romanceBooksIds,
+					scienceFictionBooksIds,
+					womensFictionBooksIds
+				)
+			);
+			setUsersInfo({
+				loggedInUser: {
+					profilePicture:
+						'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/nophoto/user/m_700x933._UX150_CR0,25,150,150_RO75,1,255,255,255,255,255,255,15_.png',
+					friends: [
+						{
+							id: '123',
+							name: 'Edson',
+						},
+						{
+							id: '123',
+							name: 'Clara',
+						},
+						{
+							id: '123',
+							name: 'Victor',
+						},
+					],
+					popularBooks: [
+						{
+							rootId: 'JdE1oE1zeZYOVU8PYyy7',
+							status: 'to-read',
+						},
+						{
+							rootId: 'Fctu87S2XLy2RA5Wcr6H',
+							status: 'read',
+							rating: 3,
+						},
+					],
+					classicsBooks: [
+						{
+							rootId: '6490z4ij4qsGAIBoeBMK',
+							status: 'read',
+							rating: 5,
+						},
+					],
+					popularFictionBooks: [],
+					thrillersBooks: [],
+					nonFictionBooks: [],
+					fantasyBooks: [],
+					romanceBooks: [],
+					scienceFictionBooks: [],
+					womensFictionBooks: [],
+				},
+				otherUser: {
+					profilePicture:
+						'https://images.gr-assets.com/users/1612195247p2/2863914.jpg',
+					popularBooks: [
+						{
+							rootId: 'JdE1oE1zeZYOVU8PYyy7',
+							status: 'read',
+							rating: 1,
+						},
+						{
+							rootId: 'Fctu87S2XLy2RA5Wcr6H',
+							status: 'read',
+							rating: 4,
+						},
+					],
+					classicsBooks: [
+						{
+							rootId: '6490z4ij4qsGAIBoeBMK',
+							status: 'read',
+							rating: 2,
+						},
+					],
+					popularFictionBooks: [],
+					thrillersBooks: [],
+					nonFictionBooks: [
+						{
+							rootId: 'bzRUzMqsdgjKD75Jxosn',
+							status: 'reading',
+						},
+					],
+					fantasyBooks: [],
+					romanceBooks: [],
+					scienceFictionBooks: [],
+					womensFictionBooks: [
+						{
+							rootId: 'unRbEhtsd1vcMxpSvDKI',
+							status: 'read',
+							rating: 4,
+						},
+					],
+				},
+			});
+			setLoaded(true);
+		};
+		getInfo();
+	}, [
+		classicsBooksIds,
+		popularFictionBooksIds,
+		popularBooksIds,
+		thrillersBooksIds,
+		fantasyBooksIds,
+		womensFictionBooksIds,
+		scienceFictionBooksIds,
+		nonFictionBooksIds,
+		romanceBooksIds,
+	]);
 
 	const calculateMatchForCategory = (
 		generalCategoryIdArray,
@@ -343,7 +530,7 @@ const BookCompatibilityTestPage = () => {
 				>
 					{userName}
 				</a>
-				<span>{` is ${generalMatch * 100}%`}</span>
+				<span>{` is ${(generalMatch * 100).toFixed(0)}%`}</span>
 			</span>
 			<a
 				className="user-profile-picture-wrapper"
@@ -408,16 +595,344 @@ const BookCompatibilityTestPage = () => {
 		</table>
 	) : null;
 
+	const generateSpecificCategoryCompatibilitySection = (
+		categoryName,
+		bookIdsArray,
+		booksInfoObject,
+		loggedInUserInfoObject,
+		otherUserInfoObject,
+		index
+	) => {
+		const generateTableEntryForBook = (bookObjectArray) => {
+			if (bookObjectArray.length > 0) {
+				if (
+					bookObjectArray[0].rating !== undefined &&
+					bookObjectArray[0].rating !== 0
+				) {
+					return (
+						<div className="rating-stars">
+							<div
+								className={
+									bookObjectArray[0].rating >= 1
+										? 'static-star small full'
+										: bookObjectArray[0].rating >= 0.5
+										? 'static-star small almost-full'
+										: bookObjectArray[0].rating > 0
+										? 'static-star small almost-empty'
+										: 'static-star small empty'
+								}
+							></div>
+							<div
+								className={
+									bookObjectArray[0].rating >= 2
+										? 'static-star small full'
+										: bookObjectArray[0].rating >= 1.5
+										? 'static-star small almost-full'
+										: bookObjectArray[0].rating > 1
+										? 'static-star small almost-empty'
+										: 'static-star small empty'
+								}
+							></div>
+							<div
+								className={
+									bookObjectArray[0].rating >= 3
+										? 'static-star small full'
+										: bookObjectArray[0].rating >= 2.5
+										? 'static-star small almost-full'
+										: bookObjectArray[0].rating > 2
+										? 'static-star small almost-empty'
+										: 'static-star small empty'
+								}
+							></div>
+							<div
+								className={
+									bookObjectArray[0].rating >= 4
+										? 'static-star small full'
+										: bookObjectArray[0].rating >= 3.5
+										? 'static-star small almost-full'
+										: bookObjectArray[0].rating > 3
+										? 'static-star small almost-empty'
+										: 'static-star small empty'
+								}
+							></div>
+							<div
+								className={
+									bookObjectArray[0].rating >= 5
+										? 'static-star small full'
+										: bookObjectArray[0].rating >= 4.5
+										? 'static-star small almost-full'
+										: bookObjectArray[0].rating > 4
+										? 'static-star small almost-empty'
+										: 'static-star small empty'
+								}
+							></div>
+						</div>
+					);
+				} else {
+					return (
+						<span className="status-span">{bookObjectArray[0].status}</span>
+					);
+				}
+			}
+			return <span className="nothing-span">--</span>;
+		};
+
+		return (
+			<table className="specific-category-table" key={index}>
+				<thead>
+					<th>{categoryName + ' Books'}</th>
+					<th>My Rating</th>
+					<th>{`${userFirstName}'s Rating`}</th>
+					<th>Match</th>
+				</thead>
+				<tbody>
+					{bookIdsArray.map((bookRootId, i) => {
+						const loggedInUserBook = loggedInUserInfoObject.filter(
+							(book) => book.rootId === bookRootId
+						);
+						const otherUserBook = otherUserInfoObject.filter(
+							(book) => book.rootId === bookRootId
+						);
+						return (
+							<tr key={i}>
+								<td>
+									<span>
+										<a
+											href={Firebase.pageGenerator.generateBookPage(
+												booksInfoObject[i].id,
+												booksInfoObject[i].title
+											)}
+										>
+											{booksInfoObject[i].title}
+										</a>
+										<span> by </span>
+										<a
+											href={Firebase.pageGenerator.generateAuthorPage(
+												booksInfoObject[i].authorId,
+												booksInfoObject[i].authorName
+											)}
+										>
+											{booksInfoObject[i].authorName}
+										</a>
+									</span>
+								</td>
+								<td>{generateTableEntryForBook(loggedInUserBook)}</td>
+								<td>{generateTableEntryForBook(otherUserBook)}</td>
+								<td>
+									{loggedInUserBook.length > 0 &&
+									loggedInUserBook[0].rating !== undefined &&
+									loggedInUserBook[0].rating !== 0 &&
+									otherUserBook.length > 0 &&
+									otherUserBook[0].rating !== undefined &&
+									otherUserBook[0].rating !== 0 ? (
+										loggedInUserBook[0].rating - otherUserBook[0].rating ===
+										0 ? (
+											<span className="excellent">excellent</span>
+										) : loggedInUserBook[0].rating - otherUserBook[0].rating ===
+										  1 ? (
+											<span className="good">good</span>
+										) : loggedInUserBook[0].rating - otherUserBook[0].rating ===
+										  2 ? (
+											<span className="ok">ok</span>
+										) : loggedInUserBook[0].rating - otherUserBook[0].rating ===
+										  3 ? (
+											<span className="not-good">not good</span>
+										) : (
+											<span className="very-bad">very bad</span>
+										)
+									) : (
+										<span></span>
+									)}
+								</td>
+							</tr>
+						);
+					})}
+				</tbody>
+			</table>
+		);
+	};
+
+	const popularSection = loaded ? (
+		<div className="book-compatibility-test-page-popular-section">
+			{generateSpecificCategoryCompatibilitySection(
+				'popular',
+				popularBooksIds,
+				booksInfo.popularBooks,
+				usersInfo.loggedInUser.popularBooks,
+				usersInfo.otherUser.popularBooks,
+				0
+			)}
+		</div>
+	) : null;
+
+	const classicsSection = loaded ? (
+		<div className="book-compatibility-test-page-classics-section">
+			{generateSpecificCategoryCompatibilitySection(
+				'classics',
+				classicsBooksIds,
+				booksInfo.classicsBooks,
+				usersInfo.loggedInUser.classicsBooks,
+				usersInfo.otherUser.classicsBooks,
+				0
+			)}
+		</div>
+	) : null;
+
+	const popularFictionSection = loaded ? (
+		<div className="book-compatibility-test-page-popular-fiction-section">
+			{generateSpecificCategoryCompatibilitySection(
+				'popular fiction',
+				popularFictionBooksIds,
+				booksInfo.popularFictionBooks,
+				usersInfo.loggedInUser.popularFictionBooks,
+				usersInfo.otherUser.popularFictionBooks,
+				0
+			)}
+		</div>
+	) : null;
+
+	const thrillersSection = loaded ? (
+		<div className="book-compatibility-test-page-thrillers-section">
+			{generateSpecificCategoryCompatibilitySection(
+				'thrillers',
+				thrillersBooksIds,
+				booksInfo.thrillersBooks,
+				usersInfo.loggedInUser.thrillersBooks,
+				usersInfo.otherUser.thrillersBooks,
+				0
+			)}
+		</div>
+	) : null;
+
+	const nonFictionSection = loaded ? (
+		<div className="book-compatibility-test-page-nonfiction-section">
+			{generateSpecificCategoryCompatibilitySection(
+				'nonfiction',
+				nonFictionBooksIds,
+				booksInfo.nonFictionBooks,
+				usersInfo.loggedInUser.nonFictionBooks,
+				usersInfo.otherUser.nonFictionBooks,
+				0
+			)}
+		</div>
+	) : null;
+
+	const fantasySection = loaded ? (
+		<div className="book-compatibility-test-page-fantasy-section">
+			{generateSpecificCategoryCompatibilitySection(
+				'fantasy',
+				fantasyBooksIds,
+				booksInfo.fantasyBooks,
+				usersInfo.loggedInUser.fantasyBooks,
+				usersInfo.otherUser.fantasyBooks,
+				0
+			)}
+		</div>
+	) : null;
+
+	const romanceSection = loaded ? (
+		<div className="book-compatibility-test-page-romance-section">
+			{generateSpecificCategoryCompatibilitySection(
+				'romance',
+				romanceBooksIds,
+				booksInfo.romanceBooks,
+				usersInfo.loggedInUser.romanceBooks,
+				usersInfo.otherUser.romanceBooks,
+				0
+			)}
+		</div>
+	) : null;
+
+	const scienceFictionSection = loaded ? (
+		<div className="book-compatibility-test-page-science-fiction-section">
+			{generateSpecificCategoryCompatibilitySection(
+				'science fiction',
+				scienceFictionBooksIds,
+				booksInfo.scienceFictionBooks,
+				usersInfo.loggedInUser.scienceFictionBooks,
+				usersInfo.otherUser.scienceFictionBooks,
+				0
+			)}
+		</div>
+	) : null;
+
+	const womensFictionSection = loaded ? (
+		<div className="book-compatibility-test-page-womens-fiction-section">
+			{generateSpecificCategoryCompatibilitySection(
+				"women's fiction",
+				womensFictionBooksIds,
+				booksInfo.womensFictionBooks,
+				usersInfo.loggedInUser.womensFictionBooks,
+				usersInfo.otherUser.womensFictionBooks,
+				0
+			)}
+		</div>
+	) : null;
+
 	const mainContentLeftSection = (
 		<div className="book-compatibility-test-page-main-content-left-section">
 			{pageHeader}
 			{generalCompatibilitySection}
 			{categoryCompatibilitySection}
+			{popularSection}
+			{classicsSection}
+			{popularFictionSection}
+			{thrillersSection}
+			{nonFictionSection}
+			{fantasySection}
+			{romanceSection}
+			{scienceFictionSection}
+			{womensFictionSection}
 		</div>
 	);
 
+	const mainContentRightSection = loaded ? (
+		<div className="book-compatibility-test-page-main-content-right-section">
+			<div className="top-links">
+				<a
+					href={Firebase.pageGenerator.generateBookEditCompatibilityTestAnswersPage(
+						userId
+					)}
+				>
+					edit my answers
+				</a>
+				<a href={Firebase.pageGenerator.generateUserCompareBooksPage(userId)}>
+					compare books
+				</a>
+			</div>
+			<div className="compare-with-friends-section">
+				<select
+					value={friendSelectInput}
+					onChange={(e) => {
+						const newFriendIndex = e.target.value;
+						setFriendSelectInput(newFriendIndex);
+
+						history.push({
+							pathname: Firebase.pageGenerator.generateBookCompatibilityTestPage(
+								usersInfo.loggedInUser.friends[newFriendIndex - 1].id,
+								usersInfo.loggedInUser.friends[newFriendIndex - 1].name
+							),
+						});
+					}}
+				>
+					<option className="no-display-option" value={0}></option>
+					{usersInfo.loggedInUser.friends.map((friend, index) => {
+						return (
+							<option key={index} value={index + 1}>
+								{friend.name}
+							</option>
+						);
+					})}
+				</select>
+			</div>
+		</div>
+	) : null;
+
 	const mainContent = (
-		<div className="book-compatibility-test-page-main-content"></div>
+		<div className="book-compatibility-test-page-main-content">
+			{mainContentLeftSection}
+			{mainContentRightSection}
+		</div>
 	);
 
 	return (

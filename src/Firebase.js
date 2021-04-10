@@ -298,6 +298,10 @@ const Firebase = (() => {
 			);
 		};
 
+		const generateBookEditCompatibilityTestAnswersPage = (userId) => {
+			return '/book/compatibility_test?id=' + userId;
+		};
+
 		return {
 			generateBookPage,
 			generateAddBookPage,
@@ -358,6 +362,7 @@ const Firebase = (() => {
 			generateGiveRecommendationPage,
 			generateGiveRecommendationToUserPage,
 			generateBookCompatibilityTestPage,
+			generateBookEditCompatibilityTestAnswersPage,
 		};
 	})();
 
@@ -1976,52 +1981,54 @@ const Firebase = (() => {
 						.where('title', '==', originalTitle)
 						.where('mainEdition', '==', true)
 						.get();
-					const originalBookCandidates = await Promise.all(
-						originalBookQuery.docs.map(async (book) => {
-							const rootBookQuery = await database
-								.collection('rootBooks')
-								.doc(book.data().rootBook)
-								.get();
-							const authorQuery = await database
-								.collection('authors')
-								.doc(rootBookQuery.data().authorId)
-								.get();
-							const seriesQuery =
-								rootBookQuery.data().series !== undefined
-									? await database
-											.collection('series')
-											.doc(rootBookQuery.data().series)
-											.get()
-									: null;
-							if (originalPublicationDate !== null) {
-								const timestamp = firebase.firestore.Timestamp.fromDate(
-									originalPublicationDate
-								);
-								if (
-									mainAuthorQuery.docs[0].data().name ===
-										authorQuery.data().name &&
-									book.data().publishedDate === timestamp &&
-									((seriesQuery === null && seriesName.length === 0) ||
-										(seriesName.toLowerCase() ===
-											seriesQuery.data().name.toLowerCase() &&
-											seriesInstance === rootBookQuery.data().seriesInstance))
-								) {
-									return book;
+					const originalBookCandidates = (
+						await Promise.all(
+							originalBookQuery.docs.map(async (book) => {
+								const rootBookQuery = await database
+									.collection('rootBooks')
+									.doc(book.data().rootBook)
+									.get();
+								const authorQuery = await database
+									.collection('authors')
+									.doc(rootBookQuery.data().authorId)
+									.get();
+								const seriesQuery =
+									rootBookQuery.data().series !== undefined
+										? await database
+												.collection('series')
+												.doc(rootBookQuery.data().series)
+												.get()
+										: null;
+								if (originalPublicationDate !== null) {
+									const timestamp = firebase.firestore.Timestamp.fromDate(
+										originalPublicationDate
+									);
+									if (
+										mainAuthorQuery.docs[0].data().name ===
+											authorQuery.data().name &&
+										book.data().publishedDate === timestamp &&
+										((seriesQuery === null && seriesName.length === 0) ||
+											(seriesName.toLowerCase() ===
+												seriesQuery.data().name.toLowerCase() &&
+												seriesInstance === rootBookQuery.data().seriesInstance))
+									) {
+										return book;
+									}
+								} else {
+									if (
+										mainAuthorQuery.docs[0].data().name ===
+											authorQuery.data().name &&
+										((seriesQuery === null && seriesName.length === 0) ||
+											(seriesName.toLowerCase() ===
+												seriesQuery.data().name.toLowerCase() &&
+												seriesInstance === rootBookQuery.data().seriesInstance))
+									) {
+										return book;
+									}
 								}
-							} else {
-								if (
-									mainAuthorQuery.docs[0].data().name ===
-										authorQuery.data().name &&
-									((seriesQuery === null && seriesName.length === 0) ||
-										(seriesName.toLowerCase() ===
-											seriesQuery.data().name.toLowerCase() &&
-											seriesInstance === rootBookQuery.data().seriesInstance))
-								) {
-									return book;
-								}
-							}
-							return null;
-						})
+								return null;
+							})
+						)
 					).filter((book) => book !== null);
 					if (originalBookCandidates.length !== 0) {
 						newBookObject.rootBook = originalBookCandidates[0].data().rootBook;
@@ -4165,6 +4172,62 @@ const Firebase = (() => {
 		}
 	};
 
+	const getBooksInfoForBookCompatibilityTestPage = async (
+		popularBooksRootIds,
+		classicsBooksRootIds,
+		popularFictionBooksRootIds,
+		thrillersBooksRootIds,
+		nonFictionBooksRootIds,
+		fantasyBooksRootIds,
+		romanceBooksRootIds,
+		scienceFictionBooksRootIds,
+		womensFictionBooksRootIds
+	) => {
+		const getBooksInfoForCategory = async (rootIds) => {
+			return await Promise.all(
+				rootIds.map(async (rootId) => {
+					const rootBookQuery = await database
+						.collection('rootBooks')
+						.doc(rootId)
+						.get();
+					const authorQuery = await database
+						.collection('authors')
+						.doc(rootBookQuery.data().authorId)
+						.get();
+					const bookQuery = await database
+						.collection('books')
+						.where('rootBook', '==', rootId)
+						.where('mainEdition', '==', true)
+						.get();
+					return {
+						id: bookQuery.docs[0].id,
+						title: bookQuery.docs[0].data().title,
+						authorId: rootBookQuery.data().authorId,
+						authorName: authorQuery.data().name,
+					};
+				})
+			);
+		};
+
+		return {
+			popularBooks: await getBooksInfoForCategory(popularBooksRootIds),
+			classicsBooks: await getBooksInfoForCategory(classicsBooksRootIds),
+			popularFictionBooks: await getBooksInfoForCategory(
+				popularFictionBooksRootIds
+			),
+			thrillersBooks: await getBooksInfoForCategory(thrillersBooksRootIds),
+			nonFictionBooks: await getBooksInfoForCategory(nonFictionBooksRootIds),
+			fantasyBooks: await getBooksInfoForCategory(fantasyBooksRootIds),
+			romanceBooks: await getBooksInfoForCategory(romanceBooksRootIds),
+			scienceFictionBooks: await getBooksInfoForCategory(
+				scienceFictionBooksRootIds
+			),
+			womensFictionBooks: await getBooksInfoForCategory(
+				womensFictionBooksRootIds
+			),
+		};
+	};
+
 	return {
 		pageGenerator,
 		getAlsoEnjoyedBooksDetailsForBook,
@@ -4234,6 +4297,7 @@ const Firebase = (() => {
 		unfriendUser,
 		deleteUpdate,
 		getInfoForCompareBooksPage,
+		getBooksInfoForBookCompatibilityTestPage,
 	};
 })();
 

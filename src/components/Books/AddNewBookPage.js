@@ -9,8 +9,8 @@ import '../styles/Books/AddNewBookPage.css';
 const AddNewBookPage = ({ location }) => {
 	const history = useHistory();
 	const query = new URLSearchParams(location.search);
-	const authorName = query.get('author[name]');
-	const bookTitle = query.get('book[title]');
+	const authorName = query.get('author');
+	const bookTitle = query.get('title');
 	const bookId = query.get('work[id]');
 	const fileInput = useRef();
 	const [loaded, setLoaded] = useState(false);
@@ -498,7 +498,10 @@ const AddNewBookPage = ({ location }) => {
 					{mainAuthorRoleInput === null ? (
 						<button
 							className="add-role-button"
-							onClick={(_e) => setMainAuthorRoleInput('')}
+							onClick={(e) => {
+								e.preventDefault();
+								setMainAuthorRoleInput('');
+							}}
 						>
 							Add role
 						</button>
@@ -586,7 +589,8 @@ const AddNewBookPage = ({ location }) => {
 					})}
 					<button
 						className="add-new-author-button"
-						onClick={(_e) => {
+						onClick={(e) => {
+							e.preventDefault();
 							setOtherAuthorNameInputs((previous) => previous.concat(''));
 							setOtherAuthorRoleInputs((previous) => previous.concat(''));
 							setIsOtherAuthorsPopupHidden((previous) => previous.concat(true));
@@ -646,18 +650,18 @@ const AddNewBookPage = ({ location }) => {
 							onChange={(e) => setPublishedMonthInput(e.target.value)}
 						>
 							<option value=""></option>
-							<option value="January">January</option>
-							<option value="February">February</option>
-							<option value="March">March</option>
-							<option value="April">April</option>
-							<option value="May">May</option>
-							<option value="June">June</option>
-							<option value="July">July</option>
-							<option value="August">August</option>
-							<option value="September">September</option>
-							<option value="October">October</option>
-							<option value="November">November</option>
-							<option value="December">December</option>
+							<option value="0">January</option>
+							<option value="1">February</option>
+							<option value="2">March</option>
+							<option value="3">April</option>
+							<option value="4">May</option>
+							<option value="5">June</option>
+							<option value="6">July</option>
+							<option value="7">August</option>
+							<option value="8">September</option>
+							<option value="9">October</option>
+							<option value="10">November</option>
+							<option value="11">December</option>
 						</select>
 					</div>
 					<div className="published-day">
@@ -671,7 +675,7 @@ const AddNewBookPage = ({ location }) => {
 							{Array(31)
 								.fill(0)
 								.map((_value, index) => (
-									<option key={index} value={toString(index + 1)}>
+									<option key={index} value={(index + 1).toString()}>
 										{index + 1}
 									</option>
 								))}
@@ -862,18 +866,18 @@ const AddNewBookPage = ({ location }) => {
 									}
 								>
 									<option value=""></option>
-									<option value="January">January</option>
-									<option value="February">February</option>
-									<option value="March">March</option>
-									<option value="April">April</option>
-									<option value="May">May</option>
-									<option value="June">June</option>
-									<option value="July">July</option>
-									<option value="August">August</option>
-									<option value="September">September</option>
-									<option value="October">October</option>
-									<option value="November">November</option>
-									<option value="December">December</option>
+									<option value="0">January</option>
+									<option value="1">February</option>
+									<option value="2">March</option>
+									<option value="3">April</option>
+									<option value="4">May</option>
+									<option value="5">June</option>
+									<option value="6">July</option>
+									<option value="7">August</option>
+									<option value="8">September</option>
+									<option value="9">October</option>
+									<option value="10">November</option>
+									<option value="11">December</option>
 								</select>
 							</div>
 							<div className="published-day">
@@ -887,7 +891,7 @@ const AddNewBookPage = ({ location }) => {
 									{Array(31)
 										.fill(0)
 										.map((_value, index) => (
-											<option key={index} value={toString(index + 1)}>
+											<option key={index} value={(index + 1).toString()}>
 												{index + 1}
 											</option>
 										))}
