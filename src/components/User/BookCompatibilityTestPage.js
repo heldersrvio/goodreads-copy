@@ -3,6 +3,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 import Firebase from '../../Firebase';
+import '../styles/User/BookCompatibilityTestPage.css';
 
 const BookCompatibilityTestPage = () => {
 	const history = useHistory();
@@ -13,8 +14,8 @@ const BookCompatibilityTestPage = () => {
 		pageId !== null
 			? pageId
 					.split('-')
-					.splice(1)
-					.map((name) => name[0].toUpperCase() + name.splice(1))
+					.slice(1)
+					.map((name) => name[0].toUpperCase() + name.slice(1))
 					.join(' ')
 			: null;
 	const userFirstName = userName !== null ? userName.split(' ')[0] : null;
@@ -301,7 +302,7 @@ const BookCompatibilityTestPage = () => {
 						{
 							rootId: 'Fctu87S2XLy2RA5Wcr6H',
 							status: 'read',
-							rating: 3,
+							rating: 2,
 						},
 					],
 					classicsBooks: [
@@ -396,6 +397,9 @@ const BookCompatibilityTestPage = () => {
 						book.rating > 0
 				)
 		);
+		if (ratedBooksInCommon.length === 0) {
+			return -1;
+		}
 		return ratedBooksInCommon.reduce(
 			(previous, current) =>
 				previous +
@@ -484,17 +488,14 @@ const BookCompatibilityTestPage = () => {
 		scienceFictionMatch,
 		womensFictionMatch,
 	];
-	const generalMatch =
-		(popularMatch +
-			classicsMatch +
-			popularFictionMatch +
-			thrillersMatch +
-			nonFictionMatch +
-			fantasyMatch +
-			romanceMatch +
-			scienceFictionMatch +
-			womensFictionMatch) /
-		5;
+	const generalMatch = matchesArray
+		.filter((match) => match !== -1)
+		.reduce(
+			(previous, current) =>
+				previous +
+				current / matchesArray.filter((match) => match !== -1).length,
+			0
+		);
 
 	const pageHeader = (
 		<h1 className="book-compatibility-test-page-header">
@@ -530,7 +531,7 @@ const BookCompatibilityTestPage = () => {
 				>
 					{userName}
 				</a>
-				<span>{` is ${(generalMatch * 100).toFixed(0)}%`}</span>
+				<span>{` is ${(generalMatch * 100).toFixed(0)}%.`}</span>
 			</span>
 			<a
 				className="user-profile-picture-wrapper"
@@ -554,8 +555,10 @@ const BookCompatibilityTestPage = () => {
 	const categoryCompatibilitySection = loaded ? (
 		<table className="book-compatibility-test-page-category-compatibility-section">
 			<thead>
-				<th>Category</th>
-				<th>Score</th>
+				<tr>
+					<th>Category</th>
+					<th>Score</th>
+				</tr>
 			</thead>
 			<tbody>
 				{[
@@ -569,9 +572,11 @@ const BookCompatibilityTestPage = () => {
 					'science fiction',
 					"women's fiction",
 				].map((genre, index) => {
+					const matchValue =
+						matchesArray[index] === -1 ? 0 : matchesArray[index];
 					return (
-						<tr key={index}>
-							<td>
+						<tr key={index} className={index === 8 ? 'last-row' : ''}>
+							<td className="category-td">
 								<a
 									href={Firebase.pageGenerator.generateGenrePage(
 										genre.split(' ').join('-')
@@ -580,12 +585,10 @@ const BookCompatibilityTestPage = () => {
 									{genre}
 								</a>
 							</td>
-							<td>
-								<span>{matchesArray[index] * 100}</span>
+							<td className="score-td">
+								<span>{matchValue * 100}</span>
 								<div
-									className={
-										'green-bar ' + (matchesArray[index] * 100).toString()
-									}
+									className={'green-bar-' + (matchValue * 100).toString()}
 								></div>
 							</td>
 						</tr>
@@ -680,10 +683,12 @@ const BookCompatibilityTestPage = () => {
 		return (
 			<table className="specific-category-table" key={index}>
 				<thead>
-					<th>{categoryName + ' Books'}</th>
-					<th>My Rating</th>
-					<th>{`${userFirstName}'s Rating`}</th>
-					<th>Match</th>
+					<tr>
+						<th>{categoryName + ' Books'}</th>
+						<th>My Rating</th>
+						<th>{`${userFirstName}'s Rating`}</th>
+						<th>Match</th>
+					</tr>
 				</thead>
 				<tbody>
 					{bookIdsArray.map((bookRootId, i) => {
@@ -694,7 +699,10 @@ const BookCompatibilityTestPage = () => {
 							(book) => book.rootId === bookRootId
 						);
 						return (
-							<tr key={i}>
+							<tr
+								key={i}
+								className={i === bookIdsArray.length - 1 ? 'last-row' : ''}
+							>
 								<td>
 									<span>
 										<a
@@ -725,17 +733,21 @@ const BookCompatibilityTestPage = () => {
 									otherUserBook.length > 0 &&
 									otherUserBook[0].rating !== undefined &&
 									otherUserBook[0].rating !== 0 ? (
-										loggedInUserBook[0].rating - otherUserBook[0].rating ===
-										0 ? (
+										Math.abs(
+											loggedInUserBook[0].rating - otherUserBook[0].rating
+										) === 0 ? (
 											<span className="excellent">excellent</span>
-										) : loggedInUserBook[0].rating - otherUserBook[0].rating ===
-										  1 ? (
+										) : Math.abs(
+												loggedInUserBook[0].rating - otherUserBook[0].rating
+										  ) === 1 ? (
 											<span className="good">good</span>
-										) : loggedInUserBook[0].rating - otherUserBook[0].rating ===
-										  2 ? (
+										) : Math.abs(
+												loggedInUserBook[0].rating - otherUserBook[0].rating
+										  ) === 2 ? (
 											<span className="ok">ok</span>
-										) : loggedInUserBook[0].rating - otherUserBook[0].rating ===
-										  3 ? (
+										) : Math.abs(
+												loggedInUserBook[0].rating - otherUserBook[0].rating
+										  ) === 3 ? (
 											<span className="not-good">not good</span>
 										) : (
 											<span className="very-bad">very bad</span>

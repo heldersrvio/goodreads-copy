@@ -1,0 +1,280 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+
+.book-compatibility-test-page-main-content {
+	margin: 0 155px;
+	padding-top: 15px;
+	display: flex;
+	flex-direction: row;
+	padding-bottom: 40px;
+}
+
+.book-compatibility-test-page-main-content a {
+	background-color: transparent;
+	padding: 0;
+	height: auto;
+}
+
+.book-compatibility-test-page-main-content-left-section {
+	width: 625px;
+	padding-left: 8px;
+	padding-right: 10px;
+}
+
+h1.book-compatibility-test-page-header {
+	color: var(--goodreads-brown);
+	font-family: var(--merriweather-font);
+	font-size: 20px;
+	font-weight: bold;
+}
+
+.book-compatibility-test-page-general-compatibility-section {
+	margin-top: 25px;
+	display: flex;
+	flex-direction: row;
+}
+
+.book-compatibility-test-page-general-compatibility-section
+	.user-profile-picture-wrapper,
+.book-compatibility-test-page-general-compatibility-section
+	.user-profile-picture-wrapper
+	img {
+	width: 25px;
+	height: 33px;
+}
+
+.book-compatibility-test-page-general-compatibility-section > span {
+	margin: 10px;
+}
+
+.book-compatibility-test-page-general-compatibility-section span {
+	color: rgb(24, 24, 24);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 18px;
+}
+
+.book-compatibility-test-page-general-compatibility-section span a {
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	font-weight: bold;
+	line-height: 18px;
+	display: inline;
+}
+
+.book-compatibility-test-page-general-compatibility-section span a:hover {
+	text-decoration: underline;
+}
+
+.book-compatibility-test-page-category-compatibility-section {
+	margin-top: 20px;
+	width: 100%;
+	border-bottom: 1px solid rgb(215, 215, 215);
+}
+
+.book-compatibility-test-page-category-compatibility-section .last-row td {
+	padding-bottom: 10px;
+}
+
+.book-compatibility-test-page-category-compatibility-section thead,
+.book-compatibility-test-page-main-content .specific-category-table thead {
+	border-bottom: 1px solid rgb(215, 215, 215);
+}
+
+.book-compatibility-test-page-category-compatibility-section thead th,
+.book-compatibility-test-page-main-content .specific-category-table thead th {
+	text-align: left;
+	color: var(--goodreads-brown);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 18px;
+	padding: 10px;
+}
+
+.book-compatibility-test-page-category-compatibility-section tbody:before {
+	content: '@';
+	display: block;
+	line-height: 10px;
+	text-indent: -99999px;
+}
+
+.book-compatibility-test-page-category-compatibility-section tr td a {
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+	display: inline;
+}
+
+.book-compatibility-test-page-category-compatibility-section tr td.category-td {
+	width: 150px;
+}
+
+.book-compatibility-test-page-category-compatibility-section tr td a:hover {
+	text-decoration: underline;
+}
+
+.book-compatibility-test-page-category-compatibility-section tr td.score-td {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.book-compatibility-test-page-category-compatibility-section
+	tr
+	td.score-td
+	span {
+	color: rgb(24, 24, 24);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.book-compatibility-test-page-category-compatibility-section
+	tr
+	td.score-td
+	> div {
+	background-color: rgb(33, 86, 37);
+	height: 8px;
+	margin-left: 15px;
+}
+
+.book-compatibility-test-page-category-compatibility-section
+	tr
+	td.score-td
+	.green-bar-0 {
+	width: 0;
+}
+
+.book-compatibility-test-page-category-compatibility-section
+	tr
+	td.score-td
+	.green-bar-20 {
+	width: 90px;
+}
+
+.book-compatibility-test-page-category-compatibility-section
+	tr
+	td.score-td
+	.green-bar-40 {
+	width: 180px;
+}
+
+.book-compatibility-test-page-category-compatibility-section
+	tr
+	td.score-td
+	.green-bar-60 {
+	width: 270px;
+}
+
+.book-compatibility-test-page-category-compatibility-section
+	tr
+	td.score-td
+	.green-bar-80 {
+	width: 360px;
+}
+
+.book-compatibility-test-page-category-compatibility-section
+	tr
+	td.score-td
+	.green-bar-100 {
+	width: 450px;
+}
+
+.book-compatibility-test-page-main-content .specific-category-table {
+	margin-top: 25px;
+	width: 100%;
+}
+
+.book-compatibility-test-page-main-content .specific-category-table td span {
+	color: rgb(0, 0, 0);
+	font-size: 13px;
+	font-family: var(--lato-font);
+	line-height: 18px;
+}
+
+.book-compatibility-test-page-main-content .specific-category-table td span a {
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+	display: inline;
+	color: var(--goodreads-teal);
+}
+
+.book-compatibility-test-page-main-content .specific-category-table tbody tr {
+	border-bottom: 1px solid rgb(215, 215, 215);
+}
+
+.book-compatibility-test-page-main-content
+	.specific-category-table
+	tbody
+	tr
+	td {
+	padding: 2px 0;
+}
+
+.book-compatibility-test-page-main-content
+	.specific-category-table
+	td
+	span
+	a:hover {
+	text-decoration: underline;
+}
+
+.book-compatibility-test-page-main-content
+	.specific-category-table
+	td
+	.rating-stars {
+	display: flex;
+	flex-direction: row;
+}
+
+.book-compatibility-test-page-main-content
+	.specific-category-table
+	td
+	.status-span,
+.book-compatibility-test-page-main-content
+	.specific-category-table
+	td
+	.nothing-span {
+	color: rgb(24, 24, 24);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.book-compatibility-test-page-main-content .specific-category-table td span.ok {
+	color: rgb(255, 141, 65);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.book-compatibility-test-page-main-content
+	.specific-category-table
+	td
+	span.good,
+.book-compatibility-test-page-main-content
+	.specific-category-table
+	td
+	span.excellent {
+	color: rgb(0, 128, 0);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.book-compatibility-test-page-main-content
+	.specific-category-table
+	td
+	span.not-good,
+.book-compatibility-test-page-main-content
+	.specific-category-table
+	td
+	span.very-bad {
+	color: rgb(255, 0, 0);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+}
