@@ -2,14 +2,23 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
+import InteractiveStarRating from './InteractiveStarRating';
 import Firebase from '../../Firebase';
+import WantToReadButton from './WantToReadButton';
 
 const EditCompatibilityTestAnswersPage = () => {
 	const history = useHistory();
 	const [loaded, setLoaded] = useState(false);
 	const [booksInfo, setBooksInfo] = useState({});
+	const [ratedBooks, setRatedBooks] = useState([]);
+	const [wantToReadBooks, setWantToReadBooks] = useState([]);
 	const query = new URLSearchParams(useLocation().search);
 	const userId = query.get('id');
+
+	const user = JSON.parse(localStorage.getItem('userState'));
+
+	const noCoverUrl =
+		'https://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png';
 
 	/*
     booksInfo: {
@@ -143,6 +152,66 @@ const EditCompatibilityTestAnswersPage = () => {
 		[]
 	);
 
+	useEffect(() => {
+		const getBooksInfo = async () => {
+			setBooksInfo(
+				await Firebase.getBooksInfoForBookCompatibilityTestPage(
+					popularBooksIds,
+					classicsBooksIds,
+					popularFictionBooksIds,
+					thrillersBooksIds,
+					nonFictionBooksIds,
+					fantasyBooksIds,
+					romanceBooksIds,
+					scienceFictionBooksIds,
+					womensFictionBooksIds
+				)
+			);
+			setLoaded(true);
+		};
+		if (user.userUID === null || user.userUID === undefined) {
+			history.push({
+				pathname: '/user/sign_in',
+			});
+		} else {
+			getBooksInfo();
+		}
+	}, [
+		popularBooksIds,
+		classicsBooksIds,
+		popularFictionBooksIds,
+		thrillersBooksIds,
+		nonFictionBooksIds,
+		fantasyBooksIds,
+		romanceBooksIds,
+		scienceFictionBooksIds,
+		womensFictionBooksIds,
+		user.userUID,
+		history,
+	]);
+
+	const moveBookToWantToReadShelf = async (id) => {
+		await Firebase.addBookToShelf(user.userUID, id, 'to-read', history);
+		setWantToReadBooks((previous) => previous.concat(id));
+	};
+
+	const removeBookFromWantToReadShelf = async (id) => {
+		await Firebase.removeBookFromShelf(user.userUID, id);
+		setWantToReadBooks((previous) =>
+			previous.filter((bookId) => bookId !== id)
+		);
+	};
+
+	const rateBook = async (id, rating) => {
+		await Firebase.rateBook(user.userUID, id, rating, history);
+		setRatedBooks((previous) =>
+			previous.concat({
+				id,
+				rating,
+			})
+		);
+	};
+
 	const topSection = (
 		<div className="edit-compatibility-test-answers-page-main-content-top-section">
 			<h1>Book Compatibility Test</h1>
@@ -163,11 +232,66 @@ const EditCompatibilityTestAnswersPage = () => {
 		<div className="edit-compatibility-test-answers-page-main-content-categories-section">
 			<div className="categories">
 				{Object.keys(booksInfo).map((key, index) => {
-					<div className="category-books-list" key={index}>
-						<span className="section-title"></span>
-					</div>;
+					const generateBookRow = (startingIndex) => {
+						return (
+							<div className="book-row">
+								{booksInfo[key]
+									.filter(
+										(_book, i) => i >= startingIndex && i < startingIndex + 5
+									)
+									.map((book, i) => {
+										const ratedBook = ratedBooks.filter(
+											(ratedBook) => ratedBook.id === book.id
+										);
+										return (
+											<div className="book-card" key={i}>
+												<img
+													src={
+														book.cover !== undefined ? book.cover : noCoverUrl
+													}
+													alt={book.title}
+												/>
+												<WantToReadButton
+													wantToRead={wantToReadBooks.includes(book.id)}
+													addToShelf={() => moveBookToWantToReadShelf(book.id)}
+													removeFromShelf={() =>
+														removeBookFromWantToReadShelf(book.id)
+													}
+												/>
+												<InteractiveStarRating
+													rating={
+														ratedBook.length > 0 ? ratedBook[0].rating : 0
+													}
+													saveRating={(rating) => rateBook(book.id, rating)}
+												/>
+											</div>
+										);
+									})}
+							</div>
+						);
+					};
+
+					return (
+						<div className="category-books-list" key={index}>
+							<span className="section-title">{categoryTitles[index]}</span>
+							<div className="book-row">{generateBookRow(0)}</div>
+							{booksInfo[key].length > 5 ? (
+								<div className="divider"></div>
+							) : null}
+							{booksInfo[key].length > 5 ? generateBookRow(5) : null}
+						</div>
+					);
 				})}
 			</div>
+			<a
+				href={
+					userId !== null
+						? Firebase.pageGenerator.generateBookCompatibilityTestPage(userId)
+						: Firebase.pageGenerator.generateInviteFriendsPage()
+				}
+			>
+				Compare Results
+			</a>
 		</div>
 	) : null;
 
@@ -176,6 +300,7 @@ const EditCompatibilityTestAnswersPage = () => {
 			<TopBar />
 			<div className="edit-compatibility-test-answers-page-main-section">
 				{topSection}
+				{categoriesSection}
 			</div>
 			<HomePageFootBar />
 		</div>

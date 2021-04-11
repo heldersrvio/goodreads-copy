@@ -4207,6 +4207,7 @@ const Firebase = (() => {
 					return {
 						id: bookQuery.docs[0].id,
 						title: bookQuery.docs[0].data().title,
+						cover: bookQuery.docs[0].data().cover,
 						authorId: rootBookQuery.data().authorId,
 						authorName: authorQuery.data().name,
 					};
