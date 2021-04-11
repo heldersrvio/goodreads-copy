@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+
+.edit-compatibility-test-answers-page-main-section {
+	margin: 0 155px;
+	padding-top: 20px;
+	padding-bottom: 30px;
+}
+
+.edit-compatibility-test-answers-page-main-content-top-section h1 {
+	color: var(--goodreads-brown);
+	font-family: var(--merriweather-font);
+	font-size: 20px;
+	font-weight: bold;
+	line-height: 24px;
+}
+
+.edit-compatibility-test-answers-page-main-content-top-section span {
+	display: block;
+	margin-top: 15px;
+	color: rgb(24, 24, 24);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 18px;
+}
+
+.edit-compatibility-test-answers-page-main-content-top-section,
+.edit-compatibility-test-answers-page-main-content-categories-section {
+	position: relative;
+	width: 625px;
+	padding-bottom: 35px;
+}
+
+.edit-compatibility-test-answers-page-main-content-top-section > a,
+.edit-compatibility-test-answers-page-main-content-categories-section > a {
+	width: 105px;
+	height: 14px;
+	padding: 8px 12px;
+	background-color: rgb(244, 241, 234);
+	border: 1px solid rgb(214, 208, 196);
+	border-radius: 3px;
+	color: rgb(51, 51, 51);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 14px;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+}
+
+.edit-compatibility-test-answers-page-main-content-top-section > a:hover,
+.edit-compatibility-test-answers-page-main-content-categories-section
+	> a:hover {
+	background-color: rgb(237, 230, 214);
+}
+
+.edit-compatibility-test-answers-page-main-content-categories-section
+	.categories
+	.category-books-list {
+	margin-bottom: 50px;
+}
+
+.edit-compatibility-test-answers-page-main-content-categories-section
+	.categories
+	.section-title {
+	display: block;
+	width: 100%;
+	color: var(--goodreads-brown);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	font-weight: bold;
+	line-height: 24px;
+	padding: 2px 0;
+	border-bottom: 1px solid rgb(216, 216, 216);
+	margin-bottom: 10px;
+}
+
+.edit-compatibility-test-answers-page-main-content-categories-section
+	.categories
+	.book-row {
+	display: flex;
+	flex-direction: row;
+	padding: 10px 0;
+}
+
+.edit-compatibility-test-answers-page-main-content-categories-section
+	.categories
+	.book-row
+	.book-card
+	> img {
+	width: 115px;
+	height: 180px;
+	padding: 0 5px;
+}
+
+.edit-compatibility-test-answers-page-main-content-categories-section
+	.categories
+	.book-row
+	.book-card {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.edit-compatibility-test-answers-page-main-content-categories-section
+	.categories
+	.divider {
+	width: 100%;
+	height: 1px;
+	background-color: rgb(215, 215, 215);
+}
+
+.edit-compatibility-test-answers-page-main-content-categories-section
+	.user-book-page-rate-book-star-rating {
+	margin: 0;
+}
+
+.edit-compatibility-test-answers-page-main-content-categories-section
+	.user-want-to-read-button {
+	margin-top: 15px;
+	margin-bottom: 3px;
+}

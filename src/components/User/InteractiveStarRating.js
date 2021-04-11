@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import '../styles/User/InteractiveStarRating.css';
 
 const InteractiveStarRating = (props) => {
 	const [exhibitedStarRating, setExhibitedStarRating] = useState(props.rating);
@@ -12,7 +13,7 @@ const InteractiveStarRating = (props) => {
 	};
 
 	return !saving ? (
-		<div className="book-page-rate-book-star-rating">
+		<div className="user-book-page-rate-book-star-rating">
 			<div
 				className={
 					exhibitedStarRating > 0

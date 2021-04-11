@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import '../styles/User/WantToReadButton.css';
 
 const WantToReadButton = (props) => {
 	const [saving, setSaving] = useState(false);
@@ -20,8 +21,8 @@ const WantToReadButton = (props) => {
 		<button
 			className={
 				props.wantToRead
-					? 'want-to-read-button remove'
-					: 'want-to-read-button add'
+					? 'user-want-to-read-button remove'
+					: 'user-want-to-read-button add'
 			}
 			onClick={(_e) => {
 				if (props.wantToRead) {
@@ -39,7 +40,7 @@ const WantToReadButton = (props) => {
 						alt="Green check"
 					/>
 				) : null}
-				{saving ? '...saving' : 'Want to Read'}
+				<span>{saving ? '...saving' : 'Want to Read'}</span>
 			</span>
 		</button>
 	);

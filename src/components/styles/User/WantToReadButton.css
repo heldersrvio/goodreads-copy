@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+
+.user-want-to-read-button {
+	font-family: var(--lato-font);
+	font-size: 11px;
+	line-height: 17px;
+	padding: 4px 8px;
+	height: 25px;
+	border-radius: 3px;
+}
+
+.user-want-to-read-button > span {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.user-want-to-read-button span img {
+	width: 14px;
+	height: 11px;
+	margin-right: 3px;
+}
+
+.user-want-to-read-button.add {
+	color: rgb(255, 255, 255);
+	background-color: rgb(64, 157, 105);
+}
+
+.user-want-to-read-button.add:hover {
+	background-color: rgb(61, 147, 99);
+}
+
+.user-want-to-read-button.add img.check-img {
+	display: none;
+}
+
+.user-want-to-read-button.remove {
+	color: rgb(24, 24, 24);
+	background-color: rgb(242, 242, 242);
+}

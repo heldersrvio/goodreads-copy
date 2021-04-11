@@ -5,6 +5,7 @@ import HomePageFootBar from '../Authentication/HomePageFootBar';
 import InteractiveStarRating from './InteractiveStarRating';
 import Firebase from '../../Firebase';
 import WantToReadButton from './WantToReadButton';
+import '../styles/User/EditCompatibilityTestAnswersPage.css';
 
 const EditCompatibilityTestAnswersPage = () => {
 	const history = useHistory();
@@ -19,56 +20,6 @@ const EditCompatibilityTestAnswersPage = () => {
 
 	const noCoverUrl =
 		'https://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png';
-
-	/*
-    booksInfo: {
-        popularBooks: [{
-            id,
-            title,
-            cover,
-        }],
-        classicsBooks: [{
-            id,
-            title,
-            cover,
-        }],
-        popularFictionBooks: [{
-            id,
-            title,
-            cover,
-        }],
-        thrillersBooks: [{
-            id,
-            title,
-            cover,
-        }],
-        nonFictionBooks: [{
-            id,
-            title,
-            cover,
-        }],
-        fantasyBooks: [{
-            id,
-            title,
-            cover,
-        }],
-        romanceBooks: [{
-            id,
-            title,
-            cover,
-        }],
-        scienceFictionBooks: [{
-            id,
-            title,
-            cover,
-        }],
-        womensFictionBooks: [{
-            id,
-            title,
-            cover,
-        }],
-    }
-    */
 
 	const categoryTitles = [
 		'POPULAR BOOKS',
@@ -88,6 +39,8 @@ const EditCompatibilityTestAnswersPage = () => {
 			'Fctu87S2XLy2RA5Wcr6H',
 			'0Ahlt0lmj06b0rKaD7qJ',
 			'24P8kxLmS4LmtcDSPkvl',
+			'4uhaVEO0ZZvDCvT8FgEM',
+			'AsA2JWdwSzRg6vTJ7adi',
 		],
 		[]
 	);
@@ -274,7 +227,7 @@ const EditCompatibilityTestAnswersPage = () => {
 					return (
 						<div className="category-books-list" key={index}>
 							<span className="section-title">{categoryTitles[index]}</span>
-							<div className="book-row">{generateBookRow(0)}</div>
+							{generateBookRow(0)}
 							{booksInfo[key].length > 5 ? (
 								<div className="divider"></div>
 							) : null}
