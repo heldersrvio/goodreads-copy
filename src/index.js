@@ -133,7 +133,7 @@ ReactDOM.render(
 						path="/friend/add_as_friend/:newFriendId"
 						component={UserAddAsFriendPage}
 					/>
-					<Route path="/review/list/:userId" component={UserBookshelfPage} />
+					<Route path="/review/list/:pageId" component={UserBookshelfPage} />
 					<Route path="/" component={App} />
 				</Switch>
 			</BrowserRouter>

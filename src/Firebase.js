@@ -107,14 +107,37 @@ const Firebase = (() => {
 			return '/review/list/' + userId + '?sort=review&view=reviews';
 		};
 
-		const generateUserShelfPage = (userId, firstName, shelf) => {
+		const generateUserShelfPage = (userId, firstName, shelves, view) => {
+			const viewValue = view === undefined ? 'table' : view;
+			const shelvesValue = shelves.length === 0 ? ['all'] : shelves;
 			return (
 				'/review/list/' +
 				userId +
 				'-' +
 				firstName.toLowerCase() +
 				'?shelf=' +
-				shelf
+				shelvesValue.join(',') +
+				'&view=' +
+				viewValue
+			);
+		};
+
+		const generateUserShelfWithSearchTermPage = (
+			userId,
+			firstName,
+			searchTerm,
+			view
+		) => {
+			const viewValue = view === undefined ? 'table' : view;
+			return (
+				'/review/list/' +
+				userId +
+				'-' +
+				firstName.toLowerCase() +
+				'?search_query=' +
+				searchTerm +
+				'&view=' +
+				viewValue
 			);
 		};
 
@@ -327,6 +350,7 @@ const Firebase = (() => {
 			generateUserRatingsPage,
 			generateUserReviewsPage,
 			generateUserShelfPage,
+			generateUserShelfWithSearchTermPage,
 			generateReviewPage,
 			generateReviewLikesPage,
 			generateBookGenreShelfPage,
