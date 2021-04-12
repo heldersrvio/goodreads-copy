@@ -39,6 +39,7 @@ import UserCompareBooksPage from './components/User/UserCompareBooksPage';
 import BookCompatibilityTestPage from './components/User/BookCompatibilityTestPage';
 import EditCompatibilityTestAnswersPage from './components/User/EditCompatibilityTestAnswersPage';
 import UserAddAsFriendPage from './components/User/UserAddAsFriendPage';
+import UserBookshelfPage from './components/User/UserBookshelfPage';
 
 const store = createStore(reducer.userReducer);
 
@@ -132,6 +133,7 @@ ReactDOM.render(
 						path="/friend/add_as_friend/:newFriendId"
 						component={UserAddAsFriendPage}
 					/>
+					<Route path="/review/list/:userId" component={UserBookshelfPage} />
 					<Route path="/" component={App} />
 				</Switch>
 			</BrowserRouter>
