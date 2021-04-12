@@ -129,7 +129,7 @@ ReactDOM.render(
 						component={EditCompatibilityTestAnswersPage}
 					/>
 					<Route
-						path="/add_as_friend/:newFriendId"
+						path="/friend/add_as_friend/:newFriendId"
 						component={UserAddAsFriendPage}
 					/>
 					<Route path="/" component={App} />

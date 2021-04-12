@@ -4389,6 +4389,61 @@ const Firebase = (() => {
 		}
 	};
 
+	const sendFriendRequest = async (senderId, receiverId, message) => {
+		const receiverQuery = await database
+			.collection('users')
+			.doc(receiverId)
+			.get();
+		await database
+			.collection('users')
+			.doc(receiverId)
+			.set(
+				{
+					newFriendsRequests: receiverQuery.data().newFriendsRequests.concat({
+						id: senderId,
+						message,
+					}),
+				},
+				{ merge: true }
+			);
+	};
+
+	const getUserInfoForAddAsFriendPage = async (
+		userUID,
+		newFriendId,
+		history
+	) => {
+		const newFriendQuery = await database
+			.collection('users')
+			.doc(newFriendId)
+			.get();
+		if (
+			newFriendQuery
+				.data()
+				.newFriendsRequests.some((request) => request.id === userUID)
+		) {
+			history.push({
+				pathname: pageGenerator.generateUserPage(
+					newFriendId,
+					newFriendQuery.data().firstName
+				),
+				state: 'You have already sent a friend request to this person.',
+			});
+		} else {
+			return {
+				firstName: newFriendQuery.data().firstName,
+				pronouns:
+					newFriendQuery.data().pronouns === 'male'
+						? 'his'
+						: newFriendQuery.data().pronouns === 'female'
+						? 'her'
+						: 'their',
+			};
+		}
+
+		return null;
+	};
+
 	return {
 		pageGenerator,
 		getAlsoEnjoyedBooksDetailsForBook,
@@ -4460,6 +4515,8 @@ const Firebase = (() => {
 		getInfoForCompareBooksPage,
 		getBooksInfoForBookCompatibilityTestPage,
 		getUsersInfoForCompatibilityTestPage,
+		sendFriendRequest,
+		getUserInfoForAddAsFriendPage,
 	};
 })();
 

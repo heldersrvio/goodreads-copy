@@ -7,6 +7,8 @@ import Firebase from '../../Firebase';
 import '../styles/User/UserPage.css';
 import RatingsChart from './RatingsChart';
 
+// TODO: Accept request option
+
 const UserPage = ({ match }) => {
 	const {
 		params: { userPageId },

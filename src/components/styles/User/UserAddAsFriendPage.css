@@ -1,0 +1,147 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+
+.user-add-as-friend-page-main-content {
+	margin: 0 155px;
+	padding-top: 15px;
+	min-height: 65vh;
+}
+
+.user-add-as-friend-page-main-content a {
+	padding: 0;
+	height: auto;
+	background-color: transparent;
+}
+
+.user-add-as-friend-page-main-content a:hover {
+	text-decoration: underline;
+}
+
+.user-add-as-friend-page-header {
+	margin-bottom: 20px;
+}
+
+.user-add-as-friend-page-header span,
+.user-add-as-friend-page-header a {
+	display: inline;
+	font-family: var(--merriweather-font);
+	font-size: 20px;
+	font-weight: bold;
+	line-height: 24px;
+}
+
+.user-add-as-friend-page-header a {
+	color: var(--goodreads-teal);
+}
+
+.user-add-as-friend-page-header span {
+	color: var(--goodreads-brown);
+}
+
+.user-add-as-friend-page-explanation-section span {
+	display: block;
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 18px;
+	margin-bottom: 15px;
+}
+
+.user-add-as-friend-page-explanation-section span.black-span {
+	color: rgb(24, 24, 24);
+}
+
+.user-add-as-friend-page-explanation-section span.grey-span {
+	margin-top: 20px;
+	color: var(--goodreads-light-gray);
+}
+
+.user-add-as-friend-page-explanation-section .add-message-button {
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 18px;
+	padding: 0;
+	background-color: transparent;
+}
+
+.user-add-as-friend-page-explanation-section .add-message-button:hover {
+	text-decoration: underline;
+}
+
+.user-add-as-friend-page-explanation-section textarea {
+	margin-top: 3px;
+	width: 256px;
+	height: 65px;
+	padding: 2px;
+	border-radius: 3px;
+	border: 1px solid rgb(220, 214, 204);
+	color: rgb(51, 51, 51);
+	font-family: var(--lato-font);
+	font-size: 11px;
+	line-height: normal;
+}
+
+.user-add-as-friend-page-explanation-section textarea:focus {
+	border-color: rgb(185, 173, 153);
+	box-shadow: rgba(185, 173, 153, 0.5) 0px 0px 4px 0px;
+}
+
+.user-add-as-friend-page-explanation-section textarea.hidden {
+	display: none;
+}
+
+.user-add-as-friend-page-bottom-section {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.user-add-as-friend-page-bottom-section .add-friend-button {
+	height: 32px;
+	padding: 8px 12px;
+	background-color: rgb(244, 241, 234);
+	border: 1px solid rgb(214, 208, 196);
+	border-radius: 3px;
+	color: rgb(51, 51, 51);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 14px;
+}
+
+.user-add-as-friend-page-bottom-section .add-friend-button:hover {
+	background-color: rgb(237, 230, 214);
+}
+
+.user-add-as-friend-page-bottom-section .cancel-a {
+	color: var(--goodreads-light-gray);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 18px;
+	margin-left: 15px;
+}
+
+.user-add-as-friend-page-request-sent-area span {
+	display: block;
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 18px;
+}
+
+.user-add-as-friend-page-request-sent-area .ok-a {
+	margin-top: 20px;
+	height: 16px;
+	padding: 8px 12px;
+	background-color: rgb(244, 241, 234);
+	border: 1px solid rgb(214, 208, 196);
+	border-radius: 3px;
+	color: rgb(51, 51, 51);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 14px;
+	width: 20px;
+}
+
+.user-add-as-friend-page-request-sent-area .ok-a:hover {
+	text-decoration: none;
+	background-color: rgb(237, 230, 214);
+}
