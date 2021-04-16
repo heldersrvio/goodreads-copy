@@ -26,7 +26,7 @@ const UserBookshelfPage = ({ match }) => {
 			: 'descending';
 	const sort = query.get('sort') !== null ? query.get('sort') : 'date-added';
 	const perPage = query.get('per_page') !== null ? query.get('per_page') : '20';
-	const page = query.get('page') !== null ? query.get('page') : 1;
+	const page = query.get('page') !== null ? parseInt(query.get('page')) : 1;
 	const view = query.get('view') !== null ? query.get('view') : 'table';
 	const searchQuery =
 		query.get('search_query') !== null ? query.get('search_query') : '';
@@ -72,7 +72,6 @@ const UserBookshelfPage = ({ match }) => {
     */
 	const [searchInputText, setSearchInputText] = useState(searchQuery);
 	const [isSettingsTabOpen, setIsSettingsTabOpen] = useState(false);
-	const [columnSet, setColumnSet] = useState('');
 	const [isAuthorColumnVisible, setIsAuthorColumnVisible] = useState(true);
 	const [isAvgRatingColumnVisible, setIsAvgRatingColumnVisible] = useState(
 		true
@@ -115,6 +114,11 @@ const UserBookshelfPage = ({ match }) => {
 	);
 
 	const user = JSON.parse(localStorage.getItem('userState'));
+
+	useEffect(() => {
+		const getUsersInfo = () => {};
+		getUsersInfo();
+	}, []);
 
 	const rateBook = async (bookId, rating) => {
 		if (user.userUID === undefined || user.userUID === null) {
@@ -298,10 +302,14 @@ const UserBookshelfPage = ({ match }) => {
 					></input>
 					<a
 						className="search-magnifying-glass-a"
-						href={Firebase.pageGenerator.generateUserShelfWithSearchTermPage(
+						href={Firebase.pageGenerator.generateUserShelfPage(
 							userId,
 							userFirstName,
-							searchInputText
+							['all'],
+							searchInputText,
+							view,
+							perPage,
+							1
 						)}
 					>
 						<img
@@ -331,17 +339,23 @@ const UserBookshelfPage = ({ match }) => {
 					className={view === 'table' ? 'view-type-a selected' : 'view-type-a'}
 					href={
 						searchQuery !== ''
-							? Firebase.pageGenerator.generateUserShelfWithSearchTermPage(
+							? Firebase.pageGenerator.generateUserShelfPage(
 									userId,
 									userFirstName,
+									['all'],
 									searchQuery,
-									'table'
+									'table',
+									perPage,
+									1
 							  )
 							: Firebase.pageGenerator.generateUserShelfPage(
 									userId,
 									userFirstName,
 									shelves,
-									'table'
+									'',
+									'table',
+									perPage,
+									1
 							  )
 					}
 				>
@@ -354,17 +368,23 @@ const UserBookshelfPage = ({ match }) => {
 					className={view === 'cover' ? 'view-type-a selected' : 'view-type-a'}
 					href={
 						searchQuery !== ''
-							? Firebase.pageGenerator.generateUserShelfWithSearchTermPage(
+							? Firebase.pageGenerator.generateUserShelfPage(
 									userId,
 									userFirstName,
+									['all'],
 									searchQuery,
-									'cover'
+									'cover',
+									perPage,
+									1
 							  )
 							: Firebase.pageGenerator.generateUserShelfPage(
 									userId,
 									userFirstName,
 									shelves,
-									'cover'
+									'',
+									'cover',
+									perPage,
+									1
 							  )
 					}
 				>
@@ -394,7 +414,11 @@ const UserBookshelfPage = ({ match }) => {
 							href={Firebase.pageGenerator.generateUserShelfPage(
 								userId,
 								userFirstName,
-								['all']
+								['all'],
+								'',
+								view,
+								perPage,
+								1
 							)}
 						>{`All (${
 							userInfo.shelves.filter((shelf) => shelf.name === 'all').books
@@ -411,7 +435,11 @@ const UserBookshelfPage = ({ match }) => {
 							href={Firebase.pageGenerator.generateUserShelfPage(
 								userId,
 								userFirstName,
-								['Read']
+								['Read'],
+								'',
+								view,
+								perPage,
+								1
 							)}
 						>{`Read (${
 							userInfo.shelves.filter((shelf) => shelf.name === 'Read').books
@@ -425,7 +453,11 @@ const UserBookshelfPage = ({ match }) => {
 									userFirstName,
 									!shelves.includes('Read')
 										? shelves.concat('Read')
-										: shelves.filter((shelf) => shelf !== 'Read')
+										: shelves.filter((shelf) => shelf !== 'Read'),
+									'',
+									view,
+									perPage,
+									1
 								)}
 							>
 								{!shelves.includes('Read') ? '+' : '-'}
@@ -442,7 +474,11 @@ const UserBookshelfPage = ({ match }) => {
 							href={Firebase.pageGenerator.generateUserShelfPage(
 								userId,
 								userFirstName,
-								['Want To Read']
+								['Want To Read'],
+								'',
+								view,
+								perPage,
+								1
 							)}
 						>{`Want To Read (${
 							userInfo.shelves.filter((shelf) => shelf.name === 'Want To Read')
@@ -456,7 +492,11 @@ const UserBookshelfPage = ({ match }) => {
 									userFirstName,
 									!shelves.includes('Want To Read')
 										? shelves.concat('Want To Read')
-										: shelves.filter((shelf) => shelf !== 'Want To Read')
+										: shelves.filter((shelf) => shelf !== 'Want To Read'),
+									'',
+									view,
+									perPage,
+									1
 								)}
 							>
 								{!shelves.includes('Want To Read') ? '+' : '-'}
@@ -487,7 +527,11 @@ const UserBookshelfPage = ({ match }) => {
 										href={Firebase.pageGenerator.generateUserShelfPage(
 											userId,
 											userFirstName,
-											[shelf.name]
+											[shelf.name],
+											'',
+											view,
+											perPage,
+											1
 										)}
 									>{`${shelf.name} (${shelf.books.length})`}</a>
 									{isSelectingMultipleShelves ? (
@@ -498,7 +542,11 @@ const UserBookshelfPage = ({ match }) => {
 												userFirstName,
 												!shelves.includes(shelf.name)
 													? shelves.concat(shelf.name)
-													: shelves.filter((shelf) => shelf !== shelf.name)
+													: shelves.filter((shelf) => shelf !== shelf.name),
+												'',
+												view,
+												perPage,
+												1
 											)}
 										>
 											{!shelves.includes(shelf.name) ? '+' : '-'}
@@ -901,6 +949,64 @@ const UserBookshelfPage = ({ match }) => {
 			</button>
 		</div>
 	);
+
+	const pageNavigationSection =
+		booksToBeShown.length > perPage ? (
+			<div className="page-navigation-section">
+				<a
+					href={Firebase.pageGenerator.generateUserShelfPage(
+						userId,
+						userFirstName,
+						shelves,
+						searchQuery,
+						view,
+						perPage,
+						page - 1
+					)}
+					disabled={page === 1}
+				>
+					« previous
+				</a>
+				{Array.from(
+					{
+						length: Math.ceil(booksToBeShown.length / perPage),
+					},
+					(_x, i) => i + 1
+				).map((number) => {
+					return (
+						<a
+							key={number}
+							href={Firebase.pageGenerator.generateUserShelfPage(
+								userId,
+								userFirstName,
+								shelves,
+								searchQuery,
+								view,
+								perPage,
+								number
+							)}
+							disabled={page === number}
+						>
+							{page !== number ? number : <i>{number}</i>}
+						</a>
+					);
+				})}
+				<a
+					href={Firebase.pageGenerator.generateUserShelfPage(
+						userId,
+						userFirstName,
+						shelves,
+						searchQuery,
+						view,
+						perPage,
+						page + 1
+					)}
+					disabled={page === Math.ceil(booksToBeShown.length / perPage)}
+				>
+					next »
+				</a>
+			</div>
+		) : null;
 
 	const booksTable = loaded ? (
 		<table className="user-bookshelf-page-books-table">
@@ -1655,11 +1761,14 @@ const UserBookshelfPage = ({ match }) => {
 					onChange={(e) => {
 						const newPageValue = e.target.value;
 						history.push({
-							pathname: Firebase.pageGenerator.generateUserShelfPageWithPerPageParameter(
+							pathname: Firebase.pageGenerator.generateUserShelfPage(
 								userId,
 								userFirstName,
 								shelves,
-								newPageValue
+								'',
+								view,
+								newPageValue,
+								1
 							),
 						});
 					}}
@@ -1730,6 +1839,7 @@ const UserBookshelfPage = ({ match }) => {
 	const mainInfoContainer = (
 		<div className="user-bookshelf-page-main-info-container">
 			{settingsTab}
+			{pageNavigationSection}
 			{booksTable}
 			{tableParametersSection}
 		</div>

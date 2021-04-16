@@ -107,27 +107,16 @@ const Firebase = (() => {
 			return '/review/list/' + userId + '?sort=review&view=reviews';
 		};
 
-		const generateUserShelfPage = (userId, firstName, shelves, view) => {
-			const viewValue = view === undefined ? 'table' : view;
-			const shelvesValue = shelves.length === 0 ? ['all'] : shelves;
-			return (
-				'/review/list/' +
-				userId +
-				'-' +
-				firstName.toLowerCase() +
-				'?shelf=' +
-				shelvesValue.join(',') +
-				'&view=' +
-				viewValue
-			);
-		};
-
-		const generateUserShelfPageWithPerPageParameter = (
+		const generateUserShelfPage = (
 			userId,
 			firstName,
 			shelves,
-			perPageValue
+			searchTerm,
+			view,
+			perPageValue,
+			page
 		) => {
+			const viewValue = view === undefined ? 'table' : view;
 			const shelvesValue = shelves.length === 0 ? ['all'] : shelves;
 			return (
 				'/review/list/' +
@@ -136,27 +125,14 @@ const Firebase = (() => {
 				firstName.toLowerCase() +
 				'?shelf=' +
 				shelvesValue.join(',') +
-				'&per_page=' +
-				perPageValue
-			);
-		};
-
-		const generateUserShelfWithSearchTermPage = (
-			userId,
-			firstName,
-			searchTerm,
-			view
-		) => {
-			const viewValue = view === undefined ? 'table' : view;
-			return (
-				'/review/list/' +
-				userId +
-				'-' +
-				firstName.toLowerCase() +
-				'?search_query=' +
-				searchTerm +
 				'&view=' +
-				viewValue
+				viewValue +
+				'&search_query=' +
+				searchTerm +
+				'&per_page=' +
+				perPageValue +
+				'&page=' +
+				page
 			);
 		};
 
@@ -369,8 +345,6 @@ const Firebase = (() => {
 			generateUserRatingsPage,
 			generateUserReviewsPage,
 			generateUserShelfPage,
-			generateUserShelfPageWithPerPageParameter,
-			generateUserShelfWithSearchTermPage,
 			generateReviewPage,
 			generateReviewLikesPage,
 			generateBookGenreShelfPage,
