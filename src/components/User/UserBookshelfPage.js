@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
+import { format } from 'date-fns';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
+import InteractiveStarRating from './InteractiveStarRating';
 import Firebase from '../../Firebase';
+
+// TODO: Implement sorting, add to shelves popup and review more/less buttons, table parameters links
 
 const UserBookshelfPage = ({ match }) => {
 	const history = useHistory();
@@ -14,11 +18,23 @@ const UserBookshelfPage = ({ match }) => {
 	const query = new URLSearchParams(useLocation().search);
 	const shelves =
 		query.get('shelf') !== null ? query.get('shelf').split(',') : ['all'];
+	const order =
+		query.get('order') !== null
+			? query.get('order') === 'd'
+				? 'descending'
+				: 'ascending'
+			: 'descending';
+	const sort = query.get('sort') !== null ? query.get('sort') : 'date-added';
+	const perPage =
+		query.get('per_page') !== null
+			? Number.parseInt(query.get('per_page'))
+			: 20;
 	const page = query.get('page') !== null ? query.get('page') : 1;
 	const view = query.get('view') !== null ? query.get('view') : 'table';
 	const searchQuery = query.get('search_query');
 	const [loaded, setLoaded] = useState(false);
 	const [userInfo, setUserInfo] = useState({});
+	const [loggedInUserShelves, setLoggedInUserShelves] = useState([]);
 
 	/*
     userInfo: {
@@ -29,6 +45,8 @@ const UserBookshelfPage = ({ match }) => {
                 id,
                 cover,
                 title,
+				seriesName,
+				seriesInstance,
                 authorId,
                 authorName,
                 averageRating,
@@ -43,13 +61,16 @@ const UserBookshelfPage = ({ match }) => {
                 numberOfRatings,
                 position,
                 rating,
-                readCount,
                 review,
                 loggedInUserRating,
-                loggedInUserHasInShelves,
             }],
         }]
     }
+
+	loggedInUserShelves: [{
+		name,
+		books,
+	}]
     */
 	const [searchInputText, setSearchInputText] = useState('');
 	const [isSettingsTabOpen, setIsSettingsTabOpen] = useState(false);
@@ -82,9 +103,6 @@ const UserBookshelfPage = ({ match }) => {
 	);
 	const [isPositionColumnVisible, setIsPositionColumnVisible] = useState(false);
 	const [isRatingColumnVisible, setIsRatingColumnVisible] = useState(true);
-	const [isReadCountColumnVisible, setIsReadCountColumnVisible] = useState(
-		false
-	);
 	const [isReviewColumnVisible, setIsReviewColumnVisible] = useState(true);
 	const [isShelvesColumnVisible, setIsShelvesColumnVisible] = useState(true);
 	const [isTitleColumnVisible, setIsTitleColumnVisible] = useState(false);
@@ -92,8 +110,20 @@ const UserBookshelfPage = ({ match }) => {
 		false
 	);
 	const [selectedColumnSetButton, setSelectedColumnSetButton] = useState('');
-	const [tableSortColumn, setTableSortColumn] = useState('title');
-	const [tableSortOrder, setTableSortOrder] = useState('ascending');
+	const [tableSortColumn, setTableSortColumn] = useState(sort);
+	const [tableSortOrder, setTableSortOrder] = useState(order);
+
+	const user = JSON.parse(localStorage.getItem('userState'));
+
+	const rateBook = async (bookId, rating) => {
+		if (user.userUID === undefined || user.userUID === null) {
+			history.push({
+				pathname: '/user/sign_in',
+			});
+		} else {
+			await Firebase.rateBook(user.userUID, bookId, rating, history);
+		}
+	};
 
 	const setAllColumns = (
 		author,
@@ -110,7 +140,6 @@ const UserBookshelfPage = ({ match }) => {
 		numRatings,
 		position,
 		rating,
-		readCount,
 		review,
 		shelves,
 		title
@@ -129,7 +158,6 @@ const UserBookshelfPage = ({ match }) => {
 		setIsNumRatingsColumnVisible(numRatings);
 		setIsPositionColumnVisible(position);
 		setIsRatingColumnVisible(rating);
-		setIsReadCountColumnVisible(readCount);
 		setIsReviewColumnVisible(review);
 		setIsShelvesColumnVisible(shelves);
 		setIsTitleColumnVisible(title);
@@ -138,9 +166,28 @@ const UserBookshelfPage = ({ match }) => {
 	const noPictureImageUrl =
 		'https://s.gr-assets.com/assets/nophoto/user/u_100x100-259587f1619f5253426a4fa6fb508831.png';
 
-	const currentUserShelves = shelves.map((shelf) =>
-		userInfo.shelves.filter((bookshelf) => bookshelf.name === shelf)
-	);
+	const noCoverUrl =
+		'https://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png';
+
+	const currentUserShelves = loaded
+		? shelves.map((shelf) =>
+				userInfo.shelves.filter((bookshelf) => bookshelf.name === shelf)
+		  )
+		: [];
+
+	const booksToBeShown = currentUserShelves.reduce((previous, current) => {
+		current.books.forEach((shelfBook) => {
+			if (
+				!previous.map((book) => book.id).includes(shelfBook.id) &&
+				currentUserShelves.every((shelf) =>
+					shelf.books.some((b) => b.id === shelfBook.id)
+				)
+			) {
+				previous.push(shelfBook);
+			}
+		});
+		return previous;
+	}, []);
 
 	const shelvesTopBar = loaded ? (
 		<div className="user-bookshelf-page-shelves-top-bar">
@@ -479,7 +526,6 @@ const UserBookshelfPage = ({ match }) => {
 								true,
 								true,
 								true,
-								true,
 								true
 							);
 						}}
@@ -659,18 +705,6 @@ const UserBookshelfPage = ({ match }) => {
 						></input>
 						<label htmlFor="rating">rating</label>
 					</div>
-					<div className="read-count-column-selection">
-						<input
-							name="read-count"
-							type="chekbox"
-							checked={isReadCountColumnVisible}
-							onChange={(e) => {
-								setSelectedColumnSetButton('');
-								setIsReadCountColumnVisible(e.target.checked);
-							}}
-						></input>
-						<label htmlFor="read-count">read-count</label>
-					</div>
 					<div className="review-column-selection">
 						<input
 							name="review"
@@ -737,7 +771,6 @@ const UserBookshelfPage = ({ match }) => {
 							true,
 							true,
 							false,
-							false,
 							true,
 							true
 						);
@@ -767,7 +800,6 @@ const UserBookshelfPage = ({ match }) => {
 							false,
 							false,
 							true,
-							false,
 							false,
 							false,
 							false,
@@ -802,7 +834,6 @@ const UserBookshelfPage = ({ match }) => {
 							true,
 							false,
 							false,
-							false,
 							true
 						);
 					}}
@@ -832,7 +863,6 @@ const UserBookshelfPage = ({ match }) => {
 							false,
 							false,
 							true,
-							false,
 							true,
 							true,
 							true
@@ -853,9 +883,703 @@ const UserBookshelfPage = ({ match }) => {
 
 	const booksTable = loaded ? (
 		<table className="user-bookshelf-page-books-table">
-			<thead>{isPositionColumnVisible ? <th>#</th> : null}</thead>
+			<thead>
+				<tr>
+					{isPositionColumnVisible ? (
+						<th
+							onClick={(_e) => {
+								if (tableSortColumn === 'position') {
+									setTableSortOrder((previous) =>
+										previous === 'ascending' ? 'descending' : 'ascending'
+									);
+								} else {
+									setTableSortOrder('position');
+								}
+							}}
+						>
+							<span>#</span>
+							{tableSortColumn === 'position' ? (
+								<img
+									src={
+										tableSortOrder === 'ascending'
+											? 'https://s.gr-assets.com/assets/up_arrow-eed7cf633822703667086373e41273eb.gif'
+											: 'https://s.gr-assets.com/assets/down_arrow-1e1fa5642066c151f5e0136233fce98a.gif'
+									}
+									alt={
+										tableSortOrder === 'ascending' ? 'Up arrow' : 'Down arrow'
+									}
+								/>
+							) : null}
+						</th>
+					) : null}
+					{isCoverColumnVisible ? (
+						<th
+							onClick={(_e) => {
+								if (tableSortColumn === 'cover') {
+									setTableSortOrder((previous) =>
+										previous === 'ascending' ? 'descending' : 'ascending'
+									);
+								} else {
+									setTableSortOrder('cover');
+								}
+							}}
+						>
+							<span>cover</span>
+							{tableSortColumn === 'cover' ? (
+								<img
+									src={
+										tableSortOrder === 'ascending'
+											? 'https://s.gr-assets.com/assets/up_arrow-eed7cf633822703667086373e41273eb.gif'
+											: 'https://s.gr-assets.com/assets/down_arrow-1e1fa5642066c151f5e0136233fce98a.gif'
+									}
+									alt={
+										tableSortOrder === 'ascending' ? 'Up arrow' : 'Down arrow'
+									}
+								/>
+							) : null}
+						</th>
+					) : null}
+					{isTitleColumnVisible ? (
+						<th
+							onClick={(_e) => {
+								if (tableSortColumn === 'title') {
+									setTableSortOrder((previous) =>
+										previous === 'ascending' ? 'descending' : 'ascending'
+									);
+								} else {
+									setTableSortOrder('title');
+								}
+							}}
+						>
+							<span>title</span>
+							{tableSortColumn === 'title' ? (
+								<img
+									src={
+										tableSortOrder === 'ascending'
+											? 'https://s.gr-assets.com/assets/up_arrow-eed7cf633822703667086373e41273eb.gif'
+											: 'https://s.gr-assets.com/assets/down_arrow-1e1fa5642066c151f5e0136233fce98a.gif'
+									}
+									alt={
+										tableSortOrder === 'ascending' ? 'Up arrow' : 'Down arrow'
+									}
+								/>
+							) : null}
+						</th>
+					) : null}
+					{isAuthorColumnVisible ? (
+						<th
+							onClick={(_e) => {
+								if (tableSortColumn === 'author') {
+									setTableSortOrder((previous) =>
+										previous === 'ascending' ? 'descending' : 'ascending'
+									);
+								} else {
+									setTableSortOrder('author');
+								}
+							}}
+						>
+							<span>author</span>
+							{tableSortColumn === 'author' ? (
+								<img
+									src={
+										tableSortOrder === 'ascending'
+											? 'https://s.gr-assets.com/assets/up_arrow-eed7cf633822703667086373e41273eb.gif'
+											: 'https://s.gr-assets.com/assets/down_arrow-1e1fa5642066c151f5e0136233fce98a.gif'
+									}
+									alt={
+										tableSortOrder === 'ascending' ? 'Up arrow' : 'Down arrow'
+									}
+								/>
+							) : null}
+						</th>
+					) : null}
+					{isIsbnColumnVisible ? (
+						<th
+							onClick={(_e) => {
+								if (tableSortColumn === 'isbn') {
+									setTableSortOrder((previous) =>
+										previous === 'ascending' ? 'descending' : 'ascending'
+									);
+								} else {
+									setTableSortOrder('isbn');
+								}
+							}}
+						>
+							<span>isbn</span>
+							{tableSortColumn === 'isbn' ? (
+								<img
+									src={
+										tableSortOrder === 'ascending'
+											? 'https://s.gr-assets.com/assets/up_arrow-eed7cf633822703667086373e41273eb.gif'
+											: 'https://s.gr-assets.com/assets/down_arrow-1e1fa5642066c151f5e0136233fce98a.gif'
+									}
+									alt={
+										tableSortOrder === 'ascending' ? 'Up arrow' : 'Down arrow'
+									}
+								/>
+							) : null}
+						</th>
+					) : null}
+					{isNumPagesColumnVisible ? (
+						<th
+							onClick={(_e) => {
+								if (tableSortColumn === 'num-pages') {
+									setTableSortOrder((previous) =>
+										previous === 'ascending' ? 'descending' : 'ascending'
+									);
+								} else {
+									setTableSortOrder('num-pages');
+								}
+							}}
+						>
+							<span>num pages</span>
+							{tableSortColumn === 'num-pages' ? (
+								<img
+									src={
+										tableSortOrder === 'ascending'
+											? 'https://s.gr-assets.com/assets/up_arrow-eed7cf633822703667086373e41273eb.gif'
+											: 'https://s.gr-assets.com/assets/down_arrow-1e1fa5642066c151f5e0136233fce98a.gif'
+									}
+									alt={
+										tableSortOrder === 'ascending' ? 'Up arrow' : 'Down arrow'
+									}
+								/>
+							) : null}
+						</th>
+					) : null}
+					{isAvgRatingColumnVisible ? (
+						<th
+							onClick={(_e) => {
+								if (tableSortColumn === 'avg-rating') {
+									setTableSortOrder((previous) =>
+										previous === 'ascending' ? 'descending' : 'ascending'
+									);
+								} else {
+									setTableSortOrder('avg-rating');
+								}
+							}}
+						>
+							<span>avg rating</span>
+							{tableSortColumn === 'avg-rating' ? (
+								<img
+									src={
+										tableSortOrder === 'ascending'
+											? 'https://s.gr-assets.com/assets/up_arrow-eed7cf633822703667086373e41273eb.gif'
+											: 'https://s.gr-assets.com/assets/down_arrow-1e1fa5642066c151f5e0136233fce98a.gif'
+									}
+									alt={
+										tableSortOrder === 'ascending' ? 'Up arrow' : 'Down arrow'
+									}
+								/>
+							) : null}
+						</th>
+					) : null}
+					{isNumRatingsColumnVisible ? (
+						<th
+							onClick={(_e) => {
+								if (tableSortColumn === 'num-ratings') {
+									setTableSortOrder((previous) =>
+										previous === 'ascending' ? 'descending' : 'ascending'
+									);
+								} else {
+									setTableSortOrder('num-ratings');
+								}
+							}}
+						>
+							<span>num ratings</span>
+							{tableSortColumn === 'num-ratings' ? (
+								<img
+									src={
+										tableSortOrder === 'ascending'
+											? 'https://s.gr-assets.com/assets/up_arrow-eed7cf633822703667086373e41273eb.gif'
+											: 'https://s.gr-assets.com/assets/down_arrow-1e1fa5642066c151f5e0136233fce98a.gif'
+									}
+									alt={
+										tableSortOrder === 'ascending' ? 'Up arrow' : 'Down arrow'
+									}
+								/>
+							) : null}
+						</th>
+					) : null}
+					{isDatePublicationColumnVisible ? (
+						<th
+							onClick={(_e) => {
+								if (tableSortColumn === 'date-pub') {
+									setTableSortOrder((previous) =>
+										previous === 'ascending' ? 'descending' : 'ascending'
+									);
+								} else {
+									setTableSortOrder('date-pub');
+								}
+							}}
+						>
+							<span>date pub</span>
+							{tableSortColumn === 'date-pub' ? (
+								<img
+									src={
+										tableSortOrder === 'ascending'
+											? 'https://s.gr-assets.com/assets/up_arrow-eed7cf633822703667086373e41273eb.gif'
+											: 'https://s.gr-assets.com/assets/down_arrow-1e1fa5642066c151f5e0136233fce98a.gif'
+									}
+									alt={
+										tableSortOrder === 'ascending' ? 'Up arrow' : 'Down arrow'
+									}
+								/>
+							) : null}
+						</th>
+					) : null}
+					{isDatePublicationEditionColumnVisible ? (
+						<th
+							onClick={(_e) => {
+								if (tableSortColumn === 'date-pub-ed') {
+									setTableSortOrder((previous) =>
+										previous === 'ascending' ? 'descending' : 'ascending'
+									);
+								} else {
+									setTableSortOrder('date-pub-ed');
+								}
+							}}
+						>
+							<span>date pub (ed.)</span>
+							{tableSortColumn === 'date-pub-ed' ? (
+								<img
+									src={
+										tableSortOrder === 'ascending'
+											? 'https://s.gr-assets.com/assets/up_arrow-eed7cf633822703667086373e41273eb.gif'
+											: 'https://s.gr-assets.com/assets/down_arrow-1e1fa5642066c151f5e0136233fce98a.gif'
+									}
+									alt={
+										tableSortOrder === 'ascending' ? 'Up arrow' : 'Down arrow'
+									}
+								/>
+							) : null}
+						</th>
+					) : null}
+					{isRatingColumnVisible ? (
+						<th
+							onClick={(_e) => {
+								if (tableSortColumn === 'rating') {
+									setTableSortOrder((previous) =>
+										previous === 'ascending' ? 'descending' : 'ascending'
+									);
+								} else {
+									setTableSortOrder('rating');
+								}
+							}}
+						>
+							<span>rating</span>
+							{tableSortColumn === 'rating' ? (
+								<img
+									src={
+										tableSortOrder === 'ascending'
+											? 'https://s.gr-assets.com/assets/up_arrow-eed7cf633822703667086373e41273eb.gif'
+											: 'https://s.gr-assets.com/assets/down_arrow-1e1fa5642066c151f5e0136233fce98a.gif'
+									}
+									alt={
+										tableSortOrder === 'ascending' ? 'Up arrow' : 'Down arrow'
+									}
+								/>
+							) : null}
+						</th>
+					) : null}
+					{isShelvesColumnVisible ? (
+						<th className="my-rating-th">my rating</th>
+					) : null}
+					{isReviewColumnVisible ? (
+						<th
+							onClick={(_e) => {
+								if (tableSortColumn === 'review') {
+									setTableSortOrder((previous) =>
+										previous === 'ascending' ? 'descending' : 'ascending'
+									);
+								} else {
+									setTableSortOrder('review');
+								}
+							}}
+						>
+							<span>review</span>
+							{tableSortColumn === 'review' ? (
+								<img
+									src={
+										tableSortOrder === 'ascending'
+											? 'https://s.gr-assets.com/assets/up_arrow-eed7cf633822703667086373e41273eb.gif'
+											: 'https://s.gr-assets.com/assets/down_arrow-1e1fa5642066c151f5e0136233fce98a.gif'
+									}
+									alt={
+										tableSortOrder === 'ascending' ? 'Up arrow' : 'Down arrow'
+									}
+								/>
+							) : null}
+						</th>
+					) : null}
+					{isDateStartedColumnVisible ? (
+						<th
+							onClick={(_e) => {
+								if (tableSortColumn === 'date-started') {
+									setTableSortOrder((previous) =>
+										previous === 'ascending' ? 'descending' : 'ascending'
+									);
+								} else {
+									setTableSortOrder('date-started');
+								}
+							}}
+						>
+							<span>date started</span>
+							{tableSortColumn === 'date-started' ? (
+								<img
+									src={
+										tableSortOrder === 'ascending'
+											? 'https://s.gr-assets.com/assets/up_arrow-eed7cf633822703667086373e41273eb.gif'
+											: 'https://s.gr-assets.com/assets/down_arrow-1e1fa5642066c151f5e0136233fce98a.gif'
+									}
+									alt={
+										tableSortOrder === 'ascending' ? 'Up arrow' : 'Down arrow'
+									}
+								/>
+							) : null}
+						</th>
+					) : null}
+					{isDateReadColumnVisible ? (
+						<th
+							onClick={(_e) => {
+								if (tableSortColumn === 'date-read') {
+									setTableSortOrder((previous) =>
+										previous === 'ascending' ? 'descending' : 'ascending'
+									);
+								} else {
+									setTableSortOrder('date-read');
+								}
+							}}
+						>
+							<span>date read</span>
+							{tableSortColumn === 'date-read' ? (
+								<img
+									src={
+										tableSortOrder === 'ascending'
+											? 'https://s.gr-assets.com/assets/up_arrow-eed7cf633822703667086373e41273eb.gif'
+											: 'https://s.gr-assets.com/assets/down_arrow-1e1fa5642066c151f5e0136233fce98a.gif'
+									}
+									alt={
+										tableSortOrder === 'ascending' ? 'Up arrow' : 'Down arrow'
+									}
+								/>
+							) : null}
+						</th>
+					) : null}
+					{isDateAddedColumnVisible ? (
+						<th
+							onClick={(_e) => {
+								if (tableSortColumn === 'date-added') {
+									setTableSortOrder((previous) =>
+										previous === 'ascending' ? 'descending' : 'ascending'
+									);
+								} else {
+									setTableSortOrder('date-added');
+								}
+							}}
+						>
+							<span>date added</span>
+							{tableSortColumn === 'date-added' ? (
+								<img
+									src={
+										tableSortOrder === 'ascending'
+											? 'https://s.gr-assets.com/assets/up_arrow-eed7cf633822703667086373e41273eb.gif'
+											: 'https://s.gr-assets.com/assets/down_arrow-1e1fa5642066c151f5e0136233fce98a.gif'
+									}
+									alt={
+										tableSortOrder === 'ascending' ? 'Up arrow' : 'Down arrow'
+									}
+								/>
+							) : null}
+						</th>
+					) : null}
+					{isFormatColumnVisible ? (
+						<th
+							onClick={(_e) => {
+								if (tableSortColumn === 'format') {
+									setTableSortOrder((previous) =>
+										previous === 'ascending' ? 'descending' : 'ascending'
+									);
+								} else {
+									setTableSortOrder('format');
+								}
+							}}
+						>
+							<span>format</span>
+							{tableSortColumn === 'format' ? (
+								<img
+									src={
+										tableSortOrder === 'ascending'
+											? 'https://s.gr-assets.com/assets/up_arrow-eed7cf633822703667086373e41273eb.gif'
+											: 'https://s.gr-assets.com/assets/down_arrow-1e1fa5642066c151f5e0136233fce98a.gif'
+									}
+									alt={
+										tableSortOrder === 'ascending' ? 'Up arrow' : 'Down arrow'
+									}
+								/>
+							) : null}
+						</th>
+					) : null}
+				</tr>
+			</thead>
+			<tbody>
+				{booksToBeShown.length === 0 ? (
+					<span className="no-matching-items-span">No matching items!</span>
+				) : (
+					booksToBeShown.map((book, index) => {
+						const authorName =
+							book.authorName !== undefined &&
+							book.authorName.split(' ').length > 1
+								? book.authorName.split(' ').slice(1).join(' ') +
+								  ', ' +
+								  book.authorName.split(' ')[0]
+								: book.authorName;
+						return (
+							<tr key={index}>
+								{isPositionColumnVisible ? (
+									<td>
+										<span>
+											{book.position !== undefined ? book.position : ''}
+										</span>
+									</td>
+								) : null}
+								{isCoverColumnVisible ? (
+									<td>
+										<a
+											className="book-cover-wrapper"
+											href={Firebase.pageGenerator.generateBookPage(
+												book.id,
+												book.title
+											)}
+										>
+											<img
+												src={book.cover !== undefined ? book.cover : noCoverUrl}
+												alt={book.title}
+											/>
+										</a>
+									</td>
+								) : null}
+								{isTitleColumnVisible ? (
+									<td>
+										<a
+											className="book-title-a"
+											href={Firebase.pageGenerator.generateBookPage(
+												book.id,
+												book.title
+											)}
+										>
+											<span className="book-title-proper">{book.title}</span>
+											{book.seriesName !== undefined ? (
+												<span className="book-series-span">
+													{`(${book.seriesName}, #${book.seriesInstance})`}
+												</span>
+											) : null}
+										</a>
+									</td>
+								) : null}
+								{isAuthorColumnVisible ? (
+									<td>
+										<a
+											className="author-a"
+											href={Firebase.pageGenerator.generateAuthorPage(
+												book.authorId,
+												book.authorName
+											)}
+										>
+											{authorName !== undefined ? authorName : ''}
+										</a>
+									</td>
+								) : null}
+								{isIsbnColumnVisible ? (
+									<td>
+										<span>{book.isbn !== undefined ? book.isbn : ''}</span>
+									</td>
+								) : null}
+								{isNumPagesColumnVisible ? (
+									<td>
+										{book.numberOfPages !== undefined ? (
+											<span className="num-pages-span">
+												<span className="black">{book.numberOfPages}</span>
+												<span className="gray"> pp</span>
+											</span>
+										) : null}
+									</td>
+								) : null}
+								{isAvgRatingColumnVisible ? (
+									<td>
+										<span>{book.averageRating.toFixed(2)}</span>
+									</td>
+								) : null}
+								{isNumRatingsColumnVisible ? (
+									<td>
+										<span>{book.numberOfRatings}</span>
+									</td>
+								) : null}
+								{isDatePublicationColumnVisible ? (
+									<td>
+										<span>
+											{book.datePublished !== undefined
+												? format(book.datePublished, 'MMM dd, yyyy')
+												: ''}
+										</span>
+									</td>
+								) : null}
+								{isDatePublicationEditionColumnVisible ? (
+									<td>
+										<span>
+											{book.datePublishedEdition !== undefined
+												? format(book.datePublishedEdition, 'MMM dd, yyyy')
+												: ''}
+										</span>
+									</td>
+								) : null}
+								{isRatingColumnVisible ? (
+									<td>
+										<div className="rating-stars">
+											<div
+												className={
+													book.rating >= 1
+														? 'static-star small full'
+														: book.rating >= 0.5
+														? 'static-star small almost-full'
+														: book.rating > 0
+														? 'static-star small almost-empty'
+														: 'static-star small empty'
+												}
+											></div>
+											<div
+												className={
+													book.rating >= 2
+														? 'static-star small full'
+														: book.rating >= 1.5
+														? 'static-star small almost-full'
+														: book.rating > 1
+														? 'static-star small almost-empty'
+														: 'static-star small empty'
+												}
+											></div>
+											<div
+												className={
+													book.rating >= 3
+														? 'static-star small full'
+														: book.rating >= 2.5
+														? 'static-star small almost-full'
+														: book.rating > 2
+														? 'static-star small almost-empty'
+														: 'static-star small empty'
+												}
+											></div>
+											<div
+												className={
+													book.rating >= 4
+														? 'static-star small full'
+														: book.rating >= 3.5
+														? 'static-star small almost-full'
+														: book.rating > 3
+														? 'static-star small almost-empty'
+														: 'static-star small empty'
+												}
+											></div>
+											<div
+												className={
+													book.rating >= 5
+														? 'static-star small full'
+														: book.rating >= 4.5
+														? 'static-star small almost-full'
+														: book.rating > 4
+														? 'static-star small almost-empty'
+														: 'static-star small empty'
+												}
+											></div>
+										</div>
+									</td>
+								) : null}
+								{isShelvesColumnVisible ? (
+									<td>
+										<InteractiveStarRating
+											rating={
+												book.loggedInUserRating !== undefined
+													? book.loggedInUserRating
+													: 0
+											}
+											saveRating={(rating) => rateBook(book.id, rating)}
+										/>
+										<button className="add-to-shelves-button">
+											{loggedInUserShelves.some((shelf) =>
+												shelf.books.includes(book.id)
+											)
+												? 'edit shelves'
+												: 'add to shelves'}
+										</button>
+									</td>
+								) : null}
+								{isReviewColumnVisible ? (
+									<td>
+										<span>{book.review !== undefined ? book.review : ''}</span>
+										{book.review !== undefined && book.review.length > 150 ? (
+											<button className="review-more-less-button">
+												...more
+											</button>
+										) : null}
+									</td>
+								) : null}
+								{isDateStartedColumnVisible ? (
+									<td>
+										<span>
+											{book.dateStarted !== undefined
+												? format(book.dateStarted, 'MMM dd, yyyy')
+												: ''}
+										</span>
+									</td>
+								) : null}
+								{isDateReadColumnVisible ? (
+									<td>
+										<span>
+											{book.dateRead !== undefined
+												? format(book.dateRead, 'MMM dd, yyyy')
+												: ''}
+										</span>
+									</td>
+								) : null}
+								{isDateAddedColumnVisible ? (
+									<td>
+										<span>
+											{book.dateAdded !== undefined
+												? format(book.dateAdded, 'MMM dd, yyyy')
+												: ''}
+										</span>
+									</td>
+								) : null}
+								{isFormatColumnVisible ? (
+									<td>
+										<span>{book.format}</span>
+									</td>
+								) : null}
+							</tr>
+						);
+					})
+				)}
+			</tbody>
 		</table>
 	) : null;
+
+	const tableParametersSection = (
+		<div className="user-bookshelf-page">
+			<div className="per-page-parameter">
+				<label htmlFor="per-page">per page</label>
+				<select name="per-page" value={perPage.toString()}>
+					<option>10</option>
+					<option>20</option>
+					<option>30</option>
+					<option>40</option>
+					<option>50</option>
+					<option>75</option>
+					<option>100</option>
+					<option>infinite scroll</option>
+				</select>
+			</div>
+		</div>
+	);
 
 	return (
 		<div className="user-bookshelf-page">
