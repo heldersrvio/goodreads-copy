@@ -6,7 +6,7 @@ import HomePageFootBar from '../Authentication/HomePageFootBar';
 import InteractiveStarRating from './InteractiveStarRating';
 import Firebase from '../../Firebase';
 
-// TODO: Implement sorting, add to shelves popup and review more/less buttons, table parameters links
+// TODO: Add to shelves popup and review more/less buttons
 
 const UserBookshelfPage = ({ match }) => {
 	const history = useHistory();
@@ -25,13 +25,11 @@ const UserBookshelfPage = ({ match }) => {
 				: 'ascending'
 			: 'descending';
 	const sort = query.get('sort') !== null ? query.get('sort') : 'date-added';
-	const perPage =
-		query.get('per_page') !== null
-			? Number.parseInt(query.get('per_page'))
-			: 20;
+	const perPage = query.get('per_page') !== null ? query.get('per_page') : '20';
 	const page = query.get('page') !== null ? query.get('page') : 1;
 	const view = query.get('view') !== null ? query.get('view') : 'table';
-	const searchQuery = query.get('search_query');
+	const searchQuery =
+		query.get('search_query') !== null ? query.get('search_query') : '';
 	const [loaded, setLoaded] = useState(false);
 	const [userInfo, setUserInfo] = useState({});
 	const [loggedInUserShelves, setLoggedInUserShelves] = useState([]);
@@ -72,7 +70,7 @@ const UserBookshelfPage = ({ match }) => {
 		books,
 	}]
     */
-	const [searchInputText, setSearchInputText] = useState('');
+	const [searchInputText, setSearchInputText] = useState(searchQuery);
 	const [isSettingsTabOpen, setIsSettingsTabOpen] = useState(false);
 	const [columnSet, setColumnSet] = useState('');
 	const [isAuthorColumnVisible, setIsAuthorColumnVisible] = useState(true);
@@ -112,6 +110,9 @@ const UserBookshelfPage = ({ match }) => {
 	const [selectedColumnSetButton, setSelectedColumnSetButton] = useState('');
 	const [tableSortColumn, setTableSortColumn] = useState(sort);
 	const [tableSortOrder, setTableSortOrder] = useState(order);
+	const [visibleAddToShelvesPopup, setVisibleAddToShelvesPopup] = useState(
+		null
+	);
 
 	const user = JSON.parse(localStorage.getItem('userState'));
 
@@ -175,19 +176,39 @@ const UserBookshelfPage = ({ match }) => {
 		  )
 		: [];
 
-	const booksToBeShown = currentUserShelves.reduce((previous, current) => {
-		current.books.forEach((shelfBook) => {
-			if (
-				!previous.map((book) => book.id).includes(shelfBook.id) &&
-				currentUserShelves.every((shelf) =>
-					shelf.books.some((b) => b.id === shelfBook.id)
-				)
-			) {
-				previous.push(shelfBook);
-			}
-		});
-		return previous;
-	}, []);
+	const booksToBeShown =
+		currentUserShelves.length > 0
+			? currentUserShelves.reduce((previous, current) => {
+					current.books.forEach((shelfBook) => {
+						if (
+							!previous.map((book) => book.id).includes(shelfBook.id) &&
+							currentUserShelves.every((shelf) =>
+								shelf.books.some((b) => b.id === shelfBook.id)
+							)
+						) {
+							previous.push(shelfBook);
+						}
+					});
+					return previous;
+			  }, [])
+			: loaded
+			? userInfo.shelves.reduce((previous, current) => {
+					current.books.forEach((shelfBook) => {
+						if (
+							!previous.map((book) => book.id).includes(shelfBook.id) &&
+							(shelfBook.title
+								.toLowerCase()
+								.includes(searchQuery.toLowerCase()) ||
+								shelfBook.authorName
+									.toLowerCase()
+									.includes(searchQuery.toLowerCase()))
+						) {
+							previous.push(shelfBook);
+						}
+					});
+					return previous;
+			  })
+			: [];
 
 	const shelvesTopBar = loaded ? (
 		<div className="user-bookshelf-page-shelves-top-bar">
@@ -309,7 +330,7 @@ const UserBookshelfPage = ({ match }) => {
 				<a
 					className={view === 'table' ? 'view-type-a selected' : 'view-type-a'}
 					href={
-						searchQuery !== null
+						searchQuery !== ''
 							? Firebase.pageGenerator.generateUserShelfWithSearchTermPage(
 									userId,
 									userFirstName,
@@ -332,7 +353,7 @@ const UserBookshelfPage = ({ match }) => {
 				<a
 					className={view === 'cover' ? 'view-type-a selected' : 'view-type-a'}
 					href={
-						searchQuery !== null
+						searchQuery !== ''
 							? Firebase.pageGenerator.generateUserShelfWithSearchTermPage(
 									userId,
 									userFirstName,
@@ -1326,238 +1347,299 @@ const UserBookshelfPage = ({ match }) => {
 				{booksToBeShown.length === 0 ? (
 					<span className="no-matching-items-span">No matching items!</span>
 				) : (
-					booksToBeShown.map((book, index) => {
-						const authorName =
-							book.authorName !== undefined &&
-							book.authorName.split(' ').length > 1
-								? book.authorName.split(' ').slice(1).join(' ') +
-								  ', ' +
-								  book.authorName.split(' ')[0]
-								: book.authorName;
-						return (
-							<tr key={index}>
-								{isPositionColumnVisible ? (
-									<td>
-										<span>
-											{book.position !== undefined ? book.position : ''}
-										</span>
-									</td>
-								) : null}
-								{isCoverColumnVisible ? (
-									<td>
-										<a
-											className="book-cover-wrapper"
-											href={Firebase.pageGenerator.generateBookPage(
-												book.id,
-												book.title
-											)}
-										>
-											<img
-												src={book.cover !== undefined ? book.cover : noCoverUrl}
-												alt={book.title}
-											/>
-										</a>
-									</td>
-								) : null}
-								{isTitleColumnVisible ? (
-									<td>
-										<a
-											className="book-title-a"
-											href={Firebase.pageGenerator.generateBookPage(
-												book.id,
-												book.title
-											)}
-										>
-											<span className="book-title-proper">{book.title}</span>
-											{book.seriesName !== undefined ? (
-												<span className="book-series-span">
-													{`(${book.seriesName}, #${book.seriesInstance})`}
+					booksToBeShown
+						.sort((a, b) => {
+							const compare = (value1, value2) => {
+								return tableSortOrder === 'ascending'
+									? value1 - value2
+									: value2 - value1;
+							};
+
+							switch (tableSortColumn) {
+								case 'author':
+									return compare(a.authorName, b.authorName);
+								case 'avg-rating':
+									return compare(a.averageRating, b.averageRating);
+								case 'cover':
+									return compare(a.cover, b.cover);
+								case 'date-added':
+									return compare(a.dateAdded, b.dateAdded);
+								case 'date-pub':
+									return compare(a.datePublished, b.datePublished);
+								case 'date-pub-ed':
+									return compare(
+										a.datePublishedEdition,
+										b.datePublishedEdition
+									);
+								case 'date-read':
+									return compare(a.dateRead, b.dateRead);
+								case 'date-started':
+									return compare(a.dateStarted, b.dateStarted);
+								case 'format':
+									return compare(a.format, b.format);
+								case 'isbn':
+									return compare(a.isbn, b.isbn);
+								case 'num-pages':
+									return compare(a.numberOfPages, b.numberOfPages);
+								case 'num-ratings':
+									return compare(a.numberOfRatings, b.numberOfRatings);
+								case 'position':
+									return compare(a.position, b.position);
+								case 'rating':
+									return compare(a.rating, b.rating);
+								case 'review':
+									return compare(a.review, b.review);
+								case 'title':
+									return compare(a.title, b.title);
+								default:
+									return Math.random() > 0.5 ? a : b;
+							}
+						})
+						.map((book, index) => {
+							const authorName =
+								book.authorName !== undefined &&
+								book.authorName.split(' ').length > 1
+									? book.authorName.split(' ').slice(1).join(' ') +
+									  ', ' +
+									  book.authorName.split(' ')[0]
+									: book.authorName;
+							return (
+								<tr key={index}>
+									{isPositionColumnVisible ? (
+										<td>
+											<span>
+												{book.position !== undefined ? book.position : ''}
+											</span>
+										</td>
+									) : null}
+									{isCoverColumnVisible ? (
+										<td>
+											<a
+												className="book-cover-wrapper"
+												href={Firebase.pageGenerator.generateBookPage(
+													book.id,
+													book.title
+												)}
+											>
+												<img
+													src={
+														book.cover !== undefined ? book.cover : noCoverUrl
+													}
+													alt={book.title}
+												/>
+											</a>
+										</td>
+									) : null}
+									{isTitleColumnVisible ? (
+										<td>
+											<a
+												className="book-title-a"
+												href={Firebase.pageGenerator.generateBookPage(
+													book.id,
+													book.title
+												)}
+											>
+												<span className="book-title-proper">{book.title}</span>
+												{book.seriesName !== undefined ? (
+													<span className="book-series-span">
+														{`(${book.seriesName}, #${book.seriesInstance})`}
+													</span>
+												) : null}
+											</a>
+										</td>
+									) : null}
+									{isAuthorColumnVisible ? (
+										<td>
+											<a
+												className="author-a"
+												href={Firebase.pageGenerator.generateAuthorPage(
+													book.authorId,
+													book.authorName
+												)}
+											>
+												{authorName !== undefined ? authorName : ''}
+											</a>
+										</td>
+									) : null}
+									{isIsbnColumnVisible ? (
+										<td>
+											<span>{book.isbn !== undefined ? book.isbn : ''}</span>
+										</td>
+									) : null}
+									{isNumPagesColumnVisible ? (
+										<td>
+											{book.numberOfPages !== undefined ? (
+												<span className="num-pages-span">
+													<span className="black">{book.numberOfPages}</span>
+													<span className="gray"> pp</span>
 												</span>
 											) : null}
-										</a>
-									</td>
-								) : null}
-								{isAuthorColumnVisible ? (
-									<td>
-										<a
-											className="author-a"
-											href={Firebase.pageGenerator.generateAuthorPage(
-												book.authorId,
-												book.authorName
-											)}
-										>
-											{authorName !== undefined ? authorName : ''}
-										</a>
-									</td>
-								) : null}
-								{isIsbnColumnVisible ? (
-									<td>
-										<span>{book.isbn !== undefined ? book.isbn : ''}</span>
-									</td>
-								) : null}
-								{isNumPagesColumnVisible ? (
-									<td>
-										{book.numberOfPages !== undefined ? (
-											<span className="num-pages-span">
-												<span className="black">{book.numberOfPages}</span>
-												<span className="gray"> pp</span>
+										</td>
+									) : null}
+									{isAvgRatingColumnVisible ? (
+										<td>
+											<span>{book.averageRating.toFixed(2)}</span>
+										</td>
+									) : null}
+									{isNumRatingsColumnVisible ? (
+										<td>
+											<span>{book.numberOfRatings}</span>
+										</td>
+									) : null}
+									{isDatePublicationColumnVisible ? (
+										<td>
+											<span>
+												{book.datePublished !== undefined
+													? format(book.datePublished, 'MMM dd, yyyy')
+													: ''}
 											</span>
-										) : null}
-									</td>
-								) : null}
-								{isAvgRatingColumnVisible ? (
-									<td>
-										<span>{book.averageRating.toFixed(2)}</span>
-									</td>
-								) : null}
-								{isNumRatingsColumnVisible ? (
-									<td>
-										<span>{book.numberOfRatings}</span>
-									</td>
-								) : null}
-								{isDatePublicationColumnVisible ? (
-									<td>
-										<span>
-											{book.datePublished !== undefined
-												? format(book.datePublished, 'MMM dd, yyyy')
-												: ''}
-										</span>
-									</td>
-								) : null}
-								{isDatePublicationEditionColumnVisible ? (
-									<td>
-										<span>
-											{book.datePublishedEdition !== undefined
-												? format(book.datePublishedEdition, 'MMM dd, yyyy')
-												: ''}
-										</span>
-									</td>
-								) : null}
-								{isRatingColumnVisible ? (
-									<td>
-										<div className="rating-stars">
-											<div
-												className={
-													book.rating >= 1
-														? 'static-star small full'
-														: book.rating >= 0.5
-														? 'static-star small almost-full'
-														: book.rating > 0
-														? 'static-star small almost-empty'
-														: 'static-star small empty'
+										</td>
+									) : null}
+									{isDatePublicationEditionColumnVisible ? (
+										<td>
+											<span>
+												{book.datePublishedEdition !== undefined
+													? format(book.datePublishedEdition, 'MMM dd, yyyy')
+													: ''}
+											</span>
+										</td>
+									) : null}
+									{isRatingColumnVisible ? (
+										<td>
+											<div className="rating-stars">
+												<div
+													className={
+														book.rating >= 1
+															? 'static-star small full'
+															: book.rating >= 0.5
+															? 'static-star small almost-full'
+															: book.rating > 0
+															? 'static-star small almost-empty'
+															: 'static-star small empty'
+													}
+												></div>
+												<div
+													className={
+														book.rating >= 2
+															? 'static-star small full'
+															: book.rating >= 1.5
+															? 'static-star small almost-full'
+															: book.rating > 1
+															? 'static-star small almost-empty'
+															: 'static-star small empty'
+													}
+												></div>
+												<div
+													className={
+														book.rating >= 3
+															? 'static-star small full'
+															: book.rating >= 2.5
+															? 'static-star small almost-full'
+															: book.rating > 2
+															? 'static-star small almost-empty'
+															: 'static-star small empty'
+													}
+												></div>
+												<div
+													className={
+														book.rating >= 4
+															? 'static-star small full'
+															: book.rating >= 3.5
+															? 'static-star small almost-full'
+															: book.rating > 3
+															? 'static-star small almost-empty'
+															: 'static-star small empty'
+													}
+												></div>
+												<div
+													className={
+														book.rating >= 5
+															? 'static-star small full'
+															: book.rating >= 4.5
+															? 'static-star small almost-full'
+															: book.rating > 4
+															? 'static-star small almost-empty'
+															: 'static-star small empty'
+													}
+												></div>
+											</div>
+										</td>
+									) : null}
+									{isShelvesColumnVisible ? (
+										<td>
+											<InteractiveStarRating
+												rating={
+													book.loggedInUserRating !== undefined
+														? book.loggedInUserRating
+														: 0
 												}
-											></div>
-											<div
-												className={
-													book.rating >= 2
-														? 'static-star small full'
-														: book.rating >= 1.5
-														? 'static-star small almost-full'
-														: book.rating > 1
-														? 'static-star small almost-empty'
-														: 'static-star small empty'
-												}
-											></div>
-											<div
-												className={
-													book.rating >= 3
-														? 'static-star small full'
-														: book.rating >= 2.5
-														? 'static-star small almost-full'
-														: book.rating > 2
-														? 'static-star small almost-empty'
-														: 'static-star small empty'
-												}
-											></div>
-											<div
-												className={
-													book.rating >= 4
-														? 'static-star small full'
-														: book.rating >= 3.5
-														? 'static-star small almost-full'
-														: book.rating > 3
-														? 'static-star small almost-empty'
-														: 'static-star small empty'
-												}
-											></div>
-											<div
-												className={
-													book.rating >= 5
-														? 'static-star small full'
-														: book.rating >= 4.5
-														? 'static-star small almost-full'
-														: book.rating > 4
-														? 'static-star small almost-empty'
-														: 'static-star small empty'
-												}
-											></div>
-										</div>
-									</td>
-								) : null}
-								{isShelvesColumnVisible ? (
-									<td>
-										<InteractiveStarRating
-											rating={
-												book.loggedInUserRating !== undefined
-													? book.loggedInUserRating
-													: 0
-											}
-											saveRating={(rating) => rateBook(book.id, rating)}
-										/>
-										<button className="add-to-shelves-button">
-											{loggedInUserShelves.some((shelf) =>
-												shelf.books.includes(book.id)
-											)
-												? 'edit shelves'
-												: 'add to shelves'}
-										</button>
-									</td>
-								) : null}
-								{isReviewColumnVisible ? (
-									<td>
-										<span>{book.review !== undefined ? book.review : ''}</span>
-										{book.review !== undefined && book.review.length > 150 ? (
-											<button className="review-more-less-button">
-												...more
+												saveRating={(rating) => rateBook(book.id, rating)}
+											/>
+											<button
+												className="add-to-shelves-button"
+												onClick={(_e) => {
+													if (visibleAddToShelvesPopup === index) {
+														setVisibleAddToShelvesPopup(null);
+													} else {
+														setVisibleAddToShelvesPopup(index);
+													}
+												}}
+											>
+												{loggedInUserShelves.some((shelf) =>
+													shelf.books.includes(book.id)
+												)
+													? 'edit shelves'
+													: 'add to shelves'}
 											</button>
-										) : null}
-									</td>
-								) : null}
-								{isDateStartedColumnVisible ? (
-									<td>
-										<span>
-											{book.dateStarted !== undefined
-												? format(book.dateStarted, 'MMM dd, yyyy')
-												: ''}
-										</span>
-									</td>
-								) : null}
-								{isDateReadColumnVisible ? (
-									<td>
-										<span>
-											{book.dateRead !== undefined
-												? format(book.dateRead, 'MMM dd, yyyy')
-												: ''}
-										</span>
-									</td>
-								) : null}
-								{isDateAddedColumnVisible ? (
-									<td>
-										<span>
-											{book.dateAdded !== undefined
-												? format(book.dateAdded, 'MMM dd, yyyy')
-												: ''}
-										</span>
-									</td>
-								) : null}
-								{isFormatColumnVisible ? (
-									<td>
-										<span>{book.format}</span>
-									</td>
-								) : null}
-							</tr>
-						);
-					})
+										</td>
+									) : null}
+									{isReviewColumnVisible ? (
+										<td>
+											<span>
+												{book.review !== undefined ? book.review : ''}
+											</span>
+											{book.review !== undefined && book.review.length > 150 ? (
+												<button className="review-more-less-button">
+													...more
+												</button>
+											) : null}
+										</td>
+									) : null}
+									{isDateStartedColumnVisible ? (
+										<td>
+											<span>
+												{book.dateStarted !== undefined
+													? format(book.dateStarted, 'MMM dd, yyyy')
+													: ''}
+											</span>
+										</td>
+									) : null}
+									{isDateReadColumnVisible ? (
+										<td>
+											<span>
+												{book.dateRead !== undefined
+													? format(book.dateRead, 'MMM dd, yyyy')
+													: ''}
+											</span>
+										</td>
+									) : null}
+									{isDateAddedColumnVisible ? (
+										<td>
+											<span>
+												{book.dateAdded !== undefined
+													? format(book.dateAdded, 'MMM dd, yyyy')
+													: ''}
+											</span>
+										</td>
+									) : null}
+									{isFormatColumnVisible ? (
+										<td>
+											<span>{book.format}</span>
+										</td>
+									) : null}
+								</tr>
+							);
+						})
 				)}
 			</tbody>
 		</table>
@@ -1567,16 +1649,100 @@ const UserBookshelfPage = ({ match }) => {
 		<div className="user-bookshelf-page">
 			<div className="per-page-parameter">
 				<label htmlFor="per-page">per page</label>
-				<select name="per-page" value={perPage.toString()}>
-					<option>10</option>
-					<option>20</option>
-					<option>30</option>
-					<option>40</option>
-					<option>50</option>
-					<option>75</option>
-					<option>100</option>
-					<option>infinite scroll</option>
+				<select
+					name="per-page"
+					value={perPage}
+					onChange={(e) => {
+						const newPageValue = e.target.value;
+						history.push({
+							pathname: Firebase.pageGenerator.generateUserShelfPageWithPerPageParameter(
+								userId,
+								userFirstName,
+								shelves,
+								newPageValue
+							),
+						});
+					}}
+				>
+					<option value="10">10</option>
+					<option value="20">20</option>
+					<option value="30">30</option>
+					<option value="40">40</option>
+					<option value="50">50</option>
+					<option value="75">75</option>
+					<option value="100">100</option>
+					<option value="infinite-scroll">infinite scroll</option>
 				</select>
+			</div>
+			<div className="sort-parameter">
+				<label htmlFor="sort">sort</label>
+				<select
+					name="sort"
+					value={sort}
+					onChange={(e) => setTableSortColumn(e.target.value)}
+				>
+					<option value="author">Author</option>
+					<option value="avg-rating">Avg rating</option>
+					<option value="cover">Cover</option>
+					<option value="date-added">Date added</option>
+					<option value="date-pub">Date pub</option>
+					<option value="date-pub-edition">Date pub edition</option>
+					<option value="date-read">Date read</option>
+					<option value="date-started">Date started</option>
+					<option value="format">Format</option>
+					<option value="isbn">Isbn</option>
+					<option value="num-pages">Num pages</option>
+					<option value="num-ratings">Num ratings</option>
+					<option value="position">Position</option>
+					<option value="random">Random</option>
+					<option value="rating">Rating</option>
+					<option value="review">Review</option>
+					<option value="title">Title</option>
+				</select>
+			</div>
+			<div className="sort-order-parameter">
+				<input
+					type="radio"
+					checked={tableSortOrder === 'ascending'}
+					onChange={(e) => {
+						if (e.target.checked) {
+							setTableSortOrder('ascending');
+						}
+					}}
+					name="asc"
+				></input>
+				<label htmlFor="asc">asc.</label>
+				<input
+					type="radio"
+					checked={tableSortOrder === 'descending'}
+					onChange={(e) => {
+						if (e.target.checked) {
+							setTableSortOrder('descending');
+						}
+					}}
+					name="desc"
+				></input>
+				<label htmlFor="desc">desc.</label>
+			</div>
+		</div>
+	);
+
+	const mainInfoContainer = (
+		<div className="user-bookshelf-page-main-info-container">
+			{settingsTab}
+			{booksTable}
+			{tableParametersSection}
+		</div>
+	);
+
+	const mainContent = (
+		<div className="user-bookshelf-page-main-content">
+			<div className="user-bookshelf-page-main-content-top-section">
+				{shelvesTopBar}
+			</div>
+			<div className="user-bookshelf-page-main-content-bottom-section">
+				{bookshelfNavigationSection}
+				{mainInfoContainer}
 			</div>
 		</div>
 	);
@@ -1584,6 +1750,7 @@ const UserBookshelfPage = ({ match }) => {
 	return (
 		<div className="user-bookshelf-page">
 			<TopBar />
+			{mainContent}
 			<HomePageFootBar />
 		</div>
 	);

@@ -122,6 +122,25 @@ const Firebase = (() => {
 			);
 		};
 
+		const generateUserShelfPageWithPerPageParameter = (
+			userId,
+			firstName,
+			shelves,
+			perPageValue
+		) => {
+			const shelvesValue = shelves.length === 0 ? ['all'] : shelves;
+			return (
+				'/review/list/' +
+				userId +
+				'-' +
+				firstName.toLowerCase() +
+				'?shelf=' +
+				shelvesValue.join(',') +
+				'&per_page=' +
+				perPageValue
+			);
+		};
+
 		const generateUserShelfWithSearchTermPage = (
 			userId,
 			firstName,
@@ -350,6 +369,7 @@ const Firebase = (() => {
 			generateUserRatingsPage,
 			generateUserReviewsPage,
 			generateUserShelfPage,
+			generateUserShelfPageWithPerPageParameter,
 			generateUserShelfWithSearchTermPage,
 			generateReviewPage,
 			generateReviewLikesPage,
