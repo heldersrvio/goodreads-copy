@@ -5,6 +5,7 @@ import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 import InteractiveStarRating from './InteractiveStarRating';
 import Firebase from '../../Firebase';
+import '../styles/User/UserBookshelfPage.css';
 
 // TODO: Add to shelves popup and review more/less buttons
 
@@ -14,7 +15,8 @@ const UserBookshelfPage = ({ match }) => {
 		params: { pageId },
 	} = match;
 	const userId = pageId.split('-')[0];
-	const userFirstName = pageId.split('-')[1];
+	const userFirstName =
+		pageId.split('-')[1][0].toUpperCase() + pageId.split('-')[1].slice(1);
 	const query = new URLSearchParams(useLocation().search);
 	const shelves =
 		query.get('shelf') !== null ? query.get('shelf').split(',') : ['all'];
@@ -116,7 +118,350 @@ const UserBookshelfPage = ({ match }) => {
 	const user = JSON.parse(localStorage.getItem('userState'));
 
 	useEffect(() => {
-		const getUsersInfo = () => {};
+		const getUsersInfo = () => {
+			setUserInfo({
+				profilePicture:
+					'https://pbs.twimg.com/profile_images/1018676952629219328/IAnErcp1.jpg',
+				shelves: [
+					{
+						name: 'all',
+						books: [
+							{
+								id: '1',
+								cover:
+									'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1605574715l/55077642._SY75_.jpg',
+								title: "She Wouldn't Change a Thing",
+								authorId: '123',
+								authorName: 'Sarah Adlakha',
+								averageRating: 4.36,
+								dateAdded: new Date(2020, 2, 10),
+								datePublished: new Date(2018, 2, 1),
+								datePublishedEdition: new Date(2018, 2, 1),
+								dateRead: new Date(2020, 3, 10),
+								dateStarted: new Date(2020, 2, 15),
+								format: 'Paperback',
+								isbn: 1250774551,
+								numberOfPages: 304,
+								numberOfRatings: 53,
+								rating: 3,
+								review: 'It was alright',
+							},
+							{
+								id: '2',
+								cover:
+									'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1608476881l/55711715._SX50_.jpg',
+								title: 'The Perfect Family',
+								authorId: '123',
+								authorName: 'Robyn Harding',
+								averageRating: 4.14,
+								dateAdded: new Date(2020, 3, 10),
+								datePublished: new Date(2018, 3, 10),
+								datePublishedEdition: new Date(2018, 3, 19),
+								dateRead: new Date(2020, 3, 10),
+								dateStarted: new Date(2020, 3, 10),
+								format: 'Hardcover',
+								isbn: 1982169397,
+								numberOfPages: 352,
+								numberOfRatings: 126,
+								rating: 4,
+								review: 'It was great',
+							},
+							{
+								id: '3',
+								cover:
+									'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1601039560l/54304220.jpg',
+								title: 'Under the Southern Sky',
+								authorId: '123',
+								authorName: 'Kristy Woodson Harvey',
+								averageRating: 4.5,
+								dateAdded: new Date(2010, 3, 10),
+								datePublished: new Date(2009, 3, 10),
+								datePublishedEdition: new Date(2009, 3, 18),
+								dateRead: new Date(2010, 3, 10),
+								dateStarted: new Date(2010, 3, 10),
+								format: 'Hardcover',
+								isbn: 1982117729,
+								numberOfPages: 400,
+								numberOfRatings: 327,
+								rating: 1,
+								review: 'It was terrible',
+							},
+							{
+								id: '4',
+								cover:
+									'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1510367389l/36573115._SX318_.jpg',
+								title: 'The Anointed',
+								seriesName: 'Red Proxy',
+								seriesInstance: 3,
+								authorId: '123',
+								authorName: 'Keith Ward',
+								averageRating: 3.77,
+								dateAdded: new Date(2018, 7, 20),
+								datePublished: new Date(2017, 10, 10),
+								datePublishedEdition: new Date(2017, 10, 10),
+								dateRead: new Date(2017, 10, 10),
+								dateStarted: new Date(2017, 10, 5),
+								format: 'ebook',
+								numberOfRatings: 35,
+								rating: 2,
+								review: 'I could not take this book seriously at all.',
+							},
+							{
+								id: '5',
+								cover:
+									'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1362762309l/17249467.jpg',
+								title: 'Shaman: A Novel of the Ice Age',
+								authorId: '123',
+								authorName: 'Kim Stanley Robinson',
+								averageRating: 3.93,
+								dateAdded: new Date(2013, 1, 26),
+								datePublished: new Date(2013, 5, 4),
+								datePublishedEdition: new Date(2013, 5, 4),
+								format: 'Hardcover',
+								numberOfRatings: 255031,
+								position: 1,
+							},
+							{
+								id: '6',
+								cover:
+									'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1530054954l/59._SY475_.jpg',
+								title: 'The Challenging Sea',
+								authorId: '123',
+								authorName: 'Patricia A. McKillip',
+								averageRating: 4.07,
+								dateAdded: new Date(2013, 3, 10),
+								datePublished: new Date(1988, 9, 1),
+								datePublishedEdition: new Date(2003, 3, 14),
+								format: 'Paperback',
+								numberOfRatings: 5043,
+								position: 2,
+							},
+						],
+					},
+					{
+						name: 'Read',
+						books: [
+							{
+								id: '1',
+								cover:
+									'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1605574715l/55077642._SY75_.jpg',
+								title: "She Wouldn't Change a Thing",
+								authorId: '123',
+								authorName: 'Sarah Adlakha',
+								averageRating: 4.36,
+								dateAdded: new Date(2020, 2, 10),
+								datePublished: new Date(2018, 2, 1),
+								datePublishedEdition: new Date(2018, 2, 1),
+								dateRead: new Date(2020, 3, 10),
+								dateStarted: new Date(2020, 2, 15),
+								format: 'Paperback',
+								isbn: 1250774551,
+								numberOfPages: 304,
+								numberOfRatings: 53,
+								rating: 3,
+								review: 'It was alright',
+							},
+							{
+								id: '2',
+								cover:
+									'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1608476881l/55711715._SX50_.jpg',
+								title: 'The Perfect Family',
+								authorId: '123',
+								authorName: 'Robyn Harding',
+								averageRating: 4.14,
+								dateAdded: new Date(2020, 3, 10),
+								datePublished: new Date(2018, 3, 10),
+								datePublishedEdition: new Date(2018, 3, 19),
+								dateRead: new Date(2020, 3, 10),
+								dateStarted: new Date(2020, 3, 10),
+								format: 'Hardcover',
+								isbn: 1982169397,
+								numberOfPages: 352,
+								numberOfRatings: 126,
+								rating: 4,
+								review: 'It was great',
+							},
+							{
+								id: '3',
+								cover:
+									'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1601039560l/54304220.jpg',
+								title: 'Under the Southern Sky',
+								authorId: '123',
+								authorName: 'Kristy Woodson Harvey',
+								averageRating: 4.5,
+								dateAdded: new Date(2010, 3, 10),
+								datePublished: new Date(2009, 3, 10),
+								datePublishedEdition: new Date(2009, 3, 18),
+								dateRead: new Date(2010, 3, 10),
+								dateStarted: new Date(2010, 3, 10),
+								format: 'Hardcover',
+								isbn: 1982117729,
+								numberOfPages: 400,
+								numberOfRatings: 327,
+								rating: 1,
+								review: 'It was terrible',
+							},
+						],
+					},
+					{
+						name: 'Currently Reading',
+						books: [
+							{
+								id: '4',
+								cover:
+									'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1510367389l/36573115._SX318_.jpg',
+								title: 'The Anointed',
+								seriesName: 'Red Proxy',
+								seriesInstance: 3,
+								authorId: '123',
+								authorName: 'Keith Ward',
+								averageRating: 3.77,
+								dateAdded: new Date(2018, 7, 20),
+								datePublished: new Date(2017, 10, 10),
+								datePublishedEdition: new Date(2017, 10, 10),
+								dateRead: new Date(2017, 10, 10),
+								dateStarted: new Date(2017, 10, 5),
+								format: 'ebook',
+								numberOfRatings: 35,
+								rating: 2,
+								review: 'I could not take this book seriously at all.',
+							},
+						],
+					},
+					{
+						name: 'Want To Read',
+						books: [
+							{
+								id: '5',
+								cover:
+									'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1362762309l/17249467.jpg',
+								title: 'Shaman: A Novel of the Ice Age',
+								authorId: '123',
+								authorName: 'Kim Stanley Robinson',
+								averageRating: 3.93,
+								dateAdded: new Date(2013, 1, 26),
+								datePublished: new Date(2013, 5, 4),
+								datePublishedEdition: new Date(2013, 5, 4),
+								format: 'Hardcover',
+								numberOfRatings: 255031,
+								position: 1,
+							},
+							{
+								id: '6',
+								cover:
+									'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1530054954l/59._SY475_.jpg',
+								title: 'The Challenging Sea',
+								authorId: '123',
+								authorName: 'Patricia A. McKillip',
+								averageRating: 4.07,
+								dateAdded: new Date(2013, 3, 10),
+								datePublished: new Date(1988, 9, 1),
+								datePublishedEdition: new Date(2003, 3, 14),
+								format: 'Paperback',
+								numberOfRatings: 5043,
+								position: 2,
+							},
+						],
+					},
+					{
+						name: 'fantasy',
+						books: [
+							{
+								id: '6',
+								cover:
+									'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1530054954l/59._SY475_.jpg',
+								title: 'The Challenging Sea',
+								authorId: '123',
+								authorName: 'Patricia A. McKillip',
+								averageRating: 4.07,
+								dateAdded: new Date(2013, 3, 10),
+								datePublished: new Date(1988, 9, 1),
+								datePublishedEdition: new Date(2003, 3, 14),
+								format: 'Paperback',
+								numberOfRatings: 5043,
+								position: 2,
+							},
+							{
+								id: '4',
+								cover:
+									'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1510367389l/36573115._SX318_.jpg',
+								title: 'The Anointed',
+								seriesName: 'Red Proxy',
+								seriesInstance: 3,
+								authorId: '123',
+								authorName: 'Keith Ward',
+								averageRating: 3.77,
+								dateAdded: new Date(2018, 7, 20),
+								datePublished: new Date(2017, 10, 10),
+								datePublishedEdition: new Date(2017, 10, 10),
+								dateRead: new Date(2017, 10, 10),
+								dateStarted: new Date(2017, 10, 5),
+								format: 'ebook',
+								numberOfRatings: 35,
+								rating: 2,
+								review: 'I could not take this book seriously at all.',
+							},
+						],
+					},
+					{
+						name: 'womens-literature',
+						books: [
+							{
+								id: '1',
+								cover:
+									'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1605574715l/55077642._SY75_.jpg',
+								title: "She Wouldn't Change a Thing",
+								authorId: '123',
+								authorName: 'Sarah Adlakha',
+								averageRating: 4.36,
+								dateAdded: new Date(2020, 2, 10),
+								datePublished: new Date(2018, 2, 1),
+								datePublishedEdition: new Date(2018, 2, 1),
+								dateRead: new Date(2020, 3, 10),
+								dateStarted: new Date(2020, 2, 15),
+								format: 'Paperback',
+								isbn: 1250774551,
+								numberOfPages: 304,
+								numberOfRatings: 53,
+								rating: 3,
+								review: 'It was alright',
+							},
+							{
+								id: '2',
+								cover:
+									'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1608476881l/55711715._SX50_.jpg',
+								title: 'The Perfect Family',
+								authorId: '123',
+								authorName: 'Robyn Harding',
+								averageRating: 4.14,
+								dateAdded: new Date(2020, 3, 10),
+								datePublished: new Date(2018, 3, 10),
+								datePublishedEdition: new Date(2018, 3, 19),
+								dateRead: new Date(2020, 3, 10),
+								dateStarted: new Date(2020, 3, 10),
+								format: 'Hardcover',
+								isbn: 1982169397,
+								numberOfPages: 352,
+								numberOfRatings: 126,
+								rating: 4,
+								review: 'It was great',
+							},
+						],
+					},
+				],
+			});
+			setLoggedInUserShelves([
+				{
+					name: 'Read',
+					books: ['1', '6'],
+				},
+				{
+					name: 'Currently Reading',
+					books: ['10', '15'],
+				},
+			]);
+			setLoaded(true);
+		};
 		getUsersInfo();
 	}, []);
 
@@ -175,9 +520,12 @@ const UserBookshelfPage = ({ match }) => {
 		'https://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png';
 
 	const currentUserShelves = loaded
-		? shelves.map((shelf) =>
-				userInfo.shelves.filter((bookshelf) => bookshelf.name === shelf)
-		  )
+		? shelves.map((shelf) => {
+				return userInfo.shelves.filter((bookshelf) => bookshelf.name === shelf)
+					.length > 0
+					? userInfo.shelves.filter((bookshelf) => bookshelf.name === shelf)[0]
+					: [];
+		  })
 		: [];
 
 	const booksToBeShown =
@@ -254,26 +602,29 @@ const UserBookshelfPage = ({ match }) => {
 					>
 						Books
 					</a>
-					{shelves[0] !== 'all' ? <span className="colon-span">:</span> : null}
-					{shelves[0] !== 'all'
-						? shelves.map((shelf, index) => {
+					{currentUserShelves.length > 0 && currentUserShelves[0] !== 'all' ? (
+						<span className="colon-span">:</span>
+					) : null}
+					{currentUserShelves.length > 0 && currentUserShelves[0] !== 'all'
+						? currentUserShelves.map((shelf, index) => {
 								return (
-									<div className="shelf-selection-indicator-wrapper">
-										<div className="shelf-selection-indicator" key={index}>
+									<div
+										className="shelf-selection-indicator-wrapper"
+										key={index}
+									>
+										<div className="shelf-selection-indicator">
 											<span>
-												<span className="shelf-name-span">{shelf}</span>
-												<span className="shelf-number-span">{` (${
-													currentUserShelves[index].length === 0
-														? 0
-														: currentUserShelves[index][0].books.length
-												}) `}</span>
+												<span className="shelf-name-span">{shelf.name}</span>
+												<span className="shelf-number-span">{` (${shelf.books.length}) `}</span>
 											</span>
 											<a
 												className="deselect-a"
 												href={Firebase.pageGenerator.generateUserShelfPage(
 													userId,
 													userFirstName,
-													shelves.filter((bookshelf) => bookshelf !== shelf)
+													shelves.filter(
+														(bookshelf) => bookshelf !== shelf.name
+													)
 												)}
 											>
 												<img
@@ -282,7 +633,7 @@ const UserBookshelfPage = ({ match }) => {
 												/>
 											</a>
 										</div>
-										{index !== shelves.length - 1 ? (
+										{index !== currentUserShelves.length - 1 ? (
 											<span className="shelf-separator-span">{'&'}</span>
 										) : null}
 									</div>
@@ -407,7 +758,7 @@ const UserBookshelfPage = ({ match }) => {
 					<li>
 						<a
 							className={
-								shelves[0] === 'all'
+								shelves.length === 0 || shelves[0] === 'all'
 									? 'general-shelf-a selected-shelf'
 									: 'general-shelf-a'
 							}
@@ -421,7 +772,7 @@ const UserBookshelfPage = ({ match }) => {
 								1
 							)}
 						>{`All (${
-							userInfo.shelves.filter((shelf) => shelf.name === 'all').books
+							userInfo.shelves.filter((shelf) => shelf.name === 'all')[0].books
 								.length
 						})`}</a>
 					</li>
@@ -442,7 +793,7 @@ const UserBookshelfPage = ({ match }) => {
 								1
 							)}
 						>{`Read (${
-							userInfo.shelves.filter((shelf) => shelf.name === 'Read').books
+							userInfo.shelves.filter((shelf) => shelf.name === 'Read')[0].books
 								.length
 						})`}</a>
 						{isSelectingMultipleShelves ? (
@@ -481,8 +832,9 @@ const UserBookshelfPage = ({ match }) => {
 								1
 							)}
 						>{`Want To Read (${
-							userInfo.shelves.filter((shelf) => shelf.name === 'Want To Read')
-								.books.length
+							userInfo.shelves.filter(
+								(shelf) => shelf.name === 'Want To Read'
+							)[0].books.length
 						})`}</a>
 						{isSelectingMultipleShelves ? (
 							<a
@@ -1451,7 +1803,11 @@ const UserBookshelfPage = ({ match }) => {
 			</thead>
 			<tbody>
 				{booksToBeShown.length === 0 ? (
-					<span className="no-matching-items-span">No matching items!</span>
+					<tr>
+						<td>
+							<span className="no-matching-items-span">No matching items!</span>
+						</td>
+					</tr>
 				) : (
 					booksToBeShown
 						.sort((a, b) => {
@@ -1701,8 +2057,12 @@ const UserBookshelfPage = ({ match }) => {
 									) : null}
 									{isReviewColumnVisible ? (
 										<td>
-											<span>
-												{book.review !== undefined ? book.review : ''}
+											<span
+												className={
+													book.review === undefined ? 'no-review-span' : ''
+												}
+											>
+												{book.review !== undefined ? book.review : 'None'}
 											</span>
 											{book.review !== undefined && book.review.length > 150 ? (
 												<button className="review-more-less-button">
@@ -1713,19 +2073,27 @@ const UserBookshelfPage = ({ match }) => {
 									) : null}
 									{isDateStartedColumnVisible ? (
 										<td>
-											<span>
+											<span
+												className={
+													book.dateStarted === undefined ? 'no-date-span' : ''
+												}
+											>
 												{book.dateStarted !== undefined
 													? format(book.dateStarted, 'MMM dd, yyyy')
-													: ''}
+													: 'not set'}
 											</span>
 										</td>
 									) : null}
 									{isDateReadColumnVisible ? (
 										<td>
-											<span>
+											<span
+												className={
+													book.dateRead === undefined ? 'no-date-span' : ''
+												}
+											>
 												{book.dateRead !== undefined
 													? format(book.dateRead, 'MMM dd, yyyy')
-													: ''}
+													: 'not set'}
 											</span>
 										</td>
 									) : null}

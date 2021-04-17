@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+
+.user-bookshelf-page-main-content {
+	margin: 15px 155px;
+}
+
+.user-bookshelf-page a {
+	padding: 0;
+	height: auto;
+	background-color: transparent;
+}
+
+.user-bookshelf-page-shelves-top-bar {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	justify-content: space-between;
+}
+
+.user-bookshelf-page-shelves-top-bar .left-section h1 {
+	color: var(--goodreads-brown);
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	font-family: var(--merriweather-font);
+	font-size: 20px;
+	font-weight: bold;
+	line-height: 26px;
+}
+
+.user-bookshelf-page-shelves-top-bar .left-section h1 a {
+	color: var(--goodreads-teal);
+}
+
+.user-bookshelf-page-shelves-top-bar .left-section h1 .separator {
+	margin: 0 10px;
+}
+
+.user-bookshelf-page-shelves-top-bar .left-section h1 a:hover {
+	text-decoration: underline;
+}
+
+.user-bookshelf-page-shelves-top-bar .left-section h1 .profile-picture-a img {
+	width: 15px;
+	height: 20px;
+	margin-right: 10px;
+}
+
+.user-bookshelf-page-shelves-top-bar .shelf-selection-indicator {
+	background-color: rgb(244, 244, 234);
+	display: flex;
+	flex-direction: row;
+	height: 22px;
+	border-radius: 5px;
+	overflow: hidden;
+}
+
+.user-bookshelf-page-shelves-top-bar .shelf-selection-indicator > span {
+	padding: 2px 0 2px 5px;
+	display: block;
+	font-size: 16.67px;
+	line-height: 21px;
+}
+
+.user-bookshelf-page-shelves-top-bar
+	.shelf-selection-indicator
+	> span
+	.shelf-number-span {
+	color: rgb(153, 153, 153);
+}
+
+.user-bookshelf-page-shelves-top-bar .shelf-selection-indicator .deselect-a {
+	padding: 2px 5px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	background-color: rgb(233, 229, 211);
+}
+
+.user-bookshelf-page-shelves-top-bar
+	.shelf-selection-indicator
+	.deselect-a:hover {
+	background-color: rgb(233, 225, 194);
+}
