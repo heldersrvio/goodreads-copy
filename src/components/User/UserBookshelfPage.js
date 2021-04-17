@@ -7,7 +7,7 @@ import InteractiveStarRating from './InteractiveStarRating';
 import Firebase from '../../Firebase';
 import '../styles/User/UserBookshelfPage.css';
 
-// TODO: Add to shelves popup and review more/less buttons
+// TODO: Add to shelves popup, review more/less buttons, cover view
 
 const UserBookshelfPage = ({ match }) => {
 	const history = useHistory();
@@ -239,7 +239,7 @@ const UserBookshelfPage = ({ match }) => {
 						],
 					},
 					{
-						name: 'Read',
+						name: 'read',
 						books: [
 							{
 								id: '1',
@@ -304,7 +304,7 @@ const UserBookshelfPage = ({ match }) => {
 						],
 					},
 					{
-						name: 'Currently Reading',
+						name: 'currently-reading',
 						books: [
 							{
 								id: '4',
@@ -329,7 +329,7 @@ const UserBookshelfPage = ({ match }) => {
 						],
 					},
 					{
-						name: 'Want To Read',
+						name: 'want-to-read',
 						books: [
 							{
 								id: '5',
@@ -452,11 +452,11 @@ const UserBookshelfPage = ({ match }) => {
 			});
 			setLoggedInUserShelves([
 				{
-					name: 'Read',
+					name: 'read',
 					books: ['1', '6'],
 				},
 				{
-					name: 'Currently Reading',
+					name: 'currently-reading',
 					books: ['10', '15'],
 				},
 			]);
@@ -520,12 +520,17 @@ const UserBookshelfPage = ({ match }) => {
 		'https://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png';
 
 	const currentUserShelves = loaded
-		? shelves.map((shelf) => {
-				return userInfo.shelves.filter((bookshelf) => bookshelf.name === shelf)
-					.length > 0
-					? userInfo.shelves.filter((bookshelf) => bookshelf.name === shelf)[0]
-					: [];
-		  })
+		? shelves
+				.map((shelf) => {
+					return userInfo.shelves.filter(
+						(bookshelf) => bookshelf.name === shelf
+					).length > 0
+						? userInfo.shelves.filter(
+								(bookshelf) => bookshelf.name === shelf
+						  )[0]
+						: null;
+				})
+				.filter((obj) => obj !== null)
 		: [];
 
 	const booksToBeShown =
@@ -559,7 +564,7 @@ const UserBookshelfPage = ({ match }) => {
 						}
 					});
 					return previous;
-			  })
+			  }, [])
 			: [];
 
 	const shelvesTopBar = loaded ? (
@@ -602,10 +607,11 @@ const UserBookshelfPage = ({ match }) => {
 					>
 						Books
 					</a>
-					{currentUserShelves.length > 0 && currentUserShelves[0] !== 'all' ? (
+					{currentUserShelves.length > 0 &&
+					currentUserShelves[0].name !== 'all' ? (
 						<span className="colon-span">:</span>
 					) : null}
-					{currentUserShelves.length > 0 && currentUserShelves[0] !== 'all'
+					{currentUserShelves.length > 0 && currentUserShelves[0].name !== 'all'
 						? currentUserShelves.map((shelf, index) => {
 								return (
 									<div
@@ -687,7 +693,7 @@ const UserBookshelfPage = ({ match }) => {
 				</button>
 				<span className="separator">|</span>
 				<a
-					className={view === 'table' ? 'view-type-a selected' : 'view-type-a'}
+					className="view-type-a"
 					href={
 						searchQuery !== ''
 							? Firebase.pageGenerator.generateUserShelfPage(
@@ -711,12 +717,26 @@ const UserBookshelfPage = ({ match }) => {
 					}
 				>
 					<img
+						onMouseOver={(e) => {
+							e.target.src =
+								'https://s.gr-assets.com/assets/layout/list_selected.png';
+						}}
+						onMouseOut={(e) => {
+							if (view === 'cover') {
+								e.target.src =
+									'https://s.gr-assets.com/assets/layout/list-fe412c89a6a612c841b5b58681660b82.png';
+							}
+						}}
 						alt="Table View"
-						src="https://s.gr-assets.com/assets/layout/list-fe412c89a6a612c841b5b58681660b82.png"
+						src={
+							view === 'table'
+								? 'https://s.gr-assets.com/assets/layout/list_selected.png'
+								: 'https://s.gr-assets.com/assets/layout/list-fe412c89a6a612c841b5b58681660b82.png'
+						}
 					/>
 				</a>
 				<a
-					className={view === 'cover' ? 'view-type-a selected' : 'view-type-a'}
+					className="view-type-a"
 					href={
 						searchQuery !== ''
 							? Firebase.pageGenerator.generateUserShelfPage(
@@ -740,8 +760,22 @@ const UserBookshelfPage = ({ match }) => {
 					}
 				>
 					<img
+						onMouseOver={(e) => {
+							e.target.src =
+								'https://s.gr-assets.com/assets/layout/grid_selected.png';
+						}}
+						onMouseOut={(e) => {
+							if (view === 'table') {
+								e.target.src =
+									'https://s.gr-assets.com/assets/layout/grid-2c030bffe1065f73ddca41540e8a267d.png';
+							}
+						}}
 						alt="Cover View"
-						src="https://s.gr-assets.com/assets/layout/grid-2c030bffe1065f73ddca41540e8a267d.png"
+						src={
+							view === 'cover'
+								? 'https://s.gr-assets.com/assets/layout/grid_selected.png'
+								: 'https://s.gr-assets.com/assets/layout/grid-2c030bffe1065f73ddca41540e8a267d.png'
+						}
 					/>
 				</a>
 			</div>
@@ -779,21 +813,21 @@ const UserBookshelfPage = ({ match }) => {
 					<li>
 						<a
 							className={
-								shelves.includes('Read')
+								shelves.includes('read')
 									? 'general-shelf-a selected-shelf'
 									: 'general-shelf-a'
 							}
 							href={Firebase.pageGenerator.generateUserShelfPage(
 								userId,
 								userFirstName,
-								['Read'],
+								['read'],
 								'',
 								view,
 								perPage,
 								1
 							)}
 						>{`Read (${
-							userInfo.shelves.filter((shelf) => shelf.name === 'Read')[0].books
+							userInfo.shelves.filter((shelf) => shelf.name === 'read')[0].books
 								.length
 						})`}</a>
 						{isSelectingMultipleShelves ? (
@@ -802,30 +836,30 @@ const UserBookshelfPage = ({ match }) => {
 								href={Firebase.pageGenerator.generateUserShelfPage(
 									userId,
 									userFirstName,
-									!shelves.includes('Read')
-										? shelves.concat('Read')
-										: shelves.filter((shelf) => shelf !== 'Read'),
+									!shelves.includes('read')
+										? shelves.concat('read')
+										: shelves.filter((shelf) => shelf !== 'read'),
 									'',
 									view,
 									perPage,
 									1
 								)}
 							>
-								{!shelves.includes('Read') ? '+' : '-'}
+								{!shelves.includes('read') ? '+' : '-'}
 							</a>
 						) : null}
 					</li>
 					<li>
 						<a
 							className={
-								shelves.includes('Want To Read')
+								shelves.includes('want-to-read')
 									? 'general-shelf-a selected-shelf'
 									: 'general-shelf-a'
 							}
 							href={Firebase.pageGenerator.generateUserShelfPage(
 								userId,
 								userFirstName,
-								['Want To Read'],
+								['want-to-read'],
 								'',
 								view,
 								perPage,
@@ -833,7 +867,7 @@ const UserBookshelfPage = ({ match }) => {
 							)}
 						>{`Want To Read (${
 							userInfo.shelves.filter(
-								(shelf) => shelf.name === 'Want To Read'
+								(shelf) => shelf.name === 'want-to-read'
 							)[0].books.length
 						})`}</a>
 						{isSelectingMultipleShelves ? (
@@ -842,16 +876,16 @@ const UserBookshelfPage = ({ match }) => {
 								href={Firebase.pageGenerator.generateUserShelfPage(
 									userId,
 									userFirstName,
-									!shelves.includes('Want To Read')
-										? shelves.concat('Want To Read')
-										: shelves.filter((shelf) => shelf !== 'Want To Read'),
+									!shelves.includes('want-to-read')
+										? shelves.concat('want-to-read')
+										: shelves.filter((shelf) => shelf !== 'want-to-read'),
 									'',
 									view,
 									perPage,
 									1
 								)}
 							>
-								{!shelves.includes('Want To Read') ? '+' : '-'}
+								{!shelves.includes('want-to-read') ? '+' : '-'}
 							</a>
 						) : null}
 					</li>
@@ -863,7 +897,7 @@ const UserBookshelfPage = ({ match }) => {
 					{userInfo.shelves
 						.filter(
 							(shelf) =>
-								!['Read', 'Want To Read', 'Currently Reading'].includes(
+								!['read', 'want-to-read', 'currently-reading', 'all'].includes(
 									shelf.name
 								)
 						)
@@ -908,14 +942,17 @@ const UserBookshelfPage = ({ match }) => {
 							);
 						})}
 				</ul>
-				<button
-					className="select-multiple-shelves-button"
-					onClick={(_e) =>
-						setIsSelectingMultipleShelves((previous) => !previous)
-					}
-				>
-					select multiple
-				</button>
+				{currentUserShelves.length > 0 &&
+				currentUserShelves[0].name !== 'all' ? (
+					<button
+						className="select-multiple-shelves-button"
+						onClick={(_e) =>
+							setIsSelectingMultipleShelves((previous) => !previous)
+						}
+					>
+						select multiple
+					</button>
+				) : null}
 			</div>
 			<div className="shelf-group-separator"></div>
 		</div>
@@ -961,7 +998,7 @@ const UserBookshelfPage = ({ match }) => {
 					<div className="author-column-selection">
 						<input
 							name="author"
-							type="chekbox"
+							type="checkbox"
 							checked={isAuthorColumnVisible}
 							onChange={(e) => {
 								setSelectedColumnSetButton('');
@@ -973,7 +1010,7 @@ const UserBookshelfPage = ({ match }) => {
 					<div className="avg-rating-column-selection">
 						<input
 							name="avg-rating"
-							type="chekbox"
+							type="checkbox"
 							checked={isAvgRatingColumnVisible}
 							onChange={(e) => {
 								setSelectedColumnSetButton('');
@@ -985,7 +1022,7 @@ const UserBookshelfPage = ({ match }) => {
 					<div className="cover-column-selection">
 						<input
 							name="cover"
-							type="chekbox"
+							type="checkbox"
 							checked={isCoverColumnVisible}
 							onChange={(e) => {
 								setSelectedColumnSetButton('');
@@ -997,7 +1034,7 @@ const UserBookshelfPage = ({ match }) => {
 					<div className="date-added-column-selection">
 						<input
 							name="date-added"
-							type="chekbox"
+							type="checkbox"
 							checked={isDateAddedColumnVisible}
 							onChange={(e) => {
 								setSelectedColumnSetButton('');
@@ -1009,7 +1046,7 @@ const UserBookshelfPage = ({ match }) => {
 					<div className="date-publication-column-selection">
 						<input
 							name="date-publication"
-							type="chekbox"
+							type="checkbox"
 							checked={isDatePublicationColumnVisible}
 							onChange={(e) => {
 								setSelectedColumnSetButton('');
@@ -1021,7 +1058,7 @@ const UserBookshelfPage = ({ match }) => {
 					<div className="date-publication-edition-column-selection">
 						<input
 							name="date-publication-edition"
-							type="chekbox"
+							type="checkbox"
 							checked={isDatePublicationEditionColumnVisible}
 							onChange={(e) => {
 								setSelectedColumnSetButton('');
@@ -1033,7 +1070,7 @@ const UserBookshelfPage = ({ match }) => {
 					<div className="date-read-column-selection">
 						<input
 							name="date-read"
-							type="chekbox"
+							type="checkbox"
 							checked={isDateReadColumnVisible}
 							onChange={(e) => {
 								setSelectedColumnSetButton('');
@@ -1045,7 +1082,7 @@ const UserBookshelfPage = ({ match }) => {
 					<div className="date-started-column-selection">
 						<input
 							name="date-started"
-							type="chekbox"
+							type="checkbox"
 							checked={isDateStartedColumnVisible}
 							onChange={(e) => {
 								setSelectedColumnSetButton('');
@@ -1057,7 +1094,7 @@ const UserBookshelfPage = ({ match }) => {
 					<div className="format-column-selection">
 						<input
 							name="format"
-							type="chekbox"
+							type="checkbox"
 							checked={isFormatColumnVisible}
 							onChange={(e) => {
 								setSelectedColumnSetButton('');
@@ -1069,7 +1106,7 @@ const UserBookshelfPage = ({ match }) => {
 					<div className="isbn-column-selection">
 						<input
 							name="isbn"
-							type="chekbox"
+							type="checkbox"
 							checked={isIsbnColumnVisible}
 							onChange={(e) => {
 								setSelectedColumnSetButton('');
@@ -1081,7 +1118,7 @@ const UserBookshelfPage = ({ match }) => {
 					<div className="number-of-pages-column-selection">
 						<input
 							name="number-of-pages"
-							type="chekbox"
+							type="checkbox"
 							checked={isNumPagesColumnVisible}
 							onChange={(e) => {
 								setSelectedColumnSetButton('');
@@ -1093,7 +1130,7 @@ const UserBookshelfPage = ({ match }) => {
 					<div className="number-of-ratings-column-selection">
 						<input
 							name="number-of-ratings"
-							type="chekbox"
+							type="checkbox"
 							checked={isNumRatingsColumnVisible}
 							onChange={(e) => {
 								setSelectedColumnSetButton('');
@@ -1105,7 +1142,7 @@ const UserBookshelfPage = ({ match }) => {
 					<div className="position-column-selection">
 						<input
 							name="position"
-							type="chekbox"
+							type="checkbox"
 							checked={isPositionColumnVisible}
 							onChange={(e) => {
 								setSelectedColumnSetButton('');
@@ -1117,7 +1154,7 @@ const UserBookshelfPage = ({ match }) => {
 					<div className="rating-column-selection">
 						<input
 							name="rating"
-							type="chekbox"
+							type="checkbox"
 							checked={isRatingColumnVisible}
 							onChange={(e) => {
 								setSelectedColumnSetButton('');
@@ -1129,7 +1166,7 @@ const UserBookshelfPage = ({ match }) => {
 					<div className="review-column-selection">
 						<input
 							name="review"
-							type="chekbox"
+							type="checkbox"
 							checked={isReviewColumnVisible}
 							onChange={(e) => {
 								setSelectedColumnSetButton('');
@@ -1141,7 +1178,7 @@ const UserBookshelfPage = ({ match }) => {
 					<div className="shelves-column-selection">
 						<input
 							name="shelves"
-							type="chekbox"
+							type="checkbox"
 							checked={isShelvesColumnVisible}
 							onChange={(e) => {
 								setSelectedColumnSetButton('');
@@ -1153,7 +1190,7 @@ const UserBookshelfPage = ({ match }) => {
 					<div className="title-column-selection">
 						<input
 							name="title"
-							type="chekbox"
+							type="checkbox"
 							checked={isTitleColumnVisible}
 							onChange={(e) => {
 								setSelectedColumnSetButton('');
@@ -2206,7 +2243,7 @@ const UserBookshelfPage = ({ match }) => {
 
 	const mainInfoContainer = (
 		<div className="user-bookshelf-page-main-info-container">
-			{settingsTab}
+			{isSettingsTabOpen ? settingsTab : null}
 			{pageNavigationSection}
 			{booksTable}
 			{tableParametersSection}
