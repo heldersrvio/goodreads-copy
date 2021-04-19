@@ -1941,7 +1941,7 @@ const UserBookshelfPage = ({ match }) => {
 												<span className="book-title-proper">{book.title}</span>
 												{book.seriesName !== undefined ? (
 													<span className="book-series-span">
-														{`(${book.seriesName}, #${book.seriesInstance})`}
+														{` (${book.seriesName}, #${book.seriesInstance})`}
 													</span>
 												) : null}
 											</a>
@@ -2157,7 +2157,7 @@ const UserBookshelfPage = ({ match }) => {
 	) : null;
 
 	const tableParametersSection = (
-		<div className="user-bookshelf-page">
+		<div className="user-bookshelf-page-table-parameters-section">
 			<div className="per-page-parameter">
 				<label htmlFor="per-page">per page</label>
 				<select

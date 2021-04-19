@@ -194,6 +194,7 @@
 
 .user-bookshelf-page-bookshelf-navigation-section {
 	margin-top: 10px;
+	margin-right: 20px;
 }
 
 .user-bookshelf-page-bookshelf-navigation-section .title-span {
@@ -246,4 +247,260 @@
 .user-bookshelf-page-bookshelf-navigation-section
 	.select-multiple-shelves-button:hover {
 	text-decoration: underline;
+}
+
+.user-bookshelf-page-main-content-bottom-section {
+	display: flex;
+	flex-direction: row;
+}
+
+.user-bookshelf-page-books-table {
+	max-width: none;
+	min-width: 770px;
+}
+
+.user-bookshelf-page-books-table tbody td {
+	padding: 12px 5px 5px 0;
+	vertical-align: top;
+}
+
+.user-bookshelf-page-books-table td img {
+	width: 50px;
+	height: 78px;
+}
+
+.user-bookshelf-page-books-table td .rating-stars {
+	display: flex;
+	flex-direction: row;
+}
+
+.user-bookshelf-page-books-table td span {
+	color: rgb(24, 24, 24);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 18px;
+}
+
+.user-bookshelf-page-books-table td span.no-date-span,
+.user-bookshelf-page-books-table td span.no-review-span {
+	color: var(--goodreads-light-gray);
+}
+
+.user-bookshelf-page-books-table .book-title-a,
+.user-bookshelf-page-books-table .author-a {
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 18px;
+	color: var(--goodreads-teal);
+}
+
+.user-bookshelf-page-books-table .book-title-a:hover,
+.user-bookshelf-page-books-table .author-a:hover {
+	text-decoration: underline;
+}
+
+.user-bookshelf-page-books-table .book-title-a .book-title-proper {
+	color: var(--goodreads-teal);
+}
+
+.user-bookshelf-page-books-table .book-title-a .book-series-span {
+	color: rgb(119, 119, 119);
+}
+
+.user-bookshelf-page-books-table thead {
+	border-bottom: 2px solid rgb(235, 232, 213);
+}
+
+.user-bookshelf-page-books-table thead th {
+	vertical-align: bottom;
+	cursor: pointer;
+	text-align: left;
+	padding: 12px 5px 5px 0;
+	color: var(--goodreads-brown);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	font-weight: bold;
+	line-height: 18px;
+}
+
+.user-bookshelf-page-books-table thead th:hover {
+	text-decoration: underline;
+}
+
+.user-bookshelf-page-books-table thead th img {
+	margin-left: 3px;
+}
+
+.user-bookshelf-page-books-table thead .my-rating-th {
+	cursor: default;
+}
+
+.user-bookshelf-page-books-table thead th.my-rating-th:hover {
+	text-decoration: none;
+}
+
+.user-bookshelf-page-books-table .add-to-shelves-button {
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 11px;
+	line-height: 14px;
+	background-color: transparent;
+	padding: 0;
+	margin-top: 5px;
+}
+
+.user-bookshelf-page-books-table .add-to-shelves-button:hover {
+	text-decoration: underline;
+}
+
+.user-bookshelf-page-books-table tbody tr {
+	border-bottom: 1px solid rgb(238, 238, 238);
+}
+
+.user-bookshelf-page-table-parameters-section {
+	display: flex;
+	flex-direction: row;
+	margin-bottom: 25px;
+	margin-top: 10px;
+}
+
+.user-bookshelf-page-table-parameters-section select {
+	font-size: 11px;
+	margin-left: 10px;
+}
+
+.user-bookshelf-page-table-parameters-section input[type='radio'] {
+	width: 12px;
+	height: 12px;
+}
+
+.user-bookshelf-page-table-parameters-section label {
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 28px;
+}
+
+.user-bookshelf-page-table-parameters-section label[for='sort'] {
+	margin-left: 10px;
+}
+
+.user-bookshelf-page-table-parameters-section .sort-order-parameter {
+	margin-left: 10px;
+}
+
+.user-bookshelf-page-table-parameters-section .sort-order-parameter label {
+	color: rgb(24, 24, 24);
+	margin-left: 5px;
+	margin-right: 10px;
+}
+
+.user-bookshelf-page-settings-tab {
+	width: 750px;
+	position: relative;
+	background-color: rgb(241, 241, 228);
+	padding: 10px;
+	height: 144px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	border-top: 1px solid rgb(204, 201, 181);
+	border-bottom: 1px solid rgb(204, 201, 181);
+}
+
+.user-bookshelf-page-settings-tab button {
+	font-family: var(--lato-font);
+	color: var(--goodreads-teal);
+	padding: 0;
+	height: auto;
+	background-color: transparent;
+}
+
+.user-bookshelf-page-settings-tab button:hover {
+	text-decoration: underline;
+}
+
+.user-bookshelf-page-settings-tab b {
+	font-weight: bold;
+}
+
+.user-bookshelf-page-settings-tab .settings-title {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin-bottom: 3px;
+}
+
+.user-bookshelf-page-settings-tab .settings-title span {
+	color: rgb(24, 24, 24);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.user-bookshelf-page-settings-tab .settings-title button {
+	font-size: 11px;
+	font-weight: bold;
+	line-height: 14px;
+	margin-left: 3px;
+}
+
+.user-bookshelf-page-settings-tab .gray-settings-message {
+	color: var(--goodreads-light-gray);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.user-bookshelf-page-settings-tab .column-checkboxes {
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	max-height: 100px;
+}
+
+.user-bookshelf-page-settings-tab .column-checkboxes label {
+	color: rgb(24, 24, 24);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+	margin-right: 10px;
+}
+
+.user-bookshelf-page-settings-tab .column-sets-title {
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.user-bookshelf-page-settings-tab .column-set-button {
+	color: var(--goodreads-teal);
+	font-size: 12px;
+	font-family: var(--lato-font);
+	line-height: 18px;
+}
+
+.user-bookshelf-page-settings-tab .column-set-button.selected {
+	position: relative;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+.user-bookshelf-page-settings-tab .column-set-button.selected::before {
+	position: absolute;
+	left: -10px;
+	color: rgb(192, 188, 165);
+	display: block;
+	content: '〉';
+	width: 12px;
+	height: 18px;
+}
+
+.user-bookshelf-page-settings-tab .settings-tab-close-button {
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+	color: var(--goodreads-light-gray);
+	font-family: var(--lato-font);
+	font-size: 11px;
+	line-height: 14px;
 }
