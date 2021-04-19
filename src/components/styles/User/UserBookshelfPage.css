@@ -3,21 +3,25 @@
 
 .user-bookshelf-page-main-content {
 	margin: 15px 155px;
+	min-height: 65vh;
 }
 
-.user-bookshelf-page a {
+.user-bookshelf-page-main-content a {
 	padding: 0;
 	height: auto;
 	background-color: transparent;
 }
 
 .user-bookshelf-page-shelves-top-bar {
-	display: flex;
-	flex-direction: row;
+	display: block;
 	width: 100%;
-	justify-content: space-between;
 	border-bottom: 1px solid rgb(235, 232, 213);
-	height: 40px;
+	overflow: hidden;
+}
+
+.user-bookshelf-page-shelves-top-bar .left-section {
+	display: block;
+	float: left;
 }
 
 .user-bookshelf-page-shelves-top-bar .left-section h1 {
@@ -57,6 +61,7 @@
 	height: 22px;
 	border-radius: 5px;
 	overflow: hidden;
+	margin-left: 7px;
 }
 
 .user-bookshelf-page-shelves-top-bar .shelf-selection-indicator > span {
@@ -64,6 +69,23 @@
 	display: block;
 	font-size: 16.67px;
 	line-height: 21px;
+}
+
+.user-bookshelf-page-shelves-top-bar .shelf-selection-indicator-wrapper {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.user-bookshelf-page-shelves-top-bar
+	.shelf-selection-indicator-wrapper
+	span.shelf-separator-span {
+	color: var(--goodreads-light-gray);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	font-weight: bold;
+	line-height: 13px;
+	margin-left: 6px;
 }
 
 .user-bookshelf-page-shelves-top-bar
@@ -88,9 +110,11 @@
 }
 
 .user-bookshelf-page-shelves-top-bar .right-section {
+	float: right;
 	display: flex;
 	flex-direction: row;
 	align-items: center;
+	padding-bottom: 2px;
 }
 
 .user-bookshelf-page-shelves-top-bar .right-section .search-bar-container {
@@ -208,6 +232,9 @@
 .user-bookshelf-page-bookshelf-navigation-section li {
 	padding: 0;
 	margin-bottom: 3px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
 }
 
 .user-bookshelf-page-bookshelf-navigation-section a {
@@ -219,6 +246,10 @@
 
 .user-bookshelf-page-bookshelf-navigation-section a:hover {
 	text-decoration: underline;
+}
+
+.user-bookshelf-page-bookshelf-navigation-section li .add-shelf-a {
+	color: var(--goodreads-light-gray);
 }
 
 .user-bookshelf-page-bookshelf-navigation-section a.selected-shelf {
@@ -262,6 +293,24 @@
 .user-bookshelf-page-books-table tbody td {
 	padding: 12px 5px 5px 0;
 	vertical-align: top;
+}
+
+.user-bookshelf-page-books-table tbody .no-matching-items-tr {
+	border: none;
+	width: 100%;
+}
+
+.user-bookshelf-page-books-table tbody .no-matching-items-tr td {
+	text-align: center;
+	margin-left: 50px;
+}
+
+.user-bookshelf-page-books-table tbody .no-matching-items-tr td span {
+	padding: 20px;
+	color: var(--goodreads-light-gray);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 18px;
 }
 
 .user-bookshelf-page-books-table td img {

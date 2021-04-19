@@ -19,19 +19,36 @@ const UserBookshelfPage = ({ match }) => {
 		pageId.split('-')[1][0].toUpperCase() + pageId.split('-')[1].slice(1);
 	const query = new URLSearchParams(useLocation().search);
 	const shelves =
-		query.get('shelf') !== null ? query.get('shelf').split(',') : ['all'];
+		query.get('shelf') !== null && query.get('shelf') !== undefined
+			? query.get('shelf').split(',')
+			: ['all'];
 	const order =
-		query.get('order') !== null
+		query.get('order') !== null && query.get('order') !== undefined
 			? query.get('order') === 'd'
 				? 'descending'
 				: 'ascending'
 			: 'descending';
-	const sort = query.get('sort') !== null ? query.get('sort') : 'date-added';
-	const perPage = query.get('per_page') !== null ? query.get('per_page') : '20';
-	const page = query.get('page') !== null ? parseInt(query.get('page')) : 1;
-	const view = query.get('view') !== null ? query.get('view') : 'table';
+	const sort =
+		query.get('sort') !== null && query.get('sort') !== undefined
+			? query.get('sort')
+			: 'date-added';
+	const perPage =
+		query.get('per_page') !== null && query.get('per_page') !== undefined
+			? query.get('per_page')
+			: 20;
+	const page =
+		query.get('page') !== null && query.get('page') !== undefined
+			? parseInt(query.get('page'))
+			: 1;
+	const view =
+		query.get('view') !== null && query.get('view') !== undefined
+			? query.get('view')
+			: 'table';
 	const searchQuery =
-		query.get('search_query') !== null ? query.get('search_query') : '';
+		query.get('search_query') !== null &&
+		query.get('search_query') !== undefined
+			? query.get('search_query')
+			: '';
 	const [loaded, setLoaded] = useState(false);
 	const [userInfo, setUserInfo] = useState({});
 	const [loggedInUserShelves, setLoggedInUserShelves] = useState([]);
@@ -520,21 +537,38 @@ const UserBookshelfPage = ({ match }) => {
 		'https://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png';
 
 	const currentUserShelves = loaded
-		? shelves
-				.map((shelf) => {
-					return userInfo.shelves.filter(
-						(bookshelf) => bookshelf.name === shelf
-					).length > 0
-						? userInfo.shelves.filter(
-								(bookshelf) => bookshelf.name === shelf
-						  )[0]
-						: null;
-				})
-				.filter((obj) => obj !== null)
+		? searchQuery.length > 0
+			? userInfo.shelves.filter((shelf) => shelf.name === 'all')
+			: shelves
+					.map((shelf) => {
+						return userInfo.shelves.filter(
+							(bookshelf) => bookshelf.name === shelf
+						).length > 0
+							? userInfo.shelves.filter(
+									(bookshelf) => bookshelf.name === shelf
+							  )[0]
+							: null;
+					})
+					.filter((obj) => obj !== null)
 		: [];
 
 	const booksToBeShown =
-		currentUserShelves.length > 0
+		searchQuery.length > 0
+			? currentUserShelves.reduce((previous, current) => {
+					current.books.forEach((book) => {
+						if (
+							!previous.includes(book) &&
+							(book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+								book.authorName
+									.toLowerCase()
+									.includes(searchQuery.toLowerCase()))
+						) {
+							previous.push(book);
+						}
+					});
+					return previous;
+			  }, [])
+			: currentUserShelves.length > 0
 			? currentUserShelves.reduce((previous, current) => {
 					current.books.forEach((shelfBook) => {
 						if (
@@ -620,7 +654,21 @@ const UserBookshelfPage = ({ match }) => {
 									>
 										<div className="shelf-selection-indicator">
 											<span>
-												<span className="shelf-name-span">{shelf.name}</span>
+												<span className="shelf-name-span">
+													{[
+														'read',
+														'want-to-read',
+														'currently-reading',
+													].includes(shelf.name)
+														? shelf.name
+																.split('-')
+																.map(
+																	(portion) =>
+																		portion[0].toUpperCase() + portion.slice(1)
+																)
+																.join(' ')
+														: shelf.name}
+												</span>
 												<span className="shelf-number-span">{` (${shelf.books.length}) `}</span>
 											</span>
 											<a
@@ -630,7 +678,11 @@ const UserBookshelfPage = ({ match }) => {
 													userFirstName,
 													shelves.filter(
 														(bookshelf) => bookshelf !== shelf.name
-													)
+													),
+													'',
+													view,
+													20,
+													1
 												)}
 											>
 												<img
@@ -656,6 +708,22 @@ const UserBookshelfPage = ({ match }) => {
 						placeholder="Search and add books"
 						value={searchInputText}
 						onChange={(e) => setSearchInputText(e.target.value)}
+						onKeyDown={(e) => {
+							console.log(e.keyCode);
+							if (e.keyCode === 13) {
+								history.push(
+									Firebase.pageGenerator.generateUserShelfPage(
+										userId,
+										userFirstName,
+										['all'],
+										searchInputText,
+										view,
+										perPage,
+										1
+									)
+								);
+							}
+						}}
 					></input>
 					<a
 						className="search-magnifying-glass-a"
@@ -845,7 +913,7 @@ const UserBookshelfPage = ({ match }) => {
 									1
 								)}
 							>
-								{!shelves.includes('read') ? '+' : '-'}
+								{!shelves.includes('read') ? '+' : '−'}
 							</a>
 						) : null}
 					</li>
@@ -885,7 +953,7 @@ const UserBookshelfPage = ({ match }) => {
 									1
 								)}
 							>
-								{!shelves.includes('want-to-read') ? '+' : '-'}
+								{!shelves.includes('want-to-read') ? '+' : '−'}
 							</a>
 						) : null}
 					</li>
@@ -935,7 +1003,7 @@ const UserBookshelfPage = ({ match }) => {
 												1
 											)}
 										>
-											{!shelves.includes(shelf.name) ? '+' : '-'}
+											{!shelves.includes(shelf.name) ? '+' : '−'}
 										</a>
 									) : null}
 								</li>
@@ -1409,7 +1477,7 @@ const UserBookshelfPage = ({ match }) => {
 										previous === 'ascending' ? 'descending' : 'ascending'
 									);
 								} else {
-									setTableSortOrder('position');
+									setTableSortColumn('position');
 								}
 							}}
 						>
@@ -1436,7 +1504,7 @@ const UserBookshelfPage = ({ match }) => {
 										previous === 'ascending' ? 'descending' : 'ascending'
 									);
 								} else {
-									setTableSortOrder('cover');
+									setTableSortColumn('cover');
 								}
 							}}
 						>
@@ -1463,7 +1531,7 @@ const UserBookshelfPage = ({ match }) => {
 										previous === 'ascending' ? 'descending' : 'ascending'
 									);
 								} else {
-									setTableSortOrder('title');
+									setTableSortColumn('title');
 								}
 							}}
 						>
@@ -1490,7 +1558,7 @@ const UserBookshelfPage = ({ match }) => {
 										previous === 'ascending' ? 'descending' : 'ascending'
 									);
 								} else {
-									setTableSortOrder('author');
+									setTableSortColumn('author');
 								}
 							}}
 						>
@@ -1517,7 +1585,7 @@ const UserBookshelfPage = ({ match }) => {
 										previous === 'ascending' ? 'descending' : 'ascending'
 									);
 								} else {
-									setTableSortOrder('isbn');
+									setTableSortColumn('isbn');
 								}
 							}}
 						>
@@ -1544,7 +1612,7 @@ const UserBookshelfPage = ({ match }) => {
 										previous === 'ascending' ? 'descending' : 'ascending'
 									);
 								} else {
-									setTableSortOrder('num-pages');
+									setTableSortColumn('num-pages');
 								}
 							}}
 						>
@@ -1571,7 +1639,7 @@ const UserBookshelfPage = ({ match }) => {
 										previous === 'ascending' ? 'descending' : 'ascending'
 									);
 								} else {
-									setTableSortOrder('avg-rating');
+									setTableSortColumn('avg-rating');
 								}
 							}}
 						>
@@ -1598,7 +1666,7 @@ const UserBookshelfPage = ({ match }) => {
 										previous === 'ascending' ? 'descending' : 'ascending'
 									);
 								} else {
-									setTableSortOrder('num-ratings');
+									setTableSortColumn('num-ratings');
 								}
 							}}
 						>
@@ -1625,7 +1693,7 @@ const UserBookshelfPage = ({ match }) => {
 										previous === 'ascending' ? 'descending' : 'ascending'
 									);
 								} else {
-									setTableSortOrder('date-pub');
+									setTableSortColumn('date-pub');
 								}
 							}}
 						>
@@ -1652,7 +1720,7 @@ const UserBookshelfPage = ({ match }) => {
 										previous === 'ascending' ? 'descending' : 'ascending'
 									);
 								} else {
-									setTableSortOrder('date-pub-ed');
+									setTableSortColumn('date-pub-ed');
 								}
 							}}
 						>
@@ -1679,7 +1747,7 @@ const UserBookshelfPage = ({ match }) => {
 										previous === 'ascending' ? 'descending' : 'ascending'
 									);
 								} else {
-									setTableSortOrder('rating');
+									setTableSortColumn('rating');
 								}
 							}}
 						>
@@ -1709,7 +1777,7 @@ const UserBookshelfPage = ({ match }) => {
 										previous === 'ascending' ? 'descending' : 'ascending'
 									);
 								} else {
-									setTableSortOrder('review');
+									setTableSortColumn('review');
 								}
 							}}
 						>
@@ -1736,7 +1804,7 @@ const UserBookshelfPage = ({ match }) => {
 										previous === 'ascending' ? 'descending' : 'ascending'
 									);
 								} else {
-									setTableSortOrder('date-started');
+									setTableSortColumn('date-started');
 								}
 							}}
 						>
@@ -1763,7 +1831,7 @@ const UserBookshelfPage = ({ match }) => {
 										previous === 'ascending' ? 'descending' : 'ascending'
 									);
 								} else {
-									setTableSortOrder('date-read');
+									setTableSortColumn('date-read');
 								}
 							}}
 						>
@@ -1790,7 +1858,7 @@ const UserBookshelfPage = ({ match }) => {
 										previous === 'ascending' ? 'descending' : 'ascending'
 									);
 								} else {
-									setTableSortOrder('date-added');
+									setTableSortColumn('date-added');
 								}
 							}}
 						>
@@ -1817,7 +1885,7 @@ const UserBookshelfPage = ({ match }) => {
 										previous === 'ascending' ? 'descending' : 'ascending'
 									);
 								} else {
-									setTableSortOrder('format');
+									setTableSortColumn('format');
 								}
 							}}
 						>
@@ -1840,8 +1908,8 @@ const UserBookshelfPage = ({ match }) => {
 			</thead>
 			<tbody>
 				{booksToBeShown.length === 0 ? (
-					<tr>
-						<td>
+					<tr className="no-matching-items-tr">
+						<td colSpan="20">
 							<span className="no-matching-items-span">No matching items!</span>
 						</td>
 					</tr>
@@ -1850,8 +1918,12 @@ const UserBookshelfPage = ({ match }) => {
 						.sort((a, b) => {
 							const compare = (value1, value2) => {
 								return tableSortOrder === 'ascending'
-									? value1 - value2
-									: value2 - value1;
+									? value1 < value2
+										? -1
+										: 1
+									: value2 < value1
+									? -1
+									: 1;
 							};
 
 							switch (tableSortColumn) {
@@ -2192,7 +2264,7 @@ const UserBookshelfPage = ({ match }) => {
 				<label htmlFor="sort">sort</label>
 				<select
 					name="sort"
-					value={sort}
+					value={tableSortColumn}
 					onChange={(e) => setTableSortColumn(e.target.value)}
 				>
 					<option value="author">Author</option>
