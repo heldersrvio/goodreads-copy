@@ -388,6 +388,10 @@
 	text-decoration: none;
 }
 
+.user-bookshelf-page-books-table .add-to-shelves-button-wrapper {
+	position: relative;
+}
+
 .user-bookshelf-page-books-table .add-to-shelves-button {
 	color: var(--goodreads-teal);
 	font-family: var(--lato-font);

@@ -1662,7 +1662,7 @@ const Firebase = (() => {
 			const shelfQuery = await database
 				.collection('shelves')
 				.where('user', '==', userUID)
-				.where('shelf', '==', shelf)
+				.where('name', '==', shelf)
 				.get();
 			if (shelfQuery.docs.length === 0) {
 				await database
@@ -4462,6 +4462,21 @@ const Firebase = (() => {
 		return null;
 	};
 
+	const addNewBookshelf = async (userId, shelfName) => {
+		const homonymousShelvesDocs = (
+			await database
+				.collection('shelves')
+				.where('user', '==', userId)
+				.where('name', '==', shelfName)
+				.get()
+		).docs;
+		if (homonymousShelvesDocs.length === 0) {
+			await database
+				.collection('shelves')
+				.add({ user: userId, name: shelfName });
+		}
+	};
+
 	return {
 		pageGenerator,
 		getAlsoEnjoyedBooksDetailsForBook,
@@ -4535,6 +4550,7 @@ const Firebase = (() => {
 		getUsersInfoForCompatibilityTestPage,
 		sendFriendRequest,
 		getUserInfoForAddAsFriendPage,
+		addNewBookshelf,
 	};
 })();
 

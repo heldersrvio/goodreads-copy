@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { format } from 'date-fns';
 import TopBar from '../Global/TopBar';
@@ -6,10 +6,12 @@ import HomePageFootBar from '../Authentication/HomePageFootBar';
 import InteractiveStarRating from './InteractiveStarRating';
 import Firebase from '../../Firebase';
 import '../styles/User/UserBookshelfPage.css';
+import AddToShelvesPopup from './AddToShelvesPopup';
 
-// TODO: Add to shelves popup, review more/less buttons, cover view
+// TODO: Add to shelves popup, review more/less buttons, cover view, user's own bookshelf page
 
 const UserBookshelfPage = ({ match }) => {
+	const openAddShelvesPopup = useRef();
 	const history = useHistory();
 	const {
 		params: { pageId },
@@ -86,7 +88,10 @@ const UserBookshelfPage = ({ match }) => {
 
 	loggedInUserShelves: [{
 		name,
-		books,
+		books: [
+			id,
+			rootId,
+		],
 	}]
     */
 	const [searchInputText, setSearchInputText] = useState(searchQuery);
@@ -133,6 +138,20 @@ const UserBookshelfPage = ({ match }) => {
 	);
 
 	const user = JSON.parse(localStorage.getItem('userState'));
+
+	useLayoutEffect(() => {
+		document.addEventListener('click', (event) => {
+			if (
+				!(
+					openAddShelvesPopup.current === null ||
+					(openAddShelvesPopup.current !== null &&
+						openAddShelvesPopup.current.contains(event.target))
+				)
+			) {
+				setVisibleAddToShelvesPopup(null);
+			}
+		});
+	}, []);
 
 	useEffect(() => {
 		const getUsersInfo = () => {
@@ -470,11 +489,29 @@ const UserBookshelfPage = ({ match }) => {
 			setLoggedInUserShelves([
 				{
 					name: 'read',
-					books: ['1', '6'],
+					books: [
+						{
+							id: '1',
+							rootId: '1',
+						},
+						{
+							id: '6',
+							rootId: '6',
+						},
+					],
 				},
 				{
 					name: 'currently-reading',
-					books: ['10', '15'],
+					books: [
+						{
+							id: '10',
+							rootId: '10',
+						},
+						{
+							id: '15',
+							rootId: '15',
+						},
+					],
 				},
 			]);
 			setLoaded(true);
@@ -2146,22 +2183,111 @@ const UserBookshelfPage = ({ match }) => {
 												}
 												saveRating={(rating) => rateBook(book.id, rating)}
 											/>
-											<button
-												className="add-to-shelves-button"
-												onClick={(_e) => {
-													if (visibleAddToShelvesPopup === index) {
-														setVisibleAddToShelvesPopup(null);
-													} else {
-														setVisibleAddToShelvesPopup(index);
-													}
-												}}
+											<div
+												className="add-to-shelves-button-wrapper"
+												ref={
+													index === visibleAddToShelvesPopup
+														? openAddShelvesPopup
+														: null
+												}
 											>
-												{loggedInUserShelves.some((shelf) =>
-													shelf.books.includes(book.id)
-												)
-													? 'edit shelves'
-													: 'add to shelves'}
-											</button>
+												<button
+													className="add-to-shelves-button"
+													onClick={(_e) => {
+														if (user.userUID !== null) {
+															if (visibleAddToShelvesPopup === index) {
+																setVisibleAddToShelvesPopup(null);
+															} else {
+																setVisibleAddToShelvesPopup(index);
+															}
+														} else {
+															history.push('/user/sign_up');
+														}
+													}}
+												>
+													{loggedInUserShelves.some((shelf) =>
+														shelf.books
+															.map((loggedInBook) => loggedInBook.id)
+															.includes(book.id)
+													)
+														? 'edit shelves'
+														: 'add to shelves'}
+												</button>
+												<div
+													className={
+														visibleAddToShelvesPopup === index
+															? 'add-to-shelves-popup-wrapper visible'
+															: 'add-to-shelves-popup-wrapper'
+													}
+												>
+													<AddToShelvesPopup
+														shelves={loggedInUserShelves
+															.map((shelf) =>
+																shelf.name !== 'want-to-read'
+																	? shelf.name
+																	: 'to-read'
+															)
+															.filter((shelf) => shelf !== 'all')}
+														shelvesBookBelongsTo={loggedInUserShelves
+															.filter(
+																(shelf) =>
+																	shelf.name !== 'all' &&
+																	shelf.books.some(
+																		(shelfBook) => shelfBook.id === book.id
+																	)
+															)
+															.map((shelf) =>
+																shelf.name !== 'want-to-read'
+																	? shelf.name
+																	: 'to-read'
+															)}
+														addNewShelf={async (shelfName) => {
+															await Firebase.addNewBookshelf(
+																user.userUID,
+																shelfName
+															);
+															setLoggedInUserShelves((previous) =>
+																previous.concat({
+																	name: shelfName,
+																	books: [],
+																})
+															);
+														}}
+														addBookToShelf={async (shelfName) => {
+															await Firebase.addBookToUserShelf(
+																user.userUID,
+																book.rootId,
+																shelfName,
+																null,
+																history
+															);
+															setLoggedInUserShelves((previous) =>
+																previous.map((previousShelf) => {
+																	if (previousShelf.name === shelfName) {
+																		return {
+																			name: shelfName,
+																			books: previousShelf.books.concat({
+																				id: book.id,
+																				rootId: book.rootId,
+																			}),
+																		};
+																	}
+																	return previousShelf;
+																})
+															);
+														}}
+														changeBookStatus={async (status) =>
+															await Firebase.addBookToShelf(
+																user.userUID,
+																book.id,
+																status,
+																history
+															)
+														}
+														close={() => setVisibleAddToShelvesPopup(null)}
+													/>
+												</div>
+											</div>
 										</td>
 									) : null}
 									{isReviewColumnVisible ? (
