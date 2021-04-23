@@ -3,13 +3,189 @@
 
 .user-bookshelf-page-add-to-shelves-popup {
 	position: absolute;
+	padding: 5px;
+	width: 188px;
+	border-radius: 5px;
+	background-color: rgb(255, 255, 255);
+	box-shadow: rgba(0, 0, 0, 0.15) 0px 1px 2px 0px;
+	z-index: 2;
 }
 
 .add-to-shelves-popup-wrapper .user-bookshelf-page-add-to-shelves-popup {
 	display: none;
 }
 
-.add-to-shelves-popup-wrapper
-	.user-bookshelf-page-add-to-shelves-popup.visible {
+.add-to-shelves-popup-wrapper.visible
+	.user-bookshelf-page-add-to-shelves-popup {
 	display: block;
+}
+
+.user-bookshelf-page-add-to-shelves-popup .popup-topmost-section {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.user-bookshelf-page-add-to-shelves-popup .popup-topmost-section button {
+	color: rgb(153, 153, 153);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+	padding: 0;
+	background-color: transparent;
+}
+
+.user-bookshelf-page-add-to-shelves-popup .popup-topmost-section button:hover {
+	text-decoration: underline;
+}
+
+.user-bookshelf-page-add-to-shelves-popup .popup-top-section input {
+	margin-top: 5px;
+	padding: 2px 3px;
+	width: 176px;
+	border-radius: 3px;
+	border: 1px solid rgb(220, 214, 204);
+	color: rgb(51, 51, 51);
+	font-family: var(--lato-font);
+	font-size: 11px;
+	line-height: normal;
+}
+
+.user-bookshelf-page-add-to-shelves-popup .popup-top-section input:focus {
+	border-color: rgb(185, 173, 153);
+	box-shadow: rgba(185, 173, 153, 0.5) 0px 0px 4px 0px;
+}
+
+.user-bookshelf-page-add-to-shelves-popup .popup-middle-section {
+	margin-top: 3px;
+}
+
+.user-bookshelf-page-add-to-shelves-popup .popup-middle-section .popup-shelf {
+	cursor: pointer;
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAIAAACQKrqGAAABgElEQVQoUz2SzWrCUBBG06umNV34W3wGMXUhCiK%2BhYKC0lBfQOhTKOjGvWARfBVx6dKlbnSjCNoYMdqeTLTfIpmZ78y9MyHqV%2BS67uFw6PV6tVrtQ9RsNkkpYvmM0jSNZD6fW5aVSCT6%2Ff63qNPpRKNRilgAYOp6vW63W4zWZ6tarSaTbxiXi0tbpVKp1%2BvdbhcATJ1Op%2BFwmMlkzHfTcRzb%2FhEdbdsmzWazpmmORiMwtd%2FvV6tVoVA4Hu82Op%2FP98Bx8vk8AJja7XaxWCyVSjG4LWeeRAQ0BAIBLIYGU%2BzIWM8P6boeDAYhJNR1eQGAqScRq4RCIdAXUTgc5uF3spDPqEgk4t9I1Yf%2BRUqRMXDBVDweNwxjvV7Tjf36kCG63W6bzYYeMO9U1p%2FNZsvlUilvHk1EzMTsPp1OAbxT6Uin06VSaTKZ8IEXi8VFREA6Ho%2BLxSIAGM2Kj1UulxuNBsRgMLBEBExJEQvA47iLi0hyuRz%2FSrvd%2FhIRkFLEAgD7A8%2BYCA4qZ3hDAAAAAElFTkSuQmCC);
+	background-repeat: no-repeat;
+	background-position-x: left;
+	background-position-y: center;
+	padding: 2px 18px;
+	border-bottom: 1px solid rgb(238, 238, 238);
+}
+
+.user-bookshelf-page-add-to-shelves-popup
+	.popup-middle-section
+	.popup-shelf.selected {
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAIAAACQKrqGAAACKElEQVQoFSXQT2jTUBwH8OQly%2FK3adKtm7pOmHOslyndMlCKtlYv%2FrkNCvawDYagl1qnsAp6Uk9aBedFEbQb4qwH3UHvnvwDrgHZ6p%2BpIOpqmvY1deuIifOX%2BeUd3u%2F3%2B%2BSF99DGZhzHaTQaV67eTRw9qe0fG46NHzx2Ckpowui%2FQQRBQLGgLx4eyRimdf7c%2BKOZyw%2Fzl6YmR8sGPjKSKeqLAIAh13VN08xkr%2B%2FdM3AooSGa%2FL5i%2FPj5i6SIeDyya3ff6ewNAMBQs9m8djNPtbZ0hdqxZRkmLhuVsmEaZq2KrW1dbTRL56ZngCGM8au3S93d7TA2a3VdX7iYPXshO6nreg3XzRoOhYJviiVgqFqt%2FnE3fLLoOG6liudm731Z%2Fvj186fCg%2FuN32s0RSuK5PwlgSG4oyhyPMsKAidJAk3TBEHCoihKEnhB4HmOlSQeGCJJUuAo%2BFoUeFmSjo9O7Ojt6%2BndmRqbkGUfaKaFkXgKGJIhvPdkcITfLw8Oablbd3LTtweHhhW%2F7POJNKJ8vMeQqqoD%2Fdvt5irDMKqiBIPBDi%2BdsFEUpZVh7fXV%2Fp6twDyuaZptrdRrFY7jA4G2js4tnlNVURAtbDYq3wB4p7IsGw6HEwdipeLL5%2FOP3y%2B9W2%2Bu2ba9%2FKH07GlBf%2F0iHtsHABiCwI%2Bi0WgqlQrIwnxhdip9AtaTubxf4qAJIwCegwvBu0ARiUSSyWQ6nT6zGdhACU0YAQD2DxEM9P%2F1XfyBAAAAAElFTkSuQmCC);
+	background-color: rgb(255, 255, 224);
+}
+
+.user-bookshelf-page-add-to-shelves-popup
+	.popup-middle-section
+	.popup-shelf:hover,
+.user-bookshelf-page-add-to-shelves-popup
+	.popup-middle-section
+	.popup-shelf.marked {
+	background-color: rgb(255, 255, 224);
+}
+
+.user-bookshelf-page-add-to-shelves-popup
+	.popup-middle-section
+	.popup-shelf
+	span {
+	color: rgb(24, 24, 24);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.user-bookshelf-page-add-to-shelves-popup
+	.popup-bottom-section
+	.add-new-shelf-button {
+	width: 100%;
+	text-align: left;
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+	padding: 5px;
+}
+
+.user-bookshelf-page-add-to-shelves-popup
+	.popup-bottom-section
+	.add-new-shelf-button
+	span {
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.user-bookshelf-page-add-to-shelves-popup
+	.popup-bottom-section
+	.add-new-shelf-button
+	span
+	b {
+	font-weight: bold;
+}
+
+.user-bookshelf-page-add-to-shelves-popup
+	.popup-bottom-section
+	.add-new-shelf-button:hover {
+	text-decoration: underline;
+	background-color: rgb(255, 255, 224);
+}
+
+.user-bookshelf-page-add-to-shelves-popup
+	.popup-bottom-section
+	.add-new-shelf-container
+	input {
+	border-radius: 3px;
+	width: 100px;
+	color: rgb(51, 51, 51);
+	font-family: var(--lato-font);
+	font-size: 11px;
+	padding: 2px 3px;
+	border: 1px solid rgb(220, 214, 204);
+	margin-right: 5px;
+}
+
+.user-bookshelf-page-add-to-shelves-popup
+	.popup-bottom-section
+	.add-new-shelf-container
+	input:focus {
+	border-color: rgb(185, 173, 153);
+	box-shadow: rgba(185, 173, 153, 0.5) 0px 0px 4px 0px;
+}
+
+.user-bookshelf-page-add-to-shelves-popup
+	.popup-bottom-section
+	.add-new-shelf-container {
+	display: flex;
+	flex-direction: row;
+	padding: 10px 3px;
+}
+
+.user-bookshelf-page-add-to-shelves-popup
+	.popup-bottom-section
+	.add-new-shelf-container:hover {
+	background-color: rgb(255, 255, 224);
+}
+
+.user-bookshelf-page-add-to-shelves-popup
+	.popup-bottom-section
+	.add-new-shelf-container
+	.add-new-shelf-with-input-button {
+	background-color: rgb(244, 241, 234);
+	color: rgb(51, 51, 51);
+	font-family: var(--lato-font);
+	font-size: 11px;
+	line-height: 11px;
+	padding: 4px 12px;
+	border: 1px solid rgb(214, 208, 196);
+	border-radius: 3px;
+}
+
+.user-bookshelf-page-add-to-shelves-popup
+	.popup-bottom-section
+	.add-new-shelf-container
+	.add-new-shelf-with-input-button:hover {
+	background-color: rgb(237, 230, 214);
 }

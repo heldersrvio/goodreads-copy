@@ -392,7 +392,7 @@
 	position: relative;
 }
 
-.user-bookshelf-page-books-table .add-to-shelves-button {
+.user-bookshelf-page-books-table .table-add-to-shelves-button {
 	color: var(--goodreads-teal);
 	font-family: var(--lato-font);
 	font-size: 11px;
@@ -402,7 +402,7 @@
 	margin-top: 5px;
 }
 
-.user-bookshelf-page-books-table .add-to-shelves-button:hover {
+.user-bookshelf-page-books-table .table-add-to-shelves-button:hover {
 	text-decoration: underline;
 }
 

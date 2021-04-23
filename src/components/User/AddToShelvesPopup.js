@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import '../styles/User/AddToShelvesPopup.css';
 
@@ -11,6 +11,10 @@ const AddToShelvesPopup = (props) => {
 		false
 	);
 	const [addShelfInput, setAddShelfInput] = useState('');
+
+	useEffect(() => {
+		setSelectedShelves(props.shelvesBookBelongsTo);
+	}, [props.shelvesBookBelongsTo]);
 
 	return (
 		<div className="user-bookshelf-page-add-to-shelves-popup">
@@ -42,12 +46,16 @@ const AddToShelvesPopup = (props) => {
 						return (
 							<div
 								className={
-									selectedShelves.includes(shelf)
+									shelf === 'read'
+										? selectedShelves.includes(shelf)
+											? 'marked selected popup-shelf'
+											: 'marked popup-shelf'
+										: selectedShelves.includes(shelf)
 										? 'selected popup-shelf'
 										: 'popup-shelf'
 								}
 								key={index}
-								onClick={(_e) => {
+								onClick={async (_e) => {
 									if (!selectedShelves.includes(shelf)) {
 										if (
 											['read', 'to-read', 'currently-reading'].includes(shelf)
@@ -65,11 +73,11 @@ const AddToShelvesPopup = (props) => {
 														)
 														.concat(shelf)
 												);
-												props.changeBookStatus(shelf);
+												await props.changeBookStatus(shelf);
 											}
 										} else if (!selectedShelves.includes(shelf)) {
 											setSelectedShelves((previous) => previous.concat(shelf));
-											props.addBookToShelf(shelf);
+											await props.addBookToShelf(shelf);
 										}
 									}
 								}}
@@ -79,8 +87,8 @@ const AddToShelvesPopup = (props) => {
 						);
 					})}
 			</div>
-			<div className="bottom-section">
-				{!isAddShelfSectionVisible ? (
+			<div className="popup-bottom-section">
+				{!isAddShelfSectionVisible || searchShelfInput.length > 0 ? (
 					<button
 						className="add-new-shelf-button"
 						onClick={async (_e) => {
@@ -90,16 +98,22 @@ const AddToShelvesPopup = (props) => {
 							) {
 								setIsAddShelfSectionVisible(true);
 							} else {
-								await props.addNewShelf(addShelfInput);
-								await props.addBookToShelf(addShelfInput);
+								await props.addBookToShelf(searchShelfInput);
+								setSearchShelfInput('');
 								setIsAddShelfSectionVisible(false);
 							}
 						}}
 					>
 						{searchShelfInput.length === 0 ||
-						props.shelves.includes(searchShelfInput)
-							? 'Add new shelf'
-							: `Add "${searchShelfInput}" shelf`}
+						props.shelves.includes(searchShelfInput) ? (
+							<span className="add-new-shelf-span">Add new shelf</span>
+						) : (
+							<span>
+								{`Add `}
+								<b>{`"${searchShelfInput}"`}</b>
+								{` shelf`}
+							</span>
+						)}
 					</button>
 				) : (
 					<div className="add-new-shelf-container">
@@ -111,8 +125,8 @@ const AddToShelvesPopup = (props) => {
 						<button
 							className="add-new-shelf-with-input-button"
 							onClick={async (_e) => {
-								await props.addNewShelf(addShelfInput);
 								await props.addBookToShelf(addShelfInput);
+								setAddShelfInput('');
 								setIsAddShelfSectionVisible(false);
 							}}
 						>
@@ -128,7 +142,6 @@ const AddToShelvesPopup = (props) => {
 AddToShelvesPopup.propTypes = {
 	shelves: PropTypes.arrayOf(PropTypes.string),
 	shelvesBookBelongsTo: PropTypes.arrayOf(PropTypes.string),
-	addNewShelf: PropTypes.func,
 	addBookToShelf: PropTypes.func,
 	changeBookStatus: PropTypes.func,
 	close: PropTypes.func,

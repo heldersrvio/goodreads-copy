@@ -62,6 +62,7 @@ const UserBookshelfPage = ({ match }) => {
             name,
             books: [{
                 id,
+				rootId,
                 cover,
                 title,
 				seriesName,
@@ -146,7 +147,8 @@ const UserBookshelfPage = ({ match }) => {
 					openAddShelvesPopup.current === null ||
 					(openAddShelvesPopup.current !== null &&
 						openAddShelvesPopup.current.contains(event.target))
-				)
+				) &&
+				event.target.className !== 'add-new-shelf-span'
 			) {
 				setVisibleAddToShelvesPopup(null);
 			}
@@ -164,6 +166,7 @@ const UserBookshelfPage = ({ match }) => {
 						books: [
 							{
 								id: '1',
+								rootId: '1',
 								cover:
 									'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1605574715l/55077642._SY75_.jpg',
 								title: "She Wouldn't Change a Thing",
@@ -184,6 +187,7 @@ const UserBookshelfPage = ({ match }) => {
 							},
 							{
 								id: '2',
+								rootId: '1',
 								cover:
 									'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1608476881l/55711715._SX50_.jpg',
 								title: 'The Perfect Family',
@@ -204,6 +208,7 @@ const UserBookshelfPage = ({ match }) => {
 							},
 							{
 								id: '3',
+								rootId: '1',
 								cover:
 									'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1601039560l/54304220.jpg',
 								title: 'Under the Southern Sky',
@@ -224,6 +229,7 @@ const UserBookshelfPage = ({ match }) => {
 							},
 							{
 								id: '4',
+								rootId: '1',
 								cover:
 									'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1510367389l/36573115._SX318_.jpg',
 								title: 'The Anointed',
@@ -244,6 +250,7 @@ const UserBookshelfPage = ({ match }) => {
 							},
 							{
 								id: '5',
+								rootId: '1',
 								cover:
 									'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1362762309l/17249467.jpg',
 								title: 'Shaman: A Novel of the Ice Age',
@@ -259,6 +266,7 @@ const UserBookshelfPage = ({ match }) => {
 							},
 							{
 								id: '6',
+								rootId: '1',
 								cover:
 									'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1530054954l/59._SY475_.jpg',
 								title: 'The Challenging Sea',
@@ -279,6 +287,7 @@ const UserBookshelfPage = ({ match }) => {
 						books: [
 							{
 								id: '1',
+								rootId: '1',
 								cover:
 									'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1605574715l/55077642._SY75_.jpg',
 								title: "She Wouldn't Change a Thing",
@@ -299,6 +308,7 @@ const UserBookshelfPage = ({ match }) => {
 							},
 							{
 								id: '2',
+								rootId: '1',
 								cover:
 									'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1608476881l/55711715._SX50_.jpg',
 								title: 'The Perfect Family',
@@ -319,6 +329,7 @@ const UserBookshelfPage = ({ match }) => {
 							},
 							{
 								id: '3',
+								rootId: '1',
 								cover:
 									'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1601039560l/54304220.jpg',
 								title: 'Under the Southern Sky',
@@ -344,6 +355,7 @@ const UserBookshelfPage = ({ match }) => {
 						books: [
 							{
 								id: '4',
+								rootId: '1',
 								cover:
 									'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1510367389l/36573115._SX318_.jpg',
 								title: 'The Anointed',
@@ -369,6 +381,7 @@ const UserBookshelfPage = ({ match }) => {
 						books: [
 							{
 								id: '5',
+								rootId: '1',
 								cover:
 									'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1362762309l/17249467.jpg',
 								title: 'Shaman: A Novel of the Ice Age',
@@ -384,6 +397,7 @@ const UserBookshelfPage = ({ match }) => {
 							},
 							{
 								id: '6',
+								rootId: '1',
 								cover:
 									'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1530054954l/59._SY475_.jpg',
 								title: 'The Challenging Sea',
@@ -404,6 +418,7 @@ const UserBookshelfPage = ({ match }) => {
 						books: [
 							{
 								id: '6',
+								rootId: '1',
 								cover:
 									'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1530054954l/59._SY475_.jpg',
 								title: 'The Challenging Sea',
@@ -419,6 +434,7 @@ const UserBookshelfPage = ({ match }) => {
 							},
 							{
 								id: '4',
+								rootId: '1',
 								cover:
 									'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1510367389l/36573115._SX318_.jpg',
 								title: 'The Anointed',
@@ -444,6 +460,7 @@ const UserBookshelfPage = ({ match }) => {
 						books: [
 							{
 								id: '1',
+								rootId: '1',
 								cover:
 									'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1605574715l/55077642._SY75_.jpg',
 								title: "She Wouldn't Change a Thing",
@@ -464,6 +481,7 @@ const UserBookshelfPage = ({ match }) => {
 							},
 							{
 								id: '2',
+								rootId: '1',
 								cover:
 									'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1608476881l/55711715._SX50_.jpg',
 								title: 'The Perfect Family',
@@ -510,6 +528,15 @@ const UserBookshelfPage = ({ match }) => {
 						{
 							id: '15',
 							rootId: '15',
+						},
+					],
+				},
+				{
+					name: 'want-to-read',
+					books: [
+						{
+							id: '2',
+							rootId: '2',
 						},
 					],
 				},
@@ -2192,7 +2219,7 @@ const UserBookshelfPage = ({ match }) => {
 												}
 											>
 												<button
-													className="add-to-shelves-button"
+													className="table-add-to-shelves-button"
 													onClick={(_e) => {
 														if (user.userUID !== null) {
 															if (visibleAddToShelvesPopup === index) {
@@ -2241,18 +2268,6 @@ const UserBookshelfPage = ({ match }) => {
 																	? shelf.name
 																	: 'to-read'
 															)}
-														addNewShelf={async (shelfName) => {
-															await Firebase.addNewBookshelf(
-																user.userUID,
-																shelfName
-															);
-															setLoggedInUserShelves((previous) =>
-																previous.concat({
-																	name: shelfName,
-																	books: [],
-																})
-															);
-														}}
 														addBookToShelf={async (shelfName) => {
 															await Firebase.addBookToUserShelf(
 																user.userUID,
@@ -2262,18 +2277,28 @@ const UserBookshelfPage = ({ match }) => {
 																history
 															);
 															setLoggedInUserShelves((previous) =>
-																previous.map((previousShelf) => {
-																	if (previousShelf.name === shelfName) {
-																		return {
+																!previous.some(
+																	(previousShelf) =>
+																		previousShelf.name === shelfName
+																)
+																	? previous.concat({
 																			name: shelfName,
-																			books: previousShelf.books.concat({
-																				id: book.id,
-																				rootId: book.rootId,
-																			}),
-																		};
-																	}
-																	return previousShelf;
-																})
+																			books: [
+																				{ id: book.id, rootId: book.rootId },
+																			],
+																	  })
+																	: previous.map((previousShelf) => {
+																			if (previousShelf.name === shelfName) {
+																				return {
+																					name: shelfName,
+																					books: previousShelf.books.concat({
+																						id: book.id,
+																						rootId: book.rootId,
+																					}),
+																				};
+																			}
+																			return previousShelf;
+																	  })
 															);
 														}}
 														changeBookStatus={async (status) =>

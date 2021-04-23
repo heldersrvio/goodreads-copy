@@ -4473,7 +4473,7 @@ const Firebase = (() => {
 		if (homonymousShelvesDocs.length === 0) {
 			await database
 				.collection('shelves')
-				.add({ user: userId, name: shelfName });
+				.add({ user: userId, name: shelfName, rootBooks: [] });
 		}
 	};
 
