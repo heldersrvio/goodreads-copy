@@ -7,8 +7,9 @@ import InteractiveStarRating from './InteractiveStarRating';
 import Firebase from '../../Firebase';
 import '../styles/User/UserBookshelfPage.css';
 import AddToShelvesPopup from './AddToShelvesPopup';
+import UserReviewSection from './UserReviewSection';
 
-// TODO: Add to shelves popup, review more/less buttons, cover view, user's own bookshelf page
+// TODO: Cover view, user's own bookshelf page
 
 const UserBookshelfPage = ({ match }) => {
 	const openAddShelvesPopup = useRef();
@@ -146,6 +147,7 @@ const UserBookshelfPage = ({ match }) => {
 				!(
 					openAddShelvesPopup.current === null ||
 					(openAddShelvesPopup.current !== null &&
+						openAddShelvesPopup.current !== undefined &&
 						openAddShelvesPopup.current.contains(event.target))
 				) &&
 				event.target.className !== 'add-new-shelf-span'
@@ -2317,18 +2319,7 @@ const UserBookshelfPage = ({ match }) => {
 									) : null}
 									{isReviewColumnVisible ? (
 										<td>
-											<span
-												className={
-													book.review === undefined ? 'no-review-span' : ''
-												}
-											>
-												{book.review !== undefined ? book.review : 'None'}
-											</span>
-											{book.review !== undefined && book.review.length > 150 ? (
-												<button className="review-more-less-button">
-													...more
-												</button>
-											) : null}
+											<UserReviewSection reviewText={book.review} />
 										</td>
 									) : null}
 									{isDateStartedColumnVisible ? (

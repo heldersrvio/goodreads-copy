@@ -1,0 +1,14 @@
+.user-bookshelf-page-user-review-section button {
+	display: inline;
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 18px;
+	padding: 0;
+	background-color: transparent;
+	margin-left: 2px;
+}
+
+.user-bookshelf-page-user-review-section button:hover {
+	text-decoration: underline;
+}
