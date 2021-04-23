@@ -285,6 +285,23 @@
 	flex-direction: row;
 }
 
+.user-bookshelf-page-books-cover-view {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	margin-top: 20px;
+}
+
+.user-bookshelf-page-books-cover-view a {
+	margin-right: 20px;
+}
+
+.user-bookshelf-page-books-cover-view img {
+	width: 98px;
+	height: 147px;
+	box-shadow: rgb(204, 204, 204) 5px 5px 5px 0px;
+}
+
 .user-bookshelf-page-books-table {
 	max-width: none;
 	min-width: 770px;
@@ -305,7 +322,8 @@
 	margin-left: 50px;
 }
 
-.user-bookshelf-page-books-table tbody .no-matching-items-tr td span {
+.user-bookshelf-page-books-table tbody .no-matching-items-tr td span,
+.user-bookshelf-page-books-cover-view .no-matching-items-span {
 	padding: 20px;
 	color: var(--goodreads-light-gray);
 	font-family: var(--lato-font);
