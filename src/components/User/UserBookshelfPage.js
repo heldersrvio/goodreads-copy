@@ -1140,7 +1140,14 @@ const UserBookshelfPage = ({ match }) => {
 					</button>
 				) : null}
 			</div>
-			<div className="shelf-group-separator"></div>
+			{userInfo.shelves.filter(
+				(shelf) =>
+					!['read', 'want-to-read', 'currently-reading', 'all'].includes(
+						shelf.name
+					)
+			).length > 0 ? (
+				<div className="shelf-group-separator"></div>
+			) : null}
 		</div>
 	) : null;
 

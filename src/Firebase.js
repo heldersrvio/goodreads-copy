@@ -4596,7 +4596,7 @@ const Firebase = (() => {
 			);
 			const averageBookRating = allRatedBookInstances.reduce(
 				(previous, current) =>
-					previous + current.data() / allRatedBookInstances.length,
+					previous + current.data().rating / allRatedBookInstances.length,
 				0
 			);
 			const userBookUpdates = await database
@@ -4705,8 +4705,8 @@ const Firebase = (() => {
 					.concat([
 						{ name: 'all', rootBooks: allUserRootBooks },
 						{ name: 'read', rootBooks: readUserRootBooks },
-						{ name: 'to-read', rootBooks: wantToReadUserRootBooks },
-						{ name: 'reading', rootBooks: readingUserRootBooks },
+						{ name: 'want-to-read', rootBooks: wantToReadUserRootBooks },
+						{ name: 'currently-reading', rootBooks: readingUserRootBooks },
 					])
 					.map(async (data) => {
 						return {
@@ -4784,7 +4784,6 @@ const Firebase = (() => {
 				.where('bookId', 'in', allEditionIds)
 				.where('userId', '==', userUID)
 				.get();
-
 			return {
 				id: userInstancesQuery.docs[0].data().bookId,
 				rootId: rootBook,
@@ -4797,8 +4796,8 @@ const Firebase = (() => {
 				.concat([
 					{ name: 'all', rootBooks: allUserRootBooks },
 					{ name: 'read', rootBooks: readUserRootBooks },
-					{ name: 'to-read', rootBooks: wantToReadUserRootBooks },
-					{ name: 'reading', rootBooks: readingUserRootBooks },
+					{ name: 'want-to-read', rootBooks: wantToReadUserRootBooks },
+					{ name: 'currently-reading', rootBooks: readingUserRootBooks },
 				])
 				.map(async (data) => {
 					return {
