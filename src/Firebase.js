@@ -1659,6 +1659,27 @@ const Firebase = (() => {
 				state: { error: 'User not logged in' },
 			});
 		} else {
+			const editionIds = (
+				await database
+					.collection('books')
+					.where('rootBook', '==', rootBook)
+					.get()
+			).docs.map((doc) => doc.id);
+			const mainEditionId = (
+				await database
+					.collection('books')
+					.where('rootBook', '==', rootBook)
+					.where('mainEdition', '==', true)
+					.get()
+			).docs[0].id;
+			const statusQuery = await database
+				.collection('userBooksInstances')
+				.where('userId', '==', userUID)
+				.where('bookId', 'in', editionIds)
+				.get();
+			if (statusQuery.docs.length === 0) {
+				await addBookToShelf(userUID, mainEditionId, 'read', history);
+			}
 			const shelfQuery = await database
 				.collection('shelves')
 				.where('user', '==', userUID)
@@ -4477,6 +4498,320 @@ const Firebase = (() => {
 		}
 	};
 
+	const queryUserInfoForUserBookshelfPage = async (
+		userUID,
+		loggedInUserUID
+	) => {
+		const userQuery = await database.collection('users').doc(userUID).get();
+		const shelvesQuery = await database
+			.collection('shelves')
+			.where('user', '==', userUID)
+			.get();
+		const allUserBooksInstances = await database
+			.collection('userBooksInstances')
+			.where('userId', '==', userUID)
+			.get();
+		const allUserRootBooks = await Promise.all(
+			allUserBooksInstances.docs.map(
+				async (doc) =>
+					(
+						await database.collection('books').doc(doc.data().bookId).get()
+					).data().rootBook
+			)
+		);
+		const wantToReadUserRootBooks = await Promise.all(
+			allUserBooksInstances.docs
+				.filter((doc) => doc.data().status === 'to-read')
+				.map(
+					async (doc) =>
+						(
+							await database.collection('books').doc(doc.data().bookId).get()
+						).data().rootBook
+				)
+		);
+		const readingUserRootBooks = await Promise.all(
+			allUserBooksInstances.docs
+				.filter((doc) => doc.data().status === 'reading')
+				.map(
+					async (doc) =>
+						(
+							await database.collection('books').doc(doc.data().bookId).get()
+						).data().rootBook
+				)
+		);
+		const readUserRootBooks = await Promise.all(
+			allUserBooksInstances.docs
+				.filter((doc) => doc.data().status === 'read')
+				.map(
+					async (doc) =>
+						(
+							await database.collection('books').doc(doc.data().bookId).get()
+						).data().rootBook
+				)
+		);
+
+		const getShelfBookInfo = async (rootBook) => {
+			const rootBookQuery = await database
+				.collection('rootBooks')
+				.doc(rootBook)
+				.get();
+			const seriesName =
+				rootBookQuery.data().series !== undefined
+					? (
+							await database
+								.collection('series')
+								.doc(rootBookQuery.data().series)
+								.get()
+					  ).data().name
+					: undefined;
+			const authorQuery =
+				rootBookQuery !== null && rootBookQuery !== undefined
+					? await database
+							.collection('authors')
+							.doc(rootBookQuery.data().authorId)
+							.get()
+					: undefined;
+			const allEditionIds = (
+				await database
+					.collection('books')
+					.where('rootBook', '==', rootBook)
+					.get()
+			).docs.map((doc) => doc.id);
+			const userInstancesQuery = await database
+				.collection('userBooksInstances')
+				.where('bookId', 'in', allEditionIds)
+				.where('userId', '==', userUID)
+				.get();
+			const editionQuery = await database
+				.collection('books')
+				.doc(userInstancesQuery.docs[0].data().bookId)
+				.get();
+			const allRatedBookInstances = (
+				await database
+					.collection('userBooksInstances')
+					.where('bookId', 'in', allEditionIds)
+					.get()
+			).docs.filter(
+				(doc) => doc.data().rating !== undefined && doc.data().rating !== 0
+			);
+			const averageBookRating = allRatedBookInstances.reduce(
+				(previous, current) =>
+					previous + current.data() / allRatedBookInstances.length,
+				0
+			);
+			const userBookUpdates = await database
+				.collection('userBooksUpdates')
+				.where('user', '==', userUID)
+				.where('book', 'in', allEditionIds)
+				.get();
+			const dateRead =
+				userBookUpdates.docs.filter(
+					(doc) =>
+						doc.data().action === 'add-book' && doc.data().shelf === 'read'
+				).length === 0
+					? undefined
+					: userBookUpdates.docs
+							.filter(
+								(doc) =>
+									doc.data().action === 'add-book' &&
+									doc.data().shelf === 'read'
+							)[0]
+							.data()
+							.date.toDate();
+			const reviewQuery = await database
+				.collection('reviews')
+				.where('bookEdition', 'in', allEditionIds)
+				.where('user', '==', userUID)
+				.get();
+			const loggedInUserInstanceQuery =
+				loggedInUserUID !== undefined && loggedInUserUID !== null
+					? await database
+							.collection('userBooksInstances')
+							.where('bookId', 'in', allEditionIds)
+							.where('userId', '==', loggedInUserUID)
+							.get()
+					: undefined;
+
+			return {
+				id: userInstancesQuery.docs[0].data().bookId,
+				rootId: rootBook,
+				cover: editionQuery.data().cover,
+				title: editionQuery.data().title,
+				seriesName,
+				seriesInstance: rootBookQuery.data().seriesInstance,
+				authorId: rootBookQuery.data().authorId,
+				authorName: authorQuery.data().name,
+				averageRating: averageBookRating,
+				dateAdded:
+					userBookUpdates.docs.length === 0
+						? undefined
+						: userBookUpdates.docs
+								.sort(
+									(a, b) => a.data().date.toDate() - b.data().date.toDate()
+								)[0]
+								.data()
+								.date.toDate(),
+				datePublished: (
+					await database
+						.collection('books')
+						.where('rootBook', '==', rootBook)
+						.get()
+				).docs
+					.sort(
+						(a, b) =>
+							a.data().publishedDate.toDate() - b.data().publishedDate.toDate()
+					)[0]
+					.data()
+					.publishedDate.toDate(),
+				datePublishedEdtion: editionQuery.data().publishedDate.toDate(),
+				dateRead,
+				dateStarted:
+					userBookUpdates.docs.filter(
+						(doc) =>
+							doc.data().action === 'add-book' && doc.data().shelf === 'reading'
+					).length === 0
+						? dateRead
+						: userBookUpdates.docs
+								.filter(
+									(doc) =>
+										doc.data().action === 'add-book' &&
+										doc.data().shelf === 'reading'
+								)[0]
+								.data()
+								.date.toDate(),
+				format: editionQuery.data().format,
+				isbn: editionQuery.data().ISBN,
+				numberOfPages: editionQuery.data().pageCount,
+				numberOfRatings: allRatedBookInstances.length,
+				position: userInstancesQuery.docs[0].data().position,
+				rating: userInstancesQuery.docs[0].data().rating,
+				review:
+					reviewQuery.docs.length > 0
+						? reviewQuery.docs[0].data().text
+						: undefined,
+				loggedInUserRating:
+					loggedInUserInstanceQuery === undefined ||
+					loggedInUserInstanceQuery.docs.length === 0
+						? undefined
+						: loggedInUserInstanceQuery.docs[0].data().rating,
+			};
+		};
+
+		return {
+			profilePicture: userQuery.data().profileImage,
+			shelves: await Promise.all(
+				shelvesQuery.docs
+					.map((doc) => doc.data())
+					.concat([
+						{ name: 'all', rootBooks: allUserRootBooks },
+						{ name: 'read', rootBooks: readUserRootBooks },
+						{ name: 'to-read', rootBooks: wantToReadUserRootBooks },
+						{ name: 'reading', rootBooks: readingUserRootBooks },
+					])
+					.map(async (data) => {
+						return {
+							name:
+								data.genre !== null && data.genre !== undefined
+									? data.genre
+									: data.name,
+							books: await Promise.all(data.rootBooks.map(getShelfBookInfo)),
+						};
+					})
+			),
+		};
+	};
+
+	const queryLoggedInUserInfoForUserBookshelfPage = async (userUID) => {
+		if (userUID === undefined || userUID === null) {
+			return [];
+		}
+		const shelvesQuery = await database
+			.collection('shelves')
+			.where('user', '==', userUID)
+			.get();
+		const allUserBooksInstances = await database
+			.collection('userBooksInstances')
+			.where('userId', '==', userUID)
+			.get();
+		const allUserRootBooks = await Promise.all(
+			allUserBooksInstances.docs.map(
+				async (doc) =>
+					(
+						await database.collection('books').doc(doc.data().bookId).get()
+					).data().rootBook
+			)
+		);
+		const wantToReadUserRootBooks = await Promise.all(
+			allUserBooksInstances.docs
+				.filter((doc) => doc.data().status === 'to-read')
+				.map(
+					async (doc) =>
+						(
+							await database.collection('books').doc(doc.data().bookId).get()
+						).data().rootBook
+				)
+		);
+		const readingUserRootBooks = await Promise.all(
+			allUserBooksInstances.docs
+				.filter((doc) => doc.data().status === 'reading')
+				.map(
+					async (doc) =>
+						(
+							await database.collection('books').doc(doc.data().bookId).get()
+						).data().rootBook
+				)
+		);
+		const readUserRootBooks = await Promise.all(
+			allUserBooksInstances.docs
+				.filter((doc) => doc.data().status === 'read')
+				.map(
+					async (doc) =>
+						(
+							await database.collection('books').doc(doc.data().bookId).get()
+						).data().rootBook
+				)
+		);
+
+		const getShelfBookInfo = async (rootBook) => {
+			const allEditionIds = (
+				await database
+					.collection('books')
+					.where('rootBook', '==', rootBook)
+					.get()
+			).docs.map((doc) => doc.id);
+			const userInstancesQuery = await database
+				.collection('userBooksInstances')
+				.where('bookId', 'in', allEditionIds)
+				.where('userId', '==', userUID)
+				.get();
+
+			return {
+				id: userInstancesQuery.docs[0].data().bookId,
+				rootId: rootBook,
+			};
+		};
+
+		return await Promise.all(
+			shelvesQuery.docs
+				.map((doc) => doc.data())
+				.concat([
+					{ name: 'all', rootBooks: allUserRootBooks },
+					{ name: 'read', rootBooks: readUserRootBooks },
+					{ name: 'to-read', rootBooks: wantToReadUserRootBooks },
+					{ name: 'reading', rootBooks: readingUserRootBooks },
+				])
+				.map(async (data) => {
+					return {
+						name:
+							data.genre !== null && data.genre !== undefined
+								? data.genre
+								: data.name,
+						books: await Promise.all(data.rootBooks.map(getShelfBookInfo)),
+					};
+				})
+		);
+	};
+
 	return {
 		pageGenerator,
 		getAlsoEnjoyedBooksDetailsForBook,
@@ -4551,6 +4886,8 @@ const Firebase = (() => {
 		sendFriendRequest,
 		getUserInfoForAddAsFriendPage,
 		addNewBookshelf,
+		queryUserInfoForUserBookshelfPage,
+		queryLoggedInUserInfoForUserBookshelfPage,
 	};
 })();
 

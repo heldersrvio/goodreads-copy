@@ -158,8 +158,8 @@ const UserBookshelfPage = ({ match }) => {
 	}, []);
 
 	useEffect(() => {
-		const getUsersInfo = () => {
-			setUserInfo({
+		const getUsersInfo = async () => {
+			/*setUserInfo({
 				profilePicture:
 					'https://pbs.twimg.com/profile_images/1018676952629219328/IAnErcp1.jpg',
 				shelves: [
@@ -306,7 +306,7 @@ const UserBookshelfPage = ({ match }) => {
 								numberOfRatings: 5043,
 								position: 2,
 							},
-						],*/,
+						],/,
 					},
 					{
 						name: 'read',
@@ -334,7 +334,7 @@ const UserBookshelfPage = ({ match }) => {
 									rating: 3,
 									review: 'It was alright',
 								};
-							}) /*[
+							})[
 							{
 								id: '1',
 								rootId: '1',
@@ -398,7 +398,7 @@ const UserBookshelfPage = ({ match }) => {
 								rating: 1,
 								review: 'It was terrible',
 							},
-						],*/,
+						],/,
 					},
 					{
 						name: 'currently-reading',
@@ -424,7 +424,7 @@ const UserBookshelfPage = ({ match }) => {
 								rating: 2,
 								review: 'I could not take this book seriously at all.',
 							},
-						],*/,
+						],/,
 					},
 					{
 						name: 'want-to-read',
@@ -461,7 +461,7 @@ const UserBookshelfPage = ({ match }) => {
 								numberOfRatings: 5043,
 								position: 2,
 							},
-						],*/,
+						],/,
 					},
 					/*{
 						name: 'fantasy',
@@ -551,10 +551,10 @@ const UserBookshelfPage = ({ match }) => {
 								review: 'It was great',
 							},
 						],
-					},*/
+					},/
 				],
-			});
-			setLoggedInUserShelves([
+			});*/
+			/*setLoggedInUserShelves([
 				{
 					name: 'read',
 					books: [
@@ -590,11 +590,17 @@ const UserBookshelfPage = ({ match }) => {
 						},
 					],
 				},
-			]);
+			]);*/
+			setUserInfo(
+				await Firebase.queryUserInfoForUserBookshelfPage(userId, user.userUID)
+			);
+			setLoggedInUserShelves(
+				await Firebase.queryLoggedInUserInfoForUserBookshelfPage(user.userUID)
+			);
 			setLoaded(true);
 		};
 		getUsersInfo();
-	}, []);
+	}, [userId, user.userUID]);
 
 	const rateBook = async (bookId, rating) => {
 		if (user.userUID === undefined || user.userUID === null) {
