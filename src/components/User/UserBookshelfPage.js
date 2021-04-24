@@ -9,7 +9,7 @@ import '../styles/User/UserBookshelfPage.css';
 import AddToShelvesPopup from './AddToShelvesPopup';
 import UserReviewSection from './UserReviewSection';
 
-// TODO: Page navigation, user's own bookshelf page
+// TODO: User's own bookshelf page
 
 const UserBookshelfPage = ({ match }) => {
 	const openAddShelvesPopup = useRef();
@@ -165,7 +165,31 @@ const UserBookshelfPage = ({ match }) => {
 				shelves: [
 					{
 						name: 'all',
-						books: [
+						books: Array(30)
+							.fill(0)
+							.map((_value, index) => {
+								return {
+									id: index.toString(),
+									rootId: index.toString(),
+									cover:
+										'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1605574715l/55077642._SY75_.jpg',
+									title: "She Wouldn't Change a Thing",
+									authorId: '123',
+									authorName: 'Sarah Adlakha',
+									averageRating: 4.36,
+									dateAdded: new Date(2020, 2, 10),
+									datePublished: new Date(2018, 2, 1),
+									datePublishedEdition: new Date(2018, 2, 1),
+									dateRead: new Date(2020, 3, 10),
+									dateStarted: new Date(2020, 2, 15),
+									format: 'Paperback',
+									isbn: 1250774551,
+									numberOfPages: 304,
+									numberOfRatings: 53,
+									rating: 3,
+									review: 'It was alright',
+								};
+							}) /*[
 							{
 								id: '1',
 								rootId: '1',
@@ -282,11 +306,35 @@ const UserBookshelfPage = ({ match }) => {
 								numberOfRatings: 5043,
 								position: 2,
 							},
-						],
+						],*/,
 					},
 					{
 						name: 'read',
-						books: [
+						books: Array(30)
+							.fill(0)
+							.map((_value, index) => {
+								return {
+									id: index.toString(),
+									rootId: index.toString(),
+									cover:
+										'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1605574715l/55077642._SY75_.jpg',
+									title: "She Wouldn't Change a Thing",
+									authorId: '123',
+									authorName: 'Sarah Adlakha',
+									averageRating: 4.36,
+									dateAdded: new Date(2020, 2, 10),
+									datePublished: new Date(2018, 2, 1),
+									datePublishedEdition: new Date(2018, 2, 1),
+									dateRead: new Date(2020, 3, 10),
+									dateStarted: new Date(2020, 2, 15),
+									format: 'Paperback',
+									isbn: 1250774551,
+									numberOfPages: 304,
+									numberOfRatings: 53,
+									rating: 3,
+									review: 'It was alright',
+								};
+							}) /*[
 							{
 								id: '1',
 								rootId: '1',
@@ -350,11 +398,11 @@ const UserBookshelfPage = ({ match }) => {
 								rating: 1,
 								review: 'It was terrible',
 							},
-						],
+						],*/,
 					},
 					{
 						name: 'currently-reading',
-						books: [
+						books: [] /* [
 							{
 								id: '4',
 								rootId: '1',
@@ -376,11 +424,11 @@ const UserBookshelfPage = ({ match }) => {
 								rating: 2,
 								review: 'I could not take this book seriously at all.',
 							},
-						],
+						],*/,
 					},
 					{
 						name: 'want-to-read',
-						books: [
+						books: [] /*[
 							{
 								id: '5',
 								rootId: '1',
@@ -413,9 +461,9 @@ const UserBookshelfPage = ({ match }) => {
 								numberOfRatings: 5043,
 								position: 2,
 							},
-						],
+						],*/,
 					},
-					{
+					/*{
 						name: 'fantasy',
 						books: [
 							{
@@ -503,7 +551,7 @@ const UserBookshelfPage = ({ match }) => {
 								review: 'It was great',
 							},
 						],
-					},
+					},*/
 				],
 			});
 			setLoggedInUserShelves([
@@ -550,9 +598,7 @@ const UserBookshelfPage = ({ match }) => {
 
 	const rateBook = async (bookId, rating) => {
 		if (user.userUID === undefined || user.userUID === null) {
-			history.push({
-				pathname: '/user/sign_in',
-			});
+			history.push('/user/sign_in');
 		} else {
 			await Firebase.rateBook(user.userUID, bookId, rating, history);
 		}
@@ -1486,7 +1532,7 @@ const UserBookshelfPage = ({ match }) => {
 						perPage,
 						page - 1
 					)}
-					disabled={page === 1}
+					className={page === 1 ? 'disabled' : ''}
 				>
 					« previous
 				</a>
@@ -1508,7 +1554,7 @@ const UserBookshelfPage = ({ match }) => {
 								perPage,
 								number
 							)}
-							disabled={page === number}
+							className={page === number ? 'disabled' : ''}
 						>
 							{page !== number ? number : <i>{number}</i>}
 						</a>
@@ -1524,7 +1570,11 @@ const UserBookshelfPage = ({ match }) => {
 						perPage,
 						page + 1
 					)}
-					disabled={page === Math.ceil(booksToBeShown.length / perPage)}
+					className={
+						page === Math.ceil(booksToBeShown.length / perPage)
+							? 'disabled'
+							: ''
+					}
 				>
 					next »
 				</a>
@@ -1589,6 +1639,10 @@ const UserBookshelfPage = ({ match }) => {
 									return Math.random() > 0.5 ? a : b;
 							}
 						})
+						.filter(
+							(_book, index) =>
+								index >= (page - 1) * perPage && index < page * perPage
+						)
 						.map((book, index) => {
 							return (
 								<a
@@ -2113,6 +2167,10 @@ const UserBookshelfPage = ({ match }) => {
 										return Math.random() > 0.5 ? a : b;
 								}
 							})
+							.filter(
+								(_book, index) =>
+									index >= (page - 1) * perPage && index < page * perPage
+							)
 							.map((book, index) => {
 								const authorName =
 									book.authorName !== undefined &&
@@ -2462,8 +2520,8 @@ const UserBookshelfPage = ({ match }) => {
 					value={perPage}
 					onChange={(e) => {
 						const newPageValue = e.target.value;
-						history.push({
-							pathname: Firebase.pageGenerator.generateUserShelfPage(
+						history.push(
+							Firebase.pageGenerator.generateUserShelfPage(
 								userId,
 								userFirstName,
 								shelves,
@@ -2471,8 +2529,8 @@ const UserBookshelfPage = ({ match }) => {
 								view,
 								newPageValue,
 								1
-							),
-						});
+							)
+						);
 					}}
 				>
 					<option value="10">10</option>
@@ -2541,9 +2599,14 @@ const UserBookshelfPage = ({ match }) => {
 	const mainInfoContainer = (
 		<div className="user-bookshelf-page-main-info-container">
 			{isSettingsTabOpen ? settingsTab : null}
-			{pageNavigationSection}
+			<div className="top-page-navigation-section-wrapper">
+				{pageNavigationSection}
+			</div>
 			{booksTable}
 			{tableParametersSection}
+			<div className="bottom-page-navigation-section-wrapper">
+				{pageNavigationSection}
+			</div>
 		</div>
 	);
 

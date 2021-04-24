@@ -294,6 +294,7 @@
 
 .user-bookshelf-page-books-cover-view a {
 	margin-right: 20px;
+	margin-bottom: 15px;
 }
 
 .user-bookshelf-page-books-cover-view img {
@@ -574,4 +575,47 @@
 	font-family: var(--lato-font);
 	font-size: 11px;
 	line-height: 14px;
+}
+
+.user-bookshelf-page .bottom-page-navigation-section-wrapper,
+.user-bookshelf-page .top-page-navigation-section-wrapper {
+	padding: 10px 0 20px 0;
+}
+
+.user-bookshelf-page .page-navigation-section {
+	display: flex;
+	flex-direction: row;
+	position: absolute;
+	right: 150px;
+}
+
+.user-bookshelf-page
+	.bottom-page-navigation-section-wrapper
+	.page-navigation-section {
+	left: 350px;
+}
+
+.user-bookshelf-page .page-navigation-section a {
+	display: inline;
+	padding: 0;
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	line-height: 18px;
+	height: auto;
+	color: rgb(0, 99, 93);
+	margin-right: 3px;
+}
+
+.user-bookshelf-page .page-navigation-section a:hover {
+	background-color: transparent;
+	text-decoration: underline;
+}
+
+.user-bookshelf-page .page-navigation-section a.disabled {
+	pointer-events: none;
+	color: rgb(24, 24, 24);
+}
+
+.user-bookshelf-page .page-navigation-section a.disabled:hover {
+	text-decoration: none;
 }
