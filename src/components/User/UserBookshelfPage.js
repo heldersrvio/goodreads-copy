@@ -9,7 +9,16 @@ import '../styles/User/UserBookshelfPage.css';
 import AddToShelvesPopup from './AddToShelvesPopup';
 import UserReviewSection from './UserReviewSection';
 
-// TODO: User's own bookshelf page
+/*
+	TODO: User's own bookshelf page {
+		- Batch edit
+		- Settings 'other'
+		- Add shelf button
+		- Edit columns
+		- Remove book button
+		- No matching items message
+	}
+*/
 
 const UserBookshelfPage = ({ match }) => {
 	const openAddShelvesPopup = useRef();
@@ -968,6 +977,36 @@ const UserBookshelfPage = ({ match }) => {
 		</div>
 	) : null;
 
+	const yourReadingActivitySession =
+		userId === user.userUID ? (
+			<div className="your-reading-activity-section">
+				<span>
+					<b>Your reading activity</b>
+				</span>
+				<a
+					href={Firebase.pageGenerator.generateUserYearInBooksPage(
+						new Date().getFullYear(),
+						userId
+					)}
+				>
+					Year in Books
+				</a>
+			</div>
+		) : null;
+
+	const addBooksSection =
+		userId === user.userUID ? (
+			<div className="add-books-section">
+				<span>
+					<b>Add books</b>
+				</span>
+				<a href={Firebase.pageGenerator.generateRecommendationsPage()}>
+					Recommendations
+				</a>
+				<a href={Firebase.pageGenerator.generateExplorePage()}>Explore</a>
+			</div>
+		) : null;
+
 	const bookshelfNavigationSection = loaded ? (
 		<div className="user-bookshelf-page-bookshelf-navigation-section">
 			<div className="general-shelves-section">
@@ -1148,6 +1187,8 @@ const UserBookshelfPage = ({ match }) => {
 			).length > 0 ? (
 				<div className="shelf-group-separator"></div>
 			) : null}
+			{yourReadingActivitySession}
+			{addBooksSection}
 		</div>
 	) : null;
 
@@ -1979,7 +2020,9 @@ const UserBookshelfPage = ({ match }) => {
 							</th>
 						) : null}
 						{isShelvesColumnVisible ? (
-							<th className="my-rating-th">my rating</th>
+							<th className="my-rating-th">
+								{user.userUID !== userId ? 'my rating' : 'shelves'}
+							</th>
 						) : null}
 						{isReviewColumnVisible ? (
 							<th
@@ -2297,75 +2340,152 @@ const UserBookshelfPage = ({ match }) => {
 										) : null}
 										{isRatingColumnVisible ? (
 											<td>
-												<div className="rating-stars">
-													<div
-														className={
-															book.rating >= 1
-																? 'static-star small full'
-																: book.rating >= 0.5
-																? 'static-star small almost-full'
-																: book.rating > 0
-																? 'static-star small almost-empty'
-																: 'static-star small empty'
+												{userId !== user.userUID ? (
+													<div className="rating-stars">
+														<div
+															className={
+																book.rating >= 1
+																	? 'static-star small full'
+																	: book.rating >= 0.5
+																	? 'static-star small almost-full'
+																	: book.rating > 0
+																	? 'static-star small almost-empty'
+																	: 'static-star small empty'
+															}
+														></div>
+														<div
+															className={
+																book.rating >= 2
+																	? 'static-star small full'
+																	: book.rating >= 1.5
+																	? 'static-star small almost-full'
+																	: book.rating > 1
+																	? 'static-star small almost-empty'
+																	: 'static-star small empty'
+															}
+														></div>
+														<div
+															className={
+																book.rating >= 3
+																	? 'static-star small full'
+																	: book.rating >= 2.5
+																	? 'static-star small almost-full'
+																	: book.rating > 2
+																	? 'static-star small almost-empty'
+																	: 'static-star small empty'
+															}
+														></div>
+														<div
+															className={
+																book.rating >= 4
+																	? 'static-star small full'
+																	: book.rating >= 3.5
+																	? 'static-star small almost-full'
+																	: book.rating > 3
+																	? 'static-star small almost-empty'
+																	: 'static-star small empty'
+															}
+														></div>
+														<div
+															className={
+																book.rating >= 5
+																	? 'static-star small full'
+																	: book.rating >= 4.5
+																	? 'static-star small almost-full'
+																	: book.rating > 4
+																	? 'static-star small almost-empty'
+																	: 'static-star small empty'
+															}
+														></div>
+													</div>
+												) : (
+													<InteractiveStarRating
+														rating={
+															book.loggedInUserRating !== undefined
+																? book.loggedInUserRating
+																: 0
 														}
-													></div>
-													<div
-														className={
-															book.rating >= 2
-																? 'static-star small full'
-																: book.rating >= 1.5
-																? 'static-star small almost-full'
-																: book.rating > 1
-																? 'static-star small almost-empty'
-																: 'static-star small empty'
-														}
-													></div>
-													<div
-														className={
-															book.rating >= 3
-																? 'static-star small full'
-																: book.rating >= 2.5
-																? 'static-star small almost-full'
-																: book.rating > 2
-																? 'static-star small almost-empty'
-																: 'static-star small empty'
-														}
-													></div>
-													<div
-														className={
-															book.rating >= 4
-																? 'static-star small full'
-																: book.rating >= 3.5
-																? 'static-star small almost-full'
-																: book.rating > 3
-																? 'static-star small almost-empty'
-																: 'static-star small empty'
-														}
-													></div>
-													<div
-														className={
-															book.rating >= 5
-																? 'static-star small full'
-																: book.rating >= 4.5
-																? 'static-star small almost-full'
-																: book.rating > 4
-																? 'static-star small almost-empty'
-																: 'static-star small empty'
-														}
-													></div>
-												</div>
+														saveRating={(rating) => rateBook(book.id, rating)}
+													/>
+												)}
 											</td>
 										) : null}
 										{isShelvesColumnVisible ? (
 											<td>
-												<InteractiveStarRating
-													rating={
-														book.loggedInUserRating !== undefined
-															? book.loggedInUserRating
-															: 0
-													}
-													saveRating={(rating) => rateBook(book.id, rating)}
-												/>
+												{userId !== user.userUID ? (
+													<InteractiveStarRating
+														rating={
+															book.loggedInUserRating !== undefined
+																? book.loggedInUserRating
+																: 0
+														}
+														saveRating={(rating) => rateBook(book.id, rating)}
+													/>
+												) : (
+													<a
+														href={
+															userInfo.shelves.some(
+																(shelf) =>
+																	shelf.name === 'read' &&
+																	shelf.books.some(
+																		(shelfBook) => shelfBook.id === book.id
+																	)
+															)
+																? Firebase.pageGenerator.generateUserShelfPage(
+																		userId,
+																		userFirstName,
+																		['read'],
+																		'',
+																		'table',
+																		20,
+																		1
+																  )
+																: userInfo.shelves.some(
+																		(shelf) =>
+																			shelf.name === 'currently-reading' &&
+																			shelf.books.some(
+																				(shelfBook) => shelfBook.id === book.id
+																			)
+																  )
+																? Firebase.pageGenerator.generateUserShelfPage(
+																		userId,
+																		userFirstName,
+																		['currently-reading'],
+																		'',
+																		'table',
+																		20,
+																		1
+																  )
+																: Firebase.pageGenerator.generateUserShelfPage(
+																		userId,
+																		userFirstName,
+																		['want-to-read'],
+																		'',
+																		'table',
+																		20,
+																		1
+																  )
+														}
+													>
+														{userInfo.shelves.some(
+															(shelf) =>
+																shelf.name === 'read' &&
+																shelf.books.some(
+																	(shelfBook) => shelfBook.id === book.id
+																)
+														)
+															? 'read'
+															: userInfo.shelves.some(
+																	(shelf) =>
+																		shelf.name === 'currently-reading' &&
+																		shelf.books.some(
+																			(shelfBook) => shelfBook.id === book.id
+																		)
+															  )
+															? 'currently-reading'
+															: 'to-read'}
+													</a>
+												)}
 												<div
 													className="add-to-shelves-button-wrapper"
 													ref={

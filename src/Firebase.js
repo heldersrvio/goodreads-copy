@@ -19,6 +19,10 @@ const Firebase = (() => {
 	const database = firebase.firestore();
 
 	const pageGenerator = (() => {
+		const generateExplorePage = () => {
+			return '/book';
+		};
+
 		const generateBookPage = (bookId, title) => {
 			return '/book/show/' + bookId + '.' + title.replace(/ /g, '_');
 		};
@@ -303,6 +307,10 @@ const Firebase = (() => {
 			return '/friend/add_as_friend/' + userId;
 		};
 
+		const generateRecommendationsPage = () => {
+			return '/recommendations';
+		};
+
 		const generateGiveRecommendationPage = () => {
 			return '/recommendations/new';
 		};
@@ -325,6 +333,7 @@ const Firebase = (() => {
 		};
 
 		return {
+			generateExplorePage,
 			generateBookPage,
 			generateAddBookPage,
 			generateBookCoverPage,
@@ -382,6 +391,7 @@ const Firebase = (() => {
 			generateInterviewsNewsPage,
 			generateArticleLikesPage,
 			generateAddAsFriendPage,
+			generateRecommendationsPage,
 			generateGiveRecommendationPage,
 			generateGiveRecommendationToUserPage,
 			generateBookCompatibilityTestPage,

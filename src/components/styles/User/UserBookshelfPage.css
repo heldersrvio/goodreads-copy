@@ -619,3 +619,27 @@
 .user-bookshelf-page .page-navigation-section a.disabled:hover {
 	text-decoration: none;
 }
+
+.user-bookshelf-page-bookshelf-navigation-section
+	.your-reading-activity-section
+	span,
+.user-bookshelf-page-bookshelf-navigation-section .add-books-section span {
+	color: rgb(24, 24, 24);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 21px;
+}
+
+.user-bookshelf-page-bookshelf-navigation-section
+	.your-reading-activity-section
+	span
+	b,
+.user-bookshelf-page-bookshelf-navigation-section .add-books-section span b {
+	font-weight: bold;
+}
+
+.user-bookshelf-page-bookshelf-navigation-section .add-books-section span {
+	display: block;
+	margin-bottom: 15px;
+	margin-top: 10px;
+}
