@@ -1656,6 +1656,39 @@ const Firebase = (() => {
 		}
 	};
 
+	const addNewUserShelf = async (userUID, shelf, history) => {
+		if (userUID === undefined || userUID === null) {
+			history.push({
+				pathname: '/user/sign_in',
+				state: { error: 'User not logged in' },
+			});
+		} else {
+			const genreQuery = await database.collection('genres').doc(shelf).get();
+			const shelfQuery = !genreQuery.exists
+				? await database
+						.collection('shelves')
+						.where('name', '==', shelf)
+						.where('user', '==', userUID)
+						.get()
+				: await database
+						.collection('shelves')
+						.where('genre', '==', shelf)
+						.where('user', '==', userUID)
+						.get();
+			if (shelfQuery.docs.length === 0) {
+				if (!genreQuery.exists) {
+					await database
+						.collection('shelves')
+						.add({ name: shelf, user: userUID, rootBooks: [], genre: null });
+				} else {
+					await database
+						.collection('shelves')
+						.add({ genre: shelf, user: userUID, rootBooks: [] });
+				}
+			}
+		}
+	};
+
 	const addBookToUserShelf = async (
 		userUID,
 		rootBook,
@@ -4849,6 +4882,7 @@ const Firebase = (() => {
 		rateBook,
 		updateBookInShelf,
 		changeBookPosition,
+		addNewUserShelf,
 		addBookToUserShelf,
 		likeUnlikeReview,
 		followUnfollowAuthor,

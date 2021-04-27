@@ -166,7 +166,10 @@
 .user-bookshelf-page-shelves-top-bar .right-section .compare-books-a,
 .user-bookshelf-page-shelves-top-bar
 	.right-section
-	button.settings-toggle-button {
+	button.settings-toggle-button,
+.user-bookshelf-page-shelves-top-bar
+	.right-section
+	button.batch-edit-toggle-button {
 	padding: 5px 5px 10px 5px;
 	color: var(--goodreads-teal);
 	font-family: var(--lato-font);
@@ -177,7 +180,10 @@
 
 .user-bookshelf-page-shelves-top-bar
 	.right-section
-	button.settings-toggle-button {
+	button.settings-toggle-button,
+.user-bookshelf-page-shelves-top-bar
+	.right-section
+	button.batch-edit-toggle-button {
 	height: 33px;
 	margin: 0 5px;
 }
@@ -185,13 +191,19 @@
 .user-bookshelf-page-shelves-top-bar .right-section .compare-books-a:hover,
 .user-bookshelf-page-shelves-top-bar
 	.right-section
-	button.settings-toggle-button:hover {
+	button.settings-toggle-button:hover,
+.user-bookshelf-page-shelves-top-bar
+	.right-section
+	button.batch-edit-toggle-button:hover {
 	text-decoration: underline;
 }
 
 .user-bookshelf-page-shelves-top-bar
 	.right-section
-	button.settings-toggle-button.toggled {
+	button.settings-toggle-button.toggled,
+.user-bookshelf-page-shelves-top-bar
+	.right-section
+	button.batch-edit-toggle-button.toggled {
 	background-color: rgb(241, 241, 228);
 	border-left: 1px solid rgb(204, 201, 181);
 	border-right: 1px solid rgb(204, 201, 181);
@@ -425,8 +437,34 @@
 	text-decoration: underline;
 }
 
+.user-bookshelf-page-books-table .user-own-shelf-a {
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 18px;
+}
+
+.user-bookshelf-page-books-table .user-own-shelf-a:hover {
+	text-decoration: underline;
+}
+
 .user-bookshelf-page-books-table tbody tr {
 	border-bottom: 1px solid rgb(238, 238, 238);
+}
+
+.user-bookshelf-page-books-table tbody tr.selecting,
+.user-bookshelf-page-books-table tbody tr.selected {
+	cursor: pointer;
+}
+
+.user-bookshelf-page-books-table tbody tr.selecting:hover,
+.user-bookshelf-page-books-table tbody tr.selected {
+	background-color: rgb(255, 251, 217);
+}
+
+.user-bookshelf-page-books-table tbody tr input[type='checkbox'] {
+	margin-left: 3px;
+	margin-top: 15px;
 }
 
 .user-bookshelf-page-table-parameters-section {
@@ -642,4 +680,197 @@
 	display: block;
 	margin-bottom: 15px;
 	margin-top: 10px;
+}
+
+.user-bookshelf-page-bookshelf-navigation-section
+	.logged-in-user-add-shelf-button,
+.user-bookshelf-page .logged-in-user-add-shelf-input-area .add-button {
+	padding: 4px 12px;
+	background-color: rgb(244, 241, 234);
+	border: 1px solid rgb(214, 208, 196);
+	border-radius: 3px;
+	color: rgb(51, 51, 51);
+	font-family: var(--lato-font);
+	font-size: 11px;
+	line-height: 11px;
+}
+
+.user-bookshelf-page-bookshelf-navigation-section
+	.logged-in-user-add-shelf-button {
+	margin: 15px 0;
+}
+
+.user-bookshelf-page-bookshelf-navigation-section
+	.logged-in-user-add-shelf-button:hover,
+.user-bookshelf-page .logged-in-user-add-shelf-input-area .add-button:hover {
+	background-color: rgb(237, 230, 214);
+}
+
+.user-bookshelf-page .logged-in-user-add-shelf-input-area label {
+	display: block;
+	color: rgb(24, 24, 24);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	font-weight: bold;
+	line-height: 18px;
+	margin-top: 15px;
+}
+
+.user-bookshelf-page .logged-in-user-add-shelf-input-area .input-and-button {
+	display: flex;
+	flex-direction: row;
+}
+
+.user-bookshelf-page .logged-in-user-add-shelf-input-area input {
+	width: 100px;
+	height: 15px;
+	padding: 2px;
+	border: 1px solid rgb(220, 214, 204);
+	border-radius: 3px;
+	color: rgb(51, 51, 51);
+	font-family: var(--lato-font);
+	font-size: 11px;
+	margin-right: 5px;
+}
+
+.user-bookshelf-page .logged-in-user-add-shelf-input-area input:focus {
+	border-color: rgb(185, 173, 153);
+	box-shadow: rgba(185, 173, 153, 0.5) 0px 0px 4px 0px;
+}
+
+.user-bookshelf-page-batch-edit-tab {
+	background-color: rgb(241, 241, 228);
+	border-top: 1px solid rgb(204, 201, 181);
+	border-bottom: 1px solid rgb(204, 201, 181);
+}
+
+.user-bookshelf-page-batch-edit-tab .top-section {
+	padding: 5px 10px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	border-bottom: 1px solid rgb(204, 201, 181);
+}
+
+.user-bookshelf-page-batch-edit-tab .top-section label {
+	color: rgb(24, 24, 24);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 18px;
+	margin-right: 5px;
+}
+
+.user-bookshelf-page-batch-edit-tab .top-section select {
+	font-size: 11px;
+}
+
+.user-bookshelf-page-batch-edit-tab .top-section .add-remove-books-buttons {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin-left: 20px;
+}
+
+.user-bookshelf-page-batch-edit-tab
+	.top-section
+	.add-remove-books-buttons
+	button {
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 13px;
+	line-height: 18px;
+	padding: 0;
+	background-color: transparent;
+}
+
+.user-bookshelf-page-batch-edit-tab
+	.top-section
+	.add-remove-books-buttons
+	button:hover {
+	text-decoration: underline;
+}
+
+.user-bookshelf-page-batch-edit-tab
+	.top-section
+	.add-remove-books-buttons
+	.add-books-to-this-shelf-button,
+.user-bookshelf-page-batch-edit-tab
+	.top-section
+	.add-remove-books-buttons
+	.remove-books-from-this-shelf-button {
+	font-weight: bold;
+}
+
+.user-bookshelf-page-batch-edit-tab
+	.top-section
+	.add-remove-books-buttons
+	.separator {
+	color: rgb(24, 24, 24);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 18px;
+	margin: 0 3px;
+}
+
+.user-bookshelf-page-batch-edit-tab .bottom-section {
+	padding: 5px 10px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.user-bookshelf-page-batch-edit-tab
+	.bottom-section
+	.bottom-section-left-section {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.user-bookshelf-page-batch-edit-tab
+	.bottom-section
+	.bottom-section-left-section
+	button {
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 11px;
+	line-height: 14px;
+	height: 14px;
+	background-color: transparent;
+	padding: 0;
+}
+
+.user-bookshelf-page-batch-edit-tab
+	.bottom-section
+	.bottom-section-left-section
+	button:hover {
+	text-decoration: underline;
+}
+
+.user-bookshelf-page-batch-edit-tab
+	.bottom-section
+	.bottom-section-left-section
+	.separator {
+	color: rgb(153, 153, 153);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 18px;
+	margin: 0 3px;
+}
+
+.user-bookshelf-page-batch-edit-tab
+	.bottom-section
+	.close-batch-edit-tab-button {
+	color: rgb(153, 153, 153);
+	font-family: var(--lato-font);
+	font-size: 11px;
+	line-height: 14px;
+	padding: 0;
+	background-color: transparent;
+}
+
+.user-bookshelf-page-batch-edit-tab
+	.bottom-section
+	.close-batch-edit-tab-button:hover {
+	text-decoration: underline;
 }

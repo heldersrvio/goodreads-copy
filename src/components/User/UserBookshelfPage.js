@@ -13,7 +13,6 @@ import UserReviewSection from './UserReviewSection';
 	TODO: User's own bookshelf page {
 		- Batch edit
 		- Settings 'other'
-		- Add shelf button
 		- Edit columns
 		- Remove book button
 		- No matching items message
@@ -147,6 +146,16 @@ const UserBookshelfPage = ({ match }) => {
 	const [visibleAddToShelvesPopup, setVisibleAddToShelvesPopup] = useState(
 		null
 	);
+	const [
+		isShowingLoggedInUserAddShelfArea,
+		setIsShowingLoggedInUserAddShelfArea,
+	] = useState(false);
+	const [loggedInUserAddShelfInput, setLoggedInUserAddShelfInput] = useState(
+		''
+	);
+	const [batchEditSelectedShelf, setBatchEditSelectedShelf] = useState('read');
+	const [isShowingBatchEdit, setIsShowingBatchEdit] = useState(false);
+	const [booksChecked, setBooksChecked] = useState([]);
 
 	const user = JSON.parse(localStorage.getItem('userState'));
 
@@ -619,6 +628,13 @@ const UserBookshelfPage = ({ match }) => {
 		}
 	};
 
+	const addShelf = async (shelfName) => {
+		if (user.userUID !== undefined && user.userUID !== null) {
+			await Firebase.addNewUserShelf(user.userUID, shelfName, history);
+			history.go(0);
+		}
+	};
+
 	const setAllColumns = (
 		author,
 		avgRating,
@@ -728,252 +744,267 @@ const UserBookshelfPage = ({ match }) => {
 			  }, [])
 			: [];
 
-	const shelvesTopBar = loaded ? (
-		<div className="user-bookshelf-page-shelves-top-bar">
-			<div className="left-section">
-				<h1>
-					<a
-						className="profile-picture-a"
-						href={Firebase.pageGenerator.generateUserPage(
-							userId,
-							userFirstName
-						)}
-					>
-						<img
-							src={
-								userInfo.profilePicture !== undefined
-									? userInfo.profilePicture
-									: noPictureImageUrl
-							}
-							alt={userFirstName}
-						/>
-					</a>
-					<a
-						className="first-name-a"
-						href={Firebase.pageGenerator.generateUserPage(
-							userId,
-							userFirstName
-						)}
-					>
-						{userFirstName}
-					</a>
-					<span className="separator">{' > '}</span>
-					<a
-						className="books-a"
-						href={Firebase.pageGenerator.generateUserShelfPage(
-							userId,
-							userFirstName,
-							['all']
-						)}
-					>
-						Books
-					</a>
-					{currentUserShelves.length > 0 &&
-					currentUserShelves[0].name !== 'all' ? (
-						<span className="colon-span">:</span>
-					) : null}
-					{currentUserShelves.length > 0 && currentUserShelves[0].name !== 'all'
-						? currentUserShelves.map((shelf, index) => {
-								return (
-									<div
-										className="shelf-selection-indicator-wrapper"
-										key={index}
-									>
-										<div className="shelf-selection-indicator">
-											<span>
-												<span className="shelf-name-span">
-													{[
-														'read',
-														'want-to-read',
-														'currently-reading',
-													].includes(shelf.name)
-														? shelf.name
-																.split('-')
-																.map(
-																	(portion) =>
-																		portion[0].toUpperCase() + portion.slice(1)
-																)
-																.join(' ')
-														: shelf.name}
-												</span>
-												<span className="shelf-number-span">{` (${shelf.books.length}) `}</span>
+	const shelvesTopBarLeftSection = (
+		<div className="left-section">
+			<h1>
+				<a
+					className="profile-picture-a"
+					href={Firebase.pageGenerator.generateUserPage(userId, userFirstName)}
+				>
+					<img
+						src={
+							userInfo.profilePicture !== undefined
+								? userInfo.profilePicture
+								: noPictureImageUrl
+						}
+						alt={userFirstName}
+					/>
+				</a>
+				<a
+					className="first-name-a"
+					href={Firebase.pageGenerator.generateUserPage(userId, userFirstName)}
+				>
+					{userFirstName}
+				</a>
+				<span className="separator">{' > '}</span>
+				<a
+					className="books-a"
+					href={Firebase.pageGenerator.generateUserShelfPage(
+						userId,
+						userFirstName,
+						['all']
+					)}
+				>
+					Books
+				</a>
+				{currentUserShelves.length > 0 &&
+				currentUserShelves[0].name !== 'all' ? (
+					<span className="colon-span">:</span>
+				) : null}
+				{currentUserShelves.length > 0 && currentUserShelves[0].name !== 'all'
+					? currentUserShelves.map((shelf, index) => {
+							return (
+								<div className="shelf-selection-indicator-wrapper" key={index}>
+									<div className="shelf-selection-indicator">
+										<span>
+											<span className="shelf-name-span">
+												{['read', 'want-to-read', 'currently-reading'].includes(
+													shelf.name
+												)
+													? shelf.name
+															.split('-')
+															.map(
+																(portion) =>
+																	portion[0].toUpperCase() + portion.slice(1)
+															)
+															.join(' ')
+													: shelf.name}
 											</span>
-											<a
-												className="deselect-a"
-												href={Firebase.pageGenerator.generateUserShelfPage(
-													userId,
-													userFirstName,
-													shelves.filter(
-														(bookshelf) => bookshelf !== shelf.name
-													),
-													'',
-													'table',
-													20,
-													1
-												)}
-											>
-												<img
-													src="https://s.gr-assets.com/assets/layout/delete-small-d4ae0181ae7f3438c6eb1f1c658e6002.png"
-													alt="Remove shelf filter"
-												/>
-											</a>
-										</div>
-										{index !== currentUserShelves.length - 1 ? (
-											<span className="shelf-separator-span">{'&'}</span>
-										) : null}
+											<span className="shelf-number-span">{` (${shelf.books.length}) `}</span>
+										</span>
+										<a
+											className="deselect-a"
+											href={Firebase.pageGenerator.generateUserShelfPage(
+												userId,
+												userFirstName,
+												shelves.filter((bookshelf) => bookshelf !== shelf.name),
+												'',
+												'table',
+												20,
+												1
+											)}
+										>
+											<img
+												src="https://s.gr-assets.com/assets/layout/delete-small-d4ae0181ae7f3438c6eb1f1c658e6002.png"
+												alt="Remove shelf filter"
+											/>
+										</a>
 									</div>
-								);
-						  })
-						: null}
-				</h1>
+									{index !== currentUserShelves.length - 1 ? (
+										<span className="shelf-separator-span">{'&'}</span>
+									) : null}
+								</div>
+							);
+					  })
+					: null}
+			</h1>
+		</div>
+	);
+
+	const shelvesTopBarRightSection = (
+		<div className="right-section">
+			<div className="search-bar-container">
+				<input
+					type="text"
+					className="search-bar"
+					placeholder="Search and add books"
+					value={searchInputText}
+					onChange={(e) => setSearchInputText(e.target.value)}
+					onKeyDown={(e) => {
+						console.log(e.keyCode);
+						if (e.keyCode === 13) {
+							history.push(
+								Firebase.pageGenerator.generateUserShelfPage(
+									userId,
+									userFirstName,
+									['all'],
+									searchInputText,
+									'table',
+									perPage,
+									1
+								)
+							);
+						}
+					}}
+				></input>
+				<a
+					className="search-magnifying-glass-a"
+					href={Firebase.pageGenerator.generateUserShelfPage(
+						userId,
+						userFirstName,
+						['all'],
+						searchInputText,
+						'table',
+						perPage,
+						1
+					)}
+				>
+					<img
+						alt="search"
+						src="https://s.gr-assets.com/assets/layout/magnifying_glass-a2d7514d50bcee1a0061f1ece7821750.png"
+					/>
+				</a>
 			</div>
-			<div className="right-section">
-				<div className="search-bar-container">
-					<input
-						type="text"
-						className="search-bar"
-						placeholder="Search and add books"
-						value={searchInputText}
-						onChange={(e) => setSearchInputText(e.target.value)}
-						onKeyDown={(e) => {
-							console.log(e.keyCode);
-							if (e.keyCode === 13) {
-								history.push(
-									Firebase.pageGenerator.generateUserShelfPage(
-										userId,
-										userFirstName,
-										['all'],
-										searchInputText,
-										'table',
-										perPage,
-										1
-									)
-								);
-							}
-						}}
-					></input>
-					<a
-						className="search-magnifying-glass-a"
-						href={Firebase.pageGenerator.generateUserShelfPage(
-							userId,
-							userFirstName,
-							['all'],
-							searchInputText,
-							'table',
-							perPage,
-							1
-						)}
-					>
-						<img
-							alt="search"
-							src="https://s.gr-assets.com/assets/layout/magnifying_glass-a2d7514d50bcee1a0061f1ece7821750.png"
-						/>
-					</a>
-				</div>
+			{userId !== user.userUID ? (
 				<a
 					className="compare-books-a"
 					href={Firebase.pageGenerator.generateUserCompareBooksPage(userId)}
 				>
 					Compare Books
 				</a>
+			) : null}
+			{userId === user.userUID ? (
 				<button
 					className={
-						isSettingsTabOpen
-							? 'settings-toggle-button toggled'
-							: 'settings-toggle-button'
+						isShowingBatchEdit
+							? 'batch-edit-toggle-button toggled'
+							: 'batch-edit-toggle-button'
 					}
-					onClick={(_e) => setIsSettingsTabOpen((previous) => !previous)}
+					onClick={(_e) => {
+						setIsSettingsTabOpen(false);
+						setIsShowingBatchEdit((previous) => !previous);
+					}}
 				>
-					Settings
+					Batch Edit
 				</button>
-				<span className="separator">|</span>
-				<a
-					className="view-type-a"
-					href={
-						searchQuery !== ''
-							? Firebase.pageGenerator.generateUserShelfPage(
-									userId,
-									userFirstName,
-									['all'],
-									searchQuery,
-									'table',
-									perPage,
-									1
-							  )
-							: Firebase.pageGenerator.generateUserShelfPage(
-									userId,
-									userFirstName,
-									shelves,
-									'',
-									'table',
-									perPage,
-									1
-							  )
-					}
-				>
-					<img
-						onMouseOver={(e) => {
+			) : null}
+			<button
+				className={
+					isSettingsTabOpen
+						? 'settings-toggle-button toggled'
+						: 'settings-toggle-button'
+				}
+				onClick={(_e) => {
+					setIsShowingBatchEdit(false);
+					setIsSettingsTabOpen((previous) => !previous);
+				}}
+			>
+				Settings
+			</button>
+			<span className="separator">|</span>
+			<a
+				className="view-type-a"
+				href={
+					searchQuery !== ''
+						? Firebase.pageGenerator.generateUserShelfPage(
+								userId,
+								userFirstName,
+								['all'],
+								searchQuery,
+								'table',
+								perPage,
+								1
+						  )
+						: Firebase.pageGenerator.generateUserShelfPage(
+								userId,
+								userFirstName,
+								shelves,
+								'',
+								'table',
+								perPage,
+								1
+						  )
+				}
+			>
+				<img
+					onMouseOver={(e) => {
+						e.target.src =
+							'https://s.gr-assets.com/assets/layout/list_selected.png';
+					}}
+					onMouseOut={(e) => {
+						if (view === 'cover') {
 							e.target.src =
-								'https://s.gr-assets.com/assets/layout/list_selected.png';
-						}}
-						onMouseOut={(e) => {
-							if (view === 'cover') {
-								e.target.src =
-									'https://s.gr-assets.com/assets/layout/list-fe412c89a6a612c841b5b58681660b82.png';
-							}
-						}}
-						alt="Table View"
-						src={
-							view === 'table'
-								? 'https://s.gr-assets.com/assets/layout/list_selected.png'
-								: 'https://s.gr-assets.com/assets/layout/list-fe412c89a6a612c841b5b58681660b82.png'
+								'https://s.gr-assets.com/assets/layout/list-fe412c89a6a612c841b5b58681660b82.png';
 						}
-					/>
-				</a>
-				<a
-					className="view-type-a"
-					href={
-						searchQuery !== ''
-							? Firebase.pageGenerator.generateUserShelfPage(
-									userId,
-									userFirstName,
-									['all'],
-									searchQuery,
-									'cover',
-									perPage,
-									1
-							  )
-							: Firebase.pageGenerator.generateUserShelfPage(
-									userId,
-									userFirstName,
-									shelves,
-									'',
-									'cover',
-									perPage,
-									1
-							  )
+					}}
+					alt="Table View"
+					src={
+						view === 'table'
+							? 'https://s.gr-assets.com/assets/layout/list_selected.png'
+							: 'https://s.gr-assets.com/assets/layout/list-fe412c89a6a612c841b5b58681660b82.png'
 					}
-				>
-					<img
-						onMouseOver={(e) => {
+				/>
+			</a>
+			<a
+				className="view-type-a"
+				href={
+					searchQuery !== ''
+						? Firebase.pageGenerator.generateUserShelfPage(
+								userId,
+								userFirstName,
+								['all'],
+								searchQuery,
+								'cover',
+								perPage,
+								1
+						  )
+						: Firebase.pageGenerator.generateUserShelfPage(
+								userId,
+								userFirstName,
+								shelves,
+								'',
+								'cover',
+								perPage,
+								1
+						  )
+				}
+			>
+				<img
+					onMouseOver={(e) => {
+						e.target.src =
+							'https://s.gr-assets.com/assets/layout/grid_selected.png';
+					}}
+					onMouseOut={(e) => {
+						if (view === 'table') {
 							e.target.src =
-								'https://s.gr-assets.com/assets/layout/grid_selected.png';
-						}}
-						onMouseOut={(e) => {
-							if (view === 'table') {
-								e.target.src =
-									'https://s.gr-assets.com/assets/layout/grid-2c030bffe1065f73ddca41540e8a267d.png';
-							}
-						}}
-						alt="Cover View"
-						src={
-							view === 'cover'
-								? 'https://s.gr-assets.com/assets/layout/grid_selected.png'
-								: 'https://s.gr-assets.com/assets/layout/grid-2c030bffe1065f73ddca41540e8a267d.png'
+								'https://s.gr-assets.com/assets/layout/grid-2c030bffe1065f73ddca41540e8a267d.png';
 						}
-					/>
-				</a>
-			</div>
+					}}
+					alt="Cover View"
+					src={
+						view === 'cover'
+							? 'https://s.gr-assets.com/assets/layout/grid_selected.png'
+							: 'https://s.gr-assets.com/assets/layout/grid-2c030bffe1065f73ddca41540e8a267d.png'
+					}
+				/>
+			</a>
+		</div>
+	);
+
+	const shelvesTopBar = loaded ? (
+		<div className="user-bookshelf-page-shelves-top-bar">
+			{shelvesTopBarLeftSection}
+			{shelvesTopBarRightSection}
 		</div>
 	) : null;
 
@@ -1006,6 +1037,38 @@ const UserBookshelfPage = ({ match }) => {
 				<a href={Firebase.pageGenerator.generateExplorePage()}>Explore</a>
 			</div>
 		) : null;
+
+	const addShelfInputArea = isShowingLoggedInUserAddShelfArea ? (
+		<div className="logged-in-user-add-shelf-input-area">
+			<label htmlFor="logged-in-user-add-shelf-input">Add a Shelf:</label>
+			<div className="input-and-button">
+				<input
+					type="text"
+					value={loggedInUserAddShelfInput}
+					onChange={(e) => setLoggedInUserAddShelfInput(e.target.value)}
+				></input>
+				<button
+					className="add-button"
+					onClick={(_e) => {
+						if (loggedInUserAddShelfInput.length > 0) {
+							addShelf(loggedInUserAddShelfInput);
+						}
+					}}
+				>
+					add
+				</button>
+			</div>
+		</div>
+	) : (
+		<button
+			className="logged-in-user-add-shelf-button"
+			onClick={(_e) => setIsShowingLoggedInUserAddShelfArea(true)}
+		>
+			Add shelf
+		</button>
+	);
+
+	const addShelfArea = userId === user.userUID ? addShelfInputArea : null;
 
 	const bookshelfNavigationSection = loaded ? (
 		<div className="user-bookshelf-page-bookshelf-navigation-section">
@@ -1178,6 +1241,7 @@ const UserBookshelfPage = ({ match }) => {
 						select multiple
 					</button>
 				) : null}
+				{addShelfArea}
 			</div>
 			{userInfo.shelves.filter(
 				(shelf) =>
@@ -1189,6 +1253,121 @@ const UserBookshelfPage = ({ match }) => {
 			) : null}
 			{yourReadingActivitySession}
 			{addBooksSection}
+		</div>
+	) : null;
+
+	const batchEditTab = loaded ? (
+		<div className="user-bookshelf-page-batch-edit-tab">
+			<div className="top-section">
+				<label htmlFor="batch-edit-shelf-select">Shelf:</label>
+				<select
+					className="batch-edit-shelf-select"
+					value={batchEditSelectedShelf}
+					onChange={(e) => setBatchEditSelectedShelf(e.target.value)}
+				>
+					{userInfo.shelves
+						.filter((shelf) => shelf.name !== 'all')
+						.map((shelf) =>
+							shelf.name === 'want-to-read' ? 'to-read' : shelf.name
+						)
+						.map((shelfName, index) => {
+							return (
+								<option key={index} value={shelfName}>
+									{shelfName}
+								</option>
+							);
+						})}
+				</select>
+				<div className="add-remove-books-buttons">
+					<button
+						className="add-books-to-this-shelf-button"
+						onClick={async (_e) => {
+							await Promise.all(
+								booksChecked.forEach(async (index) => {
+									if (
+										['to-read', 'currently-reading', 'read'].includes(
+											batchEditSelectedShelf
+										)
+									) {
+										await Firebase.addBookToShelf(
+											user.userUID,
+											booksToBeShown[index].id,
+											batchEditSelectedShelf,
+											history
+										);
+									} else {
+										await Firebase.addBookToUserShelf(
+											user.userUID,
+											booksToBeShown[index].rootId,
+											batchEditSelectedShelf,
+											null,
+											history
+										);
+									}
+								})
+							);
+						}}
+					>
+						add books to this shelf
+					</button>
+					<span className="separator">|</span>
+					<button
+						className="remove-books-from-this-shelf-button"
+						onClick={async (_e) => {
+							await Promise.all(
+								booksChecked.forEach(async (index) => {
+									if (
+										['to-read', 'currently-reading', 'read'].includes(
+											batchEditSelectedShelf
+										)
+									) {
+										await Firebase.removeBookFromShelf(
+											user.userUID,
+											booksToBeShown[index].id
+										);
+									} else {
+									}
+								})
+							);
+						}}
+					>
+						remove books from this shelf
+					</button>
+					<span className="separator">|</span>
+					<button className="remove-books-from-all-shelves-button">
+						remove books from all shelves
+					</button>
+				</div>
+			</div>
+			<div className="bottom-section">
+				<div className="bottom-section-left-section">
+					<button
+						className="select-all-button"
+						onClick={(_e) => {
+							setBooksChecked(booksToBeShown.map((_b, index) => index));
+						}}
+					>
+						select all
+					</button>
+					<span className="separator">|</span>
+					<button
+						className="select-none-button"
+						onClick={(_e) => {
+							setBooksChecked([]);
+						}}
+					>
+						select none
+					</button>
+				</div>
+				<div className="bottom-section-right-section">
+					<button
+						className="close-batch-edit-tab-button"
+						onClick={(_e) => setIsShowingBatchEdit(false)}
+					>
+						close
+					</button>
+				</div>
+			</div>
 		</div>
 	) : null;
 
@@ -2236,7 +2415,35 @@ const UserBookshelfPage = ({ match }) => {
 										  book.authorName.split(' ')[0]
 										: book.authorName;
 								return (
-									<tr key={index}>
+									<tr
+										key={index}
+										className={
+											booksChecked.includes((page - 1) * perPage + index)
+												? 'selected'
+												: isShowingBatchEdit
+												? 'selecting'
+												: ''
+										}
+										onClick={(_e) => {
+											if (isShowingBatchEdit) {
+												setBooksChecked((previous) =>
+													previous.includes((page - 1) * perPage + index)
+														? previous.filter(
+																(i) => i !== (page - 1) * perPage + index
+														  )
+														: previous.concat((page - 1) * perPage + index)
+												);
+											}
+										}}
+									>
+										{isShowingBatchEdit ? (
+											<input
+												type="checkbox"
+												checked={booksChecked.includes(
+													(page - 1) * perPage + index
+												)}
+											></input>
+										) : null}
 										{isPositionColumnVisible ? (
 											<td>
 												<span>
@@ -2423,6 +2630,7 @@ const UserBookshelfPage = ({ match }) => {
 													/>
 												) : (
 													<a
+														className="user-own-shelf-a"
 														href={
 															userInfo.shelves.some(
 																(shelf) =>
@@ -2508,11 +2716,13 @@ const UserBookshelfPage = ({ match }) => {
 															}
 														}}
 													>
-														{loggedInUserShelves.some((shelf) =>
-															shelf.books
-																.map((loggedInBook) => loggedInBook.id)
-																.includes(book.id)
-														)
+														{userId === user.userUID
+															? '[edit]'
+															: loggedInUserShelves.some((shelf) =>
+																	shelf.books
+																		.map((loggedInBook) => loggedInBook.id)
+																		.includes(book.id)
+															  )
 															? 'edit shelves'
 															: 'add to shelves'}
 													</button>
@@ -2732,6 +2942,7 @@ const UserBookshelfPage = ({ match }) => {
 	const mainInfoContainer = (
 		<div className="user-bookshelf-page-main-info-container">
 			{isSettingsTabOpen ? settingsTab : null}
+			{isShowingBatchEdit ? batchEditTab : null}
 			<div className="top-page-navigation-section-wrapper">
 				{pageNavigationSection}
 			</div>
