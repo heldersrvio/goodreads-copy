@@ -1750,6 +1750,36 @@ const Firebase = (() => {
 		}
 	};
 
+	const removeBookFromUserShelf = async (userUID, rootBook, shelf, history) => {
+		if (userUID === undefined || userUID === null) {
+			history.push({
+				pathname: '/user/sign_in',
+				state: { error: 'User not logged in' },
+			});
+		} else {
+			const shelfQuery = await database
+				.collection('shelves')
+				.where('user', '==', userUID)
+				.get();
+			const correspondingShelves = shelfQuery.docs.filter(
+				(doc) => doc.data().name === shelf || doc.data().genre === shelf
+			);
+			if (
+				correspondingShelves.length > 0 &&
+				correspondingShelves[0].data().rootBooks.includes(rootBook)
+			) {
+				const shelfDoc = database
+					.collection('shelves')
+					.doc(correspondingShelves[0].id);
+				await shelfDoc.update({
+					rootBooks: correspondingShelves[0]
+						.data()
+						.rootBooks.filter((rB) => rB !== rootBook),
+				});
+			}
+		}
+	};
+
 	const likeUnlikeReview = async (userUID, reviewId, history) => {
 		if (userUID === undefined || userUID === null) {
 			history.push({
@@ -4884,6 +4914,7 @@ const Firebase = (() => {
 		changeBookPosition,
 		addNewUserShelf,
 		addBookToUserShelf,
+		removeBookFromUserShelf,
 		likeUnlikeReview,
 		followUnfollowAuthor,
 		recommendBook,

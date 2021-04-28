@@ -11,11 +11,11 @@ import UserReviewSection from './UserReviewSection';
 
 /*
 	TODO: User's own bookshelf page {
-		- Batch edit
 		- Settings 'other'
 		- Edit columns
 		- Remove book button
 		- No matching items message
+		- Position editing
 	}
 */
 
@@ -156,6 +156,7 @@ const UserBookshelfPage = ({ match }) => {
 	const [batchEditSelectedShelf, setBatchEditSelectedShelf] = useState('read');
 	const [isShowingBatchEdit, setIsShowingBatchEdit] = useState(false);
 	const [booksChecked, setBooksChecked] = useState([]);
+	const [batchEditLoadingButton, setBatchEditLoadingButton] = useState(null);
 
 	const user = JSON.parse(localStorage.getItem('userState'));
 
@@ -1279,64 +1280,233 @@ const UserBookshelfPage = ({ match }) => {
 						})}
 				</select>
 				<div className="add-remove-books-buttons">
-					<button
-						className="add-books-to-this-shelf-button"
-						onClick={async (_e) => {
-							await Promise.all(
-								booksChecked.forEach(async (index) => {
-									if (
-										['to-read', 'currently-reading', 'read'].includes(
-											batchEditSelectedShelf
-										)
-									) {
-										await Firebase.addBookToShelf(
-											user.userUID,
-											booksToBeShown[index].id,
-											batchEditSelectedShelf,
-											history
-										);
-									} else {
-										await Firebase.addBookToUserShelf(
-											user.userUID,
-											booksToBeShown[index].rootId,
-											batchEditSelectedShelf,
-											null,
-											history
-										);
-									}
-								})
-							);
-						}}
-					>
-						add books to this shelf
-					</button>
+					{batchEditLoadingButton !== 'add' ? (
+						<button
+							className="add-books-to-this-shelf-button"
+							onClick={async (_e) => {
+								setBatchEditLoadingButton('add');
+								await Promise.all(
+									booksChecked.map(async (index) => {
+										if (
+											['to-read', 'currently-reading', 'read'].includes(
+												batchEditSelectedShelf
+											)
+										) {
+											await Firebase.addBookToShelf(
+												user.userUID,
+												booksToBeShown[index].id,
+												batchEditSelectedShelf,
+												history
+											);
+											setUserInfo((previous) => {
+												return {
+													...previous,
+													shelves: previous.shelves.map((shelf) => {
+														if (
+															shelf.name === batchEditSelectedShelf ||
+															(shelf.name === 'want-to-read' &&
+																batchEditSelectedShelf === 'to-read')
+														) {
+															return {
+																...shelf,
+																books: shelf.books.concat(
+																	booksToBeShown[index]
+																),
+															};
+														} else if (
+															[
+																'want-to-read',
+																'read',
+																'currently-reading',
+															].includes(shelf.name)
+														) {
+															return {
+																...shelf,
+																books: shelf.books.filter(
+																	(book) =>
+																		book.rootId !== booksToBeShown[index].rootId
+																),
+															};
+														}
+														return shelf;
+													}),
+												};
+											});
+										} else {
+											await Firebase.addBookToUserShelf(
+												user.userUID,
+												booksToBeShown[index].rootId,
+												batchEditSelectedShelf,
+												null,
+												history
+											);
+											setUserInfo((previous) => {
+												return {
+													...previous,
+													shelves: previous.shelves.map((shelf) => {
+														if (shelf.name === batchEditSelectedShelf) {
+															return {
+																...shelf,
+																books: shelf.books.concat(
+																	booksToBeShown[index]
+																),
+															};
+														}
+														return shelf;
+													}),
+												};
+											});
+										}
+									})
+								);
+								setBatchEditLoadingButton(null);
+							}}
+						>
+							add books to this shelf
+						</button>
+					) : (
+						<img
+							src="https://s.gr-assets.com/assets/loading-trans-ced157046184c3bc7c180ffbfc6825a4.gif"
+							alt="loading"
+						/>
+					)}
 					<span className="separator">|</span>
-					<button
-						className="remove-books-from-this-shelf-button"
-						onClick={async (_e) => {
-							await Promise.all(
-								booksChecked.forEach(async (index) => {
-									if (
-										['to-read', 'currently-reading', 'read'].includes(
-											batchEditSelectedShelf
-										)
-									) {
-										await Firebase.removeBookFromShelf(
-											user.userUID,
-											booksToBeShown[index].id
-										);
-									} else {
-									}
-								})
-							);
-						}}
-					>
-						remove books from this shelf
-					</button>
+					{batchEditLoadingButton !== 'remove' ? (
+						<button
+							className="remove-books-from-this-shelf-button"
+							onClick={async (_e) => {
+								setBatchEditLoadingButton('remove');
+								await Promise.all(
+									booksChecked.map(async (index) => {
+										if (
+											['to-read', 'currently-reading', 'read'].includes(
+												batchEditSelectedShelf
+											)
+										) {
+											window.alert(
+												`“${batchEditSelectedShelf}” is an exclusive shelf. You cannot remove a book from its exclusive shelf, but you can move it to a different one, such as “to-read”.`
+											);
+										} else {
+											await Firebase.removeBookFromUserShelf(
+												user.userUID,
+												booksToBeShown[index].rootId,
+												batchEditSelectedShelf,
+												history
+											);
+											setUserInfo((previous) => {
+												return {
+													...previous,
+													shelves: previous.shelves.map((shelf) => {
+														if (shelf.name === batchEditSelectedShelf) {
+															return {
+																...shelf,
+																books: shelf.books.filter(
+																	(book) =>
+																		book.rootId !== booksToBeShown[index].rootId
+																),
+															};
+														}
+														return shelf;
+													}),
+												};
+											});
+										}
+									})
+								);
+								setBatchEditLoadingButton(null);
+							}}
+						>
+							remove books from this shelf
+						</button>
+					) : (
+						<img
+							src="https://s.gr-assets.com/assets/loading-trans-ced157046184c3bc7c180ffbfc6825a4.gif"
+							alt="loading"
+						/>
+					)}
 					<span className="separator">|</span>
-					<button className="remove-books-from-all-shelves-button">
-						remove books from all shelves
-					</button>
+					{batchEditLoadingButton !== 'remove-all' ? (
+						<button
+							className="remove-books-from-all-shelves-button"
+							onClick={async (_e) => {
+								setBatchEditLoadingButton('remove-all');
+								if (
+									window.confirm(
+										'This will completely remove the selected books from your shelves.'
+									)
+								) {
+									const booksToBeRemovedRootIds = booksChecked.map(
+										(index) => booksToBeShown[index].rootId
+									);
+									await Promise.all(
+										userInfo.shelves.map(async (shelf) => {
+											if (
+												!['to-read', 'currently-reading', 'read'].includes(
+													shelf.name
+												)
+											) {
+												await Promise.all(
+													shelf.books
+														.filter((book) =>
+															booksChecked.some(
+																(index) =>
+																	booksToBeShown[index].rootId === book.rootId
+															)
+														)
+														.map(async (book) => {
+															await Firebase.removeBookFromShelf(
+																user.userUID,
+																book.id
+															);
+														})
+												);
+											} else {
+												await Promise.all(
+													shelf.books
+														.filter((book) =>
+															booksChecked.some(
+																(index) =>
+																	booksToBeShown[index].rootId === book.rootId
+															)
+														)
+														.map(async (book) => {
+															await Firebase.removeBookFromUserShelf(
+																user.userUID,
+																book.rootId,
+																shelf.name,
+																history
+															);
+														})
+												);
+											}
+										})
+									);
+									setUserInfo((previous) => {
+										return {
+											...previous,
+											shelves: previous.shelves.map((shelf) => {
+												return {
+													...shelf,
+													books: shelf.books.filter(
+														(book) =>
+															!booksToBeRemovedRootIds.includes(book.rootId)
+													),
+												};
+											}),
+										};
+									});
+								}
+								setBatchEditLoadingButton(null);
+							}}
+						>
+							remove books from all shelves
+						</button>
+					) : (
+						<img
+							src="https://s.gr-assets.com/assets/loading-trans-ced157046184c3bc7c180ffbfc6825a4.gif"
+							alt="loading"
+						/>
+					)}
 				</div>
 			</div>
 			<div className="bottom-section">
