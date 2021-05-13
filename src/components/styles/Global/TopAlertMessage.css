@@ -1,0 +1,37 @@
+.top-message-div {
+	padding: 5px 10px;
+	width: 600px;
+	height: 18px;
+	border: 2px solid;
+	color: rgb(81, 71, 33);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+	margin-bottom: 40px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.top-message-div button {
+	width: 10px;
+	height: 10px;
+	background-image: url('https://s.gr-assets.com/assets/layout/delete-a9a86f59648bf17079954ea50a673dbc.png');
+	padding: 0;
+	background-color: transparent;
+}
+
+.top-message-div.yellow {
+	background-color: rgb(255, 251, 217);
+	border-color: rgb(248, 227, 149);
+}
+
+.top-message-div.red {
+    background-color: rgb(255, 204, 204);
+	border-color: rgb(255, 102, 102);
+}
+
+.top-message-div.hidden {
+    display: none;
+}

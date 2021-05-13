@@ -24,6 +24,10 @@
 	float: left;
 }
 
+.user-bookshelf-page-shelves-top-bar .left-section .hidden {
+	display: none;
+}
+
 .user-bookshelf-page-shelves-top-bar .left-section h1 {
 	color: var(--goodreads-brown);
 	display: flex;
@@ -325,9 +329,22 @@
 	vertical-align: top;
 }
 
+.user-bookshelf-page-books-table tbody td .remove-book-from-shelves-button {
+	background-image: url('https://s.gr-assets.com/assets/layout/delete-a9a86f59648bf17079954ea50a673dbc.png');
+	background-repeat: no-repeat;
+	width: 10px;
+	height: 10px;
+	padding: 0;
+	background-color: transparent;
+}
+
 .user-bookshelf-page-books-table tbody .no-matching-items-tr {
 	border: none;
 	width: 100%;
+}
+
+.user-bookshelf-page-books-table tbody .no-matching-items-tr b {
+	font-weight: bold;
 }
 
 .user-bookshelf-page-books-table tbody .no-matching-items-tr td {
@@ -364,6 +381,89 @@
 .user-bookshelf-page-books-table td span.no-date-span,
 .user-bookshelf-page-books-table td span.no-review-span {
 	color: var(--goodreads-light-gray);
+}
+
+.user-bookshelf-page-books-table td .want-to-read-position-input-section {
+	position: relative;
+}
+
+.user-bookshelf-page-books-table td .want-to-read-position-input-section input {
+	width: 22px;
+	height: 13px;
+	padding: 1px;
+	border: 1px solid rgb(220, 214, 204);
+	border-radius: 3px;
+	color: rgb(51, 51, 51);
+	font-family: var(--lato-font);
+	font-size: 11px;
+	text-align: center;
+}
+
+.user-bookshelf-page-books-table td .want-to-read-position-input-section input:focus {
+	border-color: rgb(185, 173, 153);
+	box-shadow: rgba(185, 173, 153, 0.5) 0px 0px 4px 0px;
+}
+
+.user-bookshelf-page-books-table td .want-to-read-position-input-section .save-position-changes-popup {
+	position: absolute;
+	top: -15px;
+	left: 50px;
+	padding: 5px;
+	background-color: rgb(255, 246, 191);
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	border: 6px solid rgb(235, 228, 180);
+	border-radius: 5px;
+}
+
+.user-bookshelf-page-books-table td .want-to-read-position-input-section .save-position-changes-popup.hidden {
+	display: none;
+}
+
+.user-bookshelf-page-books-table td .want-to-read-position-input-section .save-position-changes-popup .popup-point {
+	position: absolute;
+	left: -12px;
+	width: 0;
+	height: 0;
+	border-top: 10px solid transparent;
+	border-bottom: 10px solid transparent;
+	border-right: 10px solid rgb(235, 228, 180);
+}
+
+.user-bookshelf-page-books-table td .want-to-read-position-input-section .save-position-changes-popup .save-position-changes-button {
+	background-color: rgb(244, 241, 234);
+	height: 30px;
+	width: 160px;
+	padding: 8px 12px;
+	border: 1px solid rgb(214, 208, 196);
+	border-radius: 3px;
+	color: rgb(51, 51, 51);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 14px;
+}
+
+.user-bookshelf-page-books-table td .want-to-read-position-input-section .save-position-changes-popup .save-position-changes-button:hover {
+	background-color: rgb(237, 230, 214);
+}
+
+.user-bookshelf-page-books-table td .want-to-read-position-input-section .save-position-changes-popup .close-popup-button {
+	display: inline;
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+	background-color: transparent;
+}
+
+.user-bookshelf-page-books-table td .want-to-read-position-input-section .save-position-changes-popup .close-popup-button:hover {
+	text-decoration: underline;
+}
+
+.user-bookshelf-page-books-table td img.book-position-loading {
+	width: 16px;
+	height: 16px;
 }
 
 .user-bookshelf-page-books-table .book-title-a,
@@ -509,12 +609,17 @@
 	position: relative;
 	background-color: rgb(241, 241, 228);
 	padding: 10px;
-	height: 144px;
+	min-height: 144px;
+	display: flex;
+	flex-direction: column;
+	border-top: 1px solid rgb(204, 201, 181);
+	border-bottom: 1px solid rgb(204, 201, 181);
+}
+
+.user-bookshelf-page-settings-tab .top-section {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
-	border-top: 1px solid rgb(204, 201, 181);
-	border-bottom: 1px solid rgb(204, 201, 181);
 }
 
 .user-bookshelf-page-settings-tab button {
@@ -613,6 +718,44 @@
 	font-family: var(--lato-font);
 	font-size: 11px;
 	line-height: 14px;
+}
+
+.user-bookshelf-page-settings-tab .bottom-section {
+	margin-top: 15px;
+}
+
+.user-bookshelf-page-settings-tab .bottom-section h3 {
+	color: rgb(24, 24, 24);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	font-weight: bold;
+	margin-bottom: 5px;
+}
+
+.user-bookshelf-page-settings-tab .bottom-section .parameters-section {
+	display: flex;
+	flex-direction: row;
+}
+
+.user-bookshelf-page-settings-tab .bottom-section .parameters-section label {
+	color: rgb(24, 24, 24);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 18px;
+}
+
+.user-bookshelf-page-settings-tab .bottom-section .parameters-section select {
+	font-size: 14px;
+	line-height: 18px;
+	margin-left: 5px;
+	margin-right: 15px;
+}
+
+.user-bookshelf-page-settings-tab .bottom-section .parameters-section input[type="radio"] {
+	width: 12px;
+	height: 12px;
+	margin-right: 5px;
+	margin-left: 5px;
 }
 
 .user-bookshelf-page .bottom-page-navigation-section-wrapper,

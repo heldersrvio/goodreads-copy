@@ -8,14 +8,12 @@ import Firebase from '../../Firebase';
 import '../styles/User/UserBookshelfPage.css';
 import AddToShelvesPopup from './AddToShelvesPopup';
 import UserReviewSection from './UserReviewSection';
+import TopAlertMessage from '../Global/TopAlertMessage';
+import EditableBookshelfDateField from './EditableBookshelfDateField';
 
 /*
 	TODO: User's own bookshelf page {
-		- Settings 'other'
 		- Edit columns
-		- Remove book button
-		- No matching items message
-		- Position editing
 	}
 */
 
@@ -63,6 +61,8 @@ const UserBookshelfPage = ({ match }) => {
 	const [loaded, setLoaded] = useState(false);
 	const [userInfo, setUserInfo] = useState({});
 	const [loggedInUserShelves, setLoggedInUserShelves] = useState([]);
+
+	const topMessage = useLocation().state;
 
 	/*
     userInfo: {
@@ -157,8 +157,11 @@ const UserBookshelfPage = ({ match }) => {
 	const [isShowingBatchEdit, setIsShowingBatchEdit] = useState(false);
 	const [booksChecked, setBooksChecked] = useState([]);
 	const [batchEditLoadingButton, setBatchEditLoadingButton] = useState(null);
+	const [wantToReadBooksPositionInputs, setWantToReadBooksPositionInputs] = useState([]);
+	const [savePositionChangesVisiblePopup, setSavePositionChangesVisiblePopup] = useState(null);
+	const [savingPositions, setSavingPositions] = useState(false);
 
-	const user = JSON.parse(localStorage.getItem('userState'));
+	const user = JSON.parse(localStorage.getItem('userState')) !== null ? JSON.parse(localStorage.getItem('userState')) : { userUID: null, };
 
 	useLayoutEffect(() => {
 		document.addEventListener('click', (event) => {
@@ -610,12 +613,12 @@ const UserBookshelfPage = ({ match }) => {
 					],
 				},
 			]);*/
-			setUserInfo(
-				await Firebase.queryUserInfoForUserBookshelfPage(userId, user.userUID)
-			);
+			const newUserInfo = await Firebase.queryUserInfoForUserBookshelfPage(userId, user.userUID);
+			setUserInfo(newUserInfo);
 			setLoggedInUserShelves(
 				await Firebase.queryLoggedInUserInfoForUserBookshelfPage(user.userUID)
 			);
+			setWantToReadBooksPositionInputs(newUserInfo.shelves.filter((shelf) => shelf.name === 'want-to-read')[0].books.map((book) => book.position));
 			setLoaded(true);
 		};
 		getUsersInfo();
@@ -745,11 +748,15 @@ const UserBookshelfPage = ({ match }) => {
 			  }, [])
 			: [];
 
+	const alertMessage = (
+		<TopAlertMessage color='yellow' content={topMessage} />
+	);
+
 	const shelvesTopBarLeftSection = (
 		<div className="left-section">
 			<h1>
 				<a
-					className="profile-picture-a"
+					className={userId === user.userUID ? 'profile-picture-a hidden' : 'profile-picture-a'}
 					href={Firebase.pageGenerator.generateUserPage(userId, userFirstName)}
 				>
 					<img
@@ -762,12 +769,12 @@ const UserBookshelfPage = ({ match }) => {
 					/>
 				</a>
 				<a
-					className="first-name-a"
+					className={userId === user.userUID ? 'first-name-a hidden' : 'first-name-a'}
 					href={Firebase.pageGenerator.generateUserPage(userId, userFirstName)}
 				>
 					{userFirstName}
 				</a>
-				<span className="separator">{' > '}</span>
+				<span className={userId === user.userUID ? 'separator hidden' : 'separator'}>{' > '}</span>
 				<a
 					className="books-a"
 					href={Firebase.pageGenerator.generateUserShelfPage(
@@ -776,7 +783,7 @@ const UserBookshelfPage = ({ match }) => {
 						['all']
 					)}
 				>
-					Books
+					{userId === user.userUID ? 'My Books' : 'Books'}
 				</a>
 				{currentUserShelves.length > 0 &&
 				currentUserShelves[0].name !== 'all' ? (
@@ -1543,27 +1550,367 @@ const UserBookshelfPage = ({ match }) => {
 
 	const settingsTab = (
 		<div className="user-bookshelf-page-settings-tab">
-			<div className="left-section">
-				<div className="settings-title">
-					<span>
-						<b>visible columns</b>
+			<div className="top-section">
+				<div className="left-section">
+					<div className="settings-title">
+						<span>
+							<b>visible columns</b>
+						</span>
+						<button
+							onClick={(_e) => {
+								setAllColumns(
+									true,
+									true,
+									true,
+									true,
+									true,
+									true,
+									true,
+									true,
+									true,
+									true,
+									true,
+									true,
+									true,
+									true,
+									true,
+									true,
+									true
+								);
+							}}
+						>
+							select all
+						</button>
+					</div>
+					<span className="gray-settings-message">
+						These settings only apply to table view.
+					</span>
+					<div className="column-checkboxes">
+						<div className="author-column-selection">
+							<input
+								name="author"
+								type="checkbox"
+								checked={isAuthorColumnVisible}
+								onChange={(e) => {
+									setSelectedColumnSetButton('');
+									setIsAuthorColumnVisible(e.target.checked);
+								}}
+							></input>
+							<label htmlFor="author">author</label>
+						</div>
+						<div className="avg-rating-column-selection">
+							<input
+								name="avg-rating"
+								type="checkbox"
+								checked={isAvgRatingColumnVisible}
+								onChange={(e) => {
+									setSelectedColumnSetButton('');
+									setIsAvgRatingColumnVisible(e.target.checked);
+								}}
+							></input>
+							<label htmlFor="avg-rating">avg rating</label>
+						</div>
+						<div className="cover-column-selection">
+							<input
+								name="cover"
+								type="checkbox"
+								checked={isCoverColumnVisible}
+								onChange={(e) => {
+									setSelectedColumnSetButton('');
+									setIsCoverColumnVisible(e.target.checked);
+								}}
+							></input>
+							<label htmlFor="cover">cover</label>
+						</div>
+						<div className="date-added-column-selection">
+							<input
+								name="date-added"
+								type="checkbox"
+								checked={isDateAddedColumnVisible}
+								onChange={(e) => {
+									setSelectedColumnSetButton('');
+									setIsDateAddedColumnVisible(e.target.checked);
+								}}
+							></input>
+							<label htmlFor="date-added">date added</label>
+						</div>
+						<div className="date-publication-column-selection">
+							<input
+								name="date-publication"
+								type="checkbox"
+								checked={isDatePublicationColumnVisible}
+								onChange={(e) => {
+									setSelectedColumnSetButton('');
+									setIsDatePublicationColumnVisible(e.target.checked);
+								}}
+							></input>
+							<label htmlFor="date-publication">date pub</label>
+						</div>
+						<div className="date-publication-edition-column-selection">
+							<input
+								name="date-publication-edition"
+								type="checkbox"
+								checked={isDatePublicationEditionColumnVisible}
+								onChange={(e) => {
+									setSelectedColumnSetButton('');
+									setIsDatePublicationEditionColumnVisible(e.target.checked);
+								}}
+							></input>
+							<label htmlFor="date-publication-edition">date pub (ed.)</label>
+						</div>
+						<div className="date-read-column-selection">
+							<input
+								name="date-read"
+								type="checkbox"
+								checked={isDateReadColumnVisible}
+								onChange={(e) => {
+									setSelectedColumnSetButton('');
+									setIsDateReadColumnVisible(e.target.checked);
+								}}
+							></input>
+							<label htmlFor="date-read">date read</label>
+						</div>
+						<div className="date-started-column-selection">
+							<input
+								name="date-started"
+								type="checkbox"
+								checked={isDateStartedColumnVisible}
+								onChange={(e) => {
+									setSelectedColumnSetButton('');
+									setIsDateStartedColumnVisible(e.target.checked);
+								}}
+							></input>
+							<label htmlFor="date-started">date started</label>
+						</div>
+						<div className="format-column-selection">
+							<input
+								name="format"
+								type="checkbox"
+								checked={isFormatColumnVisible}
+								onChange={(e) => {
+									setSelectedColumnSetButton('');
+									setIsFormatColumnVisible(e.target.checked);
+								}}
+							></input>
+							<label htmlFor="format">format</label>
+						</div>
+						<div className="isbn-column-selection">
+							<input
+								name="isbn"
+								type="checkbox"
+								checked={isIsbnColumnVisible}
+								onChange={(e) => {
+									setSelectedColumnSetButton('');
+									setIsIsbnColumnVisible(e.target.checked);
+								}}
+							></input>
+							<label htmlFor="isbn">isbn</label>
+						</div>
+						<div className="number-of-pages-column-selection">
+							<input
+								name="number-of-pages"
+								type="checkbox"
+								checked={isNumPagesColumnVisible}
+								onChange={(e) => {
+									setSelectedColumnSetButton('');
+									setIsNumPagesColumnVisible(e.target.checked);
+								}}
+							></input>
+							<label htmlFor="number-of-pages">num pages</label>
+						</div>
+						<div className="number-of-ratings-column-selection">
+							<input
+								name="number-of-ratings"
+								type="checkbox"
+								checked={isNumRatingsColumnVisible}
+								onChange={(e) => {
+									setSelectedColumnSetButton('');
+									setIsNumRatingsColumnVisible(e.target.checked);
+								}}
+							></input>
+							<label htmlFor="number-of-ratings">num ratings</label>
+						</div>
+						<div className="position-column-selection">
+							<input
+								name="position"
+								type="checkbox"
+								checked={isPositionColumnVisible}
+								onChange={(e) => {
+									setSelectedColumnSetButton('');
+									setIsPositionColumnVisible(e.target.checked);
+								}}
+							></input>
+							<label htmlFor="position">position</label>
+						</div>
+						<div className="rating-column-selection">
+							<input
+								name="rating"
+								type="checkbox"
+								checked={isRatingColumnVisible}
+								onChange={(e) => {
+									setSelectedColumnSetButton('');
+									setIsRatingColumnVisible(e.target.checked);
+								}}
+							></input>
+							<label htmlFor="rating">rating</label>
+						</div>
+						<div className="review-column-selection">
+							<input
+								name="review"
+								type="checkbox"
+								checked={isReviewColumnVisible}
+								onChange={(e) => {
+									setSelectedColumnSetButton('');
+									setIsReviewColumnVisible(e.target.checked);
+								}}
+							></input>
+							<label htmlFor="review">review</label>
+						</div>
+						<div className="shelves-column-selection">
+							<input
+								name="shelves"
+								type="checkbox"
+								checked={isShelvesColumnVisible}
+								onChange={(e) => {
+									setSelectedColumnSetButton('');
+									setIsShelvesColumnVisible(e.target.checked);
+								}}
+							></input>
+							<label htmlFor="shelves">shelves</label>
+						</div>
+						<div className="title-column-selection">
+							<input
+								name="title"
+								type="checkbox"
+								checked={isTitleColumnVisible}
+								onChange={(e) => {
+									setSelectedColumnSetButton('');
+									setIsTitleColumnVisible(e.target.checked);
+								}}
+							></input>
+							<label htmlFor="title">title</label>
+						</div>
+					</div>
+				</div>
+				<div className="right-section">
+					<span className="column-sets-title">
+						<b>column sets</b>
 					</span>
 					<button
+						className={
+							selectedColumnSetButton === 'main'
+								? 'column-set-button selected'
+								: 'column-set-button'
+						}
 						onClick={(_e) => {
+							setSelectedColumnSetButton('main');
 							setAllColumns(
 								true,
 								true,
 								true,
 								true,
+								false,
+								false,
+								true,
+								false,
+								false,
+								false,
+								false,
+								false,
+								true,
+								true,
+								false,
+								true,
+								true
+							);
+						}}
+					>
+						main
+					</button>
+					<button
+						className={
+							selectedColumnSetButton === 'reading'
+								? 'column-set-button selected'
+								: 'column-set-button'
+						}
+						onClick={(_e) => {
+							setSelectedColumnSetButton('reading');
+							setAllColumns(
 								true,
 								true,
 								true,
 								true,
+								false,
+								false,
+								false,
+								false,
+								false,
+								false,
+								false,
+								false,
+								true,
+								false,
+								false,
+								false,
+								true
+							);
+						}}
+					>
+						reading
+					</button>
+					<button
+						className={
+							selectedColumnSetButton === 'list'
+								? 'column-set-button selected'
+								: 'column-set-button'
+						}
+						onClick={(_e) => {
+							setSelectedColumnSetButton('list');
+							setAllColumns(
+								true,
+								true,
+								false,
+								true,
+								true,
+								false,
+								true,
+								false,
+								false,
+								false,
+								false,
 								true,
 								true,
 								true,
+								false,
+								false,
+								true
+							);
+						}}
+					>
+						list
+					</button>
+					<button
+						className={
+							selectedColumnSetButton === 'review'
+								? 'column-set-button selected'
+								: 'column-set-button'
+						}
+						onClick={(_e) => {
+							setSelectedColumnSetButton('review');
+							setAllColumns(
+								false,
+								false,
 								true,
+								false,
+								false,
+								false,
 								true,
+								false,
+								false,
+								false,
+								false,
+								false,
+								false,
 								true,
 								true,
 								true,
@@ -1571,347 +1918,96 @@ const UserBookshelfPage = ({ match }) => {
 							);
 						}}
 					>
-						select all
+						review
 					</button>
 				</div>
-				<span className="gray-settings-message">
-					These settings only apply to table view.
-				</span>
-				<div className="column-checkboxes">
-					<div className="author-column-selection">
-						<input
-							name="author"
-							type="checkbox"
-							checked={isAuthorColumnVisible}
-							onChange={(e) => {
-								setSelectedColumnSetButton('');
-								setIsAuthorColumnVisible(e.target.checked);
-							}}
-						></input>
-						<label htmlFor="author">author</label>
-					</div>
-					<div className="avg-rating-column-selection">
-						<input
-							name="avg-rating"
-							type="checkbox"
-							checked={isAvgRatingColumnVisible}
-							onChange={(e) => {
-								setSelectedColumnSetButton('');
-								setIsAvgRatingColumnVisible(e.target.checked);
-							}}
-						></input>
-						<label htmlFor="avg-rating">avg rating</label>
-					</div>
-					<div className="cover-column-selection">
-						<input
-							name="cover"
-							type="checkbox"
-							checked={isCoverColumnVisible}
-							onChange={(e) => {
-								setSelectedColumnSetButton('');
-								setIsCoverColumnVisible(e.target.checked);
-							}}
-						></input>
-						<label htmlFor="cover">cover</label>
-					</div>
-					<div className="date-added-column-selection">
-						<input
-							name="date-added"
-							type="checkbox"
-							checked={isDateAddedColumnVisible}
-							onChange={(e) => {
-								setSelectedColumnSetButton('');
-								setIsDateAddedColumnVisible(e.target.checked);
-							}}
-						></input>
-						<label htmlFor="date-added">date added</label>
-					</div>
-					<div className="date-publication-column-selection">
-						<input
-							name="date-publication"
-							type="checkbox"
-							checked={isDatePublicationColumnVisible}
-							onChange={(e) => {
-								setSelectedColumnSetButton('');
-								setIsDatePublicationColumnVisible(e.target.checked);
-							}}
-						></input>
-						<label htmlFor="date-publication">date pub</label>
-					</div>
-					<div className="date-publication-edition-column-selection">
-						<input
-							name="date-publication-edition"
-							type="checkbox"
-							checked={isDatePublicationEditionColumnVisible}
-							onChange={(e) => {
-								setSelectedColumnSetButton('');
-								setIsDatePublicationEditionColumnVisible(e.target.checked);
-							}}
-						></input>
-						<label htmlFor="date-publication-edition">date pub (ed.)</label>
-					</div>
-					<div className="date-read-column-selection">
-						<input
-							name="date-read"
-							type="checkbox"
-							checked={isDateReadColumnVisible}
-							onChange={(e) => {
-								setSelectedColumnSetButton('');
-								setIsDateReadColumnVisible(e.target.checked);
-							}}
-						></input>
-						<label htmlFor="date-read">date read</label>
-					</div>
-					<div className="date-started-column-selection">
-						<input
-							name="date-started"
-							type="checkbox"
-							checked={isDateStartedColumnVisible}
-							onChange={(e) => {
-								setSelectedColumnSetButton('');
-								setIsDateStartedColumnVisible(e.target.checked);
-							}}
-						></input>
-						<label htmlFor="date-started">date started</label>
-					</div>
-					<div className="format-column-selection">
-						<input
-							name="format"
-							type="checkbox"
-							checked={isFormatColumnVisible}
-							onChange={(e) => {
-								setSelectedColumnSetButton('');
-								setIsFormatColumnVisible(e.target.checked);
-							}}
-						></input>
-						<label htmlFor="format">format</label>
-					</div>
-					<div className="isbn-column-selection">
-						<input
-							name="isbn"
-							type="checkbox"
-							checked={isIsbnColumnVisible}
-							onChange={(e) => {
-								setSelectedColumnSetButton('');
-								setIsIsbnColumnVisible(e.target.checked);
-							}}
-						></input>
-						<label htmlFor="isbn">isbn</label>
-					</div>
-					<div className="number-of-pages-column-selection">
-						<input
-							name="number-of-pages"
-							type="checkbox"
-							checked={isNumPagesColumnVisible}
-							onChange={(e) => {
-								setSelectedColumnSetButton('');
-								setIsNumPagesColumnVisible(e.target.checked);
-							}}
-						></input>
-						<label htmlFor="number-of-pages">num pages</label>
-					</div>
-					<div className="number-of-ratings-column-selection">
-						<input
-							name="number-of-ratings"
-							type="checkbox"
-							checked={isNumRatingsColumnVisible}
-							onChange={(e) => {
-								setSelectedColumnSetButton('');
-								setIsNumRatingsColumnVisible(e.target.checked);
-							}}
-						></input>
-						<label htmlFor="number-of-ratings">num ratings</label>
-					</div>
-					<div className="position-column-selection">
-						<input
-							name="position"
-							type="checkbox"
-							checked={isPositionColumnVisible}
-							onChange={(e) => {
-								setSelectedColumnSetButton('');
-								setIsPositionColumnVisible(e.target.checked);
-							}}
-						></input>
-						<label htmlFor="position">position</label>
-					</div>
-					<div className="rating-column-selection">
-						<input
-							name="rating"
-							type="checkbox"
-							checked={isRatingColumnVisible}
-							onChange={(e) => {
-								setSelectedColumnSetButton('');
-								setIsRatingColumnVisible(e.target.checked);
-							}}
-						></input>
-						<label htmlFor="rating">rating</label>
-					</div>
-					<div className="review-column-selection">
-						<input
-							name="review"
-							type="checkbox"
-							checked={isReviewColumnVisible}
-							onChange={(e) => {
-								setSelectedColumnSetButton('');
-								setIsReviewColumnVisible(e.target.checked);
-							}}
-						></input>
-						<label htmlFor="review">review</label>
-					</div>
-					<div className="shelves-column-selection">
-						<input
-							name="shelves"
-							type="checkbox"
-							checked={isShelvesColumnVisible}
-							onChange={(e) => {
-								setSelectedColumnSetButton('');
-								setIsShelvesColumnVisible(e.target.checked);
-							}}
-						></input>
-						<label htmlFor="shelves">shelves</label>
-					</div>
-					<div className="title-column-selection">
-						<input
-							name="title"
-							type="checkbox"
-							checked={isTitleColumnVisible}
-							onChange={(e) => {
-								setSelectedColumnSetButton('');
-								setIsTitleColumnVisible(e.target.checked);
-							}}
-						></input>
-						<label htmlFor="title">title</label>
-					</div>
-				</div>
 			</div>
-			<div className="right-section">
-				<span className="column-sets-title">
-					<b>column sets</b>
-				</span>
-				<button
-					className={
-						selectedColumnSetButton === 'main'
-							? 'column-set-button selected'
-							: 'column-set-button'
-					}
-					onClick={(_e) => {
-						setSelectedColumnSetButton('main');
-						setAllColumns(
-							true,
-							true,
-							true,
-							true,
-							false,
-							false,
-							true,
-							false,
-							false,
-							false,
-							false,
-							false,
-							true,
-							true,
-							false,
-							true,
-							true
-						);
-					}}
-				>
-					main
-				</button>
-				<button
-					className={
-						selectedColumnSetButton === 'reading'
-							? 'column-set-button selected'
-							: 'column-set-button'
-					}
-					onClick={(_e) => {
-						setSelectedColumnSetButton('reading');
-						setAllColumns(
-							true,
-							true,
-							true,
-							true,
-							false,
-							false,
-							false,
-							false,
-							false,
-							false,
-							false,
-							false,
-							true,
-							false,
-							false,
-							false,
-							true
-						);
-					}}
-				>
-					reading
-				</button>
-				<button
-					className={
-						selectedColumnSetButton === 'list'
-							? 'column-set-button selected'
-							: 'column-set-button'
-					}
-					onClick={(_e) => {
-						setSelectedColumnSetButton('list');
-						setAllColumns(
-							true,
-							true,
-							false,
-							true,
-							true,
-							false,
-							true,
-							false,
-							false,
-							false,
-							false,
-							true,
-							true,
-							true,
-							false,
-							false,
-							true
-						);
-					}}
-				>
-					list
-				</button>
-				<button
-					className={
-						selectedColumnSetButton === 'review'
-							? 'column-set-button selected'
-							: 'column-set-button'
-					}
-					onClick={(_e) => {
-						setSelectedColumnSetButton('review');
-						setAllColumns(
-							false,
-							false,
-							true,
-							false,
-							false,
-							false,
-							true,
-							false,
-							false,
-							false,
-							false,
-							false,
-							false,
-							true,
-							true,
-							true,
-							true
-						);
-					}}
-				>
-					review
-				</button>
+			<div className="bottom-section">
+				{userId === user.userUID ? <div className="other-section">
+						<h3>other</h3>
+						<div className="parameters-section">
+							<div className="per-page-parameter">
+								<label htmlFor="per-page">Per page</label>
+								<select
+									name="per-page"
+									value={perPage}
+									onChange={(e) => {
+										const newPageValue = e.target.value;
+										history.push(
+											Firebase.pageGenerator.generateUserShelfPage(
+												userId,
+												userFirstName,
+												shelves,
+												'',
+												view,
+												newPageValue,
+												1
+											)
+										);
+									}}
+								>
+									<option value="10">10</option>
+									<option value="20">20</option>
+									<option value="30">30</option>
+									<option value="40">40</option>
+									<option value="50">50</option>
+									<option value="75">75</option>
+									<option value="100">100</option>
+									<option value="infinite-scroll">infinite scroll</option>
+								</select>
+							</div>
+							<div className="sort-parameter">
+								<label htmlFor="sort">Sort</label>
+								<select
+									name="sort"
+									value={tableSortColumn}
+									onChange={(e) => setTableSortColumn(e.target.value)}
+								>
+									<option value="author">Author</option>
+									<option value="avg-rating">Avg rating</option>
+									<option value="cover">Cover</option>
+									<option value="date-added">Date added</option>
+									<option value="date-pub">Date pub</option>
+									<option value="date-pub-edition">Date pub edition</option>
+									<option value="date-read">Date read</option>
+									<option value="date-started">Date started</option>
+									<option value="format">Format</option>
+									<option value="isbn">Isbn</option>
+									<option value="num-pages">Num pages</option>
+									<option value="num-ratings">Num ratings</option>
+									<option value="position">Position</option>
+									<option value="random">Random</option>
+									<option value="rating">Rating</option>
+									<option value="review">Review</option>
+									<option value="title">Title</option>
+								</select>
+							</div>
+							<div className="sort-order-parameter">
+								<input
+									type="radio"
+									checked={tableSortOrder === 'ascending'}
+									onChange={(e) => {
+										if (e.target.checked) {
+											setTableSortOrder('ascending');
+										}
+									}}
+									name="asc"
+								></input>
+								<label htmlFor="asc">ascending</label>
+								<input
+									type="radio"
+									checked={tableSortOrder === 'descending'}
+									onChange={(e) => {
+										if (e.target.checked) {
+											setTableSortOrder('descending');
+										}
+									}}
+									name="desc"
+								></input>
+								<label htmlFor="desc">descending</label>
+							</div>
+						</div>
+				</div> : null}
 			</div>
 			<button
 				className="settings-tab-close-button"
@@ -1984,11 +2080,17 @@ const UserBookshelfPage = ({ match }) => {
 			</div>
 		) : null;
 
+	const noMatchingItemsSpan = (
+		<span className="no-matching-items-span">
+			{userId !== user.userUID ? 'No matching items!' : <span>You have no books matching <b>{`"${searchInputText}"`}</b></span>}
+		</span>
+	);
+
 	const booksTable =
 		loaded && view === 'cover' ? (
 			<div className="user-bookshelf-page-books-cover-view">
 				{booksToBeShown.length === 0 ? (
-					<span className="no-matching-items-span">No matching items!</span>
+					{noMatchingItemsSpan}
 				) : (
 					booksToBeShown
 						.sort((a, b) => {
@@ -2508,15 +2610,14 @@ const UserBookshelfPage = ({ match }) => {
 								) : null}
 							</th>
 						) : null}
+						{userId === user.userUID ? <th>{''}</th> : null}
 					</tr>
 				</thead>
 				<tbody>
 					{booksToBeShown.length === 0 ? (
 						<tr className="no-matching-items-tr">
 							<td colSpan="20">
-								<span className="no-matching-items-span">
-									No matching items!
-								</span>
+								{noMatchingItemsSpan}
 							</td>
 						</tr>
 					) : (
@@ -2616,9 +2717,52 @@ const UserBookshelfPage = ({ match }) => {
 										) : null}
 										{isPositionColumnVisible ? (
 											<td>
-												<span>
+												{userId !== user.userUID || !shelves.includes('want-to-read') || shelves.length !== 1 ? <span>
 													{book.position !== undefined ? book.position : ''}
-												</span>
+												</span> : !savingPositions ? 
+												(
+													<div className="want-to-read-position-input-section">
+														<input type="text" value={wantToReadBooksPositionInputs[index]} onChange={(e) => {
+															const newPosition = e.target.value;
+															setWantToReadBooksPositionInputs((previous) => previous.map((v, i) => i === index ? newPosition : v));
+														}} onFocus={() => setSavePositionChangesVisiblePopup(index)}></input>
+														<div className={savePositionChangesVisiblePopup === index ? 'save-position-changes-popup' : 'save-position-changes-popup hidden'}>
+															<div className="popup-point"></div>
+															<button className="save-position-changes-button" onClick={async (_e) => {
+																const oldPosition = userInfo.shelves.filter((shelf) => shelf.name === 'want-to-read')[0].books[index].position;
+																const newPosition = isNaN(wantToReadBooksPositionInputs[index]) || parseInt(wantToReadBooksPositionInputs[index]) <= 0 ? 1 : parseInt(wantToReadBooksPositionInputs[index]);
+																setSavingPositions(true);
+																await Firebase.changeBookPosition(userId, book.id, newPosition);
+																setWantToReadBooksPositionInputs((previous) => previous.map((value, i) => {
+																	if (i === index) {
+																		return newPosition;
+																	}
+																	if (newPosition < oldPosition) {
+																		if (value >= newPosition && value < oldPosition) {
+																			return value + 1;
+																		}
+																	}
+																	if (newPosition > oldPosition) {
+																		if (value <= newPosition && value > oldPosition) {
+																			return value - 1;
+																		}
+																	}
+																	return value;
+																}));
+																setSavePositionChangesVisiblePopup(null);
+																setSavingPositions(false);
+															}}>
+																Save position changes
+															</button>
+															<button className="close-popup-button" onClick={() => setSavePositionChangesVisiblePopup(null)}>close</button>
+														</div>
+													</div>
+												) : <img
+														className="book-position-loading"
+														src="https://s.gr-assets.com/assets/loading-trans-ced157046184c3bc7c180ffbfc6825a4.gif"
+														alt="loading"
+													/>
+												}
 											</td>
 										) : null}
 										{isCoverColumnVisible ? (
@@ -2978,7 +3122,7 @@ const UserBookshelfPage = ({ match }) => {
 										) : null}
 										{isDateStartedColumnVisible ? (
 											<td>
-												<span
+												{userId !== user.userUID ? <span
 													className={
 														book.dateStarted === undefined ? 'no-date-span' : ''
 													}
@@ -2986,12 +3130,14 @@ const UserBookshelfPage = ({ match }) => {
 													{book.dateStarted !== undefined
 														? format(book.dateStarted, 'MMM dd, yyyy')
 														: 'not set'}
-												</span>
+												</span> : <EditableBookshelfDateField initialDate={book.dateStarted} save={(date) => {
+
+												}} />}
 											</td>
 										) : null}
 										{isDateReadColumnVisible ? (
 											<td>
-												<span
+												{userId !== user.userUID ? <span
 													className={
 														book.dateRead === undefined ? 'no-date-span' : ''
 													}
@@ -2999,7 +3145,9 @@ const UserBookshelfPage = ({ match }) => {
 													{book.dateRead !== undefined
 														? format(book.dateRead, 'MMM dd, yyyy')
 														: 'not set'}
-												</span>
+												</span> : <EditableBookshelfDateField initialDate={book.dateStarted} save={(date) => {
+
+												}} />}
 											</td>
 										) : null}
 										{isDateAddedColumnVisible ? (
@@ -3014,6 +3162,19 @@ const UserBookshelfPage = ({ match }) => {
 										{isFormatColumnVisible ? (
 											<td>
 												<span>{book.format}</span>
+											</td>
+										) : null}
+										{userId === user.userUID ? (
+											<td>
+												<button className="remove-book-from-shelves-button" onClick={async (_e) => {
+													if (window.confirm(`Are you sure you want to remove ${book.title} from your books? This will permanently remove this book from your shelves, including any review, or rating you have added. To change the shelf this book appears on please edit the shelves.`)) {
+														await Firebase.removeBookFromShelf(userId, book.id);
+														history.push({
+															pathname: Firebase.pageGenerator.generateUserShelfPage(userId, userFirstName, shelves, '', 'table', 20, 1),
+															state: `${book.title} was removed from your books.`,
+														});
+													}
+												}}></button>
 											</td>
 										) : null}
 									</tr>
@@ -3127,6 +3288,7 @@ const UserBookshelfPage = ({ match }) => {
 	const mainContent = (
 		<div className="user-bookshelf-page-main-content">
 			<div className="user-bookshelf-page-main-content-top-section">
+				{topMessage !== undefined ? alertMessage : null}
 				{shelvesTopBar}
 			</div>
 			<div className="user-bookshelf-page-main-content-bottom-section">
