@@ -11,12 +11,6 @@ import UserReviewSection from './UserReviewSection';
 import TopAlertMessage from '../Global/TopAlertMessage';
 import EditableBookshelfDateField from './EditableBookshelfDateField';
 
-/*
-	TODO: User's own bookshelf page {
-		- Edit columns
-	}
-*/
-
 const UserBookshelfPage = ({ match }) => {
 	const openAddShelvesPopup = useRef();
 	const history = useHistory();
