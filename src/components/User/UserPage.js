@@ -545,7 +545,7 @@ const UserPage = ({ match }) => {
 											? Firebase.pageGenerator.generateUserShelfPage(
 													user.userUID,
 													user.userInfo.firstName,
-													'reading'
+													['reading']
 											  )
 											: '/user/sign_in'
 									}
@@ -638,7 +638,7 @@ const UserPage = ({ match }) => {
 										? Firebase.pageGenerator.generateUserShelfPage(
 												user.userUID,
 												user.userInfo.firstName,
-												'to-read'
+												['to-read']
 										  )
 										: '/user/sign_in'
 								}
@@ -702,7 +702,7 @@ const UserPage = ({ match }) => {
 											? Firebase.pageGenerator.generateUserShelfPage(
 													user.userUID,
 													user.userInfo.firstName,
-													'to-read'
+													['to-read']
 											  )
 											: '/user/sign_in'
 									}
@@ -1366,7 +1366,7 @@ const UserPage = ({ match }) => {
 				href={Firebase.pageGenerator.generateUserShelfPage(
 					userId,
 					firstName,
-					'to-read'
+					['to-read']
 				)}
 				className="section-title"
 			>{`${firstName.toUpperCase()}'S TO-READ SHELF`}</a>
@@ -1400,7 +1400,7 @@ const UserPage = ({ match }) => {
 				href={Firebase.pageGenerator.generateUserShelfPage(
 					userId,
 					firstName,
-					'to-read'
+					['to-read']
 				)}
 			>
 				More...
@@ -1422,7 +1422,7 @@ const UserPage = ({ match }) => {
 							href={Firebase.pageGenerator.generateUserShelfPage(
 								userId,
 								firstName,
-								shelf.name
+								[shelf.name]
 							)}
 						>{`${shelf.name} (${shelf.numberOfBooks})`}</a>
 					);
@@ -1445,7 +1445,7 @@ const UserPage = ({ match }) => {
 					href={Firebase.pageGenerator.generateUserShelfPage(
 						userId,
 						firstName,
-						'reading'
+						['reading']
 					)}
 				>{`${firstName.toUpperCase()} IS CURRENTLY READING`}</a>
 				<div className="currently-reading-list">
@@ -1517,7 +1517,7 @@ const UserPage = ({ match }) => {
 															href={Firebase.pageGenerator.generateUserShelfPage(
 																userId,
 																firstName,
-																shelf
+																[shelf]
 															)}
 														>
 															{shelf}
