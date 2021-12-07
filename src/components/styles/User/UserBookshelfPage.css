@@ -399,12 +399,18 @@
 	text-align: center;
 }
 
-.user-bookshelf-page-books-table td .want-to-read-position-input-section input:focus {
+.user-bookshelf-page-books-table
+	td
+	.want-to-read-position-input-section
+	input:focus {
 	border-color: rgb(185, 173, 153);
 	box-shadow: rgba(185, 173, 153, 0.5) 0px 0px 4px 0px;
 }
 
-.user-bookshelf-page-books-table td .want-to-read-position-input-section .save-position-changes-popup {
+.user-bookshelf-page-books-table
+	td
+	.want-to-read-position-input-section
+	.save-position-changes-popup {
 	position: absolute;
 	top: -15px;
 	left: 50px;
@@ -417,11 +423,18 @@
 	border-radius: 5px;
 }
 
-.user-bookshelf-page-books-table td .want-to-read-position-input-section .save-position-changes-popup.hidden {
+.user-bookshelf-page-books-table
+	td
+	.want-to-read-position-input-section
+	.save-position-changes-popup.hidden {
 	display: none;
 }
 
-.user-bookshelf-page-books-table td .want-to-read-position-input-section .save-position-changes-popup .popup-point {
+.user-bookshelf-page-books-table
+	td
+	.want-to-read-position-input-section
+	.save-position-changes-popup
+	.popup-point {
 	position: absolute;
 	left: -12px;
 	width: 0;
@@ -431,7 +444,11 @@
 	border-right: 10px solid rgb(235, 228, 180);
 }
 
-.user-bookshelf-page-books-table td .want-to-read-position-input-section .save-position-changes-popup .save-position-changes-button {
+.user-bookshelf-page-books-table
+	td
+	.want-to-read-position-input-section
+	.save-position-changes-popup
+	.save-position-changes-button {
 	background-color: rgb(244, 241, 234);
 	height: 30px;
 	width: 160px;
@@ -444,11 +461,19 @@
 	line-height: 14px;
 }
 
-.user-bookshelf-page-books-table td .want-to-read-position-input-section .save-position-changes-popup .save-position-changes-button:hover {
+.user-bookshelf-page-books-table
+	td
+	.want-to-read-position-input-section
+	.save-position-changes-popup
+	.save-position-changes-button:hover {
 	background-color: rgb(237, 230, 214);
 }
 
-.user-bookshelf-page-books-table td .want-to-read-position-input-section .save-position-changes-popup .close-popup-button {
+.user-bookshelf-page-books-table
+	td
+	.want-to-read-position-input-section
+	.save-position-changes-popup
+	.close-popup-button {
 	display: inline;
 	color: var(--goodreads-teal);
 	font-family: var(--lato-font);
@@ -457,7 +482,11 @@
 	background-color: transparent;
 }
 
-.user-bookshelf-page-books-table td .want-to-read-position-input-section .save-position-changes-popup .close-popup-button:hover {
+.user-bookshelf-page-books-table
+	td
+	.want-to-read-position-input-section
+	.save-position-changes-popup
+	.close-popup-button:hover {
 	text-decoration: underline;
 }
 
@@ -751,7 +780,10 @@
 	margin-right: 15px;
 }
 
-.user-bookshelf-page-settings-tab .bottom-section .parameters-section input[type="radio"] {
+.user-bookshelf-page-settings-tab
+	.bottom-section
+	.parameters-section
+	input[type='radio'] {
 	width: 12px;
 	height: 12px;
 	margin-right: 5px;

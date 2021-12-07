@@ -151,11 +151,20 @@ const UserBookshelfPage = ({ match }) => {
 	const [isShowingBatchEdit, setIsShowingBatchEdit] = useState(false);
 	const [booksChecked, setBooksChecked] = useState([]);
 	const [batchEditLoadingButton, setBatchEditLoadingButton] = useState(null);
-	const [wantToReadBooksPositionInputs, setWantToReadBooksPositionInputs] = useState([]);
-	const [savePositionChangesVisiblePopup, setSavePositionChangesVisiblePopup] = useState(null);
+	const [
+		wantToReadBooksPositionInputs,
+		setWantToReadBooksPositionInputs,
+	] = useState([]);
+	const [
+		savePositionChangesVisiblePopup,
+		setSavePositionChangesVisiblePopup,
+	] = useState(null);
 	const [savingPositions, setSavingPositions] = useState(false);
 
-	const user = JSON.parse(localStorage.getItem('userState')) !== null ? JSON.parse(localStorage.getItem('userState')) : { userUID: null, };
+	const user =
+		JSON.parse(localStorage.getItem('userState')) !== null
+			? JSON.parse(localStorage.getItem('userState'))
+			: { userUID: null };
 
 	useLayoutEffect(() => {
 		document.addEventListener('click', (event) => {
@@ -607,12 +616,19 @@ const UserBookshelfPage = ({ match }) => {
 					],
 				},
 			]);*/
-			const newUserInfo = await Firebase.queryUserInfoForUserBookshelfPage(userId, user.userUID);
+			const newUserInfo = await Firebase.queryUserInfoForUserBookshelfPage(
+				userId,
+				user.userUID
+			);
 			setUserInfo(newUserInfo);
 			setLoggedInUserShelves(
 				await Firebase.queryLoggedInUserInfoForUserBookshelfPage(user.userUID)
 			);
-			setWantToReadBooksPositionInputs(newUserInfo.shelves.filter((shelf) => shelf.name === 'want-to-read')[0].books.map((book) => book.position));
+			setWantToReadBooksPositionInputs(
+				newUserInfo.shelves
+					.filter((shelf) => shelf.name === 'want-to-read')[0]
+					.books.map((book) => book.position)
+			);
 			setLoaded(true);
 		};
 		getUsersInfo();
@@ -742,15 +758,17 @@ const UserBookshelfPage = ({ match }) => {
 			  }, [])
 			: [];
 
-	const alertMessage = (
-		<TopAlertMessage color='yellow' content={topMessage} />
-	);
+	const alertMessage = <TopAlertMessage color="yellow" content={topMessage} />;
 
 	const shelvesTopBarLeftSection = (
 		<div className="left-section">
 			<h1>
 				<a
-					className={userId === user.userUID ? 'profile-picture-a hidden' : 'profile-picture-a'}
+					className={
+						userId === user.userUID
+							? 'profile-picture-a hidden'
+							: 'profile-picture-a'
+					}
 					href={Firebase.pageGenerator.generateUserPage(userId, userFirstName)}
 				>
 					<img
@@ -763,12 +781,18 @@ const UserBookshelfPage = ({ match }) => {
 					/>
 				</a>
 				<a
-					className={userId === user.userUID ? 'first-name-a hidden' : 'first-name-a'}
+					className={
+						userId === user.userUID ? 'first-name-a hidden' : 'first-name-a'
+					}
 					href={Firebase.pageGenerator.generateUserPage(userId, userFirstName)}
 				>
 					{userFirstName}
 				</a>
-				<span className={userId === user.userUID ? 'separator hidden' : 'separator'}>{' > '}</span>
+				<span
+					className={userId === user.userUID ? 'separator hidden' : 'separator'}
+				>
+					{' > '}
+				</span>
 				<a
 					className="books-a"
 					href={Firebase.pageGenerator.generateUserShelfPage(
@@ -1917,7 +1941,8 @@ const UserBookshelfPage = ({ match }) => {
 				</div>
 			</div>
 			<div className="bottom-section">
-				{userId === user.userUID ? <div className="other-section">
+				{userId === user.userUID ? (
+					<div className="other-section">
 						<h3>other</h3>
 						<div className="parameters-section">
 							<div className="per-page-parameter">
@@ -2001,7 +2026,8 @@ const UserBookshelfPage = ({ match }) => {
 								<label htmlFor="desc">descending</label>
 							</div>
 						</div>
-				</div> : null}
+					</div>
+				) : null}
 			</div>
 			<button
 				className="settings-tab-close-button"
@@ -2076,92 +2102,98 @@ const UserBookshelfPage = ({ match }) => {
 
 	const noMatchingItemsSpan = (
 		<span className="no-matching-items-span">
-			{userId !== user.userUID ? 'No matching items!' : <span>You have no books matching <b>{`"${searchInputText}"`}</b></span>}
+			{userId !== user.userUID ? (
+				'No matching items!'
+			) : (
+				<span>
+					You have no books matching <b>{`"${searchInputText}"`}</b>
+				</span>
+			)}
 		</span>
 	);
 
 	const booksTable =
 		loaded && view === 'cover' ? (
 			<div className="user-bookshelf-page-books-cover-view">
-				{booksToBeShown.length === 0 ? (
-					{noMatchingItemsSpan}
-				) : (
-					booksToBeShown
-						.sort((a, b) => {
-							const compare = (value1, value2) => {
-								return tableSortOrder === 'ascending'
-									? value1 < value2
+				{booksToBeShown.length === 0
+					? { noMatchingItemsSpan }
+					: booksToBeShown
+							.sort((a, b) => {
+								const compare = (value1, value2) => {
+									return tableSortOrder === 'ascending'
+										? value1 < value2
+											? -1
+											: 1
+										: value2 < value1
 										? -1
-										: 1
-									: value2 < value1
-									? -1
-									: 1;
-							};
+										: 1;
+								};
 
-							switch (tableSortColumn) {
-								case 'author':
-									return compare(a.authorName, b.authorName);
-								case 'avg-rating':
-									return compare(a.averageRating, b.averageRating);
-								case 'cover':
-									return compare(a.cover, b.cover);
-								case 'date-added':
-									return compare(a.dateAdded, b.dateAdded);
-								case 'date-pub':
-									return compare(a.datePublished, b.datePublished);
-								case 'date-pub-ed':
-									return compare(
-										a.datePublishedEdition,
-										b.datePublishedEdition
-									);
-								case 'date-read':
-									return compare(a.dateRead, b.dateRead);
-								case 'date-started':
-									return compare(a.dateStarted, b.dateStarted);
-								case 'format':
-									return compare(a.format, b.format);
-								case 'isbn':
-									return compare(a.isbn, b.isbn);
-								case 'num-pages':
-									return compare(a.numberOfPages, b.numberOfPages);
-								case 'num-ratings':
-									return compare(a.numberOfRatings, b.numberOfRatings);
-								case 'position':
-									return compare(a.position, b.position);
-								case 'rating':
-									return compare(a.rating, b.rating);
-								case 'review':
-									return compare(a.review, b.review);
-								case 'title':
-									return compare(a.title, b.title);
-								default:
-									return Math.random() > 0.5 ? a : b;
-							}
-						})
-						.filter(
-							(_book, index) =>
-								index >= (page - 1) * perPage && index < page * perPage
-						)
-						.map((book, index) => {
-							return (
-								<a
-									className="book-cover-view-cover-wrapper"
-									key={index}
-									href={Firebase.pageGenerator.generateBookPage(
-										book.id,
-										book.title
-									)}
-								>
-									<img
-										src={
-											book.cover !== undefined ? book.cover : noPictureImageUrl
-										}
-										alt={book.title}
-									/>
-								</a>
-							);
-						})
-				)}
+								switch (tableSortColumn) {
+									case 'author':
+										return compare(a.authorName, b.authorName);
+									case 'avg-rating':
+										return compare(a.averageRating, b.averageRating);
+									case 'cover':
+										return compare(a.cover, b.cover);
+									case 'date-added':
+										return compare(a.dateAdded, b.dateAdded);
+									case 'date-pub':
+										return compare(a.datePublished, b.datePublished);
+									case 'date-pub-ed':
+										return compare(
+											a.datePublishedEdition,
+											b.datePublishedEdition
+										);
+									case 'date-read':
+										return compare(a.dateRead, b.dateRead);
+									case 'date-started':
+										return compare(a.dateStarted, b.dateStarted);
+									case 'format':
+										return compare(a.format, b.format);
+									case 'isbn':
+										return compare(a.isbn, b.isbn);
+									case 'num-pages':
+										return compare(a.numberOfPages, b.numberOfPages);
+									case 'num-ratings':
+										return compare(a.numberOfRatings, b.numberOfRatings);
+									case 'position':
+										return compare(a.position, b.position);
+									case 'rating':
+										return compare(a.rating, b.rating);
+									case 'review':
+										return compare(a.review, b.review);
+									case 'title':
+										return compare(a.title, b.title);
+									default:
+										return Math.random() > 0.5 ? a : b;
+								}
+							})
+							.filter(
+								(_book, index) =>
+									index >= (page - 1) * perPage && index < page * perPage
+							)
+							.map((book, index) => {
+								return (
+									<a
+										className="book-cover-view-cover-wrapper"
+										key={index}
+										href={Firebase.pageGenerator.generateBookPage(
+											book.id,
+											book.title
+										)}
+									>
+										<img
+											src={
+												book.cover !== undefined
+													? book.cover
+													: noPictureImageUrl
+											}
+											alt={book.title}
+										/>
+									</a>
+								);
+							})}
 			</div>
 		) : loaded ? (
 			<table className="user-bookshelf-page-books-table">
@@ -2610,9 +2642,7 @@ const UserBookshelfPage = ({ match }) => {
 				<tbody>
 					{booksToBeShown.length === 0 ? (
 						<tr className="no-matching-items-tr">
-							<td colSpan="20">
-								{noMatchingItemsSpan}
-							</td>
+							<td colSpan="20">{noMatchingItemsSpan}</td>
 						</tr>
 					) : (
 						booksToBeShown
@@ -2711,52 +2741,107 @@ const UserBookshelfPage = ({ match }) => {
 										) : null}
 										{isPositionColumnVisible ? (
 											<td>
-												{userId !== user.userUID || !shelves.includes('want-to-read') || shelves.length !== 1 ? <span>
-													{book.position !== undefined ? book.position : ''}
-												</span> : !savingPositions ? 
-												(
+												{userId !== user.userUID ||
+												!shelves.includes('want-to-read') ||
+												shelves.length !== 1 ? (
+													<span>
+														{book.position !== undefined ? book.position : ''}
+													</span>
+												) : !savingPositions ? (
 													<div className="want-to-read-position-input-section">
-														<input type="text" value={wantToReadBooksPositionInputs[index]} onChange={(e) => {
-															const newPosition = e.target.value;
-															setWantToReadBooksPositionInputs((previous) => previous.map((v, i) => i === index ? newPosition : v));
-														}} onFocus={() => setSavePositionChangesVisiblePopup(index)}></input>
-														<div className={savePositionChangesVisiblePopup === index ? 'save-position-changes-popup' : 'save-position-changes-popup hidden'}>
+														<input
+															type="text"
+															value={wantToReadBooksPositionInputs[index]}
+															onChange={(e) => {
+																const newPosition = e.target.value;
+																setWantToReadBooksPositionInputs((previous) =>
+																	previous.map((v, i) =>
+																		i === index ? newPosition : v
+																	)
+																);
+															}}
+															onFocus={() =>
+																setSavePositionChangesVisiblePopup(index)
+															}
+														></input>
+														<div
+															className={
+																savePositionChangesVisiblePopup === index
+																	? 'save-position-changes-popup'
+																	: 'save-position-changes-popup hidden'
+															}
+														>
 															<div className="popup-point"></div>
-															<button className="save-position-changes-button" onClick={async (_e) => {
-																const oldPosition = userInfo.shelves.filter((shelf) => shelf.name === 'want-to-read')[0].books[index].position;
-																const newPosition = isNaN(wantToReadBooksPositionInputs[index]) || parseInt(wantToReadBooksPositionInputs[index]) <= 0 ? 1 : parseInt(wantToReadBooksPositionInputs[index]);
-																setSavingPositions(true);
-																await Firebase.changeBookPosition(userId, book.id, newPosition);
-																setWantToReadBooksPositionInputs((previous) => previous.map((value, i) => {
-																	if (i === index) {
-																		return newPosition;
-																	}
-																	if (newPosition < oldPosition) {
-																		if (value >= newPosition && value < oldPosition) {
-																			return value + 1;
-																		}
-																	}
-																	if (newPosition > oldPosition) {
-																		if (value <= newPosition && value > oldPosition) {
-																			return value - 1;
-																		}
-																	}
-																	return value;
-																}));
-																setSavePositionChangesVisiblePopup(null);
-																setSavingPositions(false);
-															}}>
+															<button
+																className="save-position-changes-button"
+																onClick={async (_e) => {
+																	const oldPosition = userInfo.shelves.filter(
+																		(shelf) => shelf.name === 'want-to-read'
+																	)[0].books[index].position;
+																	const newPosition =
+																		isNaN(
+																			wantToReadBooksPositionInputs[index]
+																		) ||
+																		parseInt(
+																			wantToReadBooksPositionInputs[index]
+																		) <= 0
+																			? 1
+																			: parseInt(
+																					wantToReadBooksPositionInputs[index]
+																			  );
+																	setSavingPositions(true);
+																	await Firebase.changeBookPosition(
+																		userId,
+																		book.id,
+																		newPosition
+																	);
+																	setWantToReadBooksPositionInputs((previous) =>
+																		previous.map((value, i) => {
+																			if (i === index) {
+																				return newPosition;
+																			}
+																			if (newPosition < oldPosition) {
+																				if (
+																					value >= newPosition &&
+																					value < oldPosition
+																				) {
+																					return value + 1;
+																				}
+																			}
+																			if (newPosition > oldPosition) {
+																				if (
+																					value <= newPosition &&
+																					value > oldPosition
+																				) {
+																					return value - 1;
+																				}
+																			}
+																			return value;
+																		})
+																	);
+																	setSavePositionChangesVisiblePopup(null);
+																	setSavingPositions(false);
+																}}
+															>
 																Save position changes
 															</button>
-															<button className="close-popup-button" onClick={() => setSavePositionChangesVisiblePopup(null)}>close</button>
+															<button
+																className="close-popup-button"
+																onClick={() =>
+																	setSavePositionChangesVisiblePopup(null)
+																}
+															>
+																close
+															</button>
 														</div>
 													</div>
-												) : <img
+												) : (
+													<img
 														className="book-position-loading"
 														src="https://s.gr-assets.com/assets/loading-trans-ced157046184c3bc7c180ffbfc6825a4.gif"
 														alt="loading"
 													/>
-												}
+												)}
 											</td>
 										) : null}
 										{isCoverColumnVisible ? (
@@ -3116,32 +3201,44 @@ const UserBookshelfPage = ({ match }) => {
 										) : null}
 										{isDateStartedColumnVisible ? (
 											<td>
-												{userId !== user.userUID ? <span
-													className={
-														book.dateStarted === undefined ? 'no-date-span' : ''
-													}
-												>
-													{book.dateStarted !== undefined
-														? format(book.dateStarted, 'MMM dd, yyyy')
-														: 'not set'}
-												</span> : <EditableBookshelfDateField initialDate={book.dateStarted} save={(date) => {
-
-												}} />}
+												{userId !== user.userUID ? (
+													<span
+														className={
+															book.dateStarted === undefined
+																? 'no-date-span'
+																: ''
+														}
+													>
+														{book.dateStarted !== undefined
+															? format(book.dateStarted, 'MMM dd, yyyy')
+															: 'not set'}
+													</span>
+												) : (
+													<EditableBookshelfDateField
+														initialDate={book.dateStarted}
+														save={(date) => {}}
+													/>
+												)}
 											</td>
 										) : null}
 										{isDateReadColumnVisible ? (
 											<td>
-												{userId !== user.userUID ? <span
-													className={
-														book.dateRead === undefined ? 'no-date-span' : ''
-													}
-												>
-													{book.dateRead !== undefined
-														? format(book.dateRead, 'MMM dd, yyyy')
-														: 'not set'}
-												</span> : <EditableBookshelfDateField initialDate={book.dateStarted} save={(date) => {
-
-												}} />}
+												{userId !== user.userUID ? (
+													<span
+														className={
+															book.dateRead === undefined ? 'no-date-span' : ''
+														}
+													>
+														{book.dateRead !== undefined
+															? format(book.dateRead, 'MMM dd, yyyy')
+															: 'not set'}
+													</span>
+												) : (
+													<EditableBookshelfDateField
+														initialDate={book.dateStarted}
+														save={(date) => {}}
+													/>
+												)}
 											</td>
 										) : null}
 										{isDateAddedColumnVisible ? (
@@ -3160,15 +3257,33 @@ const UserBookshelfPage = ({ match }) => {
 										) : null}
 										{userId === user.userUID ? (
 											<td>
-												<button className="remove-book-from-shelves-button" onClick={async (_e) => {
-													if (window.confirm(`Are you sure you want to remove ${book.title} from your books? This will permanently remove this book from your shelves, including any review, or rating you have added. To change the shelf this book appears on please edit the shelves.`)) {
-														await Firebase.removeBookFromShelf(userId, book.id);
-														history.push({
-															pathname: Firebase.pageGenerator.generateUserShelfPage(userId, userFirstName, shelves, '', 'table', 20, 1),
-															state: `${book.title} was removed from your books.`,
-														});
-													}
-												}}></button>
+												<button
+													className="remove-book-from-shelves-button"
+													onClick={async (_e) => {
+														if (
+															window.confirm(
+																`Are you sure you want to remove ${book.title} from your books? This will permanently remove this book from your shelves, including any review, or rating you have added. To change the shelf this book appears on please edit the shelves.`
+															)
+														) {
+															await Firebase.removeBookFromShelf(
+																userId,
+																book.id
+															);
+															history.push({
+																pathname: Firebase.pageGenerator.generateUserShelfPage(
+																	userId,
+																	userFirstName,
+																	shelves,
+																	'',
+																	'table',
+																	20,
+																	1
+																),
+																state: `${book.title} was removed from your books.`,
+															});
+														}
+													}}
+												></button>
 											</td>
 										) : null}
 									</tr>

@@ -1363,11 +1363,9 @@ const UserPage = ({ match }) => {
 	const userToReadShelfSection = loaded ? (
 		<div className="user-page-to-read-shelf-section">
 			<a
-				href={Firebase.pageGenerator.generateUserShelfPage(
-					userId,
-					firstName,
-					['to-read']
-				)}
+				href={Firebase.pageGenerator.generateUserShelfPage(userId, firstName, [
+					'to-read',
+				])}
 				className="section-title"
 			>{`${firstName.toUpperCase()}'S TO-READ SHELF`}</a>
 			<div className="book-list">
@@ -1397,11 +1395,9 @@ const UserPage = ({ match }) => {
 			</div>
 			<a
 				className="more-books-a"
-				href={Firebase.pageGenerator.generateUserShelfPage(
-					userId,
-					firstName,
-					['to-read']
-				)}
+				href={Firebase.pageGenerator.generateUserShelfPage(userId, firstName, [
+					'to-read',
+				])}
 			>
 				More...
 			</a>

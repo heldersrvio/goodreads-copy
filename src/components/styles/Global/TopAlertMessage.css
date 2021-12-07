@@ -28,10 +28,10 @@
 }
 
 .top-message-div.red {
-    background-color: rgb(255, 204, 204);
+	background-color: rgb(255, 204, 204);
 	border-color: rgb(255, 102, 102);
 }
 
 .top-message-div.hidden {
-    display: none;
+	display: none;
 }
