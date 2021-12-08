@@ -21,7 +21,10 @@ const UserPhotoPage = ({ match }) => {
 
 	useEffect(() => {
 		const loadInfo = async () => {
-			const userObj = await Firebase.getUserInfoForUserPage(userId, loggedInUser.userUID);
+			const userObj = await Firebase.getUserInfoForUserPage(
+				userId,
+				loggedInUser.userUID
+			);
 			setPhotoInfo(userObj.profilePicture);
 			setLoaded(true);
 		};

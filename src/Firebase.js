@@ -4898,7 +4898,10 @@ const Firebase = (() => {
 				const bookQuery = await database.collection('books').doc(bookId).get();
 				const pageCount = bookQuery.data().pageCount;
 				const cover = bookQuery.data().cover;
-				const shelvedQuery = await database.collection('userBooksInstances').where('bookId', '==', bookId).get();
+				const shelvedQuery = await database
+					.collection('userBooksInstances')
+					.where('bookId', '==', bookId)
+					.get();
 				const numberShelved = shelvedQuery.docs.length;
 				const ratingsQuery = await database
 					.collection('userBooksInstances')
@@ -4913,7 +4916,7 @@ const Firebase = (() => {
 						: ratings.reduce(
 								(previous, current) => previous + current / numberOfRatings,
 								0
-							);
+						  );
 				const userRating = doc.data().rating;
 
 				return {

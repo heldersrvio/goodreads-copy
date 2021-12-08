@@ -107,7 +107,10 @@ ReactDOM.render(
 					<Route path="/user/edit" component={AccountSettingsPage} />
 					<Route path="/user/change_password" component={ChangePassswordPage} />
 					<Route path="/user/destroy" component={DeleteAccountPage} />
-					<Route path="/photo/user/:userPhotoPageId" component={UserPhotoPage} />
+					<Route
+						path="/photo/user/:userPhotoPageId"
+						component={UserPhotoPage}
+					/>
 					<Route
 						path="/user/edit_fav_genres"
 						component={EditFavoriteGenresPage}
@@ -120,7 +123,10 @@ ReactDOM.render(
 						component={ArticleLikedByPage}
 					/>
 					<Route path="/user/show/:userPageId" component={UserPage} />
-					<Route path="/user/year_in_books/:year/:userId" component={UserYearInBooksPage} />
+					<Route
+						path="/user/year_in_books/:year/:userId"
+						component={UserYearInBooksPage}
+					/>
 					<Route
 						path="/user/compare/:userId"
 						component={UserCompareBooksPage}
