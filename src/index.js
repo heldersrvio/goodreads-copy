@@ -41,6 +41,7 @@ import EditCompatibilityTestAnswersPage from './components/User/EditCompatibilit
 import UserAddAsFriendPage from './components/User/UserAddAsFriendPage';
 import UserBookshelfPage from './components/User/UserBookshelfPage';
 import UserPhotoPage from './components/User/UserPhotoPage';
+import UserYearInBooksPage from './components/User/UserYearInBooksPage';
 
 const store = createStore(reducer.userReducer);
 
@@ -119,6 +120,7 @@ ReactDOM.render(
 						component={ArticleLikedByPage}
 					/>
 					<Route path="/user/show/:userPageId" component={UserPage} />
+					<Route path="/user/year_in_books/:year/:userId" component={UserYearInBooksPage} />
 					<Route
 						path="/user/compare/:userId"
 						component={UserCompareBooksPage}
