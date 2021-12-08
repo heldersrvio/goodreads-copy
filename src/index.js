@@ -42,6 +42,7 @@ import UserAddAsFriendPage from './components/User/UserAddAsFriendPage';
 import UserBookshelfPage from './components/User/UserBookshelfPage';
 import UserPhotoPage from './components/User/UserPhotoPage';
 import UserYearInBooksPage from './components/User/UserYearInBooksPage';
+import ErrorPage from './components/Error/ErrorPage';
 
 const store = createStore(reducer.userReducer);
 
@@ -60,6 +61,7 @@ ReactDOM.render(
 		<React.StrictMode>
 			<BrowserRouter>
 				<Switch>
+					<Route path="/" exact component={App} />
 					<Route path="/user/forgot_password" component={ForgotPasswordPage} />
 					<Route path="/user/sign_out" component={SignOutPage} />
 					<Route path="/user/sign_up" component={SignUpPage} />
@@ -144,7 +146,7 @@ ReactDOM.render(
 						component={UserAddAsFriendPage}
 					/>
 					<Route path="/review/list/:pageId" component={UserBookshelfPage} />
-					<Route path="/" component={App} />
+					<Route component={ErrorPage} />
 				</Switch>
 			</BrowserRouter>
 		</React.StrictMode>
