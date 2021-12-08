@@ -4884,6 +4884,51 @@ const Firebase = (() => {
 		);
 	};
 
+	const getUserInfoForYearInBooksPage = async (userUID) => {
+		const loggedInUserAllBooks = (
+			await database
+				.collection('userBooksInstances')
+				.where('userId', '==', userUID)
+				.get()
+		).docs;
+
+		return Promise.all(
+			loggedInUserAllBooks.map(async (doc) => {
+				const bookId = doc.data().bookId;
+				const bookQuery = await database.collection('books').doc(bookId).get();
+				const pageCount = bookQuery.data().pageCount;
+				const cover = bookQuery.data().cover;
+				const shelvedQuery = await database.collection('userBooksInstances').where('bookId', '==', bookId).get();
+				const numberShelved = shelvedQuery.docs.length;
+				const ratingsQuery = await database
+					.collection('userBooksInstances')
+					.where('bookId', '==', bookId)
+					.where('rating', '>', 0)
+					.get();
+				const numberOfRatings = ratingsQuery.docs.length;
+				const ratings = ratingsQuery.docs.map((doc) => doc.data().rating);
+				const averageRating =
+					ratingsQuery.docs.lengh === 0
+						? 0
+						: ratings.reduce(
+								(previous, current) => previous + current / numberOfRatings,
+								0
+							);
+				const userRating = doc.data().rating;
+
+				return {
+					bookId,
+					pageCount,
+					cover,
+					numberShelved,
+					numberOfRatings,
+					averageRating,
+					userRating,
+				};
+			})
+		);
+	};
+
 	return {
 		pageGenerator,
 		getAlsoEnjoyedBooksDetailsForBook,
@@ -4962,6 +5007,7 @@ const Firebase = (() => {
 		addNewBookshelf,
 		queryUserInfoForUserBookshelfPage,
 		queryLoggedInUserInfoForUserBookshelfPage,
+		getUserInfoForYearInBooksPage,
 	};
 })();
 
