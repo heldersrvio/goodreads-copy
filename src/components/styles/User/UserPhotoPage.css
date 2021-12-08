@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+
+.user-photo-page-main-content {
+	margin: 20px 463px 60px 155px;
+}
+
+.user-photo-page-main-content a {
+	padding: 0;
+	line-height: normal;
+	width: auto;
+}
+
+.user-photo-page-main-content a:hover {
+	background-color: transparent;
+}
+
+.user-photo-page-title {
+	display: block;
+	color: rgb(56, 33, 16);
+	font-family: 'Merriweather', Georgia, 'Times New Roman', serif;
+	font-size: 20px;
+	font-weight: bold;
+	line-height: 24px;
+}
+
+.user-photo-page-title a {
+	display: inline;
+	color: rgb(0, 99, 93);
+	font-family: 'Merriweather', Georgia, 'Times New Roman', serif;
+	font-size: 20px;
+}
+
+.user-photo-page-title a:hover {
+	text-decoration: underline;
+}
+
+.user-photo-page-title > span {
+	margin-left: 6px;
+}
+
+.user-photo-page .small-photo-a,
+.user-photo-page .small-photo-a:hover {
+	display: inline-block;
+	width: auto;
+	height: auto;
+	padding: 3px;
+	background-color: rgb(229, 223, 192);
+	margin-top: 20px;
+	margin-bottom: 30px;
+}
+
+.user-photo-page .small-photo-a img {
+	height: 50px;
+}
+
+.user-photo-page .main-photo-section {
+	width: min-content;
+}
+
+.user-photo-page .largest-size-a {
+	float: right;
+	margin-right: 0;
+	color: rgb(0, 99, 93);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+}
+
+.user-photo-page .largest-size-a:hover {
+	text-decoration: underline;
+}
+
+.user-photo-page .description-span {
+	color: rgb(24, 24, 24);
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+	margin-top: 25px;
+	display: block;
+}

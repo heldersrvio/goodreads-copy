@@ -40,6 +40,7 @@ import BookCompatibilityTestPage from './components/User/BookCompatibilityTestPa
 import EditCompatibilityTestAnswersPage from './components/User/EditCompatibilityTestAnswersPage';
 import UserAddAsFriendPage from './components/User/UserAddAsFriendPage';
 import UserBookshelfPage from './components/User/UserBookshelfPage';
+import UserPhotoPage from './components/User/UserPhotoPage';
 
 const store = createStore(reducer.userReducer);
 
@@ -105,6 +106,7 @@ ReactDOM.render(
 					<Route path="/user/edit" component={AccountSettingsPage} />
 					<Route path="/user/change_password" component={ChangePassswordPage} />
 					<Route path="/user/destroy" component={DeleteAccountPage} />
+					<Route path="/photo/user/:userPhotoPageId" component={UserPhotoPage} />
 					<Route
 						path="/user/edit_fav_genres"
 						component={EditFavoriteGenresPage}

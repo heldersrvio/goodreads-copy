@@ -207,7 +207,7 @@ const TopBar = () => {
 							</span>
 							<ul>
 								<li>
-									<a href="/">Profile</a>
+									<a href={Firebase.pageGenerator.generateUserPage(user.userUID, user.userInfo.firstName)}>Profile</a>
 								</li>
 								<li>
 									<a href="/">Friends</a>

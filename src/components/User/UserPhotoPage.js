@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import Firebase from '../../Firebase';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
+import '../styles/User/UserPhotoPage.css';
 
-const UserPhotoPage = ({ match, location }) => {
+const UserPhotoPage = ({ match }) => {
 	const {
 		params: { userPhotoPageId },
 	} = match;
@@ -16,15 +17,21 @@ const UserPhotoPage = ({ match, location }) => {
 	const [loaded, setLoaded] = useState(false);
 	const [photoInfo, setPhotoInfo] = useState(null);
 
+	const loggedInUser = JSON.parse(localStorage.getItem('userState'));
+
 	useEffect(() => {
-		const loadInfo = () => {};
+		const loadInfo = async () => {
+			const userObj = await Firebase.getUserInfoForUserPage(userId, loggedInUser.userUID);
+			setPhotoInfo(userObj.profilePicture);
+			setLoaded(true);
+		};
 
 		loadInfo();
-	}, [userId]);
+	}, [userId, loggedInUser.userUID]);
 
 	const mainContent = loaded ? (
 		<div className="user-photo-page-main-content">
-			<span className="book-photo-page-title">
+			<span className="user-photo-page-title">
 				<a href={Firebase.pageGenerator.generateUserPage(userId, firstName)}>
 					{firstName}
 				</a>
@@ -33,6 +40,19 @@ const UserPhotoPage = ({ match, location }) => {
 				<span>{'>'}</span>
 				<span>Profile Photo</span>
 			</span>
+			<a
+				href={Firebase.pageGenerator.generateUserPhotoPage(userId)}
+				className="small-photo-a"
+			>
+				<img src={photoInfo} alt="Profile" />
+			</a>
+			<div className="main-photo-section">
+				<a className="largest-size-a" href={photoInfo}>
+					largest size
+				</a>
+				<img src={photoInfo} alt="Profile" />
+			</div>
+			<span className="description-span">Profile photo.</span>
 		</div>
 	) : null;
 

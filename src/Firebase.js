@@ -96,7 +96,7 @@ const Firebase = (() => {
 		};
 
 		const generateUserPhotoPage = (userId) => {
-			return '/photo/user' + userId;
+			return '/photo/user/' + userId;
 		};
 
 		const generateUserBooksPage = (userId) => {
