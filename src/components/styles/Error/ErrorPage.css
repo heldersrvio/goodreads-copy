@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+
+.error-page .error-page-message {
+	font-family: var(--lato-font);
+	color: var(--goodreads-black);
+	font-size: 16px;
+	margin: 32px 0 15px 13%;
+	display: block;
+}
+
+.error-page .middle-section {
+	min-height: 55vh;
+	display: flex;
+	flex-direction: row;
+	margin: 10px 40% 10px 13%;
+}
+
+.error-page .quote-section {
+	margin-right: 30px;
+}
+
+.error-page .quote-section span {
+	display: block;
+	font-family: var(--merriweather-font);
+	color: rgb(128, 128, 128);
+	font-size: 14px;
+	line-height: 150%;
+}
+
+.error-page .quote-section .quote-authorship-span {
+	margin-top: 20px;
+}
+
+.error-page .book-and-author-section {
+	position: relative;
+}
+
+.error-page .book-and-author-section .author-picture {
+	border-radius: 100%;
+	position: absolute;
+	bottom: 25%;
+	left: -10%;
+}
+
+.error-page .back-to-homepage-a {
+	margin-left: 13%;
+	margin-bottom: 5%;
+}

@@ -15,3 +15,20 @@ body,
 	--merriweather-font: 'Merriweather', Georgia, 'Times New Roman', serif;
 	--lato-font: 'Lato', Helvetica, Arial, sans-serif;
 }
+
+.goodreads-button {
+	color: var(--goodreads-black);
+	border-radius: 3px;
+	border: 1px solid rgb(216, 210, 198);
+	background-color: rgb(244, 241, 234);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	line-height: 14px;
+	padding: 8px 12px;
+	width: fit-content !important;
+}
+
+.goodreads-button:hover {
+	background-color: rgb(237, 230, 214);
+	color: inherit;
+}

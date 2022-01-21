@@ -1,6 +1,7 @@
 import React from 'react';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
+import '../styles/Error/ErrorPage.css';
 
 const ErrorPage = () => {
 	const templates = [
@@ -67,10 +68,14 @@ const ErrorPage = () => {
 				</div>
 				<div className="book-and-author-section">
 					<img src={template.book.cover} alt="Book" />
-					<img src={template.author.photo} alt={template.author.name} />
+					<img
+						className="author-picture"
+						src={template.author.photo}
+						alt={template.author.name}
+					/>
 				</div>
 			</div>
-			<a className="back-to-homepage-a" href="/">
+			<a className="back-to-homepage-a goodreads-button" href="/">
 				Back to the Goodreads homepage
 			</a>
 			<HomePageFootBar />
