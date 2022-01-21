@@ -43,6 +43,7 @@ import UserBookshelfPage from './components/User/UserBookshelfPage';
 import UserPhotoPage from './components/User/UserPhotoPage';
 import UserYearInBooksPage from './components/User/UserYearInBooksPage';
 import ErrorPage from './components/Error/ErrorPage';
+import ErrorBoundary from './ErrorBoundary';
 
 const store = createStore(reducer.userReducer);
 
@@ -61,91 +62,303 @@ ReactDOM.render(
 		<React.StrictMode>
 			<BrowserRouter>
 				<Switch>
-					<Route path="/" exact component={App} />
-					<Route path="/user/forgot_password" component={ForgotPasswordPage} />
-					<Route path="/user/sign_out" component={SignOutPage} />
-					<Route path="/user/sign_up" component={SignUpPage} />
-					<Route path="/user/sign_in" component={SignInPage} />
-					<Route path="/book/show/:bookPageId" component={BookPage} />
-					<Route path="/book/stats" component={Stats} />
-					<Route path="/book/new" component={AddNewBookPage} />
-					<Route path="/work/shelves/:bookId" component={BookTopShelvesPage} />
+					<Route
+						path="/"
+						exact
+						render={() => (
+							<ErrorBoundary>
+								<App></App>
+							</ErrorBoundary>
+						)}
+					/>
+					<Route
+						path="/user/forgot_password"
+						render={() => (
+							<ErrorBoundary>
+								<ForgotPasswordPage></ForgotPasswordPage>
+							</ErrorBoundary>
+						)}
+					/>
+					<Route
+						path="/user/sign_out"
+						render={() => (
+							<ErrorBoundary>
+								<SignOutPage></SignOutPage>
+							</ErrorBoundary>
+						)}
+					/>
+					<Route
+						path="/user/sign_up"
+						render={() => (
+							<ErrorBoundary>
+								<SignUpPage></SignUpPage>
+							</ErrorBoundary>
+						)}
+					/>
+					<Route
+						path="/user/sign_in"
+						render={() => (
+							<ErrorBoundary>
+								<SignInPage></SignInPage>
+							</ErrorBoundary>
+						)}
+					/>
+					<Route
+						path="/book/show/:bookPageId"
+						render={() => (
+							<ErrorBoundary>
+								<BookPage></BookPage>
+							</ErrorBoundary>
+						)}
+					/>
+					<Route
+						path="/book/stats"
+						render={() => (
+							<ErrorBoundary>
+								<Stats></Stats>
+							</ErrorBoundary>
+						)}
+					/>
+					<Route
+						path="/book/new"
+						render={() => (
+							<ErrorBoundary>
+								<AddNewBookPage></AddNewBookPage>
+							</ErrorBoundary>
+						)}
+					/>
+					<Route
+						path="/work/shelves/:bookId"
+						render={() => (
+							<ErrorBoundary>
+								<BookTopShelvesPage></BookTopShelvesPage>
+							</ErrorBoundary>
+						)}
+					/>
 					<Route
 						path="/book/similar/:similarBooksPageId"
-						component={SimilarBooksPage}
+						render={() => (
+							<ErrorBoundary>
+								<SimilarBooksPage></SimilarBooksPage>
+							</ErrorBoundary>
+						)}
 					/>
 					<Route
 						path="/work/editions/:bookEditionsPageId"
-						component={BookEditionsPage}
+						render={() => (
+							<ErrorBoundary>
+								<BookEditionsPage></BookEditionsPage>
+							</ErrorBoundary>
+						)}
 					/>
 					<Route
 						path="/book/photo/:bookCoverPageId"
-						component={BookCoverPage}
+						render={() => (
+							<ErrorBoundary>
+								<BookCoverPage></BookCoverPage>
+							</ErrorBoundary>
+						)}
 					/>
 					<Route
 						path="/photo/work/:bookPhotoPageId"
-						component={BookPhotoPage}
+						render={() => (
+							<ErrorBoundary>
+								<BookPhotoPage></BookPhotoPage>
+							</ErrorBoundary>
+						)}
 					/>
 					<Route
 						path="/shelf/users/:bookGenreShelfPageId"
-						component={BookGenreShelfPage}
+						render={() => (
+							<ErrorBoundary>
+								<BookGenreShelfPage></BookGenreShelfPage>
+							</ErrorBoundary>
+						)}
 					/>
 					<Route
 						path="/trivia/work/:bookTriviaPageId"
-						component={BookTriviaPage}
+						render={() => (
+							<ErrorBoundary>
+								<BookTriviaPage></BookTriviaPage>
+							</ErrorBoundary>
+						)}
 					/>
 					<Route
 						path="/work/quotes/:bookQuotesPageId"
-						component={BookQuotesPage}
+						render={() => (
+							<ErrorBoundary>
+								<BookQuotesPage></BookQuotesPage>
+							</ErrorBoundary>
+						)}
 					/>
-					<Route path="/list/book/:bookId" component={BookListsPage} />
-					<Route path="/author/show/:authorPageId" component={AuthorPage} />
-					<Route path="/favorite_authors" component={FavoriteAuthorsPage} />
+					<Route
+						path="/list/book/:bookId"
+						render={() => (
+							<ErrorBoundary>
+								<BookListsPage></BookListsPage>
+							</ErrorBoundary>
+						)}
+					/>
+					<Route
+						path="/author/show/:authorPageId"
+						render={() => (
+							<ErrorBoundary>
+								<AuthorPage></AuthorPage>
+							</ErrorBoundary>
+						)}
+					/>
+					<Route
+						path="/favorite_authors"
+						render={() => (
+							<ErrorBoundary>
+								<FavoriteAuthorsPage></FavoriteAuthorsPage>
+							</ErrorBoundary>
+						)}
+					/>
 					<Route
 						path="/user/:userId/favorite_authors"
-						component={FavoriteAuthorsForUserPage}
+						render={() => (
+							<ErrorBoundary>
+								<FavoriteAuthorsForUserPage></FavoriteAuthorsForUserPage>
+							</ErrorBoundary>
+						)}
 					/>
-					<Route path="/notifications" component={NotificationsPage} />
-					<Route path="/user/edit" component={AccountSettingsPage} />
-					<Route path="/user/change_password" component={ChangePassswordPage} />
-					<Route path="/user/destroy" component={DeleteAccountPage} />
+					<Route
+						path="/notifications"
+						render={() => (
+							<ErrorBoundary>
+								<NotificationsPage></NotificationsPage>
+							</ErrorBoundary>
+						)}
+					/>
+					<Route
+						path="/user/edit"
+						render={() => (
+							<ErrorBoundary>
+								<AccountSettingsPage></AccountSettingsPage>
+							</ErrorBoundary>
+						)}
+					/>
+					<Route
+						path="/user/change_password"
+						render={() => (
+							<ErrorBoundary>
+								<ChangePassswordPage></ChangePassswordPage>
+							</ErrorBoundary>
+						)}
+					/>
+					<Route
+						path="/user/destroy"
+						render={() => (
+							<ErrorBoundary>
+								<DeleteAccountPage></DeleteAccountPage>
+							</ErrorBoundary>
+						)}
+					/>
 					<Route
 						path="/photo/user/:userPhotoPageId"
-						component={UserPhotoPage}
+						render={() => (
+							<ErrorBoundary>
+								<UserPhotoPage></UserPhotoPage>
+							</ErrorBoundary>
+						)}
 					/>
 					<Route
 						path="/user/edit_fav_genres"
-						component={EditFavoriteGenresPage}
+						render={() => (
+							<ErrorBoundary>
+								<EditFavoriteGenresPage></EditFavoriteGenresPage>
+							</ErrorBoundary>
+						)}
 					/>
-					<Route path="/genres/:genre" component={GenrePage} />
-					<Route path="/news" component={NewsPage} />
-					<Route path="/blog/show/:articlePageId" component={ArticlePage} />
+					<Route
+						path="/genres/:genre"
+						render={() => (
+							<ErrorBoundary>
+								<GenrePage></GenrePage>
+							</ErrorBoundary>
+						)}
+					/>
+					<Route
+						path="/news"
+						render={() => (
+							<ErrorBoundary>
+								<NewsPage></NewsPage>
+							</ErrorBoundary>
+						)}
+					/>
+					<Route
+						path="/blog/show/:articlePageId"
+						render={() => (
+							<ErrorBoundary>
+								<ArticlePage></ArticlePage>
+							</ErrorBoundary>
+						)}
+					/>
 					<Route
 						path="/rating/voters/:articleId"
-						component={ArticleLikedByPage}
+						render={() => (
+							<ErrorBoundary>
+								<ArticleLikedByPage></ArticleLikedByPage>
+							</ErrorBoundary>
+						)}
 					/>
-					<Route path="/user/show/:userPageId" component={UserPage} />
+					<Route
+						path="/user/show/:userPageId"
+						render={() => (
+							<ErrorBoundary>
+								<UserPage></UserPage>
+							</ErrorBoundary>
+						)}
+					/>
 					<Route
 						path="/user/year_in_books/:year/:userId"
-						component={UserYearInBooksPage}
+						render={() => (
+							<ErrorBoundary>
+								<UserYearInBooksPage></UserYearInBooksPage>
+							</ErrorBoundary>
+						)}
 					/>
 					<Route
 						path="/user/compare/:userId"
-						component={UserCompareBooksPage}
+						render={() => (
+							<ErrorBoundary>
+								<UserCompareBooksPage></UserCompareBooksPage>
+							</ErrorBoundary>
+						)}
 					/>
 					<Route
 						path="/book/compatibility_results"
-						component={BookCompatibilityTestPage}
+						render={() => (
+							<ErrorBoundary>
+								<BookCompatibilityTestPage></BookCompatibilityTestPage>
+							</ErrorBoundary>
+						)}
 					/>
 					<Route
 						path="/book/compatibility_test"
-						component={EditCompatibilityTestAnswersPage}
+						render={() => (
+							<ErrorBoundary>
+								<EditCompatibilityTestAnswersPage></EditCompatibilityTestAnswersPage>
+							</ErrorBoundary>
+						)}
 					/>
 					<Route
 						path="/friend/add_as_friend/:newFriendId"
-						component={UserAddAsFriendPage}
+						render={() => (
+							<ErrorBoundary>
+								<UserAddAsFriendPage></UserAddAsFriendPage>
+							</ErrorBoundary>
+						)}
 					/>
-					<Route path="/review/list/:pageId" component={UserBookshelfPage} />
+					<Route
+						path="/review/list/:pageId"
+						render={() => (
+							<ErrorBoundary>
+								<UserBookshelfPage></UserBookshelfPage>
+							</ErrorBoundary>
+						)}
+					/>
 					<Route component={ErrorPage} />
 				</Switch>
 			</BrowserRouter>

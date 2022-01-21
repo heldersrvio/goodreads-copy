@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import reducer from './reducers/reducer';
 import HomePage from './components/Authentication/HomePage';
@@ -14,15 +14,25 @@ const App = () => {
 
 	const [loading, setLoading] = useState(true);
 
-	const login = async (userUID) => {
-		const newUserInfo = await Firebase.modifyUserInfo(userUID);
-		dispatch(reducer.login(userUID, newUserInfo));
-		setLoading(false);
-	};
+	useEffect(() => {
+		const login = async (userUID) => {
+			const newUserInfo = await Firebase.modifyUserInfo(userUID);
+			dispatch(reducer.login(userUID, newUserInfo));
+			setLoading(false);
+		};
 
-	const signOut = async () => {
-		dispatch(reducer.signOut());
-	};
+		const signOut = async () => {
+			dispatch(reducer.signOut());
+		};
+
+		firebase.auth().onAuthStateChanged((newUser) => {
+			if (newUser !== null && user.userUID !== newUser.uid) {
+				login(newUser.uid);
+			} else if (newUser === null && user.userUID !== null) {
+				signOut();
+			}
+		});
+	}, [dispatch, user.userUID]);
 
 	const FirstPage = (props) => {
 		if (props.isLoggedIn && !props.loading) {
@@ -30,14 +40,6 @@ const App = () => {
 		}
 		return <HomePage />;
 	};
-
-	firebase.auth().onAuthStateChanged((newUser) => {
-		if (newUser !== null && user.userUID !== newUser.uid) {
-			login(newUser.uid);
-		} else if (newUser === null && user.userUID !== null) {
-			signOut();
-		}
-	});
 
 	return (
 		<div className="App">

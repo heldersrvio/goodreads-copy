@@ -22,6 +22,9 @@ const reducer = (() => {
 	};
 
 	const login = (userUID, userInfo) => {
+		if (userUID === undefined || userInfo === undefined) {
+			return signOut();
+		}
 		return {
 			type: 'LOGIN',
 			data: {
