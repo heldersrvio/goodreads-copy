@@ -76,7 +76,7 @@ const BookGenreShelfPage = ({ match, location }) => {
 								href={Firebase.pageGenerator.generateUserShelfPage(
 									user.id,
 									user.firstName,
-									shelf
+									[shelf]
 								)}
 							>{`${user.numberOfBooksOnShelf} ${shelf} books`}</a>
 						</div>

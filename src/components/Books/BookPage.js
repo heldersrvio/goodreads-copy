@@ -185,7 +185,7 @@ const BookPage = ({ match }) => {
 			setLoaded(true);
 		};
 		getBookInfo();
-	}, [bookPageId, user.userUID]);
+	}, [bookPageId, user.userUID, match]);
 
 	useEffect(() => {
 		document.addEventListener('click', (e) => {
@@ -422,7 +422,7 @@ const BookPage = ({ match }) => {
 											? Firebase.pageGenerator.generateUserShelfPage(
 													user.userUID,
 													user.userInfo.firstName,
-													'reading'
+													['reading']
 											  )
 											: '/user/sign_in'
 									}
@@ -499,7 +499,7 @@ const BookPage = ({ match }) => {
 										? Firebase.pageGenerator.generateUserShelfPage(
 												user.userUID,
 												user.userInfo.firstName,
-												'to-read'
+												['to-read']
 										  )
 										: '/user/sign_in'
 								}
@@ -552,7 +552,7 @@ const BookPage = ({ match }) => {
 											? Firebase.pageGenerator.generateUserShelfPage(
 													user.userUID,
 													user.userInfo.firstName,
-													'to-read'
+													['to-read']
 											  )
 											: '/user/sign_in'
 									}
@@ -1701,7 +1701,7 @@ const BookPage = ({ match }) => {
 															href={Firebase.pageGenerator.generateUserShelfPage(
 																review.user,
 																review.userName.split(' ')[0],
-																shelf
+																[shelf]
 															)}
 														>
 															{shelf}

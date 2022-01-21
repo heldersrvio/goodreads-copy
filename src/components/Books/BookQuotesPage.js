@@ -149,7 +149,7 @@ const BookQuotesPage = ({ match }) => {
 											? Firebase.pageGenerator.generateUserShelfPage(
 													user.userUID,
 													user.userInfo.firstName,
-													'reading'
+													['reading']
 											  )
 											: '/user/sign_in'
 									}
@@ -226,7 +226,7 @@ const BookQuotesPage = ({ match }) => {
 										? Firebase.pageGenerator.generateUserShelfPage(
 												user.userUID,
 												user.userInfo.firstName,
-												'to-read'
+												['to-read']
 										  )
 										: '/user/sign_in'
 								}
@@ -279,7 +279,7 @@ const BookQuotesPage = ({ match }) => {
 											? Firebase.pageGenerator.generateUserShelfPage(
 													user.userUID,
 													user.userInfo.firstName,
-													'to-read'
+													['to-read']
 											  )
 											: '/user/sign_in'
 									}

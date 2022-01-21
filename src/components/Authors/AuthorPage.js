@@ -278,7 +278,7 @@ const AuthorPage = ({ match }) => {
 											? Firebase.pageGenerator.generateUserShelfPage(
 													user.userUID,
 													user.userInfo.firstName,
-													'reading'
+													['reading']
 											  )
 											: '/user/sign_in'
 									}
@@ -371,7 +371,7 @@ const AuthorPage = ({ match }) => {
 										? Firebase.pageGenerator.generateUserShelfPage(
 												user.userUID,
 												user.userInfo.firstName,
-												'to-read'
+												['to-read']
 										  )
 										: '/user/sign_in'
 								}
@@ -435,7 +435,7 @@ const AuthorPage = ({ match }) => {
 											? Firebase.pageGenerator.generateUserShelfPage(
 													user.userUID,
 													user.userInfo.firstName,
-													'to-read'
+													['to-read']
 											  )
 											: '/user/sign_in'
 									}
@@ -1020,28 +1020,28 @@ const AuthorPage = ({ match }) => {
 						href={Firebase.pageGenerator.generateUserShelfPage(
 							authorId,
 							authorFirstName,
-							'read'
+							['read']
 						)}
 					>{`read (${authorInfo.numberOfReadBooks})`}</a>
 					<a
 						href={Firebase.pageGenerator.generateUserShelfPage(
 							authorId,
 							authorFirstName,
-							'reading'
+							['reading']
 						)}
 					>{`currently-reading (${authorInfo.numberOfReadingBooks})`}</a>
 					<a
 						href={Firebase.pageGenerator.generateUserShelfPage(
 							authorId,
 							authorFirstName,
-							'to-read'
+							['to-read']
 						)}
 					>{`to-read (${authorInfo.numberOfToReadBooks})`}</a>
 					<a
 						href={Firebase.pageGenerator.generateUserShelfPage(
 							authorId,
 							authorFirstName,
-							'favorites'
+							['favorites']
 						)}
 					>{`favorites (${authorInfo.numberOfFavoriteBooks})`}</a>
 				</div>

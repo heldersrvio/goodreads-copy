@@ -65,297 +65,305 @@ ReactDOM.render(
 					<Route
 						path="/"
 						exact
-						render={() => (
+						render={(routerProps) => (
 							<ErrorBoundary>
-								<App></App>
+								<App {...routerProps}></App>
 							</ErrorBoundary>
 						)}
 					/>
 					<Route
 						path="/user/forgot_password"
-						render={() => (
+						render={(routerProps) => (
 							<ErrorBoundary>
-								<ForgotPasswordPage></ForgotPasswordPage>
+								<ForgotPasswordPage {...routerProps}></ForgotPasswordPage>
 							</ErrorBoundary>
 						)}
 					/>
 					<Route
 						path="/user/sign_out"
-						render={() => (
+						render={(routerProps) => (
 							<ErrorBoundary>
-								<SignOutPage></SignOutPage>
+								<SignOutPage {...routerProps}></SignOutPage>
 							</ErrorBoundary>
 						)}
 					/>
 					<Route
 						path="/user/sign_up"
-						render={() => (
+						render={(routerProps) => (
 							<ErrorBoundary>
-								<SignUpPage></SignUpPage>
+								<SignUpPage {...routerProps}></SignUpPage>
 							</ErrorBoundary>
 						)}
 					/>
 					<Route
 						path="/user/sign_in"
-						render={() => (
+						render={(routerProps) => (
 							<ErrorBoundary>
-								<SignInPage></SignInPage>
+								<SignInPage {...routerProps}></SignInPage>
 							</ErrorBoundary>
 						)}
 					/>
 					<Route
 						path="/book/show/:bookPageId"
-						render={() => (
+						render={(routerProps) => (
 							<ErrorBoundary>
-								<BookPage></BookPage>
+								<BookPage {...routerProps}></BookPage>
 							</ErrorBoundary>
 						)}
 					/>
 					<Route
 						path="/book/stats"
-						render={() => (
+						render={(routerProps) => (
 							<ErrorBoundary>
-								<Stats></Stats>
+								<Stats {...routerProps}></Stats>
 							</ErrorBoundary>
 						)}
 					/>
 					<Route
 						path="/book/new"
-						render={() => (
+						render={(routerProps) => (
 							<ErrorBoundary>
-								<AddNewBookPage></AddNewBookPage>
+								<AddNewBookPage {...routerProps}></AddNewBookPage>
 							</ErrorBoundary>
 						)}
 					/>
 					<Route
 						path="/work/shelves/:bookId"
-						render={() => (
+						render={(routerProps) => (
 							<ErrorBoundary>
-								<BookTopShelvesPage></BookTopShelvesPage>
+								<BookTopShelvesPage {...routerProps}></BookTopShelvesPage>
 							</ErrorBoundary>
 						)}
 					/>
 					<Route
 						path="/book/similar/:similarBooksPageId"
-						render={() => (
+						render={(routerProps) => (
 							<ErrorBoundary>
-								<SimilarBooksPage></SimilarBooksPage>
+								<SimilarBooksPage {...routerProps}></SimilarBooksPage>
 							</ErrorBoundary>
 						)}
 					/>
 					<Route
 						path="/work/editions/:bookEditionsPageId"
-						render={() => (
+						render={(routerProps) => (
 							<ErrorBoundary>
-								<BookEditionsPage></BookEditionsPage>
+								<BookEditionsPage {...routerProps}></BookEditionsPage>
 							</ErrorBoundary>
 						)}
 					/>
 					<Route
 						path="/book/photo/:bookCoverPageId"
-						render={() => (
+						render={(routerProps) => (
 							<ErrorBoundary>
-								<BookCoverPage></BookCoverPage>
+								<BookCoverPage {...routerProps}></BookCoverPage>
 							</ErrorBoundary>
 						)}
 					/>
 					<Route
 						path="/photo/work/:bookPhotoPageId"
-						render={() => (
+						render={(routerProps) => (
 							<ErrorBoundary>
-								<BookPhotoPage></BookPhotoPage>
+								<BookPhotoPage {...routerProps}></BookPhotoPage>
 							</ErrorBoundary>
 						)}
 					/>
 					<Route
 						path="/shelf/users/:bookGenreShelfPageId"
-						render={() => (
+						render={(routerProps) => (
 							<ErrorBoundary>
-								<BookGenreShelfPage></BookGenreShelfPage>
+								<BookGenreShelfPage {...routerProps}></BookGenreShelfPage>
 							</ErrorBoundary>
 						)}
 					/>
 					<Route
 						path="/trivia/work/:bookTriviaPageId"
-						render={() => (
+						render={(routerProps) => (
 							<ErrorBoundary>
-								<BookTriviaPage></BookTriviaPage>
+								<BookTriviaPage {...routerProps}></BookTriviaPage>
 							</ErrorBoundary>
 						)}
 					/>
 					<Route
 						path="/work/quotes/:bookQuotesPageId"
-						render={() => (
+						render={(routerProps) => (
 							<ErrorBoundary>
-								<BookQuotesPage></BookQuotesPage>
+								<BookQuotesPage {...routerProps}></BookQuotesPage>
 							</ErrorBoundary>
 						)}
 					/>
 					<Route
 						path="/list/book/:bookId"
-						render={() => (
+						render={(routerProps) => (
 							<ErrorBoundary>
-								<BookListsPage></BookListsPage>
+								<BookListsPage {...routerProps}></BookListsPage>
 							</ErrorBoundary>
 						)}
 					/>
 					<Route
 						path="/author/show/:authorPageId"
-						render={() => (
+						render={(routerProps) => (
 							<ErrorBoundary>
-								<AuthorPage></AuthorPage>
+								<AuthorPage {...routerProps}></AuthorPage>
 							</ErrorBoundary>
 						)}
 					/>
 					<Route
 						path="/favorite_authors"
-						render={() => (
+						render={(routerProps) => (
 							<ErrorBoundary>
-								<FavoriteAuthorsPage></FavoriteAuthorsPage>
+								<FavoriteAuthorsPage {...routerProps}></FavoriteAuthorsPage>
 							</ErrorBoundary>
 						)}
 					/>
 					<Route
 						path="/user/:userId/favorite_authors"
-						render={() => (
+						render={(routerProps) => (
 							<ErrorBoundary>
-								<FavoriteAuthorsForUserPage></FavoriteAuthorsForUserPage>
+								<FavoriteAuthorsForUserPage
+									{...routerProps}
+								></FavoriteAuthorsForUserPage>
 							</ErrorBoundary>
 						)}
 					/>
 					<Route
 						path="/notifications"
-						render={() => (
+						render={(routerProps) => (
 							<ErrorBoundary>
-								<NotificationsPage></NotificationsPage>
+								<NotificationsPage {...routerProps}></NotificationsPage>
 							</ErrorBoundary>
 						)}
 					/>
 					<Route
 						path="/user/edit"
-						render={() => (
+						render={(routerProps) => (
 							<ErrorBoundary>
-								<AccountSettingsPage></AccountSettingsPage>
+								<AccountSettingsPage {...routerProps}></AccountSettingsPage>
 							</ErrorBoundary>
 						)}
 					/>
 					<Route
 						path="/user/change_password"
-						render={() => (
+						render={(routerProps) => (
 							<ErrorBoundary>
-								<ChangePassswordPage></ChangePassswordPage>
+								<ChangePassswordPage {...routerProps}></ChangePassswordPage>
 							</ErrorBoundary>
 						)}
 					/>
 					<Route
 						path="/user/destroy"
-						render={() => (
+						render={(routerProps) => (
 							<ErrorBoundary>
-								<DeleteAccountPage></DeleteAccountPage>
+								<DeleteAccountPage {...routerProps}></DeleteAccountPage>
 							</ErrorBoundary>
 						)}
 					/>
 					<Route
 						path="/photo/user/:userPhotoPageId"
-						render={() => (
+						render={(routerProps) => (
 							<ErrorBoundary>
-								<UserPhotoPage></UserPhotoPage>
+								<UserPhotoPage {...routerProps}></UserPhotoPage>
 							</ErrorBoundary>
 						)}
 					/>
 					<Route
 						path="/user/edit_fav_genres"
-						render={() => (
+						render={(routerProps) => (
 							<ErrorBoundary>
-								<EditFavoriteGenresPage></EditFavoriteGenresPage>
+								<EditFavoriteGenresPage
+									{...routerProps}
+								></EditFavoriteGenresPage>
 							</ErrorBoundary>
 						)}
 					/>
 					<Route
 						path="/genres/:genre"
-						render={() => (
+						render={(routerProps) => (
 							<ErrorBoundary>
-								<GenrePage></GenrePage>
+								<GenrePage {...routerProps}></GenrePage>
 							</ErrorBoundary>
 						)}
 					/>
 					<Route
 						path="/news"
-						render={() => (
+						render={(routerProps) => (
 							<ErrorBoundary>
-								<NewsPage></NewsPage>
+								<NewsPage {...routerProps}></NewsPage>
 							</ErrorBoundary>
 						)}
 					/>
 					<Route
 						path="/blog/show/:articlePageId"
-						render={() => (
+						render={(routerProps) => (
 							<ErrorBoundary>
-								<ArticlePage></ArticlePage>
+								<ArticlePage {...routerProps}></ArticlePage>
 							</ErrorBoundary>
 						)}
 					/>
 					<Route
 						path="/rating/voters/:articleId"
-						render={() => (
+						render={(routerProps) => (
 							<ErrorBoundary>
-								<ArticleLikedByPage></ArticleLikedByPage>
+								<ArticleLikedByPage {...routerProps}></ArticleLikedByPage>
 							</ErrorBoundary>
 						)}
 					/>
 					<Route
 						path="/user/show/:userPageId"
-						render={() => (
+						render={(routerProps) => (
 							<ErrorBoundary>
-								<UserPage></UserPage>
+								<UserPage {...routerProps}></UserPage>
 							</ErrorBoundary>
 						)}
 					/>
 					<Route
 						path="/user/year_in_books/:year/:userId"
-						render={() => (
+						render={(routerProps) => (
 							<ErrorBoundary>
-								<UserYearInBooksPage></UserYearInBooksPage>
+								<UserYearInBooksPage {...routerProps}></UserYearInBooksPage>
 							</ErrorBoundary>
 						)}
 					/>
 					<Route
 						path="/user/compare/:userId"
-						render={() => (
+						render={(routerProps) => (
 							<ErrorBoundary>
-								<UserCompareBooksPage></UserCompareBooksPage>
+								<UserCompareBooksPage {...routerProps}></UserCompareBooksPage>
 							</ErrorBoundary>
 						)}
 					/>
 					<Route
 						path="/book/compatibility_results"
-						render={() => (
+						render={(routerProps) => (
 							<ErrorBoundary>
-								<BookCompatibilityTestPage></BookCompatibilityTestPage>
+								<BookCompatibilityTestPage
+									{...routerProps}
+								></BookCompatibilityTestPage>
 							</ErrorBoundary>
 						)}
 					/>
 					<Route
 						path="/book/compatibility_test"
-						render={() => (
+						render={(routerProps) => (
 							<ErrorBoundary>
-								<EditCompatibilityTestAnswersPage></EditCompatibilityTestAnswersPage>
+								<EditCompatibilityTestAnswersPage
+									{...routerProps}
+								></EditCompatibilityTestAnswersPage>
 							</ErrorBoundary>
 						)}
 					/>
 					<Route
 						path="/friend/add_as_friend/:newFriendId"
-						render={() => (
+						render={(routerProps) => (
 							<ErrorBoundary>
-								<UserAddAsFriendPage></UserAddAsFriendPage>
+								<UserAddAsFriendPage {...routerProps}></UserAddAsFriendPage>
 							</ErrorBoundary>
 						)}
 					/>
 					<Route
 						path="/review/list/:pageId"
-						render={() => (
+						render={(routerProps) => (
 							<ErrorBoundary>
-								<UserBookshelfPage></UserBookshelfPage>
+								<UserBookshelfPage {...routerProps}></UserBookshelfPage>
 							</ErrorBoundary>
 						)}
 					/>
