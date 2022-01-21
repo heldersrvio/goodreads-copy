@@ -3,6 +3,7 @@ import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 import Firebase from '../../Firebase';
 import '../styles/Books/BookListsPage.css';
+import { trackPromise } from 'react-promise-tracker';
 
 const BookListsPage = ({ match }) => {
 	const {
@@ -17,7 +18,7 @@ const BookListsPage = ({ match }) => {
 
 	useEffect(() => {
 		const getBookInfo = async () => {
-			setBookInfo(await Firebase.getBookInfoForListsPage(bookId));
+			setBookInfo(await trackPromise(Firebase.getBookInfoForListsPage(bookId)));
 			setLoaded(true);
 		};
 		getBookInfo();

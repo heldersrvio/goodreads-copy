@@ -3,6 +3,7 @@ import Firebase from '../../Firebase';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 import '../styles/Books/BookPhotoPage.css';
+import { trackPromise } from 'react-promise-tracker';
 
 const BookPhotoPage = ({ match, location }) => {
 	const {
@@ -18,7 +19,9 @@ const BookPhotoPage = ({ match, location }) => {
 
 	useEffect(() => {
 		const loadInfo = async () => {
-			const photoObj = await Firebase.getPhotoDetails(user.userUID, photoId);
+			const photoObj = await trackPromise(
+				Firebase.getPhotoDetails(user.userUID, photoId)
+			);
 			setPhotoInfo(photoObj);
 			setLoaded(true);
 		};

@@ -7,6 +7,7 @@ import Firebase from './Firebase';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import './styles/App.css';
+import { trackPromise } from 'react-promise-tracker';
 
 const App = () => {
 	const dispatch = useDispatch();
@@ -16,7 +17,7 @@ const App = () => {
 
 	useEffect(() => {
 		const login = async (userUID) => {
-			const newUserInfo = await Firebase.modifyUserInfo(userUID);
+			const newUserInfo = await trackPromise(Firebase.modifyUserInfo(userUID));
 			dispatch(reducer.login(userUID, newUserInfo));
 			setLoading(false);
 		};

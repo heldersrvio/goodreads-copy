@@ -32,3 +32,9 @@ body,
 	background-color: rgb(237, 230, 214);
 	color: inherit;
 }
+
+.tailspin-loader-container {
+	position: absolute;
+	right: calc(50% - 50px);
+	top: 30%;
+}

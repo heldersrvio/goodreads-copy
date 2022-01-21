@@ -5,6 +5,7 @@ import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 import Firebase from '../../Firebase';
 import '../styles/News/ArticlePage.css';
+import { trackPromise } from 'react-promise-tracker';
 
 const ArticlePage = ({ match }) => {
 	const history = useHistory();
@@ -38,7 +39,7 @@ const ArticlePage = ({ match }) => {
 
 	useEffect(() => {
 		const getArticleInfo = async () => {
-			setArticleInfo(await Firebase.getInfoForArticle(articleId));
+			setArticleInfo(await trackPromise(Firebase.getInfoForArticle(articleId)));
 			setLoaded(true);
 		};
 		getArticleInfo();

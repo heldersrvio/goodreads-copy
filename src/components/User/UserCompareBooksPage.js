@@ -4,6 +4,7 @@ import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 import Firebase from '../../Firebase';
 import '../styles/User/UserCompareBooksPage.css';
+import { trackPromise } from 'react-promise-tracker';
 
 const UserCompareBooksPage = ({ match }) => {
 	const {
@@ -41,10 +42,8 @@ const UserCompareBooksPage = ({ match }) => {
 					state: "You can't compare books with yourself",
 				});
 			} else {
-				const userBooksObject = await Firebase.getInfoForCompareBooksPage(
-					user.userUID,
-					userId,
-					history
+				const userBooksObject = await trackPromise(
+					Firebase.getInfoForCompareBooksPage(user.userUID, userId, history)
 				);
 				setUserBooksInfo(userBooksObject);
 				setLoaded(true);

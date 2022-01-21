@@ -3,6 +3,7 @@ import Firebase from '../../Firebase';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 import '../styles/Books/BookCoverPage.css';
+import { trackPromise } from 'react-promise-tracker';
 
 const BookCoverPage = ({ match }) => {
 	const {
@@ -15,7 +16,7 @@ const BookCoverPage = ({ match }) => {
 
 	useEffect(() => {
 		const getBookInfo = async () => {
-			const bookPhotosObj = await Firebase.getBookPhotos(bookId);
+			const bookPhotosObj = await trackPromise(Firebase.getBookPhotos(bookId));
 			setBookPhotos(bookPhotosObj);
 			setLoaded(true);
 		};

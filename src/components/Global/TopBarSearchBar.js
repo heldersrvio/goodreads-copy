@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Firebase from '../../Firebase';
 import PropTypes from 'prop-types';
 import '../styles/Global/TopBarSearchBar.css';
+import { trackPromise } from 'react-promise-tracker';
 
 const TopBarSearchBar = (props) => {
 	// TODO: loadingSpinner animation and lenses icon
@@ -16,7 +17,7 @@ const TopBarSearchBar = (props) => {
 			}
 			const queryResults =
 				searchBarInput.length > 0
-					? await Firebase.queryBooks(searchBarInput)
+					? await trackPromise(Firebase.queryBooks(searchBarInput))
 					: [];
 			return (
 				<div id="search-books-results">
@@ -60,7 +61,7 @@ const TopBarSearchBar = (props) => {
 		};
 
 		const assignResultsToDisplay = async () => {
-			const results = await generateResults();
+			const results = await trackPromise(generateResults());
 			setLoading(false);
 			if (searchBarInput !== '') {
 				setResultsSection(results);

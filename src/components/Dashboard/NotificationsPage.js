@@ -5,6 +5,7 @@ import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 import Firebase from '../../Firebase';
 import '../styles/Dashboard/NotificationsPage.css';
+import { trackPromise } from 'react-promise-tracker';
 
 const NotificationsPage = () => {
 	const history = useHistory();
@@ -16,7 +17,9 @@ const NotificationsPage = () => {
 	useEffect(() => {
 		const loadNotifications = async () => {
 			setNotifications(
-				await Firebase.getNotificationsForUser(user.userUID, history)
+				await trackPromise(
+					Firebase.getNotificationsForUser(user.userUID, history)
+				)
 			);
 			setLoaded(true);
 		};

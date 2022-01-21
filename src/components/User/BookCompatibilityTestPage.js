@@ -4,6 +4,7 @@ import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 import Firebase from '../../Firebase';
 import '../styles/User/BookCompatibilityTestPage.css';
+import { trackPromise } from 'react-promise-tracker';
 
 const BookCompatibilityTestPage = () => {
 	const history = useHistory();
@@ -102,32 +103,36 @@ const BookCompatibilityTestPage = () => {
 	useEffect(() => {
 		const getInfo = async () => {
 			setBooksInfo(
-				await Firebase.getBooksInfoForBookCompatibilityTestPage(
-					popularBooksIds,
-					classicsBooksIds,
-					popularFictionBooksIds,
-					thrillersBooksIds,
-					nonFictionBooksIds,
-					fantasyBooksIds,
-					romanceBooksIds,
-					scienceFictionBooksIds,
-					womensFictionBooksIds
+				await trackPromise(
+					Firebase.getBooksInfoForBookCompatibilityTestPage(
+						popularBooksIds,
+						classicsBooksIds,
+						popularFictionBooksIds,
+						thrillersBooksIds,
+						nonFictionBooksIds,
+						fantasyBooksIds,
+						romanceBooksIds,
+						scienceFictionBooksIds,
+						womensFictionBooksIds
+					)
 				)
 			);
 			setUsersInfo(
-				await Firebase.getUsersInfoForCompatibilityTestPage(
-					popularBooksIds,
-					classicsBooksIds,
-					popularFictionBooksIds,
-					thrillersBooksIds,
-					nonFictionBooksIds,
-					fantasyBooksIds,
-					romanceBooksIds,
-					scienceFictionBooksIds,
-					womensFictionBooksIds,
-					user.userUID,
-					userId,
-					history
+				await trackPromise(
+					Firebase.getUsersInfoForCompatibilityTestPage(
+						popularBooksIds,
+						classicsBooksIds,
+						popularFictionBooksIds,
+						thrillersBooksIds,
+						nonFictionBooksIds,
+						fantasyBooksIds,
+						romanceBooksIds,
+						scienceFictionBooksIds,
+						womensFictionBooksIds,
+						user.userUID,
+						userId,
+						history
+					)
 				)
 			);
 			setLoaded(true);

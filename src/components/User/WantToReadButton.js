@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import '../styles/User/WantToReadButton.css';
+import { trackPromise } from 'react-promise-tracker';
 
 const WantToReadButton = (props) => {
 	const [saving, setSaving] = useState(false);
 
 	const addBook = async () => {
 		setSaving(true);
-		await props.addToShelf();
+		await trackPromise(props.addToShelf());
 		setSaving(false);
 	};
 
 	const removeBook = async () => {
 		setSaving(true);
-		await props.removeFromShelf();
+		await trackPromise(props.removeFromShelf());
 		setSaving(false);
 	};
 

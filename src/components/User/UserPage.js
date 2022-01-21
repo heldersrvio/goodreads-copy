@@ -6,6 +6,7 @@ import HomePageFootBar from '../Authentication/HomePageFootBar';
 import Firebase from '../../Firebase';
 import '../styles/User/UserPage.css';
 import RatingsChart from './RatingsChart';
+import { trackPromise } from 'react-promise-tracker';
 
 // TODO: Accept request option
 
@@ -75,9 +76,8 @@ const UserPage = ({ match }) => {
 
 	useEffect(() => {
 		const getUserInfo = async () => {
-			const userInfoObject = await Firebase.getUserInfoForUserPage(
-				userId,
-				user.userUID
+			const userInfoObject = await trackPromise(
+				Firebase.getUserInfoForUserPage(userId, user.userUID)
 			);
 			userInfoObject.isUserFriend = true;
 			setUserInfo(userInfoObject);

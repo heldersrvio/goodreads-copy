@@ -5,6 +5,7 @@ import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 import Firebase from '../../Firebase';
 import '../styles/Authors/AuthorPage.css';
+import { trackPromise } from 'react-promise-tracker';
 
 const AuthorPage = ({ match }) => {
 	const history = useHistory();
@@ -49,9 +50,11 @@ const AuthorPage = ({ match }) => {
 
 	useEffect(() => {
 		const getAuthorInfo = async () => {
-			const authorObject = await Firebase.getAuthorInfoForAuthorPage(
-				user !== null ? user.userUID : null,
-				authorId
+			const authorObject = await trackPromise(
+				Firebase.getAuthorInfoForAuthorPage(
+					user !== null ? user.userUID : null,
+					authorId
+				)
 			);
 			setAuthorInfo(authorObject);
 			setSavingShelves(authorObject.booksByAuthor.map((_book) => false));

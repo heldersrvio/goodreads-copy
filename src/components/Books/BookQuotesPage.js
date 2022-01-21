@@ -4,6 +4,7 @@ import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 import Firebase from '../../Firebase';
 import '../styles/Books/BookQuotesPage.css';
+import { trackPromise } from 'react-promise-tracker';
 
 const BookQuotesPage = ({ match }) => {
 	const history = useHistory();
@@ -40,7 +41,9 @@ const BookQuotesPage = ({ match }) => {
 	useEffect(() => {
 		const getBookInfo = async () => {
 			setBookInfo(
-				await Firebase.getBookInfoForQuotesPage(user.userUID, bookId)
+				await trackPromise(
+					Firebase.getBookInfoForQuotesPage(user.userUID, bookId)
+				)
 			);
 			setLoaded(true);
 		};

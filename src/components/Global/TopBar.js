@@ -4,6 +4,7 @@ import { formatDistance } from 'date-fns';
 import TopBarSearchBar from './TopBarSearchBar';
 import Firebase from '../../Firebase';
 import '../styles/Global/TopBar.css';
+import { trackPromise } from 'react-promise-tracker';
 
 const TopBar = () => {
 	const [browseClicked, setBrowseClicked] = useState(false);
@@ -31,8 +32,8 @@ const TopBar = () => {
 			if (user === null) {
 				setNewFriends(0);
 			} else {
-				const numberOfNewFriends = await Firebase.getNumberOfNewFriends(
-					user.userUID
+				const numberOfNewFriends = await trackPromise(
+					Firebase.getNumberOfNewFriends(user.userUID)
 				);
 				setNewFriends(numberOfNewFriends);
 			}
@@ -71,7 +72,7 @@ const TopBar = () => {
 	});
 
 	const getNotifications = async () => {
-		const query = await Firebase.queryNotifications();
+		const query = await trackPromise(Firebase.queryNotifications());
 		setNotifications(query);
 	};
 

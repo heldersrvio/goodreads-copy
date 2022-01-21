@@ -7,6 +7,7 @@ import ProfileSettings from './ProfileSettings';
 import Settings from './Settings';
 import FeedUpdateSettings from './FeedUpdateSettings';
 import '../styles/Dashboard/AccountSettingsPage.css';
+import { trackPromise } from 'react-promise-tracker';
 
 const AccountSettingsPage = () => {
 	const history = useHistory();
@@ -20,7 +21,9 @@ const AccountSettingsPage = () => {
 
 	useEffect(() => {
 		const getUserInfo = async () => {
-			setUserInfo(await Firebase.getUserSettings(user.userUID, history));
+			setUserInfo(
+				await trackPromise(Firebase.getUserSettings(user.userUID, history))
+			);
 			setLoaded(true);
 		};
 		getUserInfo();

@@ -5,6 +5,7 @@ import { format } from 'date-fns';
 import '../styles/Books/BookPage.css';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
+import { trackPromise } from 'react-promise-tracker';
 
 const BookPage = ({ match }) => {
 	const history = useHistory();
@@ -175,7 +176,9 @@ const BookPage = ({ match }) => {
 					setExhibitedStarRating(newLSObject.userRating);
 				}
 			} else {*/
-			const bookObj = await Firebase.queryBookById(user.userUID, bookId);
+			const bookObj = await trackPromise(
+				Firebase.queryBookById(user.userUID, bookId)
+			);
 			localStorage.setItem(`${bookId}Obj`, JSON.stringify(bookObj));
 			setBookInfo(bookObj);
 			if (bookObj.userRating !== undefined) {
@@ -239,18 +242,19 @@ const BookPage = ({ match }) => {
 
 	useEffect(() => {
 		const queryFriends = async () => {
-			const newFriendsInfo = await Firebase.getFriendsInfo(
-				user.userUID,
-				history
+			const newFriendsInfo = await trackPromise(
+				Firebase.getFriendsInfo(user.userUID, history)
 			);
 			setFriendsInfo(newFriendsInfo);
 			setRecommendWindowAddingMessages(newFriendsInfo.map((_friend) => false));
 			setRecommendWindowMessages(newFriendsInfo.map((_friend) => ''));
-			const recommendedToFriendsStatus = await Firebase.queryBookRecommendedToFriendsStatus(
-				user.userUID,
-				bookInfo.id,
-				newFriendsInfo.map((friend) => friend.id),
-				history
+			const recommendedToFriendsStatus = await trackPromise(
+				Firebase.queryBookRecommendedToFriendsStatus(
+					user.userUID,
+					bookInfo.id,
+					newFriendsInfo.map((friend) => friend.id),
+					history
+				)
 			);
 			setRecommendWindowSentStatuses(recommendedToFriendsStatus);
 		};

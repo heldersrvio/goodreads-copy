@@ -4,6 +4,7 @@ import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 import Firebase from '../../Firebase';
 import '../styles/Dashboard/EditFavoriteGenresPage.css';
+import { trackPromise } from 'react-promise-tracker';
 
 const EditFavoriteGenresPage = () => {
 	const history = useHistory();
@@ -63,9 +64,8 @@ const EditFavoriteGenresPage = () => {
 				'travel',
 			];
 
-			const userFavorites = await Firebase.getFavoriteGenresForUser(
-				user.userUID,
-				history
+			const userFavorites = await trackPromise(
+				Firebase.getFavoriteGenresForUser(user.userUID, history)
 			);
 			setFavoriteGenres(userFavorites);
 			setAllGenres(

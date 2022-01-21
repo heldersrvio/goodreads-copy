@@ -7,6 +7,7 @@ import BarChart from './BarChart';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 import '../styles/Books/BookAllStatsPage.css';
+import { trackPromise } from 'react-promise-tracker';
 
 const BookAllStatsPage = ({ bookId }) => {
 	const [bookInfo, setBookInfo] = useState({ title: '', cover: '' });
@@ -17,7 +18,9 @@ const BookAllStatsPage = ({ bookId }) => {
 
 	useEffect(() => {
 		const getBookInfo = async () => {
-			const bookObj = await Firebase.queryBookById(user.userUID, bookId);
+			const bookObj = await trackPromise(
+				Firebase.queryBookById(user.userUID, bookId)
+			);
 			setBookInfo(bookObj);
 			setLoaded(true);
 		};

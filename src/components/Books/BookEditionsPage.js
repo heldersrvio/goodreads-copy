@@ -5,6 +5,7 @@ import { format } from 'date-fns';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 import '../styles/Books/BookEditionsPage.css';
+import { trackPromise } from 'react-promise-tracker';
 
 const BookEditionsPage = ({ match }) => {
 	const history = useHistory();
@@ -65,9 +66,8 @@ const BookEditionsPage = ({ match }) => {
 				setShelfPopupToReadInputs(lSObject.map((_edition) => ''));
 				setEditionOnUserShelf(lSObject.filter((edition) => edition.userStatus !== undefined).length > 0 ? lSObject.filter((edition) => edition.userStatus !== undefined)[0].id : null);
 			} else {*/
-			const editionsObj = await Firebase.getEditionDetailsForBook(
-				user.userUID,
-				rootBook
+			const editionsObj = await trackPromise(
+				Firebase.getEditionDetailsForBook(user.userUID, rootBook)
 			);
 			localStorage.setItem(
 				`editions${rootBook}Obj`,

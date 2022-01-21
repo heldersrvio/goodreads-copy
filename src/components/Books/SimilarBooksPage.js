@@ -4,6 +4,7 @@ import Firebase from '../../Firebase';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 import '../styles/Books/SimilarBooksPage.css';
+import { trackPromise } from 'react-promise-tracker';
 
 const SimilarBooksPage = ({ match }) => {
 	const history = useHistory();
@@ -58,9 +59,8 @@ const SimilarBooksPage = ({ match }) => {
 					)
 				);
 			} else {*/
-			const bookObj = await Firebase.getAlsoEnjoyedBooksDetailsForBook(
-				user.userUID,
-				bookId
+			const bookObj = await trackPromise(
+				Firebase.getAlsoEnjoyedBooksDetailsForBook(user.userUID, bookId)
 			);
 			localStorage.setItem(`alsoEnjoyed${bookId}Obj`, JSON.stringify(bookObj));
 			setBookInfo(bookObj);

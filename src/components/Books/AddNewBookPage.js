@@ -5,6 +5,7 @@ import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 import ReCAPTCHA from 'react-google-recaptcha';
 import '../styles/Books/AddNewBookPage.css';
+import { trackPromise } from 'react-promise-tracker';
 
 const AddNewBookPage = ({ location }) => {
 	const history = useHistory();
@@ -151,8 +152,8 @@ const AddNewBookPage = ({ location }) => {
 
 	useEffect(() => {
 		const getBookMiscInfo = async () => {
-			const synopsisAndPreSynopsisObj = await Firebase.getSynopsisAndPreSynopsisForBook(
-				bookId
+			const synopsisAndPreSynopsisObj = await trackPromise(
+				Firebase.getSynopsisAndPreSynopsisForBook(bookId)
 			);
 			if (synopsisAndPreSynopsisObj.preSynopsis !== null) {
 				setDescription(synopsisAndPreSynopsisObj.preSynopsis);

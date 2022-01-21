@@ -10,6 +10,7 @@ import AddToShelvesPopup from './AddToShelvesPopup';
 import UserReviewSection from './UserReviewSection';
 import TopAlertMessage from '../Global/TopAlertMessage';
 import EditableBookshelfDateField from './EditableBookshelfDateField';
+import { trackPromise } from 'react-promise-tracker';
 
 const UserBookshelfPage = ({ match }) => {
 	const openAddShelvesPopup = useRef();
@@ -616,13 +617,14 @@ const UserBookshelfPage = ({ match }) => {
 					],
 				},
 			]);*/
-			const newUserInfo = await Firebase.queryUserInfoForUserBookshelfPage(
-				userId,
-				user.userUID
+			const newUserInfo = await trackPromise(
+				Firebase.queryUserInfoForUserBookshelfPage(userId, user.userUID)
 			);
 			setUserInfo(newUserInfo);
 			setLoggedInUserShelves(
-				await Firebase.queryLoggedInUserInfoForUserBookshelfPage(user.userUID)
+				await trackPromise(
+					Firebase.queryLoggedInUserInfoForUserBookshelfPage(user.userUID)
+				)
 			);
 			setWantToReadBooksPositionInputs(
 				newUserInfo.shelves

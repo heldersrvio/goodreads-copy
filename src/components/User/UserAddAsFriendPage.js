@@ -4,6 +4,7 @@ import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 import Firebase from '../../Firebase';
 import '../styles/User/UserAddAsFriendPage.css';
+import { trackPromise } from 'react-promise-tracker';
 
 const UserAddAsFriendPage = ({ match }) => {
 	const history = useHistory();
@@ -21,10 +22,12 @@ const UserAddAsFriendPage = ({ match }) => {
 	useEffect(() => {
 		const getUserInfo = async () => {
 			setUserInfo(
-				await Firebase.getUserInfoForAddAsFriendPage(
-					user.userUID,
-					newFriendId,
-					history
+				await trackPromise(
+					Firebase.getUserInfoForAddAsFriendPage(
+						user.userUID,
+						newFriendId,
+						history
+					)
 				)
 			);
 			setLoaded(true);

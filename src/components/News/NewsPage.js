@@ -5,6 +5,7 @@ import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 import Firebase from '../../Firebase';
 import '../styles/News/NewsPage.css';
+import { trackPromise } from 'react-promise-tracker';
 
 const NewsPage = () => {
 	const query = new URLSearchParams(useLocation().search);
@@ -21,7 +22,7 @@ const NewsPage = () => {
 
 	useEffect(() => {
 		const getNewsInfo = async () => {
-			setNews(await Firebase.getNews());
+			setNews(await trackPromise(Firebase.getNews()));
 			setLoaded(true);
 		};
 		getNewsInfo();

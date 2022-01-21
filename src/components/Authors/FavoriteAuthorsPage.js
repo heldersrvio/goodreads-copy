@@ -4,6 +4,7 @@ import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 import Firebase from '../../Firebase';
 import '../styles/Authors/FavoriteAuthorsPage.css';
+import { trackPromise } from 'react-promise-tracker';
 
 const FavoriteAuthorsPage = () => {
 	const history = useHistory();
@@ -31,9 +32,8 @@ const FavoriteAuthorsPage = () => {
 
 	useEffect(() => {
 		const getAuthorsInfo = async () => {
-			const authorArray = await Firebase.fetchUserFavoriteAuthors(
-				user.userUID,
-				history
+			const authorArray = await trackPromise(
+				Firebase.fetchUserFavoriteAuthors(user.userUID, history)
 			);
 			setAuthors(authorArray);
 			setOrderInputs(

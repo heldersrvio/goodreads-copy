@@ -44,6 +44,9 @@ import UserPhotoPage from './components/User/UserPhotoPage';
 import UserYearInBooksPage from './components/User/UserYearInBooksPage';
 import ErrorPage from './components/Error/ErrorPage';
 import ErrorBoundary from './ErrorBoundary';
+import { TailSpin } from 'react-loader-spinner';
+import { usePromiseTracker } from 'react-promise-tracker';
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 
 const store = createStore(reducer.userReducer);
 
@@ -54,6 +57,18 @@ const Stats = () => {
 		<BookStatsForEditionPage bookId={query.get('id')} />
 	) : (
 		<BookAllStatsPage bookId={query.get('id')} />
+	);
+};
+
+const LoadingIndicator = (_props) => {
+	const { promiseInProgress } = usePromiseTracker();
+
+	return (
+		promiseInProgress && (
+			<div className="tailspin-loader-container">
+				<TailSpin color="#382110" height={100} width={100} />
+			</div>
+		)
 	);
 };
 
@@ -369,6 +384,7 @@ ReactDOM.render(
 					/>
 					<Route component={ErrorPage} />
 				</Switch>
+				<LoadingIndicator />
 			</BrowserRouter>
 		</React.StrictMode>
 	</Provider>,

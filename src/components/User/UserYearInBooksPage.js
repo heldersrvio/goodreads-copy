@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Firebase from '../../Firebase';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
+import { trackPromise } from 'react-promise-tracker';
 
 const UserYearInBooksPage = ({ match }) => {
 	const {
@@ -15,7 +16,9 @@ const UserYearInBooksPage = ({ match }) => {
 
 	useEffect(() => {
 		const loadInfo = async () => {
-			setBooks(await Firebase.getUserInfoForYearInBooksPage(userId));
+			setBooks(
+				await trackPromise(Firebase.getUserInfoForYearInBooksPage(userId))
+			);
 			setLoaded(true);
 		};
 

@@ -3,6 +3,7 @@ import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 import Firebase from '../../Firebase';
 import '../styles/Authors/FavoriteAuthorsForUserPage.css';
+import { trackPromise } from 'react-promise-tracker';
 
 const FavoriteAuthorsForUserPage = ({ match }) => {
 	const {
@@ -16,7 +17,9 @@ const FavoriteAuthorsForUserPage = ({ match }) => {
 	useEffect(() => {
 		const getUserInfo = async () => {
 			setUserInfo(
-				await Firebase.getUserInfoForFavoriteAuthorsForUserPage(userId)
+				await trackPromise(
+					Firebase.getUserInfoForFavoriteAuthorsForUserPage(userId)
+				)
 			);
 			setLoaded(true);
 		};

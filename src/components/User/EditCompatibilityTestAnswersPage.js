@@ -6,6 +6,7 @@ import InteractiveStarRating from './InteractiveStarRating';
 import Firebase from '../../Firebase';
 import WantToReadButton from './WantToReadButton';
 import '../styles/User/EditCompatibilityTestAnswersPage.css';
+import { trackPromise } from 'react-promise-tracker';
 
 const EditCompatibilityTestAnswersPage = () => {
 	const history = useHistory();
@@ -108,16 +109,18 @@ const EditCompatibilityTestAnswersPage = () => {
 	useEffect(() => {
 		const getBooksInfo = async () => {
 			setBooksInfo(
-				await Firebase.getBooksInfoForBookCompatibilityTestPage(
-					popularBooksIds,
-					classicsBooksIds,
-					popularFictionBooksIds,
-					thrillersBooksIds,
-					nonFictionBooksIds,
-					fantasyBooksIds,
-					romanceBooksIds,
-					scienceFictionBooksIds,
-					womensFictionBooksIds
+				await trackPromise(
+					Firebase.getBooksInfoForBookCompatibilityTestPage(
+						popularBooksIds,
+						classicsBooksIds,
+						popularFictionBooksIds,
+						thrillersBooksIds,
+						nonFictionBooksIds,
+						fantasyBooksIds,
+						romanceBooksIds,
+						scienceFictionBooksIds,
+						womensFictionBooksIds
+					)
 				)
 			);
 			setLoaded(true);
@@ -144,19 +147,21 @@ const EditCompatibilityTestAnswersPage = () => {
 	]);
 
 	const moveBookToWantToReadShelf = async (id) => {
-		await Firebase.addBookToShelf(user.userUID, id, 'to-read', history);
+		await trackPromise(
+			Firebase.addBookToShelf(user.userUID, id, 'to-read', history)
+		);
 		setWantToReadBooks((previous) => previous.concat(id));
 	};
 
 	const removeBookFromWantToReadShelf = async (id) => {
-		await Firebase.removeBookFromShelf(user.userUID, id);
+		await trackPromise(Firebase.removeBookFromShelf(user.userUID, id));
 		setWantToReadBooks((previous) =>
 			previous.filter((bookId) => bookId !== id)
 		);
 	};
 
 	const rateBook = async (id, rating) => {
-		await Firebase.rateBook(user.userUID, id, rating, history);
+		await trackPromise(Firebase.rateBook(user.userUID, id, rating, history));
 		setRatedBooks((previous) =>
 			previous.concat({
 				id,

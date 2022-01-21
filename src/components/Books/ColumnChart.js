@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { format, eachDayOfInterval, isSameDay, subDays } from 'date-fns';
 import Firebase from '../../Firebase';
+import { trackPromise } from 'react-promise-tracker';
 
 const ColumnChart = (props) => {
 	const [statusUpdates, setStatusUpdates] = useState([]);
@@ -26,8 +27,10 @@ const ColumnChart = (props) => {
 	useEffect(() => {
 		const getStatusInfo = async () => {
 			const statusUpdateObjs = props.allEditions
-				? await Firebase.queryStatusUpdatesForRootBook(props.bookId)
-				: await Firebase.queryStatusUpdatesForBook(props.bookId);
+				? await trackPromise(
+						Firebase.queryStatusUpdatesForRootBook(props.bookId)
+				  )
+				: await trackPromise(Firebase.queryStatusUpdatesForBook(props.bookId));
 			setStatusUpdates(statusUpdateObjs);
 			setLoaded(true);
 		};

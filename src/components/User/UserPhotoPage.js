@@ -3,6 +3,7 @@ import Firebase from '../../Firebase';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 import '../styles/User/UserPhotoPage.css';
+import { trackPromise } from 'react-promise-tracker';
 
 const UserPhotoPage = ({ match }) => {
 	const {
@@ -21,9 +22,8 @@ const UserPhotoPage = ({ match }) => {
 
 	useEffect(() => {
 		const loadInfo = async () => {
-			const userObj = await Firebase.getUserInfoForUserPage(
-				userId,
-				loggedInUser.userUID
+			const userObj = await trackPromise(
+				Firebase.getUserInfoForUserPage(userId, loggedInUser.userUID)
 			);
 			setPhotoInfo(userObj.profilePicture);
 			setLoaded(true);

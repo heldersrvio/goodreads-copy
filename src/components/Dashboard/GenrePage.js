@@ -3,6 +3,7 @@ import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 import Firebase from '../../Firebase';
 import '../styles/Dashboard/GenrePage.css';
+import { trackPromise } from 'react-promise-tracker';
 
 const GenrePage = ({ match }) => {
 	const {
@@ -16,7 +17,9 @@ const GenrePage = ({ match }) => {
 
 	useEffect(() => {
 		const getGenreInfo = async () => {
-			setGenreInfo(await Firebase.getGenreInfo(user.userUID, genre));
+			setGenreInfo(
+				await trackPromise(Firebase.getGenreInfo(user.userUID, genre))
+			);
 			setLoaded(true);
 		};
 		getGenreInfo();

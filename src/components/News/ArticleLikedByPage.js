@@ -3,6 +3,7 @@ import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 import Firebase from '../../Firebase';
 import '../styles/News/ArticleLikedByPage.css';
+import { trackPromise } from 'react-promise-tracker';
 
 const ArticleLikedByPage = ({ match }) => {
 	const {
@@ -15,8 +16,8 @@ const ArticleLikedByPage = ({ match }) => {
 
 	useEffect(() => {
 		const getUsersAndTitle = async () => {
-			setTitle(await Firebase.getArticleTitle(articleId));
-			setUsers(await Firebase.getUsersWhoLikedArticle(articleId));
+			setTitle(await trackPromise(Firebase.getArticleTitle(articleId)));
+			setUsers(await trackPromise(Firebase.getUsersWhoLikedArticle(articleId)));
 			setLoaded(true);
 		};
 		getUsersAndTitle();

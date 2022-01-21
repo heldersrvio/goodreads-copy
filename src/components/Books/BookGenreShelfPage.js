@@ -3,6 +3,7 @@ import Firebase from '../../Firebase';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 import '../styles/Books/BookGenreShelfPage.css';
+import { trackPromise } from 'react-promise-tracker';
 
 const BookGenreShelfPage = ({ match, location }) => {
 	const {
@@ -16,7 +17,9 @@ const BookGenreShelfPage = ({ match, location }) => {
 
 	useEffect(() => {
 		const getBookInfo = async () => {
-			setBookInfo(await Firebase.getBookInfoForGenreShelfPage(bookId, shelf));
+			setBookInfo(
+				await trackPromise(Firebase.getBookInfoForGenreShelfPage(bookId, shelf))
+			);
 			setLoaded(true);
 		};
 		getBookInfo();
