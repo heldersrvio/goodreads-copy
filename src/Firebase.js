@@ -4898,6 +4898,7 @@ const Firebase = (() => {
 				const bookQuery = await database.collection('books').doc(bookId).get();
 				const pageCount = bookQuery.data().pageCount;
 				const cover = bookQuery.data().cover;
+				const title = bookQuery.data().title;
 				const shelvedQuery = await database
 					.collection('userBooksInstances')
 					.where('bookId', '==', bookId)
@@ -4921,6 +4922,7 @@ const Firebase = (() => {
 
 				return {
 					bookId,
+					title,
 					pageCount,
 					cover,
 					numberShelved,

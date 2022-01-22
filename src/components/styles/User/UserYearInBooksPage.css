@@ -1,0 +1,205 @@
+.user-year-in-books-page-main-content {
+	width: 50%;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+.user-year-in-books-overall-stats-top {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.user-year-in-books-overall-stats-top a {
+	display: inline;
+	color: var(--goodreads-teal);
+	background-color: transparent;
+	font-family: var(--lato-font);
+	font-size: 14px;
+	padding: 0;
+}
+
+.user-year-in-books-overall-stats-top a:hover {
+	text-decoration: underline;
+}
+
+.user-year-in-books-image-and-title {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-top: 25px;
+}
+
+.user-year-in-books-image-and-title span {
+	font-family: var(--merriweather-font);
+	font-size: 28px;
+}
+
+.user-year-in-books-image-and-title img {
+	width: 100%;
+}
+
+.user-year-in-books-page-main-content .bottom-section .top-half {
+	margin-top: 15px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	margin-bottom: 30px;
+}
+
+.user-year-in-books-page-main-content .bottom-section .top-half .stat {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	font-size: 14px;
+	font-family: var(--merriweather-font);
+}
+
+.user-year-in-books-page-main-content .bottom-section .top-half .number {
+	font-size: 32px;
+	line-height: 40px;
+	font-family: var(--merriweather-font);
+}
+
+.user-year-in-books-page-main-content .profile-info {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.user-year-in-books-page-main-content .profile-a {
+	padding: 0;
+	margin-bottom: 15px;
+}
+
+.user-year-in-books-page-main-content .profile-name-a {
+	padding: 0;
+	display: inline;
+	background-color: transparent;
+	color: var(--goodreads-black);
+	font-family: var(--merriweather-font);
+	font-size: 18px;
+	line-height: 23px;
+}
+
+.user-year-in-books-page-main-content .profile-name-a:hover {
+	text-decoration: underline;
+}
+
+.user-year-in-books-page-main-content .profile-a img {
+	border-radius: 100%;
+	width: 70px;
+}
+
+.user-year-in-books-page-main-content .book-and-info-wrapper {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	padding: 80px 0;
+	border-top: 0.5px solid rgb(216, 216, 216);
+}
+
+.user-year-in-books-page-main-content .book-and-info {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	margin-right: 50px;
+}
+
+.user-year-in-books-page-main-content .book-and-info span {
+	display: block;
+}
+
+.user-year-in-books-page-main-content .book-and-info .small-text {
+	color: rgb(110, 110, 110);
+	font-size: 16px;
+	line-height: 19px;
+	font-family: var(--lato-font);
+	margin-top: 50%;
+}
+
+.user-year-in-books-page-main-content .book-and-info .big-text {
+	font-family: var(--merriweather-font);
+	font-size: 40px;
+	line-height: 51px;
+	margin-top: 8px;
+}
+
+.user-year-in-books-page-main-content .book-and-info .medium-text {
+	font-family: var(--merriweather-font);
+	font-size: 20px;
+	line-height: 25px;
+	margin-top: 8px;
+}
+
+.user-year-in-books-page-main-content .book-and-info-wrapper a.book-and-info-a {
+	padding: 0;
+	width: fit-content;
+	height: fit-content;
+	margin-right: 15px;
+}
+
+.user-year-in-books-page-main-content .book-and-info-wrapper img {
+	width: 140px;
+}
+
+.user-year-in-books-page-main-content .book-length-section,
+.user-year-in-books-page-main-content .average-rating-section {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	padding: 80px 15%;
+	padding-left: 10%;
+	border-top: 0.5px solid rgb(216, 216, 216);
+}
+
+.user-year-in-books-page-main-content .book-length-section .average-length-span,
+.user-year-in-books-page-main-content
+	.average-rating-section
+	.average-rating-span {
+	font-family: var(--merriweather-font);
+	font-size: 40px;
+	line-height: 51px;
+}
+
+.user-year-in-books-page-main-content .book-length-section .number-pages,
+.user-year-in-books-page-main-content .average-rating-section .stars-rating {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.user-year-in-books-page-main-content
+	.book-length-section
+	.number-pages
+	.number,
+.user-year-in-books-page-main-content .average-rating-section .rating {
+	font-family: var(--merriweather-font);
+	font-size: 56px;
+	line-height: 71px;
+}
+
+.user-year-in-books-page-main-content
+	.book-length-section
+	.number-pages
+	.pages {
+	font-family: var(--lato-font);
+	font-size: 24px;
+	line-height: 31px;
+}
+
+.user-year-in-books-page-main-content .average-rating-section .rating-stars {
+	display: flex;
+	flex-direction: row;
+}
+
+.user-year-in-books-page-main-content
+	.average-rating-section
+	.rating-stars
+	.static-star.large {
+	width: 20px;
+	height: 20px;
+	background-repeat: no-repeat;
+	background-size: 20px 20px;
+	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAABvUlEQVR4Ab2WNZDXQBTGcWtxd+173PYFh5bJ5uBK3B0q3N3d3RvkoMalb6hw6DY5yQ8np5v8s5l5sfe+7zezXi/tVa7HDSDqub5CX60knIONlleEU2h58Zh+xlflBO/umlmrZb/BvDsDx8AXv8G8u2nm6RP6APw3+OdgNMuSJJh/DppZniXB/Mu3mYvG9gJUVZDLr5kDtag6MDkrsyjwpka+bI+07DVaDhnfO260OhtquRRqdSN+3o3jfhyP4++P1YHJUUMtGrR44IUn3jBgwWQxaGF8OYPYRcCC+U8zytzQlygvIN4wqu7DIm9oXPAhB+gHvGsZuaqr0eppoaB44Vm3aTN7SnOj5URWKB542S8WgcwKtQptgWjQZlwixw63BaPJvmhM8wbZgtEUYu9dZwtGU5gjjiU465GIk2TntCMabWqwCaS4OuMokF1EdXm0GfpXrlaxCn2KAm/C7xre+ZesQ5uumVdNaRKLvyfMHlfVhPwjl6j9joc1mLX1H5PS0Jc15eenNKyunhw11P7W4ZFm09/0C/rOZl5SiwYtHmmm0Vs283jvbGWrRYMWD0vhxPbG92bWy3jhgVdVuQp3XI5mu1kSTwAAAABJRU5ErkJggg==');
+}
