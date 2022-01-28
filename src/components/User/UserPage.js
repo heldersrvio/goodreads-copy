@@ -2119,7 +2119,8 @@ const UserPage = ({ match }) => {
 				className="section-title"
 				href={Firebase.pageGenerator.generateUserYearInBooksPage(
 					new Date().getFullYear(),
-					userId
+					userId,
+					firstName
 				)}
 			>{`${firstName.toUpperCase()}'S YEAR IN BOOKS`}</a>
 			<div className="inner-content">
@@ -2127,7 +2128,8 @@ const UserPage = ({ match }) => {
 					className="image-wrapper"
 					href={Firebase.pageGenerator.generateUserYearInBooksPage(
 						new Date().getFullYear(),
-						userId
+						userId,
+						firstName
 					)}
 				>
 					<img
@@ -2149,7 +2151,8 @@ const UserPage = ({ match }) => {
 					<a
 						href={Firebase.pageGenerator.generateUserYearInBooksPage(
 							new Date().getFullYear(),
-							userId
+							userId,
+							firstName
 						)}
 					>{`See ${
 						isLoggedInUser ? 'Your' : `${firstName}'s`

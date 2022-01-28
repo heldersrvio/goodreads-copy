@@ -248,3 +248,131 @@
 	.highest-rated-info {
 	margin-left: 30px;
 }
+
+.user-year-in-books-page-main-content .all-books-section {
+	border-top: 0.5px solid rgb(216, 216, 216);
+	padding: 20px 2%;
+}
+
+.user-year-in-books-page-main-content .all-books-section .book-and-info-a {
+	padding: 0;
+	width: fit-content;
+	height: fit-content;
+}
+
+.user-year-in-books-page-main-content .all-books-section .top-section {
+	display: flex;
+	flex-direction: row;
+}
+
+.user-year-in-books-page-main-content .all-books-section .top-section > a img {
+	width: 260px;
+}
+
+.user-year-in-books-page-main-content
+	.all-books-section
+	.top-section
+	.other-top-books {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	margin-left: 60px;
+}
+
+.user-year-in-books-page-main-content
+	.all-books-section
+	.top-section
+	.other-top-books
+	a {
+	margin-bottom: 15px;
+}
+
+.user-year-in-books-page-main-content
+	.all-books-section
+	.top-section
+	.other-top-books
+	img,
+.user-year-in-books-page-main-content .all-books-section .bottom-section img {
+	width: 143px;
+}
+
+.user-year-in-books-page-main-content .all-books-section .bottom-section {
+	display: flex;
+	flex-direction: row;
+	flex-flow: row wrap;
+	justify-content: space-between;
+	margin-top: 30px;
+}
+
+.user-year-in-books-page-main-content .all-books-section .bottom-section a {
+	margin-bottom: 15px;
+}
+
+.user-year-in-books-page-main-content
+	.all-books-section
+	.bottom-section::after {
+	content: '';
+	flex: 0 0 48%;
+}
+
+.user-year-in-books-page-main-content .all-books-section .my-books-span {
+	display: block;
+	color: var(--goodreads-black);
+	font-family: var(--lato-font);
+	text-transform: uppercase;
+	font-size: 15px;
+	font-weight: bold;
+	margin-bottom: 10px;
+}
+
+.user-year-in-books-page-main-content .missing-books-section {
+	text-align: center;
+	border: 1px solid rgb(151, 151, 151);
+	border-radius: 5px;
+	padding: 60px;
+	margin-bottom: 60px;
+}
+
+.user-year-in-books-page-main-content .missing-books-section span {
+	display: block;
+}
+
+.user-year-in-books-page-main-content
+	.missing-books-section
+	.missing-books-span {
+	font-size: 40px;
+	line-height: 50px;
+	font-family: var(--merriweather-font);
+	color: var(--goodreads-black);
+}
+
+.user-year-in-books-page-main-content
+	.missing-books-section
+	.missing-books-message {
+	font-size: 16px;
+	font-family: var(--lato-font);
+	color: var(--goodreads-black);
+	margin-top: 15px;
+}
+
+.user-year-in-books-page-main-content
+	.missing-books-section
+	.missing-books-message
+	strong {
+	font-weight: bold;
+}
+
+.user-year-in-books-page-main-content .missing-books-section .missing-books-a {
+	display: inline;
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 16px;
+	background-color: transparent;
+}
+
+.user-year-in-books-page-main-content
+	.missing-books-section
+	.missing-books-a:hover {
+	text-decoration: underline;
+}

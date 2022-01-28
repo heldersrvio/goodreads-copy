@@ -1045,7 +1045,8 @@ const UserBookshelfPage = ({ match }) => {
 				<a
 					href={Firebase.pageGenerator.generateUserYearInBooksPage(
 						new Date().getFullYear(),
-						userId
+						userId,
+						userFirstName
 					)}
 				>
 					Year in Books

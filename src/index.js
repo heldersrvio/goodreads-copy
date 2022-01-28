@@ -331,7 +331,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/user/year_in_books/:year/:userId"
+						path="/user/year_in_books/:year/:pageId"
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<UserYearInBooksPage {...routerProps}></UserYearInBooksPage>

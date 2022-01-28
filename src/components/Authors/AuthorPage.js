@@ -950,7 +950,8 @@ const AuthorPage = ({ match }) => {
 					className="section-title"
 					href={Firebase.pageGenerator.generateUserYearInBooksPage(
 						new Date().getFullYear(),
-						authorId
+						authorId,
+						authorName
 					)}
 				>{`${authorFirstName.toUpperCase()}'S YEAR IN BOOKS`}</a>
 				<div className="inner-content">
@@ -958,7 +959,8 @@ const AuthorPage = ({ match }) => {
 						className="image-wrapper"
 						href={Firebase.pageGenerator.generateUserYearInBooksPage(
 							new Date().getFullYear(),
-							authorId
+							authorId,
+							authorName
 						)}
 					>
 						<img
@@ -976,7 +978,8 @@ const AuthorPage = ({ match }) => {
 						<a
 							href={Firebase.pageGenerator.generateUserYearInBooksPage(
 								new Date().getFullYear(),
-								authorId
+								authorId,
+								authorName
 							)}
 						>{`See ${authorFirstName}'s ${new Date().getFullYear()} Year in Books`}</a>
 					</div>

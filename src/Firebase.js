@@ -1,7 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
-import { differenceInDays, startOfYear } from 'date-fns';
+import { differenceInDays, endOfYear, startOfYear } from 'date-fns';
 
 const Firebase = (() => {
 	const firebaseConfig = {
@@ -114,11 +114,11 @@ const Firebase = (() => {
 		const generateUserShelfPage = (
 			userId,
 			firstName,
-			shelves,
-			searchTerm,
-			view,
-			perPageValue,
-			page
+			shelves = ['all'],
+			searchTerm = '',
+			view = 'table',
+			perPageValue = '20',
+			page = '1'
 		) => {
 			const viewValue = view === undefined ? 'table' : view;
 			const shelvesValue = shelves.length === 0 ? ['all'] : shelves;
@@ -253,8 +253,15 @@ const Firebase = (() => {
 			return '/user/' + userId + '/favorite_authors';
 		};
 
-		const generateUserYearInBooksPage = (year, userId) => {
-			return '/user/year_in_books/' + year + '/' + userId;
+		const generateUserYearInBooksPage = (year, userId, name) => {
+			return (
+				'/user/year_in_books/' +
+				year +
+				'/' +
+				userId +
+				'-' +
+				name.toLowerCase().replace(/ /g, '-')
+			);
 		};
 
 		const generateUserFriendsPage = (userId, name) => {
@@ -4899,9 +4906,16 @@ const Firebase = (() => {
 				.where('user', '==', userUID)
 				.where('action', '==', 'add-book')
 				.where('shelf', '==', 'read')
-				.where('date', '>', startOfYear(new Date(year, 0)))
 				.get()
-		).docs;
+		).docs.filter(
+			(doc) =>
+				doc.data().date >
+					firebase.firestore.Timestamp.fromDate(
+						startOfYear(new Date(year, 0))
+					) &&
+				doc.data().date <
+					firebase.firestore.Timestamp.fromDate(endOfYear(new Date(year, 0)))
+		);
 
 		const loggedInUserYearBooks = loggedInUserAllBooks.filter((doc) =>
 			userUpdatesQuery
@@ -4949,6 +4963,11 @@ const Firebase = (() => {
 				};
 			})
 		);
+	};
+
+	const getUserProfilePicture = async (userUID) => {
+		return (await database.collection('users').doc(userUID).get()).data()
+			.profileImage;
 	};
 
 	return {
@@ -5030,6 +5049,7 @@ const Firebase = (() => {
 		queryUserInfoForUserBookshelfPage,
 		queryLoggedInUserInfoForUserBookshelfPage,
 		getUserInfoForYearInBooksPage,
+		getUserProfilePicture,
 	};
 })();
 
