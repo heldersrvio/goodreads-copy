@@ -1,7 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
-import { differenceInDays } from 'date-fns';
+import { differenceInDays, startOfYear } from 'date-fns';
 
 const Firebase = (() => {
 	const firebaseConfig = {
@@ -4884,16 +4884,33 @@ const Firebase = (() => {
 		);
 	};
 
-	const getUserInfoForYearInBooksPage = async (userUID) => {
+	const getUserInfoForYearInBooksPage = async (userUID, year) => {
 		const loggedInUserAllBooks = (
 			await database
 				.collection('userBooksInstances')
 				.where('userId', '==', userUID)
+				.where('status', '==', 'read')
 				.get()
 		).docs;
 
+		const userUpdatesQuery = (
+			await database
+				.collection('userBooksUpdates')
+				.where('user', '==', userUID)
+				.where('action', '==', 'add-book')
+				.where('shelf', '==', 'read')
+				.where('date', '>', startOfYear(new Date(year, 0)))
+				.get()
+		).docs;
+
+		const loggedInUserYearBooks = loggedInUserAllBooks.filter((doc) =>
+			userUpdatesQuery
+				.map((updateDoc) => updateDoc.data().book)
+				.includes(doc.data().bookId)
+		);
+
 		return Promise.all(
-			loggedInUserAllBooks.map(async (doc) => {
+			loggedInUserYearBooks.map(async (doc) => {
 				const bookId = doc.data().bookId;
 				const bookQuery = await database.collection('books').doc(bookId).get();
 				const pageCount = bookQuery.data().pageCount;

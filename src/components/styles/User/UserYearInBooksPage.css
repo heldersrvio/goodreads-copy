@@ -188,7 +188,8 @@
 	line-height: 31px;
 }
 
-.user-year-in-books-page-main-content .average-rating-section .rating-stars {
+.user-year-in-books-page-main-content .average-rating-section .rating-stars,
+.user-year-in-books-page-main-content .highest-rated-section .rating-stars {
 	display: flex;
 	flex-direction: row;
 }
@@ -196,10 +197,54 @@
 .user-year-in-books-page-main-content
 	.average-rating-section
 	.rating-stars
+	.static-star.large,
+.user-year-in-books-page-main-content
+	.highest-rated-section
+	.rating-stars
 	.static-star.large {
 	width: 20px;
 	height: 20px;
 	background-repeat: no-repeat;
 	background-size: 20px 20px;
-	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAABvUlEQVR4Ab2WNZDXQBTGcWtxd+173PYFh5bJ5uBK3B0q3N3d3RvkoMalb6hw6DY5yQ8np5v8s5l5sfe+7zezXi/tVa7HDSDqub5CX60knIONlleEU2h58Zh+xlflBO/umlmrZb/BvDsDx8AXv8G8u2nm6RP6APw3+OdgNMuSJJh/DppZniXB/Mu3mYvG9gJUVZDLr5kDtag6MDkrsyjwpka+bI+07DVaDhnfO260OhtquRRqdSN+3o3jfhyP4++P1YHJUUMtGrR44IUn3jBgwWQxaGF8OYPYRcCC+U8zytzQlygvIN4wqu7DIm9oXPAhB+gHvGsZuaqr0eppoaB44Vm3aTN7SnOj5URWKB542S8WgcwKtQptgWjQZlwixw63BaPJvmhM8wbZgtEUYu9dZwtGU5gjjiU465GIk2TntCMabWqwCaS4OuMokF1EdXm0GfpXrlaxCn2KAm/C7xre+ZesQ5uumVdNaRKLvyfMHlfVhPwjl6j9joc1mLX1H5PS0Jc15eenNKyunhw11P7W4ZFm09/0C/rOZl5SiwYtHmmm0Vs283jvbGWrRYMWD0vhxPbG92bWy3jhgVdVuQp3XI5mu1kSTwAAAABJRU5ErkJggg==');
+}
+
+.user-year-in-books-page-main-content .highest-rated-section > a {
+	padding: 0;
+	width: fit-content;
+	height: fit-content;
+}
+
+.user-year-in-books-page-main-content .highest-rated-section {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	border-top: 0.5px solid rgb(216, 216, 216);
+	padding: 80px 5%;
+}
+
+.user-year-in-books-page-main-content .highest-rated-section img {
+	width: 200px;
+}
+
+.user-year-in-books-page-main-content
+	.highest-rated-section
+	.highest-rated-span {
+	font-family: var(--merriweather-font);
+	font-size: 40px;
+	line-height: 51px;
+}
+
+.user-year-in-books-page-main-content .highest-rated-section .rating-average {
+	display: block;
+	color: rgb(110, 110, 110);
+	font-size: 16px;
+	line-height: 19px;
+	font-family: var(--lato-font);
+	margin-top: 15px;
+}
+
+.user-year-in-books-page-main-content
+	.highest-rated-section
+	.highest-rated-info {
+	margin-left: 30px;
 }

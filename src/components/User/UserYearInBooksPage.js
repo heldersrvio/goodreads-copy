@@ -18,13 +18,15 @@ const UserYearInBooksPage = ({ match }) => {
 	useEffect(() => {
 		const loadInfo = async () => {
 			setBooks(
-				await trackPromise(Firebase.getUserInfoForYearInBooksPage(userId))
+				await trackPromise(
+					Firebase.getUserInfoForYearInBooksPage(userId, numberYear)
+				)
 			);
 			setLoaded(true);
 		};
 
 		loadInfo();
-	}, [userId]);
+	}, [userId, numberYear]);
 
 	const shortestBook = books.reduce(
 		(previous, current) =>
@@ -76,6 +78,14 @@ const UserYearInBooksPage = ({ match }) => {
 			0
 		)
 		.toFixed(1);
+
+	const highestRatedBook = books.reduce(
+		(previous, current) =>
+			previous === null || previous.averageRating < current.averageRating
+				? current
+				: previous,
+		null
+	);
 
 	const overallStatsSection = loaded ? (
 		<div className="user-year-in-books-overall-stats">
@@ -300,6 +310,84 @@ const UserYearInBooksPage = ({ match }) => {
 						</div>
 						<span className="rating">{userAverageRating}</span>
 					</span>
+				</div>
+				<div className="highest-rated-section">
+					<a
+						className="book-and-info-a"
+						href={Firebase.pageGenerator.generateBookPage(
+							highestRatedBook.bookId,
+							highestRatedBook.title
+						)}
+					>
+						<img src={highestRatedBook.cover} alt={highestRatedBook.title} />
+					</a>
+					<div className="highest-rated-info">
+						<span className="highest-rated-span">
+							Highest Rated on Goodreads
+						</span>
+						<span className="stars-rating">
+							<div className="rating-stars">
+								<div
+									className={
+										highestRatedBook.averageRating >= 1
+											? 'static-star large full'
+											: highestRatedBook.averageRating >= 0.5
+											? 'static-star large almost-full'
+											: highestRatedBook.averageRating > 0
+											? 'static-star large almost-empty'
+											: 'static-star large empty'
+									}
+								></div>
+								<div
+									className={
+										highestRatedBook.averageRating >= 2
+											? 'static-star large full'
+											: highestRatedBook.averageRating >= 1.5
+											? 'static-star large almost-full'
+											: highestRatedBook.averageRating > 1
+											? 'static-star large almost-empty'
+											: 'static-star large empty'
+									}
+								></div>
+								<div
+									className={
+										highestRatedBook.averageRating >= 3
+											? 'static-star large full'
+											: highestRatedBook.averageRating >= 2.5
+											? 'static-star large almost-full'
+											: highestRatedBook.averageRating > 2
+											? 'static-star large almost-empty'
+											: 'static-star large empty'
+									}
+								></div>
+								<div
+									className={
+										highestRatedBook.averageRating >= 4
+											? 'static-star large full'
+											: highestRatedBook.averageRating >= 3.5
+											? 'static-star large almost-full'
+											: highestRatedBook.averageRating > 3
+											? 'static-star large almost-empty'
+											: 'static-star large empty'
+									}
+								></div>
+								<div
+									className={
+										highestRatedBook.averageRating >= 5
+											? 'static-star large full'
+											: highestRatedBook.averageRating >= 4.5
+											? 'static-star large almost-full'
+											: highestRatedBook.averageRating > 4
+											? 'static-star large almost-empty'
+											: 'static-star large empty'
+									}
+								></div>
+							</div>
+							<span className="rating-average">
+								{highestRatedBook.averageRating.toFixed(2)} average
+							</span>
+						</span>
+					</div>
 				</div>
 			</div>
 		</div>
