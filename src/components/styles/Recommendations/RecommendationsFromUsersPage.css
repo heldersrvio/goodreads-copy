@@ -1,0 +1,28 @@
+.recommendation-page .recommendations-main-content {
+	padding: 1.5% 10%;
+}
+
+.recommendation-page .recommendations-page-indicator {
+	display: block;
+	color: var(--goodreads-brown);
+	font-family: var(--merriweather-font);
+	font-weight: bold;
+	font-size: 20px;
+	line-height: 24px;
+	margin-bottom: 20px;
+}
+
+.recommendation-page .recommendations-total-span {
+	margin-left: 10px;
+	font-family: var(--lato-font);
+	font-size: 11px;
+	line-height: 14px;
+}
+
+.recommendation-page .main-content {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	width: 90%;
+	margin-left: 15px;
+}

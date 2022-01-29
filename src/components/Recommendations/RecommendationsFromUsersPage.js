@@ -4,6 +4,7 @@ import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 import { trackPromise } from 'react-promise-tracker';
 import { useHistory } from 'react-router-dom';
+import '../styles/Recommendations/RecommendationsFromUsersPage.css';
 
 const RecommendationsFromUsersPage = () => {
 	// TODO: No recommendations case
