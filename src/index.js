@@ -47,6 +47,7 @@ import ErrorBoundary from './ErrorBoundary';
 import { TailSpin } from 'react-loader-spinner';
 import { usePromiseTracker } from 'react-promise-tracker';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
+import RecommendationsFromUsersPage from './components/Recommendations/RecommendationsFromUsersPage';
 
 const store = createStore(reducer.userReducer);
 
@@ -379,6 +380,16 @@ ReactDOM.render(
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<UserBookshelfPage {...routerProps}></UserBookshelfPage>
+							</ErrorBoundary>
+						)}
+					/>
+					<Route
+						path="/recommendations/to_me"
+						render={(routerProps) => (
+							<ErrorBoundary>
+								<RecommendationsFromUsersPage
+									{...routerProps}
+								></RecommendationsFromUsersPage>
 							</ErrorBoundary>
 						)}
 					/>

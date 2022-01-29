@@ -314,8 +314,8 @@ const Firebase = (() => {
 			return '/friend/add_as_friend/' + userId;
 		};
 
-		const generateRecommendationsPage = () => {
-			return '/recommendations';
+		const generateRecommendationsPage = (isReceiver = true) => {
+			return `/recommendations/${isReceiver ? 'to_me' : 'from_me'}`;
 		};
 
 		const generateGiveRecommendationPage = () => {
@@ -4970,6 +4970,81 @@ const Firebase = (() => {
 			.profileImage;
 	};
 
+	const getRecommendationsToFromUser = async (userUID, isReceiver) => {
+		const recommendationsQuery = (
+			await database
+				.collection('recommendations')
+				.where(isReceiver ? 'receiver' : 'sender', '==', userUID)
+				.get()
+		).docs;
+		return await Promise.all(
+			recommendationsQuery.map(async (doc) => {
+				const id = doc.id;
+				const message = doc.data().message;
+				const bookId = doc.data().bookId;
+				const bookQuery = await database.collection('books').doc(bookId).get();
+				const rootBookQuery = await database
+					.collection('rootBooks')
+					.doc(bookQuery.data().rootBook)
+					.get();
+				const authorQuery = await database
+					.collection('authors')
+					.doc(rootBookQuery.data().authorId)
+					.get();
+				const userInstanceQuery = (
+					await database
+						.collection('userBooksInstances')
+						.where('bookId', '==', bookId)
+						.where('userId', '==', userUID)
+						.get()
+				).docs;
+				const book = {
+					bookId,
+					title: bookQuery.data().title,
+					cover: bookQuery.data().cover,
+					authorId: authorQuery.id,
+					authorName: authorQuery.data().name,
+					userStatus:
+						userInstanceQuery.length > 0
+							? userInstanceQuery[0].data().status
+							: undefined,
+					userRating:
+						userInstanceQuery.length > 0
+							? userInstanceQuery[0].data().rating
+							: undefined,
+					userProgress:
+						userInstanceQuery.length > 0
+							? userInstanceQuery[0].data().progress
+							: undefined,
+					toReadBookPosition:
+						userInstanceQuery.length > 0
+							? userInstanceQuery[0].data().position
+							: undefined,
+				};
+				const otherUserId = isReceiver
+					? doc.data().sender
+					: doc.data().receiver;
+				const otherUser = {
+					userId: otherUserId,
+					firstName: (
+						await database.collection('users').doc(otherUserId).get()
+					).data().firstName,
+				};
+
+				return {
+					id,
+					message,
+					book,
+					otherUser,
+				};
+			})
+		);
+	};
+
+	const deleteRecommendation = async (recommendationId) => {
+		await database.collection('recommendations').doc(recommendationId).delete();
+	};
+
 	return {
 		pageGenerator,
 		getAlsoEnjoyedBooksDetailsForBook,
@@ -5050,6 +5125,8 @@ const Firebase = (() => {
 		queryLoggedInUserInfoForUserBookshelfPage,
 		getUserInfoForYearInBooksPage,
 		getUserProfilePicture,
+		getRecommendationsToFromUser,
+		deleteRecommendation,
 	};
 })();
 

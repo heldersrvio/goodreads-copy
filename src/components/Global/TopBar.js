@@ -227,7 +227,13 @@ const TopBar = () => {
 									<a href="/">Favorite genres</a>
 								</li>
 								<li>
-									<a href="/">Friends' recommendations</a>
+									<a
+										href={Firebase.pageGenerator.generateRecommendationsPage(
+											true
+										)}
+									>
+										Friends' recommendations
+									</a>
 								</li>
 							</ul>
 						</div>
