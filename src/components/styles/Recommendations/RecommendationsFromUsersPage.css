@@ -304,3 +304,10 @@
 	padding-left: 40px;
 	border-bottom: none;
 }
+
+.recommendation-page .no-pending-recommendations-span {
+	width: 100%;
+	font-size: 14px;
+	font-family: var(--lato-font);
+	color: var(--goodreads-black);
+}

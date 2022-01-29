@@ -7,8 +7,6 @@ import { useHistory } from 'react-router-dom';
 import '../styles/Recommendations/RecommendationsFromUsersPage.css';
 
 const RecommendationsFromUsersPage = () => {
-	// TODO: No recommendations case
-
 	const history = useHistory();
 	const [loaded, setLoaded] = useState(false);
 	const [recommendations, setRecommendations] = useState([]);
@@ -28,28 +26,7 @@ const RecommendationsFromUsersPage = () => {
 	const [shelfPopupToReadInputs, setShelfPopupToReadInputs] = useState([]);
 
 	const user = JSON.parse(localStorage.getItem('userState'));
-	/*
-    [
-        {
-            id,
-            message,
-            book: {
-                bookId,
-                title,
-                cover,
-                authorId,
-                authorName,
-                userStatus,
-                userRating,
-                userProgress,
-            },
-            otherUser: {
-                userId,
-                firstName,
-            },
-        }
-    ]
-    */
+
 	const genericBookCover =
 		'https://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png';
 
@@ -721,112 +698,120 @@ const RecommendationsFromUsersPage = () => {
 				<span className="recommendations-page-indicator">
 					Recommendations {'>'} From Users
 				</span>
-				<span className="recommendations-total-span">
-					{`Showing 1-${recommendations.length} of ${recommendations.length}`}
-				</span>
+				{recommendations.length > 0 ? (
+					<span className="recommendations-total-span">
+						{`Showing 1-${recommendations.length} of ${recommendations.length}`}
+					</span>
+				) : null}
 				<div className="main-content">
-					<div className="recommendation-list">
-						{recommendations.map((recommendation, index) => {
-							return (
-								<div className="recommendation-card" key={recommendation.id}>
-									<div className="top-section">
-										<span>
-											<a
-												href={Firebase.pageGenerator.generateUserPage(
-													recommendation.otherUser.userId,
-													recommendation.otherUser.firstName
-												)}
-											>
-												{recommendation.otherUser.firstName}
-											</a>{' '}
-											recommended:
-										</span>
-										<button
-											className="ignore-button"
-											onClick={() => ignoreRecommendation(recommendation.id)}
-										>
-											ignore
-										</button>
-									</div>
-									<div className="bottom-section">
-										<div className="left-section">
-											<a
-												className="cover-wrapper-a"
-												href={Firebase.pageGenerator.generateBookPage(
-													recommendation.book.bookId,
-													recommendation.book.title
-												)}
-											>
-												<img
-													src={
-														recommendation.book.cover !== undefined &&
-														recommendation.book.cover !== null
-															? recommendation.book.cover
-															: genericBookCover
-													}
-													alt={recommendation.book.title}
-												/>
-											</a>
-											<div className="book-info">
+					{recommendations.length > 0 ? (
+						<div className="recommendation-list">
+							{recommendations.map((recommendation, index) => {
+								return (
+									<div className="recommendation-card" key={recommendation.id}>
+										<div className="top-section">
+											<span>
 												<a
-													className="book-title-a"
+													href={Firebase.pageGenerator.generateUserPage(
+														recommendation.otherUser.userId,
+														recommendation.otherUser.firstName
+													)}
+												>
+													{recommendation.otherUser.firstName}
+												</a>{' '}
+												recommended:
+											</span>
+											<button
+												className="ignore-button"
+												onClick={() => ignoreRecommendation(recommendation.id)}
+											>
+												ignore
+											</button>
+										</div>
+										<div className="bottom-section">
+											<div className="left-section">
+												<a
+													className="cover-wrapper-a"
 													href={Firebase.pageGenerator.generateBookPage(
 														recommendation.book.bookId,
 														recommendation.book.title
 													)}
 												>
-													{recommendation.book.title}
+													<img
+														src={
+															recommendation.book.cover !== undefined &&
+															recommendation.book.cover !== null
+																? recommendation.book.cover
+																: genericBookCover
+														}
+														alt={recommendation.book.title}
+													/>
 												</a>
-												<span className="authorship-span">
-													by{' '}
+												<div className="book-info">
 													<a
-														className="author-name-a"
-														href={Firebase.pageGenerator.generateAuthorPage(
-															recommendation.book.authorId,
-															recommendation.book.authorName
+														className="book-title-a"
+														href={Firebase.pageGenerator.generateBookPage(
+															recommendation.book.bookId,
+															recommendation.book.title
 														)}
 													>
-														{recommendation.book.authorName}
+														{recommendation.book.title}
 													</a>
-												</span>
-												{recommendation.message !== undefined &&
-												recommendation.message !== null &&
-												recommendation.message.length > 0 ? (
-													<span className="rec-message-span">
+													<span className="authorship-span">
+														by{' '}
 														<a
-															href={Firebase.pageGenerator.generateUserPage(
-																recommendation.otherUser.userId,
-																recommendation.otherUser.firstName
+															className="author-name-a"
+															href={Firebase.pageGenerator.generateAuthorPage(
+																recommendation.book.authorId,
+																recommendation.book.authorName
 															)}
 														>
-															they
-														</a>{' '}
-														said: " {recommendation.message} "
+															{recommendation.book.authorName}
+														</a>
 													</span>
-												) : null}
+													{recommendation.message !== undefined &&
+													recommendation.message !== null &&
+													recommendation.message.length > 0 ? (
+														<span className="rec-message-span">
+															<a
+																href={Firebase.pageGenerator.generateUserPage(
+																	recommendation.otherUser.userId,
+																	recommendation.otherUser.firstName
+																)}
+															>
+																they
+															</a>{' '}
+															said: " {recommendation.message} "
+														</span>
+													) : null}
+												</div>
 											</div>
-										</div>
-										<div className="right-section">
-											<div
-												className={`want-to-read-button-and-options ${
-													recommendation.book.userStatus !== undefined
-														? recommendation.book.userStatus
-														: ''
-												}`}
-											>
-												{generateAddToShelfButton(recommendation.book, index)}
-												{generateBookOptionsDropdown(
-													recommendation.book,
-													index
-												)}
+											<div className="right-section">
+												<div
+													className={`want-to-read-button-and-options ${
+														recommendation.book.userStatus !== undefined
+															? recommendation.book.userStatus
+															: ''
+													}`}
+												>
+													{generateAddToShelfButton(recommendation.book, index)}
+													{generateBookOptionsDropdown(
+														recommendation.book,
+														index
+													)}
+												</div>
+												{generateRateBookSection(recommendation.book, index)}
 											</div>
-											{generateRateBookSection(recommendation.book, index)}
 										</div>
 									</div>
-								</div>
-							);
-						})}
-					</div>
+								);
+							})}
+						</div>
+					) : (
+						<span className="no-pending-recommendations-span">
+							You don't have any pending recommendations.
+						</span>
+					)}
 					<div className="more-actions-box">
 						<span className="more-actions-title">More Actions</span>
 						<div className="anchors-list">
