@@ -95,6 +95,7 @@ const RecommendationsFromUsersPage = () => {
 
 	const ignoreRecommendation = async (id) => {
 		await Firebase.deleteRecommendation(id);
+		setRecommendations((previous) => previous.filter((rec) => rec.id !== id));
 	};
 
 	const displayRemoveBookConfirm = () => {
@@ -105,7 +106,7 @@ const RecommendationsFromUsersPage = () => {
 
 	const removeBookSafely = (bookObject, index) => {
 		if (displayRemoveBookConfirm()) {
-			Firebase.removeBookFromShelf(user.userUID, bookObject.id);
+			Firebase.removeBookFromShelf(user.userUID, bookObject.bookId);
 			setRecommendations((previous) => {
 				return previous.map((previousObject, i) =>
 					i === index
@@ -125,13 +126,13 @@ const RecommendationsFromUsersPage = () => {
 	};
 
 	const changeBookShelf = async (bookObject, index, shelf) => {
-		if (bookObject.id !== undefined) {
+		if (bookObject.bookId !== undefined) {
 			setSavingShelves((previous) =>
 				previous.map((value, i) => (i === index ? true : value))
 			);
 			await Firebase.addBookToShelf(
 				user.userUID,
-				bookObject.id,
+				bookObject.bookId,
 				shelf,
 				history
 			);
@@ -155,8 +156,8 @@ const RecommendationsFromUsersPage = () => {
 	};
 
 	const rateBook = async (bookObject, index, rating) => {
-		if (bookObject.id !== undefined) {
-			await Firebase.rateBook(user.userUID, bookObject.id, rating, history);
+		if (bookObject.bookId !== undefined) {
+			await Firebase.rateBook(user.userUID, bookObject.bookId, rating, history);
 			setRecommendations((previous, i) => {
 				return previous.map((previousObject, i) =>
 					i === index
@@ -181,12 +182,12 @@ const RecommendationsFromUsersPage = () => {
 		if (
 			user.userUID !== null &&
 			user.userUID !== undefined &&
-			bookObject.id !== undefined &&
+			bookObject.bookId !== undefined &&
 			pages.length > 0
 		) {
 			await Firebase.updateBookInShelf(
 				user.userUID,
-				bookObject.id,
+				bookObject.bookId,
 				parseInt(pages)
 			);
 			setRecommendations((previous) => {
@@ -332,7 +333,7 @@ const RecommendationsFromUsersPage = () => {
 						<div className="shelf-pop-up-top">
 							<a
 								href={Firebase.pageGenerator.generateWriteReviewPageForBook(
-									bookObject.id
+									bookObject.bookId
 								)}
 							>
 								Write a review
@@ -423,7 +424,7 @@ const RecommendationsFromUsersPage = () => {
 									onClick={(_e) => {
 										Firebase.changeBookPosition(
 											user.userUID,
-											bookObject.id,
+											bookObject.bookId,
 											parseInt(shelfPopupToReadInputs[index])
 										);
 										setRecommendations((previous) =>
@@ -737,7 +738,7 @@ const RecommendationsFromUsersPage = () => {
 												)}
 											>
 												{recommendation.otherUser.firstName}
-											</a>
+											</a>{' '}
 											recommended:
 										</span>
 										<button
