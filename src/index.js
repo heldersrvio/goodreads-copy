@@ -50,6 +50,7 @@ import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import RecommendationsFromUsersPage from './components/Recommendations/RecommendationsFromUsersPage';
 import RecommendationsFromYouPage from './components/Recommendations/RecommendationsFromYouPage';
 import FollowersPage from './components/Friends/FollowersPage';
+import PeopleFollowingPage from './components/Friends/PeopleFollowingPage';
 
 const store = createStore(reducer.userReducer);
 
@@ -410,6 +411,14 @@ ReactDOM.render(
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<FollowersPage {...routerProps}></FollowersPage>
+							</ErrorBoundary>
+						)}
+					/>
+					<Route
+						path="/user/:pageId/following"
+						render={(routerProps) => (
+							<ErrorBoundary>
+								<PeopleFollowingPage {...routerProps}></PeopleFollowingPage>
 							</ErrorBoundary>
 						)}
 					/>

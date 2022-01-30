@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { trackPromise } from 'react-promise-tracker';
 import Firebase from '../../Firebase';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 import TopBar from '../Global/TopBar';
@@ -26,7 +27,9 @@ const FollowersPage = ({ match }) => {
 	useEffect(() => {
 		const loadFollowers = async () => {
 			setFollowers(
-				await Firebase.getInfoForFollowPage(userId, user.userUID, 'followers')
+				await trackPromise(
+					Firebase.getInfoForFollowPage(userId, user.userUID, 'followers')
+				)
 			);
 			setLoaded(true);
 		};

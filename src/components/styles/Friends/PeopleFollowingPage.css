@@ -1,0 +1,16 @@
+.follow-page .follow-list-and-links {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.follow-page .links {
+	margin-right: 15%;
+}
+
+.follow-page .links a {
+	color: var(--goodreads-teal);
+	font-family: var(--lato-font);
+	font-size: 13px;
+	font-weight: bold;
+}
