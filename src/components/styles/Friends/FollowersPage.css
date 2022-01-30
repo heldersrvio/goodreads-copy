@@ -1,0 +1,167 @@
+.follow-page .follow-page-main-content {
+	position: relative;
+	padding: 1.5% 11%;
+	min-height: 60vh;
+}
+
+.follow-page .follow-page-main-content a {
+	padding: 0;
+	display: inline;
+	height: auto;
+	line-height: normal;
+	background-color: transparent;
+}
+
+.follow-page .follow-page-main-content a:hover {
+	text-decoration: underline;
+}
+
+.follow-page .follow-page-page-indicator {
+	display: block;
+	color: var(--goodreads-brown);
+	font-family: var(--merriweather-font);
+	font-weight: bold;
+	font-size: 20px;
+	line-height: 24px;
+	margin-bottom: 20px;
+}
+
+.follow-page .follow-page-page-indicator a {
+	font-size: 20px;
+	line-height: 24px;
+	font-family: var(--merriweather-font);
+	color: var(--goodreads-teal);
+}
+
+.follow-page .follow-page-main-content .follow-list {
+	width: 60%;
+	margin-top: 45px;
+}
+
+.follow-page .follow-page-main-content .follow-card {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: flex-end;
+	padding-bottom: 12px;
+	margin-top: 3px;
+	border-bottom: 1px solid rgb(232, 232, 232);
+}
+
+.follow-page .follow-page-main-content .follow-card .left-section {
+	display: flex;
+	flex-direction: row;
+}
+
+.follow-page .follow-page-main-content .follow-card .left-section img {
+	width: 50px;
+}
+
+.follow-page .follow-page-main-content .follow-card .left-section > a {
+	display: block;
+	margin-right: 10px;
+}
+
+.follow-page .follow-page-main-content .follow-card .left-section .user-info {
+	display: flex;
+	flex-direction: column;
+}
+
+.follow-page .follow-page-main-content .follow-card a,
+.follow-page .follow-page-main-content .follow-card span {
+	font-size: 12px;
+	line-height: 18px;
+	font-family: var(--lato-font);
+}
+
+.follow-page .follow-page-main-content .follow-card a {
+	color: var(--goodreads-teal);
+}
+
+.follow-page .follow-page-main-content .follow-card span {
+	color: var(--goodreads-black);
+}
+
+.follow-page .follow-page-main-content .follow-card .middle-section img {
+	width: 50px;
+}
+
+.follow-page .follow-page-main-content .follow-card .middle-section > a {
+	margin-right: 10px;
+}
+
+.follow-page .follow-page-main-content .follow-card .middle-section {
+	display: flex;
+	flex-direction: row;
+}
+
+.follow-page .follow-page-main-content .follow-card .currently-reading-span {
+	display: block;
+	font-size: 12px;
+	font-family: var(--lato-font);
+	line-height: 18px;
+	color: rgb(153, 153, 153);
+}
+
+.follow-page
+	.follow-page-main-content
+	.follow-card
+	.right-section
+	.add-friend-a {
+	display: block;
+	color: var(--goodreads-black);
+	border-radius: 3px;
+	border: 1px solid rgb(214, 208, 196);
+	font-family: var(--lato-font);
+	font-size: 14px;
+	background-color: rgb(244, 241, 234);
+	line-height: 1;
+	padding: 8px 12px;
+}
+
+.follow-page
+	.follow-page-main-content
+	.follow-card
+	.right-section
+	.add-friend-a:hover {
+	background-color: rgb(237, 230, 214);
+	text-decoration: none;
+}
+
+.follow-page .page-navigation-section {
+	display: flex;
+	flex-direction: row;
+	position: absolute;
+	right: 40%;
+}
+
+.follow-page .page-navigation-section button {
+	display: inline;
+	padding: 0;
+	font-family: 'Lato', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 18px;
+	height: auto;
+	color: rgb(0, 99, 93);
+	margin-right: 3px;
+}
+
+.follow-page .page-navigation-section button:hover {
+	background-color: transparent;
+	text-decoration: underline;
+}
+
+.follow-page .page-navigation-section button:disabled {
+	color: rgb(24, 24, 24);
+}
+
+.follow-page .page-navigation-section button:disabled:hover {
+	text-decoration: none;
+}
+
+.follow-page .no-follow-span {
+	font-size: 14px;
+	line-height: 18px;
+	color: var(--goodreads-black);
+	font-family: var(--lato-font);
+}

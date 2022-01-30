@@ -5045,6 +5045,71 @@ const Firebase = (() => {
 		await database.collection('recommendations').doc(recommendationId).delete();
 	};
 
+	const getInfoForFollowPage = async (userId, loggedInUserId, scope) => {
+		const users =
+			scope === 'followers'
+				? (await database.collection('users').doc(userId).get()).data()
+						.followers
+				: scope === 'friends'
+				? (await database.collection('users').doc(userId).get()).data().friends
+				: (
+						await database
+							.collection('users')
+							.where('followers', 'array-contains', userId)
+							.get()
+				  ).docs.map((doc) => doc.id);
+
+		return await Promise.all(
+			users.map(async (user) => {
+				const userQuery = await database.collection('users').doc(user).get();
+				const userBooksInstancesQuery = await database
+					.collection('userBooksInstances')
+					.where('userId', '==', user)
+					.get();
+				const currentlyReadingBooks = userBooksInstancesQuery.docs.filter(
+					(doc) => doc.data().status === 'currently-reading'
+				);
+
+				return {
+					id: user,
+					name:
+						userQuery.data().lastName === undefined
+							? userQuery.data().firstName
+							: userQuery.data().firstName + ' ' + userQuery.data().lastName,
+					numberOfBooks: userBooksInstancesQuery.docs.length,
+					numberOfFriends:
+						userQuery.data().friends === undefined
+							? 0
+							: userQuery.data().friends.length,
+					location:
+						userQuery.data().country === undefined
+							? ''
+							: userQuery.data().country,
+					profilePicture: userQuery.data().profileImage,
+					currentlyReadingBook:
+						currentlyReadingBooks.length === 0
+							? undefined
+							: {
+									id: currentlyReadingBooks[0].data().bookId,
+									title: (
+										await database
+											.collection('books')
+											.doc(currentlyReadingBooks[0].data().bookId)
+											.get()
+									).data().title,
+									cover: (
+										await database
+											.collection('books')
+											.doc(currentlyReadingBooks[0].data().bookId)
+											.get()
+									).data().cover,
+							  },
+					isFriend: userQuery.data().friends.includes(loggedInUserId),
+				};
+			})
+		);
+	};
+
 	return {
 		pageGenerator,
 		getAlsoEnjoyedBooksDetailsForBook,
@@ -5127,6 +5192,7 @@ const Firebase = (() => {
 		getUserProfilePicture,
 		getRecommendationsToFromUser,
 		deleteRecommendation,
+		getInfoForFollowPage,
 	};
 })();
 
