@@ -173,7 +173,10 @@ const TopBar = () => {
 						onClick={async () => {
 							await Firebase.setNewFriendsToZero();
 							setNewFriends(0);
-							document.location.href = 'https://www.google.com';
+							document.location.href = Firebase.pageGenerator.generateUserFriendsPage(
+								user.userUID,
+								user.userInfo.firstName
+							);
 						}}
 					>
 						{newFriends > 0 ? <span>{newFriends}</span> : null}
@@ -218,13 +221,21 @@ const TopBar = () => {
 									</a>
 								</li>
 								<li>
-									<a href="/">Friends</a>
+									<a
+										href={Firebase.pageGenerator.generateUserFriendsPage(
+											user.userUID,
+											user.userInfo.firstName
+										)}
+									>
+										Friends
+									</a>
 								</li>
 								<li>
-									<a href="/">Quotes</a>
-								</li>
-								<li>
-									<a href="/">Favorite genres</a>
+									<a
+										href={Firebase.pageGenerator.generateEditFavoriteGenresPage()}
+									>
+										Favorite genres
+									</a>
 								</li>
 								<li>
 									<a

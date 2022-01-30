@@ -42,15 +42,16 @@ import UserAddAsFriendPage from './components/User/UserAddAsFriendPage';
 import UserBookshelfPage from './components/User/UserBookshelfPage';
 import UserPhotoPage from './components/User/UserPhotoPage';
 import UserYearInBooksPage from './components/User/UserYearInBooksPage';
+import RecommendationsFromUsersPage from './components/Recommendations/RecommendationsFromUsersPage';
+import RecommendationsFromYouPage from './components/Recommendations/RecommendationsFromYouPage';
+import FollowersPage from './components/Friends/FollowersPage';
+import PeopleFollowingPage from './components/Friends/PeopleFollowingPage';
+import FriendsPage from './components/Friends/FriendsPage';
 import ErrorPage from './components/Error/ErrorPage';
 import ErrorBoundary from './ErrorBoundary';
 import { TailSpin } from 'react-loader-spinner';
 import { usePromiseTracker } from 'react-promise-tracker';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
-import RecommendationsFromUsersPage from './components/Recommendations/RecommendationsFromUsersPage';
-import RecommendationsFromYouPage from './components/Recommendations/RecommendationsFromYouPage';
-import FollowersPage from './components/Friends/FollowersPage';
-import PeopleFollowingPage from './components/Friends/PeopleFollowingPage';
 
 const store = createStore(reducer.userReducer);
 
@@ -419,6 +420,14 @@ ReactDOM.render(
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<PeopleFollowingPage {...routerProps}></PeopleFollowingPage>
+							</ErrorBoundary>
+						)}
+					/>
+					<Route
+						path="/friend/user/:pageId"
+						render={(routerProps) => (
+							<ErrorBoundary>
+								<FriendsPage {...routerProps}></FriendsPage>
 							</ErrorBoundary>
 						)}
 					/>

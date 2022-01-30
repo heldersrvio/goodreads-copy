@@ -1,0 +1,15 @@
+.friends-page .follow-page-page-indicator img {
+	width: 25px;
+}
+
+.friends-page .follow-page-page-indicator > a {
+	margin-right: 10px;
+}
+
+.friends-page .follow-page-page-indicator .showing-page-span {
+	display: inline-block;
+	font-family: var(--lato-font);
+	font-size: 11px;
+	line-height: 14px;
+	margin-left: 5px;
+}
