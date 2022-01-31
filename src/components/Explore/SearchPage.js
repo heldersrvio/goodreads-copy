@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import Firebase from '../../Firebase';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
+import '../styles/Explore/SearchPage.css';
 
 const SearchPage = () => {
 	const query = new URLSearchParams(useLocation().search);
@@ -21,7 +22,9 @@ const SearchPage = () => {
 			: 'all';
 	const [loaded, setLoaded] = useState(false);
 	const [searchInput, setSearchInput] = useState(q);
-	const [searchFieldInput, setSearchFieldInput] = useState(searchField);
+	const [searchFieldInput, setSearchFieldInput] = useState(
+		searchType === 'people' ? 'author' : searchField
+	);
 	const [books, setBooks] = useState([]);
 	/*
     books: [{
@@ -80,6 +83,12 @@ const SearchPage = () => {
 				setBooks([]);
 				setPeople([]);
 				setGenre(null);
+			} else if (searchField === 'genre') {
+				const info = {
+					name: 'paranormal',
+					parentGenre: 'fiction',
+				};
+				setGenre(info);
 			} else if (searchType === 'books') {
 				const info = Array(60).fill({
 					id: '234',
@@ -104,7 +113,7 @@ const SearchPage = () => {
 					}),
 				});
 				setBooks(info);
-			} else if (searchType === 'people') {
+			} else {
 				const info = Array(50).fill({
 					id: '78',
 					name: 'Nils Hol',
@@ -115,17 +124,11 @@ const SearchPage = () => {
 					numberOfBooks: 460,
 				});
 				setPeople(info);
-			} else {
-				const info = {
-					name: 'paranormal',
-					parentGenre: 'fiction',
-				};
-				setGenre(info);
 			}
 			setLoaded(true);
 		};
 		loadInfo();
-	}, [q, searchType]);
+	}, [q, searchType, searchField]);
 
 	const searchArea = loaded ? (
 		<div className="search-area">
@@ -241,7 +244,7 @@ const SearchPage = () => {
 			</div>
 		) : loaded && searchField === 'genre' ? (
 			<div className="book-results-section">
-				{genre !== undefined ? (
+				{genre !== null ? (
 					<div className="genre-result">
 						<span>
 							Genre:{' '}
@@ -358,7 +361,7 @@ const SearchPage = () => {
 										href={Firebase.pageGenerator.generateGenrePage(shelf.name)}
 									>
 										{shelf.name}
-									</a>
+									</a>{' '}
 									<span className="number-of-books-span">
 										({shelf.numberOfBooks})
 									</span>
