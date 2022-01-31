@@ -119,9 +119,9 @@ const SearchPage = () => {
 					numberOfRatings: 200,
 					publishedYear: 2017,
 					numberOfEditions: 12,
-					userStatus: 'reading',
-					userRating: 2,
-					userProgress: 17,
+					userStatus: undefined,
+					userRating: undefined,
+					userProgress: undefined,
 					toReadBookPosition: undefined,
 					pageCount: 450,
 					genreShelves: Array(10).fill({
