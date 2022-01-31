@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-// import { trackPromise } from 'react-promise-tracker';
+import { trackPromise } from 'react-promise-tracker';
 import Firebase from '../../Firebase';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 import TopBar from '../Global/TopBar';
@@ -23,111 +23,23 @@ const ExplorePage = () => {
 	const booksPerSequence = 4;
 	const articlesPerSequence = 2;
 
+	const user = JSON.parse(localStorage.getItem('userState'));
+
 	const noCoverUrl =
 		'https://s.gr-assets.com/assets/nophoto/book/111x148-bcc042a9c91a29c1d680899eff700a03.png';
-	/*
-    {
-        articles: [
-            id,
-            datePublished,
-            numberOfLikes,
-            numberOfComments,
-            title,
-            image,
-        ],
-        enjoyedBook: {
-            title,
-            id,
-            similarBooks: [{
-                title,
-                id,
-                cover,
-                authorName,
-                rating,
-                numberOfRatings,
-            }],
-        },
-        readingBook: {
-            title,
-            id,
-            similarBooks: [{
-                title,
-                id,
-                cover,
-                authorName,
-                rating,
-                numberOfRatings,
-            }],
-        },
-        trendingBooks: [
-            {
-                title,
-                id,
-                similarBooks: [{
-                    title,
-                    id,
-                    cover,
-                    authorName,
-                    rating,
-                    numberOfRatings,
-                }],
-            }
-        ],
-    }
-    */
 
 	useEffect(() => {
 		const loadInfo = async () => {
-			setInfo({
-				articles: Array(15).fill({
-					id: '34#',
-					datePublished: new Date(),
-					numberOfLikes: 40,
-					numberOfComments: 5,
-					title: '6 Great Books Hitting Shelves This Week',
-					image: 'https://images.gr-assets.com/blogs/1642015062p8/2203.jpg',
-				}),
-				enjoyedBook: {
-					title: 'Ethics: A Very Short Introduction',
-					id: '123',
-					similarBooks: Array(40).fill({
-						title: 'Metaphysics: A Very Short Introduction',
-						id: '234',
-						cover:
-							'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1355049704l/208036.jpg',
-						authorName: 'Stephen Mumford',
-						rating: 3.77,
-						numberOfRatings: 513,
-					}),
-				},
-				readingBook: {
-					title: 'Feeling Good: The New Mood Therapy',
-					id: '456',
-					similarBooks: Array(40).fill({
-						title: 'Kaip veikia smegenys',
-						id: '999',
-						cover:
-							'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1600767407i/52617759._SX600_.jpg',
-						authorName: 'Ramune LastName',
-						rating: 4.46,
-						numberOfRatings: 135,
-					}),
-				},
-				trendingBooks: Array(50).fill({
-					cover:
-						'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1560955053i/44421460._SX600_.jpg',
-					title: 'コーヒーが冷めないうちに',
-					id: '98',
-					authorName: '川口寿一',
-					rating: 3.75,
-					numberOfRatings: 53600,
-				}),
-			});
+			setInfo(await trackPromise(Firebase.getInfoForExplorePage(user.userUID)));
 			setLoaded(true);
 		};
 
 		loadInfo();
-	}, []);
+	}, [user.userUID]);
+
+	useEffect(() => {
+		console.log(info);
+	}, [info]);
 
 	const topNewsAndInterviewsSection =
 		loaded && info.articles.length > 0 ? (
@@ -158,7 +70,9 @@ const ExplorePage = () => {
 		) : null;
 
 	const enjoyedBookSection =
-		loaded && info.enjoyedBook !== undefined ? (
+		loaded &&
+		info.enjoyedBook !== undefined &&
+		info.enjoyedBook.similarBooks.length > 0 ? (
 			<div className="similar-books-section">
 				<div className="similar-books-section-header explore-page-section-header">
 					<span className="title-span">
@@ -237,7 +151,9 @@ const ExplorePage = () => {
 												</g>
 											</svg>
 										</div>
-										<span className="rating-span">{book.rating}</span>
+										<span className="rating-span">
+											{book.rating.toFixed(2)}
+										</span>
 										<span className="number-of-ratings-span">{`· ${book.numberOfRatings}`}</span>
 									</div>
 								</a>
@@ -258,7 +174,9 @@ const ExplorePage = () => {
 		) : null;
 
 	const readingBookSection =
-		loaded && info.readingBook !== undefined ? (
+		loaded &&
+		info.readingBook !== undefined &&
+		info.readingBook.similarBooks.length > 0 ? (
 			<div className="similar-books-section">
 				<div className="similar-books-section-header explore-page-section-header">
 					<span className="title-span">
@@ -337,7 +255,9 @@ const ExplorePage = () => {
 												</g>
 											</svg>
 										</div>
-										<span className="rating-span">{book.rating}</span>
+										<span className="rating-span">
+											{book.rating.toFixed(2)}
+										</span>
 										<span className="number-of-ratings-span">{`· ${book.numberOfRatings}`}</span>
 									</div>
 								</a>
@@ -428,7 +348,9 @@ const ExplorePage = () => {
 												</g>
 											</svg>
 										</div>
-										<span className="rating-span">{book.rating}</span>
+										<span className="rating-span">
+											{book.rating.toFixed(2)}
+										</span>
 										<span className="number-of-ratings-span">{`· ${book.numberOfRatings}`}</span>
 									</div>
 								</a>

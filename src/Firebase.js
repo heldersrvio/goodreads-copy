@@ -5067,7 +5067,7 @@ const Firebase = (() => {
 					.where('userId', '==', user)
 					.get();
 				const currentlyReadingBooks = userBooksInstancesQuery.docs.filter(
-					(doc) => doc.data().status === 'currently-reading'
+					(doc) => doc.data().status === 'reading'
 				);
 
 				return {
@@ -5108,6 +5108,153 @@ const Firebase = (() => {
 				};
 			})
 		);
+	};
+
+	const getInfoForExplorePage = async (userId) => {
+		const getBookInfo = async (bookId) => {
+			const bookQuery = await database.collection('books').doc(bookId).get();
+			const rootBookQuery = await database
+				.collection('rootBooks')
+				.doc(bookQuery.data().rootBook)
+				.get();
+			const authorQuery = await database
+				.collection('authors')
+				.doc(rootBookQuery.data().authorId)
+				.get();
+			const userInstanceQuery = (
+				await database
+					.collection('userBooksInstances')
+					.where('bookId', '==', bookId)
+					.where('rating', '>', 0)
+					.get()
+			).docs;
+
+			return {
+				title: bookQuery.data().title,
+				id: bookId,
+				cover: bookQuery.data().cover,
+				authorName: authorQuery.data().name,
+				rating:
+					userInstanceQuery.length === 0
+						? 0
+						: userInstanceQuery.reduce(
+								(previous, current) =>
+									previous + current / userInstanceQuery.length,
+								0
+						  ),
+				numberOfRatings: userInstanceQuery.length,
+			};
+		};
+
+		const getSimilarBooks = async (bookId) => {
+			const similarBooks = (
+				await database.collection('books').doc(bookId).get()
+			).data().similarBooks;
+			if (similarBooks === undefined) {
+				return [];
+			}
+			return await Promise.all(
+				similarBooks.map(async (book) => {
+					return await getBookInfo(book);
+				})
+			);
+		};
+
+		const articleQuery = (
+			await database
+				.collection('articles')
+				.orderBy('datePublished', 'desc')
+				.limit(15)
+				.get()
+		).docs;
+		const enjoyedBooks = (
+			await database
+				.collection('userBooksInstances')
+				.where('userId', '==', userId)
+				.where('rating', '>=', 3)
+				.get()
+		).docs;
+		const enjoyedBookId =
+			enjoyedBooks.length === 0
+				? undefined
+				: enjoyedBooks[
+						Math.round(Math.random() * (enjoyedBooks.length - 1))
+				  ].data().bookId;
+		const readingBooks = (
+			await database
+				.collection('userBooksInstances')
+				.where('userId', '==', userId)
+				.where('status', '==', 'reading')
+				.get()
+		).docs;
+		const readingBookId =
+			readingBooks.length === 0
+				? undefined
+				: readingBooks[
+						Math.round(Math.random() * (readingBooks.length - 1))
+				  ].data().bookId;
+		const allUserUpdates = (
+			await database
+				.collection('userBooksUpdates')
+				.orderBy('date', 'desc')
+				.limit(1000)
+				.get()
+		).docs;
+		const trendingBooks = allUserUpdates
+			.reduce(
+				(previous, current) =>
+					previous.map((obj) => obj.id === current.data().book).length === 0
+						? previous.concat({ id: current.data().book, count: 0 })
+						: previous.map((obj) =>
+								obj.id === current.data().book
+									? { ...obj, count: obj.count + 1 }
+									: obj
+						  ),
+				[]
+			)
+			.sort((a, b) => (a.count > b.count ? -1 : 1))
+			.slice(0, 25)
+			.map((obj) => obj.id);
+
+		return {
+			articles: articleQuery.map((doc) => {
+				return {
+					id: doc.id,
+					datePublished: doc.data().datePublished,
+					numberOfLikes:
+						doc.data().usersWhoLiked !== undefined
+							? doc.data().usersWhoLiked.length
+							: 0,
+					numberOfComments:
+						doc.data().comments !== undefined ? doc.data().comments.length : 0,
+					title: doc.data().title,
+					image: doc.data().image,
+				};
+			}),
+			enjoyedBook:
+				enjoyedBookId === undefined
+					? undefined
+					: {
+							id: enjoyedBookId,
+							title: (
+								await database.collection('books').doc(enjoyedBookId).get()
+							).data().title,
+							similarBooks: await getSimilarBooks(enjoyedBookId),
+					  },
+			readingBook:
+				readingBookId === undefined
+					? undefined
+					: {
+							id: readingBookId,
+							title: (
+								await database.collection('books').doc(readingBookId).get()
+							).data().title,
+							similarBooks: await getSimilarBooks(readingBookId),
+					  },
+			trendingBooks: await Promise.all(
+				trendingBooks.map(async (bookId) => await getBookInfo(bookId))
+			),
+		};
 	};
 
 	return {
@@ -5193,6 +5340,7 @@ const Firebase = (() => {
 		getRecommendationsToFromUser,
 		deleteRecommendation,
 		getInfoForFollowPage,
+		getInfoForExplorePage,
 	};
 })();
 
