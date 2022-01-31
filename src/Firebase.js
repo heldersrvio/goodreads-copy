@@ -23,6 +23,17 @@ const Firebase = (() => {
 			return '/explore';
 		};
 
+		const generateSearchPage = (q, searchType, searchField) => {
+			return (
+				'/search?q=' +
+				q +
+				'&search_type=' +
+				searchType +
+				'&search_field=' +
+				searchField
+			);
+		};
+
 		const generateBookPage = (bookId, title) => {
 			return '/book/show/' + bookId + '.' + title.replace(/ /g, '_');
 		};
@@ -341,6 +352,7 @@ const Firebase = (() => {
 
 		return {
 			generateExplorePage,
+			generateSearchPage,
 			generateBookPage,
 			generateAddBookPage,
 			generateBookCoverPage,
@@ -5020,6 +5032,7 @@ const Firebase = (() => {
 						userInstanceQuery.length > 0
 							? userInstanceQuery[0].data().position
 							: undefined,
+					pageCount: bookQuery.data().pageCount,
 				};
 				const otherUserId = isReceiver
 					? doc.data().sender
