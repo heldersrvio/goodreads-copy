@@ -1,3 +1,7 @@
+.search-page #homepage-footbar {
+	margin-top: 60px;
+}
+
 .search-page-main-content {
 	padding: 20px 160px;
 	display: flex;
@@ -257,4 +261,61 @@
 	padding: 7px 0;
 	border-bottom: 1px solid rgb(216, 216, 216);
 	margin-bottom: 7px;
+}
+
+.search-page-main-content .people-results-section .person-result-card {
+	display: flex;
+	flex-direction: row;
+	padding: 10px;
+	border-bottom: 1px solid rgb(232, 232, 232);
+}
+
+.search-page-main-content .people-results-section .person-result-card a {
+	padding: 0;
+}
+
+.search-page-main-content
+	.people-results-section
+	.person-result-card
+	.right-section {
+	margin-left: 10px;
+}
+
+.search-page-main-content
+	.people-results-section
+	.person-result-card
+	.right-section
+	a {
+	font-family: var(--lato-font);
+	font-size: 12px;
+	line-height: 18px;
+	color: var(--goodreads-teal);
+	width: auto;
+	height: auto;
+}
+
+.search-page-main-content
+	.people-results-section
+	.person-result-card
+	.right-section
+	a:hover {
+	text-decoration: underline;
+}
+
+.search-page-main-content .people-results-section .people-list img {
+	width: 50px;
+}
+
+.search-page-main-content .people-results-section .people-list {
+	margin-bottom: 15px;
+}
+
+.search-page-main-content
+	.people-results-section
+	.person-result-card
+	.right-section
+	.location-span {
+	font-family: var(--lato-font);
+	line-height: 18px;
+	font-size: 12px;
 }
