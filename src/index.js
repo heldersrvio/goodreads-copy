@@ -47,6 +47,8 @@ import RecommendationsFromYouPage from './components/Recommendations/Recommendat
 import FollowersPage from './components/Friends/FollowersPage';
 import PeopleFollowingPage from './components/Friends/PeopleFollowingPage';
 import FriendsPage from './components/Friends/FriendsPage';
+import ExplorePage from './components/Explore/ExplorePage';
+import SearchPage from './components/Explore/SearchPage';
 import ErrorPage from './components/Error/ErrorPage';
 import ErrorBoundary from './ErrorBoundary';
 import { TailSpin } from 'react-loader-spinner';
@@ -428,6 +430,22 @@ ReactDOM.render(
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<FriendsPage {...routerProps}></FriendsPage>
+							</ErrorBoundary>
+						)}
+					/>
+					<Route
+						path="/search"
+						render={(routerProps) => (
+							<ErrorBoundary>
+								<SearchPage {...routerProps}></SearchPage>
+							</ErrorBoundary>
+						)}
+					/>
+					<Route
+						path="/explore"
+						render={(routerProps) => (
+							<ErrorBoundary>
+								<ExplorePage {...routerProps}></ExplorePage>
 							</ErrorBoundary>
 						)}
 					/>

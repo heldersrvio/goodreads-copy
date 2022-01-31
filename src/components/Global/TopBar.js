@@ -357,10 +357,12 @@ const TopBar = () => {
 						<a href="/">Lists</a>
 					</li>
 					<li>
-						<a href="/">Explore</a>
+						<a href={Firebase.pageGenerator.generateExplorePage()}>Explore</a>
 					</li>
 					<li>
-						<a href="/">{'News & Interviews'}</a>
+						<a href={Firebase.pageGenerator.generateNewsPage()}>
+							{'News & Interviews'}
+						</a>
 					</li>
 				</ul>
 			</div>

@@ -20,7 +20,7 @@ const Firebase = (() => {
 
 	const pageGenerator = (() => {
 		const generateExplorePage = () => {
-			return '/book';
+			return '/explore';
 		};
 
 		const generateBookPage = (bookId, title) => {
