@@ -148,13 +148,17 @@ const SearchPage = () => {
 			<div className="radio-inputs">
 				{['all', 'title', 'author', 'genre'].map((field, index) => {
 					return (
-						<input
-							type="radio"
-							key={index}
-							checked={searchFieldInput === field}
-							value={field}
-							onChange={(_e) => setSearchFieldInput(field)}
-						></input>
+						<div className="input-wrapper" key={index}>
+							<input
+								type="radio"
+								id={field}
+								key={index}
+								checked={searchFieldInput === field}
+								value={field}
+								onChange={(_e) => setSearchFieldInput(field)}
+							></input>
+							<label htmlFor={field}>{field}</label>
+						</div>
 					);
 				})}
 			</div>
@@ -189,7 +193,9 @@ const SearchPage = () => {
 	const bookResultsSection =
 		loaded && searchField !== 'genre' ? (
 			<div className="book-results-section">
-				<span className="total-results-span">{`Page ${page} of about ${books.length} results`}</span>
+				{books.length > 0 ? (
+					<span className="total-results-span">{`Page ${page} of about ${books.length} results`}</span>
+				) : null}
 				<div className="book-list">
 					{books
 						.filter(
@@ -266,7 +272,9 @@ const SearchPage = () => {
 
 	const peopleResultsSection = loaded ? (
 		<div className="people-results-section">
-			<span className="total-results-span">{`Page ${page} of about ${books.length} results`}</span>
+			{people.length > 0 ? (
+				<span className="total-results-span">{`Page ${page} of about ${people.length} results`}</span>
+			) : null}
 			<div className="people-list">
 				{people
 					.filter(
