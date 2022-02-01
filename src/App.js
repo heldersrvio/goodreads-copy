@@ -11,9 +11,7 @@ import { trackPromise } from 'react-promise-tracker';
 
 /*
 	TODO (Brushing up):
-		- Use proper Firebase rules
 		- Verify password change and email login
-		- Use correct links on TopBar
 		- Remove unused content from Home Page
 		- Test app from private navigation
 		- Test account creation (and other pages thereafter)

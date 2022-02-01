@@ -19,6 +19,22 @@ const Firebase = (() => {
 	const database = firebase.firestore();
 
 	const pageGenerator = (() => {
+		const generateSignInPage = () => {
+			return '/user/sign_in';
+		};
+
+		const generateSignOutPage = () => {
+			return '/user/sign_out';
+		};
+
+		const generateSignUpPage = () => {
+			return '/user/sign_up';
+		};
+
+		const generateForgotPasswordPage = () => {
+			return '/user/forgot_password';
+		};
+
 		const generateExplorePage = () => {
 			return '/explore';
 		};
@@ -351,6 +367,10 @@ const Firebase = (() => {
 		};
 
 		return {
+			generateSignInPage,
+			generateSignOutPage,
+			generateSignUpPage,
+			generateForgotPasswordPage,
 			generateExplorePage,
 			generateSearchPage,
 			generateBookPage,

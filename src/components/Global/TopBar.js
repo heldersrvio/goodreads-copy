@@ -108,12 +108,18 @@ const TopBar = () => {
 		user === null || user.userUID === undefined || user.userUID === null ? (
 			<div id="top-bar-right-section">
 				<div id="top-bar-sign-in-link-container">
-					<a id="top-bar-sign-in-link" href="/">
+					<a
+						id="top-bar-sign-in-link"
+						href={Firebase.pageGenerator.generateSignInPage()}
+					>
 						Sign In
 					</a>
 				</div>
 				<div id="top-bar-join-link-container">
-					<a id="top-bar-join-link" href="/">
+					<a
+						id="top-bar-join-link"
+						href={Firebase.pageGenerator.generateSignUpPage()}
+					>
 						Join
 					</a>
 				</div>
@@ -325,7 +331,10 @@ const TopBar = () => {
 						  ))
 						: null}
 				</ul>
-				<a href="/" id="all-genres-a">
+				<a
+					href={Firebase.pageGenerator.generateEditFavoriteGenresPage()}
+					id="all-genres-a"
+				>
 					All Genres
 				</a>
 			</div>
@@ -336,16 +345,9 @@ const TopBar = () => {
 			<div id="browse-drop-down-left-section">
 				<ul>
 					<li>
-						<a href="/">Recommendations</a>
-					</li>
-					<li>
-						<a href="/">Choice Awards</a>
-					</li>
-					<li>
-						<a href="/">New Releases</a>
-					</li>
-					<li>
-						<a href="/">Lists</a>
+						<a href={Firebase.pageGenerator.generateRecommendationsPage()}>
+							Recommendations
+						</a>
 					</li>
 					<li>
 						<a href={Firebase.pageGenerator.generateExplorePage()}>Explore</a>
@@ -375,7 +377,13 @@ const TopBar = () => {
 					</a>
 				</div>
 				<div id="my-books-link-container">
-					<a id="my-books-link" href="/">
+					<a
+						id="my-books-link"
+						href={Firebase.pageGenerator.generateUserShelfPage(
+							user.userUID,
+							user.userInfo.firstName
+						)}
+					>
 						My Books
 					</a>
 				</div>

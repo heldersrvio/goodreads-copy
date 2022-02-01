@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Firebase from '../../Firebase';
 import PropTypes from 'prop-types';
 import '../styles/Global/TopBarSearchBar.css';
-import { trackPromise } from 'react-promise-tracker';
 
 const TopBarSearchBar = (props) => {
 	const [searchBarInput, setSearchBarInput] = useState('');
@@ -15,7 +14,7 @@ const TopBarSearchBar = (props) => {
 			}
 			const queryResults =
 				searchBarInput.length > 0
-					? await trackPromise(Firebase.queryBooks(searchBarInput))
+					? await Firebase.queryBooks(searchBarInput)
 					: [];
 			return (
 				<div id="search-books-results">
@@ -51,7 +50,11 @@ const TopBarSearchBar = (props) => {
 					<div id="search-books-results-bottom-section">
 						<a
 							className="see-more-results"
-							href="/"
+							href={Firebase.pageGenerator.generateSearchPage(
+								searchBarInput,
+								'books',
+								'all'
+							)}
 						>{`See all results for "${searchBarInput}"`}</a>
 					</div>
 				</div>
@@ -59,7 +62,7 @@ const TopBarSearchBar = (props) => {
 		};
 
 		const assignResultsToDisplay = async () => {
-			const results = await trackPromise(generateResults());
+			const results = await generateResults();
 			setLoading(false);
 			if (searchBarInput !== '') {
 				setResultsSection(results);
@@ -79,7 +82,14 @@ const TopBarSearchBar = (props) => {
 			<div></div>
 		</div>
 	) : (
-		<a id="search-magnifiying-glass" href="/">
+		<a
+			id="search-magnifiying-glass"
+			href={Firebase.pageGenerator.generateSearchPage(
+				searchBarInput,
+				'books',
+				'all'
+			)}
+		>
 			<span></span>
 		</a>
 	);
