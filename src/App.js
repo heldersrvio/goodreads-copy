@@ -11,8 +11,6 @@ import { trackPromise } from 'react-promise-tracker';
 
 /*
 	TODO (Brushing up):
-		- Delete comments from components
-		- Add Icon
 		- Verify different login types
 		- Use proper Firebase rules
 		- Verify password change and email login
