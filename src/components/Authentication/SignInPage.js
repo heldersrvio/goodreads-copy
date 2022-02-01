@@ -16,14 +16,19 @@ const SignInPage = (props) => {
 			<div id="wrong-email-password-message">
 				<span>
 					Sorry, that email or password isn't right. You can{' '}
-					<a href="/user/forgot_password">reset your password.</a>
+					<a href={Firebase.pageGenerator.generateForgotPasswordPage()}>
+						reset your password.
+					</a>
 				</span>
 			</div>
 		) : null;
 
 	return (
 		<div className="sign-in-up-page" id="sign-in-page">
-			<a className="sign-in-up-page-home-link" href="/">
+			<a
+				className="sign-in-up-page-home-link"
+				href={Firebase.pageGenerator.generateHomePage()}
+			>
 				<img
 					src="https://www.goodreads.com/assets/layout/goodreads_logo_324-a908b923dc3ed9b7a13f3da4d1ffb2df.png"
 					alt="Goodreads"
@@ -120,7 +125,7 @@ const SignInPage = (props) => {
 						</button>
 						<a
 							className="sign-in-up-page-forgot-password"
-							href="/user/forgot_password"
+							href={Firebase.pageGenerator.generateForgotPasswordPage()}
 						>
 							Forgot password
 						</a>
@@ -128,7 +133,7 @@ const SignInPage = (props) => {
 				</form>
 				<div className="sign-in-up-page-main-card-bottom">
 					<span>Not a member?</span>
-					<a href="/user/sign_up">Sign up</a>
+					<a href={Firebase.pageGenerator.generateSignUpPage()}>Sign up</a>
 				</div>
 			</div>
 			<div className="sign-in-up-page-bottom-section"></div>

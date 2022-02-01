@@ -19,28 +19,34 @@ const Firebase = (() => {
 	const database = firebase.firestore();
 
 	const pageGenerator = (() => {
+		const generateHomePage = () => {
+			return '/' + process.env.REACT_APP_BASE_URL + '/';
+		};
+
 		const generateSignInPage = () => {
-			return '/user/sign_in';
+			return '/' + process.env.REACT_APP_BASE_URL + '/user/sign_in';
 		};
 
 		const generateSignOutPage = () => {
-			return '/user/sign_out';
+			return '/' + process.env.REACT_APP_BASE_URL + '/user/sign_out';
 		};
 
 		const generateSignUpPage = () => {
-			return '/user/sign_up';
+			return '/' + process.env.REACT_APP_BASE_URL + '/user/sign_up';
 		};
 
 		const generateForgotPasswordPage = () => {
-			return '/user/forgot_password';
+			return '/' + process.env.REACT_APP_BASE_URL + '/user/forgot_password';
 		};
 
 		const generateExplorePage = () => {
-			return '/explore';
+			return '/' + process.env.REACT_APP_BASE_URL + '/explore';
 		};
 
 		const generateSearchPage = (q, searchType, searchField) => {
 			return (
+				'/' +
+				process.env.REACT_APP_BASE_URL +
 				'/search?q=' +
 				q +
 				'&search_type=' +
@@ -51,19 +57,35 @@ const Firebase = (() => {
 		};
 
 		const generateBookPage = (bookId, title) => {
-			return '/book/show/' + bookId + '.' + title.replace(/ /g, '_');
+			return (
+				'/' +
+				process.env.REACT_APP_BASE_URL +
+				'/book/show/' +
+				bookId +
+				'.' +
+				title.replace(/ /g, '_')
+			);
 		};
 
 		const generateAddBookPage = () => {
-			return '/book/new';
+			return '/' + process.env.REACT_APP_BASE_URL + '/book/new';
 		};
 
 		const generateBookCoverPage = (bookId, title) => {
-			return '/book/photo/' + bookId + '.' + title.replace(/ /g, '_');
+			return (
+				'/' +
+				process.env.REACT_APP_BASE_URL +
+				'/book/photo/' +
+				bookId +
+				'.' +
+				title.replace(/ /g, '_')
+			);
 		};
 
 		const generateBookPhotoPage = (bookId, title, photoId) => {
 			return (
+				'/' +
+				process.env.REACT_APP_BASE_URL +
 				'/photo/work/' +
 				bookId +
 				'.' +
@@ -75,6 +97,8 @@ const Firebase = (() => {
 
 		const generateBookEditionsPage = (originalBookId, originalBookTitle) => {
 			return (
+				'/' +
+				process.env.REACT_APP_BASE_URL +
 				'/work/editions/' +
 				originalBookId +
 				'.' +
@@ -83,7 +107,7 @@ const Firebase = (() => {
 		};
 
 		const generateBookListsPage = (bookId) => {
-			return '/list/book' + bookId;
+			return '/' + process.env.REACT_APP_BASE_URL + '/list/book' + bookId;
 		};
 
 		const generateSeriesPage = (seriesId, name) => {
@@ -91,51 +115,105 @@ const Firebase = (() => {
 		};
 
 		const generateAuthorPage = (authorId, name) => {
-			return '/author/show/' + authorId + '.' + name.replace(/ /g, '_');
+			return (
+				'/' +
+				process.env.REACT_APP_BASE_URL +
+				'/author/show/' +
+				authorId +
+				'.' +
+				name.replace(/ /g, '_')
+			);
 		};
 
 		const generateListopiaPage = () => {
-			return '/list';
+			return '/' + process.env.REACT_APP_BASE_URL + '/list';
 		};
 
 		const generateCreateListPage = () => {
-			return '/list/new';
+			return '/' + process.env.REACT_APP_BASE_URL + '/list/new';
 		};
 
 		const generateListsCreatedByUserPage = (userId, firstName) => {
-			return '/list/created/' + userId + '-' + firstName.toLowerCase();
+			return (
+				'/' +
+				process.env.REACT_APP_BASE_URL +
+				'/list/created/' +
+				userId +
+				'-' +
+				firstName.toLowerCase()
+			);
 		};
 
 		const generateListsVotedByUserPage = (userId, firstName) => {
-			return '/list/user_votes/' + userId + '-' + firstName.toLowerCase();
+			return (
+				'/' +
+				process.env.REACT_APP_BASE_URL +
+				'/list/user_votes/' +
+				userId +
+				'-' +
+				firstName.toLowerCase()
+			);
 		};
 
 		const generateListsLikedByUserPage = (userId, firstName) => {
-			return '/list/liked/' + userId + '-' + firstName.toLowerCase();
+			return (
+				'/' +
+				process.env.REACT_APP_BASE_URL +
+				'/list/liked/' +
+				userId +
+				'-' +
+				firstName.toLowerCase()
+			);
 		};
 
 		const generateListPage = (listId, title) => {
-			return '/list/show/' + listId + '.' + title.replace(/ /g, '_');
+			return (
+				'/' +
+				process.env.REACT_APP_BASE_URL +
+				'/list/show/' +
+				listId +
+				'.' +
+				title.replace(/ /g, '_')
+			);
 		};
 
 		const generateUserPage = (userId, firstName) => {
-			return '/user/show/' + userId + '-' + firstName.toLowerCase();
+			return (
+				'/' +
+				process.env.REACT_APP_BASE_URL +
+				'/user/show/' +
+				userId +
+				'-' +
+				firstName.toLowerCase()
+			);
 		};
 
 		const generateUserPhotoPage = (userId) => {
-			return '/photo/user/' + userId;
+			return '/' + process.env.REACT_APP_BASE_URL + '/photo/user/' + userId;
 		};
 
 		const generateUserBooksPage = (userId) => {
-			return '/review/list/' + userId;
+			return '/' + process.env.REACT_APP_BASE_URL + '/review/list/' + userId;
 		};
 
 		const generateUserRatingsPage = (userId) => {
-			return '/review/list/' + userId + '?sort=rating&view=reviews';
+			return (
+				'/' +
+				process.env.REACT_APP_BASE_URL +
+				'/review/list/' +
+				userId +
+				'?sort=rating&view=reviews'
+			);
 		};
 
 		const generateUserReviewsPage = (userId) => {
-			return '/review/list/' + userId + '?sort=review&view=reviews';
+			return (
+				'/' +
+				process.env.REACT_APP_BASE_URL +
+				'/review/list/' +
+				userId +
+				'?sort=review&view=reviews'
+			);
 		};
 
 		const generateUserShelfPage = (
@@ -150,6 +228,8 @@ const Firebase = (() => {
 			const viewValue = view === undefined ? 'table' : view;
 			const shelvesValue = shelves.length === 0 ? ['all'] : shelves;
 			return (
+				'/' +
+				process.env.REACT_APP_BASE_URL +
 				'/review/list/' +
 				userId +
 				'-' +
@@ -169,6 +249,8 @@ const Firebase = (() => {
 
 		const generateBookGenreShelfPage = (bookId, title, genre) => {
 			return (
+				'/' +
+				process.env.REACT_APP_BASE_URL +
 				'/shelf/users/' +
 				bookId +
 				'.' +
@@ -179,72 +261,127 @@ const Firebase = (() => {
 		};
 
 		const generateBookTopShelvesPage = (bookId) => {
-			return '/work/shelves/' + bookId;
+			return '/' + process.env.REACT_APP_BASE_URL + '/work/shelves/' + bookId;
 		};
 
 		const generateBookStatsPage = (bookId) => {
-			return '/book/stats?id=' + bookId;
+			return '/' + process.env.REACT_APP_BASE_URL + '/book/stats?id=' + bookId;
 		};
 		const generateBookStatsPageForEdition = (bookId) => {
-			return '/book/stats?id=' + bookId + '&just_this_edition=yep';
+			return (
+				'/' +
+				process.env.REACT_APP_BASE_URL +
+				'/book/stats?id=' +
+				bookId +
+				'&just_this_edition=yep'
+			);
 		};
 
 		const generateReviewPage = (reviewId) => {
-			return '/review/show/' + reviewId;
+			return '/' + process.env.REACT_APP_BASE_URL + '/review/show/' + reviewId;
 		};
 
 		const generateReviewLikesPage = (reviewId) => {
-			return '/rating/voters/' + reviewId + '?resource_type=Review';
+			return (
+				'/' +
+				process.env.REACT_APP_BASE_URL +
+				'/rating/voters/' +
+				reviewId +
+				'?resource_type=Review'
+			);
 		};
 
 		const generateSimilarBooksPage = (bookId, title) => {
-			return '/book/similar/' + bookId + '.' + title.replace(/ /g, '_');
+			return (
+				'/' +
+				process.env.REACT_APP_BASE_URL +
+				'/book/similar/' +
+				bookId +
+				'.' +
+				title.replace(/ /g, '_')
+			);
 		};
 
 		const generateGenrePage = (genre) => {
-			return '/genres/' + genre.toLowerCase().replace(/ /g, '-');
+			return (
+				'/' +
+				process.env.REACT_APP_BASE_URL +
+				'/genres/' +
+				genre.toLowerCase().replace(/ /g, '-')
+			);
 		};
 
 		const generateBooksByAuthorPage = (authorId, name) => {
-			return '/author/list/' + authorId + '.' + name.replace(/ /g, '_');
+			return (
+				'/' +
+				process.env.REACT_APP_BASE_URL +
+				'/author/list/' +
+				authorId +
+				'.' +
+				name.replace(/ /g, '_')
+			);
 		};
 
 		const generateArticlePage = (articleId, title) => {
 			return (
-				'/blog/show/' + articleId + '-' + title.toLowerCase().replace(/ /g, '-')
+				'/' +
+				process.env.REACT_APP_BASE_URL +
+				'/blog/show/' +
+				articleId +
+				'-' +
+				title.toLowerCase().replace(/ /g, '-')
 			);
 		};
 
 		const generateBookTriviaPage = (bookId, title) => {
-			return '/trivia/work/' + bookId + '.' + title.replace(/ /g, '_');
+			return (
+				'/' +
+				process.env.REACT_APP_BASE_URL +
+				'/trivia/work/' +
+				bookId +
+				'.' +
+				title.replace(/ /g, '_')
+			);
 		};
 
 		const generateQuizzesPage = () => {
-			return '/quizzes';
+			return '/' + process.env.REACT_APP_BASE_URL + '/quizzes';
 		};
 
 		const generateQuizPage = (quizId, title) => {
 			return (
-				'/quizzes/' + quizId + '-' + title.toLowerCase().replace(/ /g, '-')
+				'/' +
+				process.env.REACT_APP_BASE_URL +
+				'/quizzes/' +
+				quizId +
+				'-' +
+				title.toLowerCase().replace(/ /g, '-')
 			);
 		};
 
 		const generateCreateQuizPage = () => {
-			return '/quizzes/new';
+			return '/' + process.env.REACT_APP_BASE_URL + '/quizzes/new';
 		};
 
 		const generateQuotesPage = () => {
-			return '/quotes';
+			return '/' + process.env.REACT_APP_BASE_URL + '/quotes';
 		};
 
 		const generateBookQuotesPage = (bookId, title) => {
 			return (
-				'/work/quotes/' + bookId + '-' + title.toLowerCase().replace(/ /g, '-')
+				'/' +
+				process.env.REACT_APP_BASE_URL +
+				'/work/quotes/' +
+				bookId +
+				'-' +
+				title.toLowerCase().replace(/ /g, '-')
 			);
 		};
 
 		const generateQuotePage = (quoteId, text) => {
 			return (
+				'/' +
+				process.env.REACT_APP_BASE_URL +
 				'/quotes/' +
 				quoteId +
 				'-' +
@@ -253,35 +390,47 @@ const Firebase = (() => {
 		};
 
 		const generateAddQuotePage = () => {
-			return '/quotes/new';
+			return '/' + process.env.REACT_APP_BASE_URL + '/quotes/new';
 		};
 
 		const generateQuotesTagPage = (tag) => {
-			return '/quotes/tag/' + tag;
+			return '/' + process.env.REACT_APP_BASE_URL + '/quotes/tag/' + tag;
 		};
 
 		const generateQuotesSearchPage = (queryTerm) => {
-			return '/quotes/search?q=' + queryTerm;
+			return (
+				'/' + process.env.REACT_APP_BASE_URL + '/quotes/search?q=' + queryTerm
+			);
 		};
 
 		const generateWriteReviewPageForBook = (bookId) => {
-			return '/review/edit' + bookId;
+			return '/' + process.env.REACT_APP_BASE_URL + '/review/edit' + bookId;
 		};
 
 		const generateUserCompareBooksPage = (userId) => {
-			return '/user/compare/' + userId;
+			return '/' + process.env.REACT_APP_BASE_URL + '/user/compare/' + userId;
 		};
 
 		const generateFavoriteAuthorsPage = () => {
-			return '/favorite_authors';
+			return '/' + process.env.REACT_APP_BASE_URL + '/favorite_authors';
 		};
 
 		const generateUserFavoriteAuthorsPage = (userId) => {
-			return '/user/' + userId + '/favorite_authors';
+			return (
+				'/' +
+				process.env.REACT_APP_BASE_URL +
+				'/user/' +
+				userId +
+				'/' +
+				process.env.REACT_APP_BASE_URL +
+				'/favorite_authors'
+			);
 		};
 
 		const generateUserYearInBooksPage = (year, userId, name) => {
 			return (
+				'/' +
+				process.env.REACT_APP_BASE_URL +
 				'/user/year_in_books/' +
 				year +
 				'/' +
@@ -293,52 +442,69 @@ const Firebase = (() => {
 
 		const generateUserFriendsPage = (userId, name) => {
 			return (
-				'/friend/user/' + userId + '-' + name.toLowerCase().replace(/ /g, '-')
+				'/' +
+				process.env.REACT_APP_BASE_URL +
+				'/friend/user/' +
+				userId +
+				'-' +
+				name.toLowerCase().replace(/ /g, '-')
 			);
 		};
 
 		const generateInviteFriendsPage = () => {
-			return '/friend/invite';
+			return '/' + process.env.REACT_APP_BASE_URL + '/friend/invite';
 		};
 
 		const generateAccountSettingsPage = () => {
-			return '/user/edit';
+			return '/' + process.env.REACT_APP_BASE_URL + '/user/edit';
 		};
 
 		const generateChangePasswordPage = () => {
-			return '/user/change_password';
+			return '/' + process.env.REACT_APP_BASE_URL + '/user/change_password';
 		};
 
 		const generateDeleteAccountPage = () => {
-			return '/user/destroy';
+			return '/' + process.env.REACT_APP_BASE_URL + '/user/destroy';
 		};
 
 		const generateEditFavoriteGenresPage = () => {
-			return '/user/edit_fav_genres';
+			return '/' + process.env.REACT_APP_BASE_URL + '/user/edit_fav_genres';
 		};
 
 		const generateNewsPage = () => {
-			return '/news';
+			return '/' + process.env.REACT_APP_BASE_URL + '/news';
 		};
 
 		const generateAllStoriesNewsPage = () => {
-			return '/news?content_type=all';
+			return '/' + process.env.REACT_APP_BASE_URL + '/news?content_type=all';
 		};
 
 		const generateArticlesNewsPage = () => {
-			return '/news?content_type=articles';
+			return (
+				'/' + process.env.REACT_APP_BASE_URL + '/news?content_type=articles'
+			);
 		};
 
 		const generateInterviewsNewsPage = () => {
-			return '/news?content_type=interviews';
+			return (
+				'/' + process.env.REACT_APP_BASE_URL + '/news?content_type=interviews'
+			);
 		};
 
 		const generateArticleLikesPage = (articleId) => {
-			return '/rating/voters/' + articleId + '?resource_type=Article';
+			return (
+				'/' +
+				process.env.REACT_APP_BASE_URL +
+				'/rating/voters/' +
+				articleId +
+				'?resource_type=Article'
+			);
 		};
 
 		const generateAddAsFriendPage = (userId) => {
-			return '/friend/add_as_friend/' + userId;
+			return (
+				'/' + process.env.REACT_APP_BASE_URL + '/friend/add_as_friend/' + userId
+			);
 		};
 
 		const generateRecommendationsPage = (isReceiver = true) => {
@@ -346,15 +512,22 @@ const Firebase = (() => {
 		};
 
 		const generateGiveRecommendationPage = () => {
-			return '/recommendations/new';
+			return '/' + process.env.REACT_APP_BASE_URL + '/recommendations/new';
 		};
 
 		const generateGiveRecommendationToUserPage = (userId) => {
-			return '/recommendation/new?recommendation%5Bto_user_id%5D=' + userId;
+			return (
+				'/' +
+				process.env.REACT_APP_BASE_URL +
+				'/recommendation/new?recommendation%5Bto_user_id%5D=' +
+				userId
+			);
 		};
 
 		const generateBookCompatibilityTestPage = (userId, name) => {
 			return (
+				'/' +
+				process.env.REACT_APP_BASE_URL +
 				'/book/compatibility_results?id=' +
 				userId +
 				'-' +
@@ -363,10 +536,16 @@ const Firebase = (() => {
 		};
 
 		const generateBookEditCompatibilityTestAnswersPage = (userId) => {
-			return '/book/compatibility_test?id=' + userId;
+			return (
+				'/' +
+				process.env.REACT_APP_BASE_URL +
+				'/book/compatibility_test?id=' +
+				userId
+			);
 		};
 
 		return {
+			generateHomePage,
 			generateSignInPage,
 			generateSignOutPage,
 			generateSignUpPage,

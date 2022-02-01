@@ -12,7 +12,10 @@ const HomePageTopBar = () => {
 	return (
 		<div id="home-page-top-bar">
 			<div id="home-page-top-bar-left">
-				<a id="goodreads-home-link" href="/">
+				<a
+					id="goodreads-home-link"
+					href={Firebase.pageGenerator.generateHomePage()}
+				>
 					<img
 						src="https://www.goodreads.com/assets/home/header_logo-8d96d7078a3d63f9f31d92282fd67cf4.png"
 						alt="Goodreads logo"
@@ -45,7 +48,10 @@ const HomePageTopBar = () => {
 							onChange={(e) => setPassword(e.target.value)}
 							placeholder="Password"
 						></input>
-						<a id="forgot-password-a" href="/reset-password">
+						<a
+							id="forgot-password-a"
+							href={Firebase.pageGenerator.generateChangePasswordPage()}
+						>
 							Forgot it?
 						</a>
 					</div>

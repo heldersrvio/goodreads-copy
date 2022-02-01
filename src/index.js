@@ -85,7 +85,7 @@ ReactDOM.render(
 			<BrowserRouter>
 				<Switch>
 					<Route
-						path="/"
+						path={`/${process.env.REACT_APP_BASE_URL}/`}
 						exact
 						render={(routerProps) => (
 							<ErrorBoundary>
@@ -94,7 +94,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/user/forgot_password"
+						path={`/${process.env.REACT_APP_BASE_URL}/user/forgot_password`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<ForgotPasswordPage {...routerProps}></ForgotPasswordPage>
@@ -102,7 +102,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/user/sign_out"
+						path={`/${process.env.REACT_APP_BASE_URL}/user/sign_out`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<SignOutPage {...routerProps}></SignOutPage>
@@ -110,7 +110,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/user/sign_up"
+						path={`/${process.env.REACT_APP_BASE_URL}/user/sign_up`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<SignUpPage {...routerProps}></SignUpPage>
@@ -118,7 +118,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/user/sign_in"
+						path={`/${process.env.REACT_APP_BASE_URL}/user/sign_in`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<SignInPage {...routerProps}></SignInPage>
@@ -126,7 +126,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/book/show/:bookPageId"
+						path={`/${process.env.REACT_APP_BASE_URL}/book/show/:bookPageId`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<BookPage {...routerProps}></BookPage>
@@ -134,7 +134,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/book/stats"
+						path={`/${process.env.REACT_APP_BASE_URL}/book/stats`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<Stats {...routerProps}></Stats>
@@ -142,7 +142,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/book/new"
+						path={`/${process.env.REACT_APP_BASE_URL}/book/new`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<AddNewBookPage {...routerProps}></AddNewBookPage>
@@ -150,7 +150,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/work/shelves/:bookId"
+						path={`/${process.env.REACT_APP_BASE_URL}/work/shelves/:bookId`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<BookTopShelvesPage {...routerProps}></BookTopShelvesPage>
@@ -158,7 +158,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/book/similar/:similarBooksPageId"
+						path={`/${process.env.REACT_APP_BASE_URL}/book/similar/:similarBooksPageId`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<SimilarBooksPage {...routerProps}></SimilarBooksPage>
@@ -166,7 +166,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/work/editions/:bookEditionsPageId"
+						path={`/${process.env.REACT_APP_BASE_URL}/work/editions/:bookEditionsPageId`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<BookEditionsPage {...routerProps}></BookEditionsPage>
@@ -174,7 +174,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/book/photo/:bookCoverPageId"
+						path={`/${process.env.REACT_APP_BASE_URL}/book/photo/:bookCoverPageId`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<BookCoverPage {...routerProps}></BookCoverPage>
@@ -182,7 +182,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/photo/work/:bookPhotoPageId"
+						path={`/${process.env.REACT_APP_BASE_URL}/photo/work/:bookPhotoPageId`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<BookPhotoPage {...routerProps}></BookPhotoPage>
@@ -190,7 +190,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/shelf/users/:bookGenreShelfPageId"
+						path={`/${process.env.REACT_APP_BASE_URL}/shelf/users/:bookGenreShelfPageId`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<BookGenreShelfPage {...routerProps}></BookGenreShelfPage>
@@ -198,7 +198,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/trivia/work/:bookTriviaPageId"
+						path={`/${process.env.REACT_APP_BASE_URL}/trivia/work/:bookTriviaPageId`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<BookTriviaPage {...routerProps}></BookTriviaPage>
@@ -206,7 +206,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/work/quotes/:bookQuotesPageId"
+						path={`/${process.env.REACT_APP_BASE_URL}/work/quotes/:bookQuotesPageId`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<BookQuotesPage {...routerProps}></BookQuotesPage>
@@ -214,7 +214,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/list/book/:bookId"
+						path={`/${process.env.REACT_APP_BASE_URL}/list/book/:bookId`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<BookListsPage {...routerProps}></BookListsPage>
@@ -222,7 +222,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/author/show/:authorPageId"
+						path={`/${process.env.REACT_APP_BASE_URL}/author/show/:authorPageId`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<AuthorPage {...routerProps}></AuthorPage>
@@ -230,7 +230,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/favorite_authors"
+						path={`/${process.env.REACT_APP_BASE_URL}/favorite_authors`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<FavoriteAuthorsPage {...routerProps}></FavoriteAuthorsPage>
@@ -238,7 +238,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/user/:userId/favorite_authors"
+						path={`/${process.env.REACT_APP_BASE_URL}/user/:userId/favorite_authors`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<FavoriteAuthorsForUserPage
@@ -248,7 +248,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/notifications"
+						path={`/${process.env.REACT_APP_BASE_URL}/notifications`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<NotificationsPage {...routerProps}></NotificationsPage>
@@ -256,7 +256,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/user/edit"
+						path={`/${process.env.REACT_APP_BASE_URL}/user/edit`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<AccountSettingsPage {...routerProps}></AccountSettingsPage>
@@ -264,7 +264,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/user/change_password"
+						path={`/${process.env.REACT_APP_BASE_URL}/user/change_password`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<ChangePassswordPage {...routerProps}></ChangePassswordPage>
@@ -272,7 +272,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/user/destroy"
+						path={`/${process.env.REACT_APP_BASE_URL}/user/destroy`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<DeleteAccountPage {...routerProps}></DeleteAccountPage>
@@ -280,7 +280,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/photo/user/:userPhotoPageId"
+						path={`/${process.env.REACT_APP_BASE_URL}/photo/user/:userPhotoPageId`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<UserPhotoPage {...routerProps}></UserPhotoPage>
@@ -288,7 +288,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/user/edit_fav_genres"
+						path={`/${process.env.REACT_APP_BASE_URL}/user/edit_fav_genres`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<EditFavoriteGenresPage
@@ -298,7 +298,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/genres/:genre"
+						path={`/${process.env.REACT_APP_BASE_URL}/genres/:genre`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<GenrePage {...routerProps}></GenrePage>
@@ -306,7 +306,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/news"
+						path={`/${process.env.REACT_APP_BASE_URL}/news`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<NewsPage {...routerProps}></NewsPage>
@@ -314,7 +314,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/blog/show/:articlePageId"
+						path={`/${process.env.REACT_APP_BASE_URL}/blog/show/:articlePageId`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<ArticlePage {...routerProps}></ArticlePage>
@@ -322,7 +322,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/rating/voters/:articleId"
+						path={`/${process.env.REACT_APP_BASE_URL}/rating/voters/:articleId`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<ArticleLikedByPage {...routerProps}></ArticleLikedByPage>
@@ -330,7 +330,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/user/show/:userPageId"
+						path={`/${process.env.REACT_APP_BASE_URL}/user/show/:userPageId`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<UserPage {...routerProps}></UserPage>
@@ -338,7 +338,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/user/year_in_books/:year/:pageId"
+						path={`/${process.env.REACT_APP_BASE_URL}/user/year_in_books/:year/:pageId`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<UserYearInBooksPage {...routerProps}></UserYearInBooksPage>
@@ -346,7 +346,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/user/compare/:userId"
+						path={`/${process.env.REACT_APP_BASE_URL}/user/compare/:userId`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<UserCompareBooksPage {...routerProps}></UserCompareBooksPage>
@@ -354,7 +354,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/book/compatibility_results"
+						path={`/${process.env.REACT_APP_BASE_URL}/book/compatibility_results`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<BookCompatibilityTestPage
@@ -364,7 +364,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/book/compatibility_test"
+						path={`/${process.env.REACT_APP_BASE_URL}/book/compatibility_test`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<EditCompatibilityTestAnswersPage
@@ -374,7 +374,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/friend/add_as_friend/:newFriendId"
+						path={`/${process.env.REACT_APP_BASE_URL}/friend/add_as_friend/:newFriendId`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<UserAddAsFriendPage {...routerProps}></UserAddAsFriendPage>
@@ -382,7 +382,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/review/list/:pageId"
+						path={`/${process.env.REACT_APP_BASE_URL}/review/list/:pageId`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<UserBookshelfPage {...routerProps}></UserBookshelfPage>
@@ -390,7 +390,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/recommendations/to_me"
+						path={`/${process.env.REACT_APP_BASE_URL}/recommendations/to_me`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<RecommendationsFromUsersPage
@@ -400,7 +400,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/recommendations/from_me"
+						path={`/${process.env.REACT_APP_BASE_URL}/recommendations/from_me`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<RecommendationsFromYouPage
@@ -410,7 +410,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/user/:pageId/followers"
+						path={`/${process.env.REACT_APP_BASE_URL}/user/:pageId/followers`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<FollowersPage {...routerProps}></FollowersPage>
@@ -418,7 +418,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/user/:pageId/following"
+						path={`/${process.env.REACT_APP_BASE_URL}/user/:pageId/following`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<PeopleFollowingPage {...routerProps}></PeopleFollowingPage>
@@ -426,7 +426,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/friend/user/:pageId"
+						path={`/${process.env.REACT_APP_BASE_URL}/friend/user/:pageId`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<FriendsPage {...routerProps}></FriendsPage>
@@ -434,7 +434,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/search"
+						path={`/${process.env.REACT_APP_BASE_URL}/search`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<SearchPage {...routerProps}></SearchPage>
@@ -442,7 +442,7 @@ ReactDOM.render(
 						)}
 					/>
 					<Route
-						path="/explore"
+						path={`/${process.env.REACT_APP_BASE_URL}/explore`}
 						render={(routerProps) => (
 							<ErrorBoundary>
 								<ExplorePage {...routerProps}></ExplorePage>

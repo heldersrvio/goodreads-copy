@@ -1308,7 +1308,10 @@ const BookPage = ({ match }) => {
 		loaded && bookInfo.lists !== undefined ? (
 			<div className="book-page-lists-with-book">
 				<div className="book-page-lists-with-book-top">
-					<a className="lists-with-book-a" href={`/lists/book/${bookInfo.id}`}>
+					<a
+						className="lists-with-book-a"
+						href={Firebase.pageGenerator.generateBookListsPage(bookInfo.id)}
+					>
 						LISTS WITH THIS BOOK
 					</a>
 				</div>
@@ -1354,7 +1357,7 @@ const BookPage = ({ match }) => {
 				<div className="book-page-lists-with-book-more">
 					<a
 						className="more-lists-with-book-a"
-						href={`/lists/book/${bookInfo.id}`}
+						href={Firebase.pageGenerator.generateBookListsPage(bookInfo.id)}
 					>
 						More lists with this book...
 					</a>
@@ -1363,14 +1366,19 @@ const BookPage = ({ match }) => {
 		) : loaded ? (
 			<div className="book-page-lists-with-book">
 				<div className="book-page-lists-with-book-top">
-					<a className="lists-with-book-a" href={`/lists/book/${bookInfo.id}`}>
+					<a
+						className="lists-with-book-a"
+						href={Firebase.pageGenerator.generateBookListsPage(bookInfo.id)}
+					>
 						LISTS WITH THIS BOOK
 					</a>
 				</div>
 				<div className="not-featured-listopia">
 					<span>
 						This book is not yet featured on Listopia.{' '}
-						<a href="/list">Add this book to your favorite list »</a>
+						<a href={Firebase.pageGenerator.generateListPage()}>
+							Add this book to your favorite list »
+						</a>
 					</span>
 				</div>
 			</div>

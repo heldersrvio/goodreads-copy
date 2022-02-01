@@ -146,10 +146,16 @@ const TopBar = () => {
 					>
 						{notifications !== null && notifications.length > 0 ? (
 							<div id="notifications-drop-down-top-section">
-								<a id="notifications-a" href="/">
+								<a
+									id="notifications-a"
+									href={Firebase.pageGenerator.generateHomePage()}
+								>
 									NOTIFICATIONS
 								</a>
-								<a id="view-all-notifications-a" href="/">
+								<a
+									id="view-all-notifications-a"
+									href={Firebase.pageGenerator.generateHomePage()}
+								>
 									View all notifications
 								</a>
 							</div>
@@ -254,7 +260,7 @@ const TopBar = () => {
 								</li>
 								<li>
 									<a
-										href="/"
+										href={Firebase.pageGenerator.generateHomePage()}
 										onClick={async (e) => {
 											e.preventDefault();
 											await Firebase.signOut(history);
@@ -308,7 +314,7 @@ const TopBar = () => {
 						'More Genres',
 					].map((genre, index) => (
 						<li key={index}>
-							<a href="/">{genre}</a>
+							<a href={Firebase.pageGenerator.generateHomePage()}>{genre}</a>
 						</li>
 					))}
 				</ul>
@@ -321,7 +327,9 @@ const TopBar = () => {
 					user.userInfo.favoriteGenres !== undefined
 						? user.userInfo.favoriteGenres.map((genre) => (
 								<li key={genre}>
-									<a href="/">{genre}</a>
+									<a href={Firebase.pageGenerator.generateHomePage()}>
+										{genre}
+									</a>
 								</li>
 						  ))
 						: null}
@@ -361,13 +369,13 @@ const TopBar = () => {
 	return (
 		<div id="top-bar">
 			<div id="logo-link-container">
-				<a id="logo-home-link" href="/">
+				<a id="logo-home-link" href={Firebase.pageGenerator.generateHomePage()}>
 					<span>GH</span>
 				</a>
 			</div>
 			<div id="top-bar-left-section">
 				<div id="home-link-container">
-					<a id="home-link" href="/">
+					<a id="home-link" href={Firebase.pageGenerator.generateHomePage()}>
 						Home
 					</a>
 				</div>

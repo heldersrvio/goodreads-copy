@@ -1,4 +1,5 @@
 import React from 'react';
+import Firebase from '../../Firebase';
 import TopBar from '../Global/TopBar';
 import '../styles/Dashboard/Dashboard.css';
 
@@ -57,7 +58,13 @@ const Dashboard = () => {
 							  })
 							: null}
 						<span id="dashboard-shelf-currently-reading-bottom">
-							<a href={`/review/list/${user.userUID}?shelf=currently-reading`}>
+							<a
+								href={Firebase.pageGenerator.generateUserShelfPage(
+									user.userUID,
+									user.userInfo.firstName,
+									['reading']
+								)}
+							>
 								View all books
 							</a>
 							<span>·</span>
@@ -89,7 +96,11 @@ const Dashboard = () => {
 						</div>
 						<a
 							id="view-all-to-read"
-							href={`/review/list/${user.userUID}?shelf=to-read`}
+							href={Firebase.pageGenerator.generateUserShelfPage(
+								user.userUID,
+								user.userInfo.firstName,
+								['to-read']
+							)}
 						>
 							View all books
 						</a>
@@ -98,21 +109,37 @@ const Dashboard = () => {
 						<h2 id="bookshelves-h2">BOOKSHELVES</h2>
 						<div id="dashboard-shelf-bookshelves-bottom">
 							<div id="dashboard-shelf-bookshelves-numbers">
-								<a href={`/review/list/${user.userUID}?shelf=to-read`}>
+								<a
+									href={Firebase.pageGenerator.generateUserShelfPage(
+										user.userUID,
+										user.userInfo.firstName,
+										['to-read']
+									)}
+								>
 									{user.userInfo !== undefined &&
 									user.userInfo.wantToReadBooks !== undefined
 										? user.userInfo.wantToReadBooks.length
 										: null}
 								</a>
 								<a
-									href={`/review/list/${user.userUID}?shelf=currently-reading`}
+									href={Firebase.pageGenerator.generateUserShelfPage(
+										user.userUID,
+										user.userInfo.firstName,
+										['reading']
+									)}
 								>
 									{user.userInfo !== undefined &&
 									user.userInfo.readingBooks !== undefined
 										? user.userInfo.readingBooks.length
 										: null}
 								</a>
-								<a href={`/review/list/${user.userUID}?shelf=read`}>
+								<a
+									href={Firebase.pageGenerator.generateUserShelfPage(
+										user.userUID,
+										user.userInfo.firstName,
+										['read']
+									)}
+								>
 									{user.userInfo !== undefined &&
 									user.userInfo.numberOfReadBooks !== undefined
 										? user.userInfo.numberOfReadBooks
@@ -121,14 +148,32 @@ const Dashboard = () => {
 							</div>
 							<div id="dashboard-shelf-bookshelves-titles">
 								<a
-									href={`/review/list/${user.userUID}?shelf=currently-reading`}
+									href={Firebase.pageGenerator.generateUserShelfPage(
+										user.userUID,
+										user.userInfo.firstName,
+										['reading']
+									)}
 								>
 									Want to Read
 								</a>
-								<a href={`/review/list/${user.userUID}?shelf=to-read`}>
+								<a
+									href={Firebase.pageGenerator.generateUserShelfPage(
+										user.userUID,
+										user.userInfo.firstName,
+										['to-read']
+									)}
+								>
 									Currently Reading
 								</a>
-								<a href={`/review/list/${user.userUID}?shelf=read`}>Read</a>
+								<a
+									href={Firebase.pageGenerator.generateUserShelfPage(
+										user.userUID,
+										user.userInfo.firstName,
+										['read']
+									)}
+								>
+									Read
+								</a>
 							</div>
 						</div>
 					</div>

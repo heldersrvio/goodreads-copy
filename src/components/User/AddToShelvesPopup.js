@@ -57,19 +57,12 @@ const AddToShelvesPopup = (props) => {
 								key={index}
 								onClick={async (_e) => {
 									if (!selectedShelves.includes(shelf)) {
-										if (
-											['read', 'to-read', 'currently-reading'].includes(shelf)
-										) {
+										if (['read', 'to-read', 'reading'].includes(shelf)) {
 											if (!selectedShelves.includes(shelf)) {
 												setSelectedShelves((previous) =>
 													previous
 														.filter(
-															(s) =>
-																![
-																	'read',
-																	'to-read',
-																	'currently-reading',
-																].includes(s)
+															(s) => !['read', 'to-read', 'reading'].includes(s)
 														)
 														.concat(shelf)
 												);

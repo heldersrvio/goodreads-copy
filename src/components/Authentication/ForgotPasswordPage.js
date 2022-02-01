@@ -9,7 +9,10 @@ const ForgotPasswordPage = (props) => {
 
 	return (
 		<div className="sign-in-up-page" id="forgot-password-page">
-			<a className="sign-in-up-page-home-link" href="/">
+			<a
+				className="sign-in-up-page-home-link"
+				href={Firebase.pageGenerator.generateHomePage()}
+			>
 				<img
 					src="https://www.goodreads.com/assets/layout/goodreads_logo_324-a908b923dc3ed9b7a13f3da4d1ffb2df.png"
 					alt="Goodreads"
@@ -41,7 +44,10 @@ const ForgotPasswordPage = (props) => {
 						>
 							Reset password
 						</button>
-						<a className="sign-in-up-page-forgot-password" href="/user/sign_in">
+						<a
+							className="sign-in-up-page-forgot-password"
+							href={Firebase.pageGenerator.generateSignInPage()}
+						>
 							Cancel
 						</a>
 					</div>
@@ -49,7 +55,10 @@ const ForgotPasswordPage = (props) => {
 			</div>
 			<div id="forgot-password-not-a-member">
 				<span>Not a member?</span>
-				<a className="sign-in-up-page-sign-in" href="/user/sign_up">
+				<a
+					className="sign-in-up-page-sign-in"
+					href={Firebase.pageGenerator.generateSignUpPage()}
+				>
 					Sign up
 				</a>
 			</div>

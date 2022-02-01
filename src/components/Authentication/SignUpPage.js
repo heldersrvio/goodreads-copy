@@ -23,13 +23,16 @@ const SignUpPage = (props) => {
 		  location.state.error === 'email-exists' ? (
 			<span>
 				Sorry, that email has already been used to sign up for Goodreads.{' '}
-				<a href="/user/sign_in">Sign in</a>
+				<a href={Firebase.pageGenerator.generateSignInPage()}>Sign in</a>
 			</span>
 		) : null;
 
 	return (
 		<div className="sign-in-up-page" id="sign-up-page">
-			<a className="sign-in-up-page-home-link" href="/">
+			<a
+				className="sign-in-up-page-home-link"
+				href={Firebase.pageGenerator.generateHomePage()}
+			>
 				<img
 					src="https://www.goodreads.com/assets/layout/goodreads_logo_324-a908b923dc3ed9b7a13f3da4d1ffb2df.png"
 					alt="Goodreads"
@@ -135,7 +138,7 @@ const SignUpPage = (props) => {
 							id="sign-up-page-already-member"
 						>
 							<span>Already a member?</span>
-							<a href="/user/sign_in">Sign in</a>
+							<a href={Firebase.pageGenerator.generateSignInPage()}>Sign in</a>
 						</div>
 					</div>
 					<div id="sign-up-page-main-card-bottom">

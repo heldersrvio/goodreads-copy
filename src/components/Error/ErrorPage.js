@@ -1,4 +1,5 @@
 import React from 'react';
+import Firebase from '../../Firebase';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
 import '../styles/Error/ErrorPage.css';
@@ -75,7 +76,10 @@ const ErrorPage = () => {
 					/>
 				</div>
 			</div>
-			<a className="back-to-homepage-a goodreads-button" href="/">
+			<a
+				className="back-to-homepage-a goodreads-button"
+				href={Firebase.pageGenerator.generateHomePage()}
+			>
 				Back to the Goodreads homepage
 			</a>
 			<HomePageFootBar />

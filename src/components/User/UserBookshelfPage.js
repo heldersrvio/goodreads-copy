@@ -344,7 +344,7 @@ const UserBookshelfPage = ({ match }) => {
 									<div className="shelf-selection-indicator">
 										<span>
 											<span className="shelf-name-span">
-												{['read', 'want-to-read', 'currently-reading'].includes(
+												{['read', 'want-to-read', 'reading'].includes(
 													shelf.name
 												)
 													? shelf.name
@@ -742,9 +742,7 @@ const UserBookshelfPage = ({ match }) => {
 					{userInfo.shelves
 						.filter(
 							(shelf) =>
-								!['read', 'want-to-read', 'currently-reading', 'all'].includes(
-									shelf.name
-								)
+								!['read', 'want-to-read', 'reading', 'all'].includes(shelf.name)
 						)
 						.map((shelf, index) => {
 							return (
@@ -802,9 +800,7 @@ const UserBookshelfPage = ({ match }) => {
 			</div>
 			{userInfo.shelves.filter(
 				(shelf) =>
-					!['read', 'want-to-read', 'currently-reading', 'all'].includes(
-						shelf.name
-					)
+					!['read', 'want-to-read', 'reading', 'all'].includes(shelf.name)
 			).length > 0 ? (
 				<div className="shelf-group-separator"></div>
 			) : null}
@@ -844,7 +840,7 @@ const UserBookshelfPage = ({ match }) => {
 								await Promise.all(
 									booksChecked.map(async (index) => {
 										if (
-											['to-read', 'currently-reading', 'read'].includes(
+											['to-read', 'reading', 'read'].includes(
 												batchEditSelectedShelf
 											)
 										) {
@@ -870,11 +866,9 @@ const UserBookshelfPage = ({ match }) => {
 																),
 															};
 														} else if (
-															[
-																'want-to-read',
-																'read',
-																'currently-reading',
-															].includes(shelf.name)
+															['want-to-read', 'read', 'reading'].includes(
+																shelf.name
+															)
 														) {
 															return {
 																...shelf,
@@ -935,7 +929,7 @@ const UserBookshelfPage = ({ match }) => {
 								await Promise.all(
 									booksChecked.map(async (index) => {
 										if (
-											['to-read', 'currently-reading', 'read'].includes(
+											['to-read', 'reading', 'read'].includes(
 												batchEditSelectedShelf
 											)
 										) {
@@ -997,9 +991,7 @@ const UserBookshelfPage = ({ match }) => {
 									await Promise.all(
 										userInfo.shelves.map(async (shelf) => {
 											if (
-												!['to-read', 'currently-reading', 'read'].includes(
-													shelf.name
-												)
+												!['to-read', 'reading', 'read'].includes(shelf.name)
 											) {
 												await Promise.all(
 													shelf.books
@@ -2574,7 +2566,7 @@ const UserBookshelfPage = ({ match }) => {
 																  )
 																: userInfo.shelves.some(
 																		(shelf) =>
-																			shelf.name === 'currently-reading' &&
+																			shelf.name === 'reading' &&
 																			shelf.books.some(
 																				(shelfBook) => shelfBook.id === book.id
 																			)
@@ -2582,7 +2574,7 @@ const UserBookshelfPage = ({ match }) => {
 																? Firebase.pageGenerator.generateUserShelfPage(
 																		userId,
 																		userFirstName,
-																		['currently-reading'],
+																		['reading'],
 																		'',
 																		'table',
 																		20,
@@ -2609,12 +2601,12 @@ const UserBookshelfPage = ({ match }) => {
 															? 'read'
 															: userInfo.shelves.some(
 																	(shelf) =>
-																		shelf.name === 'currently-reading' &&
+																		shelf.name === 'reading' &&
 																		shelf.books.some(
 																			(shelfBook) => shelfBook.id === book.id
 																		)
 															  )
-															? 'currently-reading'
+															? 'reading'
 															: 'to-read'}
 													</a>
 												)}

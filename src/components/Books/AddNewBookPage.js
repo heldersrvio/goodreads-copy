@@ -218,7 +218,7 @@ const AddNewBookPage = ({ location }) => {
 	const addNewBookPageNote = (
 		<span className="add-new-book-page-note">
 			<b>Note: </b>Please{' '}
-			<a href="/search">
+			<a href={Firebase.pageGenerator.generateSearchPage()}>
 				<nobr>do a search</nobr>
 			</a>{' '}
 			before adding a book, as it may be a duplicate. Please also carefully read
