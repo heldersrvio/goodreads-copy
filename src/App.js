@@ -11,7 +11,6 @@ import { trackPromise } from 'react-promise-tracker';
 
 /*
 	TODO (Brushing up):
-		- Verify different login types
 		- Use proper Firebase rules
 		- Verify password change and email login
 		- Use correct links on TopBar
@@ -29,9 +28,14 @@ const App = () => {
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
-		const login = async (userUID) => {
+		const login = async (userUID, displayName) => {
 			const newUserInfo = await trackPromise(Firebase.modifyUserInfo(userUID));
-			dispatch(reducer.login(userUID, newUserInfo));
+			dispatch(
+				reducer.login(userUID, {
+					...newUserInfo,
+					firstName: displayName.split(' ')[0],
+				})
+			);
 			setLoading(false);
 		};
 
@@ -41,7 +45,7 @@ const App = () => {
 
 		firebase.auth().onAuthStateChanged((newUser) => {
 			if (newUser !== null && user.userUID !== newUser.uid) {
-				login(newUser.uid);
+				login(newUser.uid, newUser.displayName);
 			} else if (newUser === null && user.userUID !== null) {
 				signOut();
 			}

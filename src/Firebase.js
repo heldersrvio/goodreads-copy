@@ -1321,7 +1321,28 @@ const Firebase = (() => {
 	const facebookSignIn = async () => {
 		const provider = new firebase.auth.FacebookAuthProvider();
 		try {
-			await firebase.auth().signInWithPopup(provider);
+			const result = await firebase.auth().signInWithPopup(provider);
+
+			const user = result.user;
+			const userUID = user.uid;
+			const firstName = user.displayName.split(' ')[0];
+			const email = user.email;
+			const profileImage = user.photoURL;
+
+			if (!(await database.collection('users').doc(userUID).get()).exists) {
+				await database
+					.collection('users')
+					.doc(userUID)
+					.set({
+						firstName,
+						email,
+						profileImage,
+						membershipDate: firebase.firestore.Timestamp.fromDate(new Date()),
+						favoriteAuthors: [],
+						friends: [],
+						newFriendsRequests: [],
+					});
+			}
 		} catch (error) {
 			console.log(error.code);
 		}
@@ -1330,7 +1351,28 @@ const Firebase = (() => {
 	const twitterSignIn = async () => {
 		const provider = new firebase.auth.TwitterAuthProvider();
 		try {
-			await firebase.auth().signInWithPopup(provider);
+			const result = await firebase.auth().signInWithPopup(provider);
+
+			const user = result.user;
+			const userUID = user.uid;
+			const firstName = user.displayName.split(' ')[0];
+			const email = user.email;
+			const profileImage = user.photoURL;
+
+			if (!(await database.collection('users').doc(userUID).get()).exists) {
+				await database
+					.collection('users')
+					.doc(userUID)
+					.set({
+						firstName,
+						email,
+						profileImage,
+						membershipDate: firebase.firestore.Timestamp.fromDate(new Date()),
+						favoriteAuthors: [],
+						friends: [],
+						newFriendsRequests: [],
+					});
+			}
 		} catch (error) {
 			console.log(error.code);
 		}
@@ -1339,7 +1381,28 @@ const Firebase = (() => {
 	const googleSignIn = async () => {
 		const provider = new firebase.auth.GoogleAuthProvider();
 		try {
-			await firebase.auth().signInWithPopup(provider);
+			const result = await firebase.auth().signInWithPopup(provider);
+
+			const user = result.user;
+			const userUID = user.uid;
+			const firstName = user.displayName.split(' ')[0];
+			const email = user.email;
+			const profileImage = user.photoURL;
+
+			if (!(await database.collection('users').doc(userUID).get()).exists) {
+				await database
+					.collection('users')
+					.doc(userUID)
+					.set({
+						firstName,
+						email,
+						profileImage,
+						membershipDate: firebase.firestore.Timestamp.fromDate(new Date()),
+						favoriteAuthors: [],
+						friends: [],
+						newFriendsRequests: [],
+					});
+			}
 		} catch (error) {
 			console.log(error.code);
 		}
@@ -1443,7 +1506,6 @@ const Firebase = (() => {
 
 	const modifyUserInfo = async (userUID) => {
 		const newUserInfo = await queryUserInfo(userUID);
-		console.log(newUserInfo);
 		return newUserInfo;
 	};
 

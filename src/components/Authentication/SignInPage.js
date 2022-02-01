@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import Firebase from '../../Firebase';
 import '../styles/Authentication/SignInPage.css';
 
 const SignInPage = (props) => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [rememberMe, setRememberMe] = useState(false);
+	const history = useHistory();
 	const location = useLocation();
 
 	const errorMessage =
@@ -29,17 +32,41 @@ const SignInPage = (props) => {
 			<div className="sign-in-up-page-main-card">
 				<div className="sign-in-up-page-main-card-top">
 					<h1>Sign in to Goodreads</h1>
-					<button id="continue-with-facebook" onClick={props.facebookSignIn}>
+					<button
+						id="continue-with-facebook"
+						onClick={async () => {
+							await Firebase.facebookSignIn();
+							history.push({
+								pathname: '/',
+							});
+						}}
+					>
 						<span className="facebook-icon"></span>
 						<span className="continue-with-facebook-label">
 							Continue with Facebook
 						</span>
 					</button>
 					<div className="smaller-buttons">
-						<button id="sign-in-with-twitter" onClick={props.twitterSignIn}>
+						<button
+							id="sign-in-with-twitter"
+							onClick={async () => {
+								await Firebase.twitterSignIn();
+								history.push({
+									pathname: '/',
+								});
+							}}
+						>
 							Sign in with Twitter
 						</button>
-						<button id="sign-in-with-google" onClick={props.googleSignIn}>
+						<button
+							id="sign-in-with-google"
+							onClick={async () => {
+								await Firebase.googleSignIn();
+								history.push({
+									pathname: '/',
+								});
+							}}
+						>
 							Sign in with Google
 						</button>
 					</div>
