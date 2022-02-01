@@ -371,17 +371,21 @@ const TopBar = () => {
 						Home
 					</a>
 				</div>
-				<div id="my-books-link-container">
-					<a
-						id="my-books-link"
-						href={Firebase.pageGenerator.generateUserShelfPage(
-							user.userUID,
-							user.userInfo.firstName
-						)}
-					>
-						My Books
-					</a>
-				</div>
+				{user === null ||
+				user.userUID === undefined ||
+				user.userUID === null ? null : (
+					<div id="my-books-link-container">
+						<a
+							id="my-books-link"
+							href={Firebase.pageGenerator.generateUserShelfPage(
+								user.userUID,
+								user.userInfo.firstName
+							)}
+						>
+							My Books
+						</a>
+					</div>
+				)}
 				<div id="browse-button-container" ref={browseRef}>
 					<button
 						id="browse-button"
