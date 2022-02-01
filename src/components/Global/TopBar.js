@@ -253,14 +253,11 @@ const TopBar = () => {
 									</a>
 								</li>
 								<li>
-									<a href="/">Help</a>
-								</li>
-								<li>
 									<a
 										href="/"
-										onClick={(e) => {
+										onClick={async (e) => {
 											e.preventDefault();
-											Firebase.signOut(history);
+											await Firebase.signOut(history);
 										}}
 									>
 										Sign out

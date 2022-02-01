@@ -1309,11 +1309,14 @@ const Firebase = (() => {
 
 	const passwordSignIn = async (email, password, rememberMe, history) => {
 		try {
-			firebase.auth().signInWithEmailAndPassword(email, password);
+			await firebase.auth().signInWithEmailAndPassword(email, password);
 			if (rememberMe) {
 				localStorage.user = email;
 				localStorage.password = password;
 			}
+			history.push({
+				pathname: '/',
+			});
 		} catch (error) {
 			history.push({
 				pathname: '/user/sign_in',
@@ -1345,6 +1348,39 @@ const Firebase = (() => {
 						favoriteAuthors: [],
 						friends: [],
 						newFriendsRequests: [],
+						aboutMe: '',
+						addAFriend: true,
+						addANewStatusToBook: true,
+						addAQuote: true,
+						addBookToShelves: true,
+						ageAndBirthdayPrivacy: 'age-members-birthday-friends',
+						city: '',
+						country: '',
+						customGender: '',
+						dateOfBirth: null,
+						emailAddressVisibleTo: 'no-one',
+						favoriteGenres: [],
+						followAnAuthor: true,
+						followers: [],
+						friendChallengeAnswer: '',
+						friendChallengeQuestion: '',
+						gender: '',
+						interests: '',
+						locationViewableBy: 'everyone',
+						middleName: '',
+						notifications: [],
+						pronouns: ['male', 'female'][Math.round(Math.random() * 1)],
+						recommendABook: true,
+						showGenderTo: 'everyone',
+						showLastNameTo: 'anyone',
+						stateProvinceCode: '',
+						typeOfBooks: '',
+						updateContent: 'book-only',
+						updatesPeople: 'friends-following',
+						voteForABookReview: true,
+						website: '',
+						whoCanViewMyProfile: 'anyone',
+						zipCode: '',
 					});
 			}
 		} catch (error) {
@@ -1375,9 +1411,43 @@ const Firebase = (() => {
 						favoriteAuthors: [],
 						friends: [],
 						newFriendsRequests: [],
+						aboutMe: '',
+						addAFriend: true,
+						addANewStatusToBook: true,
+						addAQuote: true,
+						addBookToShelves: true,
+						ageAndBirthdayPrivacy: 'age-members-birthday-friends',
+						city: '',
+						country: '',
+						customGender: '',
+						dateOfBirth: null,
+						emailAddressVisibleTo: 'no-one',
+						favoriteGenres: [],
+						followAnAuthor: true,
+						followers: [],
+						friendChallengeAnswer: '',
+						friendChallengeQuestion: '',
+						gender: '',
+						interests: '',
+						locationViewableBy: 'everyone',
+						middleName: '',
+						notifications: [],
+						pronouns: ['male', 'female'][Math.round(Math.random() * 1)],
+						recommendABook: true,
+						showGenderTo: 'everyone',
+						showLastNameTo: 'anyone',
+						stateProvinceCode: '',
+						typeOfBooks: '',
+						updateContent: 'book-only',
+						updatesPeople: 'friends-following',
+						voteForABookReview: true,
+						website: '',
+						whoCanViewMyProfile: 'anyone',
+						zipCode: '',
 					});
 			}
 		} catch (error) {
+			console.log(error);
 			console.log(error.code);
 		}
 	};
@@ -1405,6 +1475,39 @@ const Firebase = (() => {
 						favoriteAuthors: [],
 						friends: [],
 						newFriendsRequests: [],
+						aboutMe: '',
+						addAFriend: true,
+						addANewStatusToBook: true,
+						addAQuote: true,
+						addBookToShelves: true,
+						ageAndBirthdayPrivacy: 'age-members-birthday-friends',
+						city: '',
+						country: '',
+						customGender: '',
+						dateOfBirth: null,
+						emailAddressVisibleTo: 'no-one',
+						favoriteGenres: [],
+						followAnAuthor: true,
+						followers: [],
+						friendChallengeAnswer: '',
+						friendChallengeQuestion: '',
+						gender: '',
+						interests: '',
+						locationViewableBy: 'everyone',
+						middleName: '',
+						notifications: [],
+						pronouns: ['male', 'female'][Math.round(Math.random() * 1)],
+						recommendABook: true,
+						showGenderTo: 'everyone',
+						showLastNameTo: 'anyone',
+						stateProvinceCode: '',
+						typeOfBooks: '',
+						updateContent: 'book-only',
+						updatesPeople: 'friends-following',
+						voteForABookReview: true,
+						website: '',
+						whoCanViewMyProfile: 'anyone',
+						zipCode: '',
 					});
 			}
 		} catch (error) {
@@ -1484,6 +1587,39 @@ const Firebase = (() => {
 						favoriteAuthors: [],
 						friends: [],
 						newFriendsRequests: [],
+						aboutMe: '',
+						addAFriend: true,
+						addANewStatusToBook: true,
+						addAQuote: true,
+						addBookToShelves: true,
+						ageAndBirthdayPrivacy: 'age-members-birthday-friends',
+						city: '',
+						country: '',
+						customGender: '',
+						dateOfBirth: null,
+						emailAddressVisibleTo: 'no-one',
+						favoriteGenres: [],
+						followAnAuthor: true,
+						followers: [],
+						friendChallengeAnswer: '',
+						friendChallengeQuestion: '',
+						gender: '',
+						interests: '',
+						locationViewableBy: 'everyone',
+						middleName: '',
+						notifications: [],
+						pronouns: ['male', 'female'][Math.round(Math.random() * 1)],
+						recommendABook: true,
+						showGenderTo: 'everyone',
+						showLastNameTo: 'anyone',
+						stateProvinceCode: '',
+						typeOfBooks: '',
+						updateContent: 'book-only',
+						updatesPeople: 'friends-following',
+						voteForABookReview: true,
+						website: '',
+						whoCanViewMyProfile: 'anyone',
+						zipCode: '',
 					});
 			}
 
@@ -2740,6 +2876,7 @@ const Firebase = (() => {
 		const GRMember = authorQuery.data().GRMember;
 		const placeOfBirth = authorQuery.data().placeOfBirth;
 		const dateOfBirth =
+			authorQuery.data().dateOfBirth !== null &&
 			authorQuery.data().dateOfBirth !== undefined
 				? authorQuery.data().dateOfBirth.toDate()
 				: undefined;
@@ -3303,7 +3440,10 @@ const Firebase = (() => {
 					),
 					country: tidyUpUserSettingForProps(userQueryData.country),
 					locationViewableBy: userQueryData.locationViewableBy,
-					dateOfBirth: userQueryData.dateOfBirth.toDate(),
+					dateOfBirth:
+						userQueryData.dateOfBirth === null
+							? undefined
+							: userQueryData.dateOfBirth.toDate(),
 					ageAndBirthdayPrivacy: userQueryData.ageAndBirthdayPrivacy,
 					profilePicture: userQueryData.profileImage,
 					website: tidyUpUserSettingForProps(userQueryData.website),
@@ -3731,7 +3871,10 @@ const Firebase = (() => {
 			stateProvinceCode: userQuery.data().stateProvinceCode,
 			city: userQuery.data().city,
 			ageAndBirthdayPrivacy: userQuery.data().ageAndBirthdayPrivacy,
-			birthday: userQuery.data().dateOfBirth.toDate(),
+			birthday:
+				userQuery.data().dateOfBirth === null
+					? undefined
+					: userQuery.data().dateOfBirth.toDate(),
 			website: userQuery.data().website,
 			lastActiveDate:
 				userUpdatesQuery.docs.length > 0

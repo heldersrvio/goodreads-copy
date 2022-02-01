@@ -106,15 +106,14 @@ const SignInPage = (props) => {
 					<div className="sign-in-up-page-main-card-center-bottom-buttons">
 						<button
 							className="sign-in-up-page-sign-in"
-							onClick={async () => {
+							onClick={async (e) => {
+								e.preventDefault();
 								await Firebase.passwordSignIn(
-									email.split,
+									email,
 									password,
-									rememberMe
+									rememberMe,
+									history
 								);
-								history.push({
-									pathname: '/',
-								});
 							}}
 						>
 							Sign in

@@ -24,7 +24,14 @@ const TopBarSearchBar = (props) => {
 								return null;
 							}
 							return (
-								<a className="search-result-book-card" href="/" key={index}>
+								<a
+									className="search-result-book-card"
+									href={Firebase.pageGenerator.generateBookPage(
+										book.id,
+										book.title
+									)}
+									key={index}
+								>
 									<div className="search-results-book-card-cover-section">
 										<img src={book.cover} alt="cover art" />
 									</div>

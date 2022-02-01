@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import '../styles/Authentication/HomePageBottomSection.css';
+import Firebase from '../../Firebase';
 
 const HomePageBottomSection = (props) => {
 	const [searchTerm, setSearchTerm] = useState('');
@@ -150,7 +151,7 @@ const HomePageBottomSection = (props) => {
 							setSearchTerm(e.target.value);
 						}}
 					/>
-					<a href={`/search?utf8=✓&query=${searchTerm}`} id="search-a">
+					<a href={Firebase.pageGenerator.generateSignInPage()} id="search-a">
 						<img
 							id="magnifying-glass-img"
 							src="https://www.goodreads.com/assets/layout/magnifying_glass-a2d7514d50bcee1a0061f1ece7821750.png"
@@ -161,10 +162,7 @@ const HomePageBottomSection = (props) => {
 						{genreList.map((genre) => {
 							return (
 								<a
-									href={`/genres/${genre
-										.toLowerCase()
-										.replace(' ', '')
-										.replace("'", '')}`}
+									href={Firebase.pageGenerator.generateSignInPage()}
 									key={genre}
 								>
 									{genre}
@@ -174,40 +172,7 @@ const HomePageBottomSection = (props) => {
 					</div>
 				</div>
 			</div>
-			<div id="homepage-bottom-section-right">
-				<span id="love-lists">Love lists?</span>
-				{props.popularLists.map((list, index) => {
-					return (
-						<div className="book-list-preview" key={index}>
-							<div className="book-list-preview-left">
-								<a href={list.link}>{list.title}</a>
-								<span>
-									{list.bookQuantity
-										.toString()
-										.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}{' '}
-									books |{' '}
-									{list.voterQuantity
-										.toString()
-										.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}{' '}
-									voters
-								</span>
-							</div>
-							<div className="book-list-preview-right">
-								{list.topBookNames.map((book, index) => {
-									return (
-										<a href={list.topBookLinks[index]} key={index}>
-											<img src={list.topBookCovers[index]} alt={book} />
-										</a>
-									);
-								})}
-							</div>
-						</div>
-					);
-				})}
-				<a id="more-book-lists" href="/list">
-					More book lists
-				</a>
-			</div>
+			<div id="homepage-bottom-section-right"></div>
 		</div>
 	);
 };
@@ -235,17 +200,6 @@ HomePageBottomSection.propTypes = {
 		recBookCover: PropTypes.string,
 		source: PropTypes.string,
 	}),
-	popularLists: PropTypes.arrayOf(
-		PropTypes.shape({
-			title: PropTypes.string,
-			link: PropTypes.string,
-			bookQuantity: PropTypes.number,
-			voterQuantity: PropTypes.number,
-			topBookNames: PropTypes.arrayOf(PropTypes.string),
-			topBookCovers: PropTypes.arrayOf(PropTypes.string),
-			topBookLinks: PropTypes.arrayOf(PropTypes.string),
-		})
-	),
 };
 
 export default HomePageBottomSection;

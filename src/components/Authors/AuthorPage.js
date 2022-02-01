@@ -51,10 +51,7 @@ const AuthorPage = ({ match }) => {
 	useEffect(() => {
 		const getAuthorInfo = async () => {
 			const authorObject = await trackPromise(
-				Firebase.getAuthorInfoForAuthorPage(
-					user !== null ? user.userUID : null,
-					authorId
-				)
+				Firebase.getAuthorInfoForAuthorPage(user.userUID, authorId)
 			);
 			setAuthorInfo(authorObject);
 			setSavingShelves(authorObject.booksByAuthor.map((_book) => false));
@@ -76,7 +73,7 @@ const AuthorPage = ({ match }) => {
 			setLoaded(true);
 		};
 		getAuthorInfo();
-	}, [authorId, user]);
+	}, [authorId, user.userUID]);
 
 	useEffect(() => {
 		document.addEventListener('click', (event) => {

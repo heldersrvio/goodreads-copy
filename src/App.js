@@ -11,10 +11,6 @@ import { trackPromise } from 'react-promise-tracker';
 
 /*
 	TODO (Brushing up):
-		- Remove unused content from Home Page
-		- Test app from private navigation
-		- Test account creation (and other pages thereafter)
-		- Delete this comment
 		- Push to GH Pages
 */
 

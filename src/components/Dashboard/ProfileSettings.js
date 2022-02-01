@@ -466,7 +466,7 @@ const ProfileSettings = (props) => {
 					<select
 						className="birth-year-select"
 						value={
-							dateOfBirthInput !== undefined
+							dateOfBirthInput !== undefined && dateOfBirthInput !== null
 								? dateOfBirthInput.getFullYear()
 								: ''
 						}
@@ -530,7 +530,9 @@ const ProfileSettings = (props) => {
 					<select
 						className="birth-day-select"
 						value={
-							dateOfBirthInput !== undefined ? dateOfBirthInput.getDate() : ''
+							dateOfBirthInput !== undefined && dateOfBirthInput !== null
+								? dateOfBirthInput.getDate()
+								: ''
 						}
 						onChange={(e) => {
 							const newValue = e.target.value;

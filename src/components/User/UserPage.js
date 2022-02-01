@@ -1334,19 +1334,21 @@ const UserPage = ({ match }) => {
 									: `in ${format(userInfo.lastActiveDate, 'MMMM yyyy')}`
 							}`}</td>
 						</tr>
-						{userInfo.interests.length > 0 ? (
+						{userInfo.interests !== undefined &&
+						userInfo.interests.length > 0 ? (
 							<tr>
 								<th>Interests</th>
 								<td>{userInfo.interests}</td>
 							</tr>
 						) : null}
-						{userInfo.favoriteBooks.length > 0 ? (
+						{userInfo.favoriteBooks !== undefined &&
+						userInfo.favoriteBooks.length > 0 ? (
 							<tr>
 								<th>Favorite Books</th>
 								<td>{userInfo.favoriteBooks}</td>
 							</tr>
 						) : null}
-						{userInfo.about.length > 0 ? (
+						{userInfo.about !== undefined && userInfo.about.length > 0 ? (
 							<tr>
 								<th>About</th>
 								<td>{userInfo.about}</td>

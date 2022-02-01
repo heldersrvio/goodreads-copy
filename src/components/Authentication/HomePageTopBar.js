@@ -51,9 +51,21 @@ const HomePageTopBar = () => {
 					</div>
 					<button
 						id="sign-in-button"
-						onClick={() =>
-							Firebase.signIn(email, password, rememberMe, history)
-						}
+						onClick={async (e) => {
+							e.preventDefault();
+							if (email.length > 0 && password.length > 0) {
+								await Firebase.passwordSignIn(
+									email,
+									password,
+									rememberMe,
+									history
+								);
+							} else {
+								history.push({
+									pathname: '/user/sign_in',
+								});
+							}
+						}}
 					>
 						Sign In
 					</button>
