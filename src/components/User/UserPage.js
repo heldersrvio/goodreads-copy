@@ -8,8 +8,6 @@ import '../styles/User/UserPage.css';
 import RatingsChart from './RatingsChart';
 import { trackPromise } from 'react-promise-tracker';
 
-// TODO: Accept request option
-
 const UserPage = ({ match }) => {
 	const {
 		params: { userPageId },

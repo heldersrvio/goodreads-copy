@@ -41,31 +41,6 @@ const BookEditionsPage = ({ match }) => {
 
 	useEffect(() => {
 		const getEditionsInfo = async () => {
-			/*const lSObjectItem = localStorage.getItem(`editions${rootBook}Obj`);
-			if (lSObjectItem !== null) {
-				const lSObject = JSON.parse(lSObjectItem).map((edition) => {
-					return {
-						...edition,
-						publishedDate: new Date(edition.publishedDate),
-					};
-				});
-				setEditionsInfo(lSObject);
-				console.log('Loaded editions from storage');
-				setDetailsExpanding(lSObject.map((_edition) => false));
-				setSavingShelves(lSObject.map((_edition) => false));
-				setAreAddShelfInputSectionsHidden(lSObject.map((_edition) => true));
-				setAddShelfInputs(lSObject.map((_edition) => ''));
-				setExhibitedStarRatings(
-					lSObject.map((edition) =>
-						edition.userRating !== undefined ? edition.userRating : 0
-					)
-				);
-				setAreShelfPopupsHidden(lSObject.map((_edition) => true));
-				setAreShelfPopupsBottomHidden(lSObject.map((_edition) => true));
-				setShelfPopupReadingInputs(lSObject.map((_edition) => ''));
-				setShelfPopupToReadInputs(lSObject.map((_edition) => ''));
-				setEditionOnUserShelf(lSObject.filter((edition) => edition.userStatus !== undefined).length > 0 ? lSObject.filter((edition) => edition.userStatus !== undefined)[0].id : null);
-			} else {*/
 			const editionsObj = await trackPromise(
 				Firebase.getEditionDetailsForBook(user.userUID, rootBook)
 			);
@@ -94,7 +69,6 @@ const BookEditionsPage = ({ match }) => {
 							.id
 					: null
 			);
-			//}
 			setLoaded(true);
 		};
 		getEditionsInfo();

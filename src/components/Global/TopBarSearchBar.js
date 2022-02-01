@@ -5,8 +5,6 @@ import '../styles/Global/TopBarSearchBar.css';
 import { trackPromise } from 'react-promise-tracker';
 
 const TopBarSearchBar = (props) => {
-	// TODO: loadingSpinner animation and lenses icon
-
 	const [searchBarInput, setSearchBarInput] = useState('');
 	const [resultsSection, setResultsSection] = useState(null);
 	const [loading, setLoading] = useState(false);

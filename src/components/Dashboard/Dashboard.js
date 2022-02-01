@@ -1,5 +1,4 @@
 import React from 'react';
-import DashboardUpdates from './DashboardUpdates';
 import TopBar from '../Global/TopBar';
 import '../styles/Dashboard/Dashboard.css';
 
@@ -134,11 +133,7 @@ const Dashboard = () => {
 						</div>
 					</div>
 				</div>
-				<DashboardUpdates queryUpdates={() => {}} />
 				<div id="dashboard-right-section">
-					{
-						//TODO: TOP SECTION
-					}
 					<div id="dashboard-bottom">
 						<div className="top-section">
 							<h2 className="connect-h2">CONNECT</h2>

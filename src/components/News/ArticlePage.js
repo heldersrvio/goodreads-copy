@@ -25,15 +25,6 @@ const ArticlePage = ({ match }) => {
 	const [loaded, setLoaded] = useState(false);
 	const [articleInfo, setArticleInfo] = useState({});
 	const [savingLike, setSavingLike] = useState(false);
-	/*
-    articleInfo: {
-        authorName,
-        date,
-        likes,
-        image,
-        content,
-    }
-    */
 
 	const user = JSON.parse(localStorage.getItem('userState'));
 

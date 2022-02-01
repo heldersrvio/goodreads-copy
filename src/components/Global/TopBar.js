@@ -21,20 +21,13 @@ const TopBar = () => {
 	const user = JSON.parse(localStorage.getItem('userState'));
 
 	useEffect(() => {
-		const checkForNewNotifications = async () => {
-			/*const query = await Firebase.queryNotifications();
-			setNewNotifications(
-				query.filter((notification) => notification.new === true).length
-			);*/
-		};
+		const checkForNewNotifications = async () => {};
 
 		const checkForNewFriends = async () => {
 			if (user === null) {
 				setNewFriends(0);
 			} else {
-				const numberOfNewFriends = await trackPromise(
-					Firebase.getNumberOfNewFriends(user.userUID)
-				);
+				const numberOfNewFriends = 0;
 				setNewFriends(numberOfNewFriends);
 			}
 		};
@@ -72,8 +65,7 @@ const TopBar = () => {
 	});
 
 	const getNotifications = async () => {
-		const query = await trackPromise(Firebase.queryNotifications());
-		setNotifications(query);
+		setNotifications([]);
 	};
 
 	const setNotificationsforDisplay = () => {

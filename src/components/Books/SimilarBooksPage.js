@@ -37,28 +37,6 @@ const SimilarBooksPage = ({ match }) => {
 				}
 				i++;
 			}
-			/*const lSObjectItem = localStorage.getItem(`alsoEnjoyed${bookId}Obj`);
-			if (lSObjectItem !== null) {
-				const lSObject = JSON.parse(lSObjectItem);
-				setBookInfo(lSObject);
-				console.log('Loaded book from storage');
-				setSynopsisShowingMore(
-					[lSObject.mainBook, ...lSObject.alsoEnjoyedBooks].map(
-						(_book) => false
-					)
-				);
-				setAreAddShelfInputSectionsHidden(
-					[lSObject.mainBook, ...lSObject.alsoEnjoyedBooks].map((_book) => true)
-				);
-				setAddShelfInputs(
-					[lSObject.mainBook, ...lSObject.alsoEnjoyedBooks].map((_book) => '')
-				);
-				setExhibitedStarRatings(
-					[lSObject.mainBook, ...lSObject.alsoEnjoyedBooks].map((book) =>
-						book.userRating !== undefined ? book.userRating : 0
-					)
-				);
-			} else {*/
 			const bookObj = await trackPromise(
 				Firebase.getAlsoEnjoyedBooksDetailsForBook(user.userUID, bookId)
 			);
@@ -81,7 +59,6 @@ const SimilarBooksPage = ({ match }) => {
 					book.userRating !== undefined ? book.userRating : 0
 				)
 			);
-			//}
 			setLoaded(true);
 		};
 		getBookInfo();

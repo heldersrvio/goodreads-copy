@@ -13,20 +13,6 @@ const FavoriteAuthorsPage = () => {
 	const [orderInputs, setOrderInputs] = useState([]);
 	const [isSaving, setIsSaving] = useState(false);
 	const [showingErrorMessage, setShowingErrorMessage] = useState(false);
-	/* 
-	author: {
-		name,
-		id,
-		userId,
-		bestBookId,
-		bestBookTitle,
-		profilePicture,
-		numberOfBooks,
-		numberOfShelvedBooks,
-		numberOfMemberReviews,
-		numberOfFriends,
-	}
-	*/
 
 	const user = JSON.parse(localStorage.getItem('userState'));
 

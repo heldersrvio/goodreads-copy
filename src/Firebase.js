@@ -1187,31 +1187,6 @@ const Firebase = (() => {
 		}
 	};
 
-	const queryNotifications = async () => {
-		try {
-			const query = await database
-				.collection('heldersrvioNotifications')
-				.limit(9)
-				.get();
-			return query.docs.map((document) => document.data());
-		} catch (error) {
-			console.log(error);
-		}
-	};
-
-	const getNumberOfNewFriends = async (userUID) => {
-		if (userUID === null) {
-			return 0;
-		}
-		//try {
-		//const query = await database.collection('users').doc(userUID).get();
-		//return query.data().newFriendsRequests.length;
-		return 0;
-		/*} catch (error) {
-			console.log(error);
-		}*/
-	};
-
 	const getFriendsInfo = async (userUID, history) => {
 		try {
 			const friendsQuery = await database
@@ -5444,8 +5419,6 @@ const Firebase = (() => {
 		getEditionDetailsForBook,
 		queryBooks,
 		queryBooksForBookCreation,
-		queryNotifications,
-		getNumberOfNewFriends,
 		getFriendsInfo,
 		queryBookRecommendedToFriendsStatus,
 		queryStatusUpdatesForRootBook,
