@@ -1,23 +1,23 @@
 {
   "files": {
-    "main.css": "./static/css/main.a501fa15.chunk.css",
-    "main.js": "./static/js/main.67a98be4.chunk.js",
-    "main.js.map": "./static/js/main.67a98be4.chunk.js.map",
-    "runtime-main.js": "./static/js/runtime-main.6322826e.js",
-    "runtime-main.js.map": "./static/js/runtime-main.6322826e.js.map",
-    "static/css/2.ab75b8d7.chunk.css": "./static/css/2.ab75b8d7.chunk.css",
-    "static/js/2.38820cdf.chunk.js": "./static/js/2.38820cdf.chunk.js",
-    "static/js/2.38820cdf.chunk.js.map": "./static/js/2.38820cdf.chunk.js.map",
-    "index.html": "./index.html",
-    "static/css/2.ab75b8d7.chunk.css.map": "./static/css/2.ab75b8d7.chunk.css.map",
-    "static/css/main.a501fa15.chunk.css.map": "./static/css/main.a501fa15.chunk.css.map",
-    "static/js/2.38820cdf.chunk.js.LICENSE.txt": "./static/js/2.38820cdf.chunk.js.LICENSE.txt"
+    "main.css": "https://heldersrvio.github.io/goodreads-copy/static/css/main.a501fa15.chunk.css",
+    "main.js": "https://heldersrvio.github.io/goodreads-copy/static/js/main.d3f21738.chunk.js",
+    "main.js.map": "https://heldersrvio.github.io/goodreads-copy/static/js/main.d3f21738.chunk.js.map",
+    "runtime-main.js": "https://heldersrvio.github.io/goodreads-copy/static/js/runtime-main.f89bd1e7.js",
+    "runtime-main.js.map": "https://heldersrvio.github.io/goodreads-copy/static/js/runtime-main.f89bd1e7.js.map",
+    "static/css/2.ab75b8d7.chunk.css": "https://heldersrvio.github.io/goodreads-copy/static/css/2.ab75b8d7.chunk.css",
+    "static/js/2.8641c6a3.chunk.js": "https://heldersrvio.github.io/goodreads-copy/static/js/2.8641c6a3.chunk.js",
+    "static/js/2.8641c6a3.chunk.js.map": "https://heldersrvio.github.io/goodreads-copy/static/js/2.8641c6a3.chunk.js.map",
+    "index.html": "https://heldersrvio.github.io/goodreads-copy/index.html",
+    "static/css/2.ab75b8d7.chunk.css.map": "https://heldersrvio.github.io/goodreads-copy/static/css/2.ab75b8d7.chunk.css.map",
+    "static/css/main.a501fa15.chunk.css.map": "https://heldersrvio.github.io/goodreads-copy/static/css/main.a501fa15.chunk.css.map",
+    "static/js/2.8641c6a3.chunk.js.LICENSE.txt": "https://heldersrvio.github.io/goodreads-copy/static/js/2.8641c6a3.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.6322826e.js",
+    "static/js/runtime-main.f89bd1e7.js",
     "static/css/2.ab75b8d7.chunk.css",
-    "static/js/2.38820cdf.chunk.js",
+    "static/js/2.8641c6a3.chunk.js",
     "static/css/main.a501fa15.chunk.css",
-    "static/js/main.67a98be4.chunk.js"
+    "static/js/main.d3f21738.chunk.js"
   ]
 }
