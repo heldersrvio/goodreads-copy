@@ -9,11 +9,6 @@ import 'firebase/auth';
 import './styles/App.css';
 import { trackPromise } from 'react-promise-tracker';
 
-/*
-	TODO (Brushing up):
-		- Push to GH Pages
-*/
-
 const App = () => {
 	const dispatch = useDispatch();
 	const user = useSelector((state) => state);
