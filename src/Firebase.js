@@ -5270,6 +5270,173 @@ const Firebase = (() => {
 		};
 	};
 
+	const getInfoForSearchPage = async (userId, q, searchType, searchField) => {
+		const query = q.toLowerCase();
+		if (searchField === 'genre') {
+			const allGenres = (await database.collection('genres').get()).docs;
+			return allGenres
+				.filter((genre) => genre.data().name.toLowerCase().includes(query))
+				.map((genre) => {
+					return {
+						name: genre.data().name,
+						parentGenre: genre.data().parentGenre,
+					};
+				});
+		} else if (searchType === 'books') {
+			const allBooks = await Promise.all(
+				(await database.collection('books').get()).docs.map(async (doc) => {
+					const rootBookQuery = await database
+						.collection('rootBooks')
+						.doc(doc.data().rootBook)
+						.get();
+					const authorQuery = await database
+						.collection('authors')
+						.doc(rootBookQuery.data().authorId)
+						.get();
+					return {
+						id: doc.id,
+						rootBookId: rootBookQuery.id,
+						amazonLink: doc.data().amazonLink,
+						title: doc.data().title,
+						cover: doc.data().cover,
+						authorId: authorQuery.id,
+						authorName: authorQuery.data().name,
+						authorIsMember: authorQuery.data().GRMember,
+						publishedYear: doc.data().publishedDate.toDate().getFullYear(),
+						pageCount: doc.data().pageCount,
+					};
+				})
+			);
+
+			const filteredBooks = allBooks.filter((book) =>
+				searchField === 'all'
+					? book.title.toLowerCase().includes(query) ||
+					  book.authorName.toLowerCase().includes(query)
+					: searchField === 'author'
+					? book.authorName.toLowerCase().includes(query)
+					: book.title.toLowerCase().includes(query)
+			);
+			return await Promise.all(
+				filteredBooks.map(async (book) => {
+					const userInstanceQuery = (
+						await database
+							.collection('userBooksInstances')
+							.where('bookId', '==', book.id)
+							.where('rating', '>', 0)
+							.get()
+					).docs;
+					const userBookQuery =
+						userId !== undefined
+							? (
+									await database
+										.collection('userBooksInstances')
+										.where('bookId', '==', book.id)
+										.where('userId', '==', userId)
+										.get()
+							  ).docs
+							: undefined;
+					const editionsQuery = (
+						await database
+							.collection('books')
+							.where('rootBook', '==', book.rootBookId)
+							.get()
+					).docs;
+
+					return {
+						id: book.id,
+						amazonLink: book.amazonLink,
+						title: book.title,
+						cover: book.cover,
+						authorId: book.authorId,
+						authorName: book.authorName,
+						authorIsMember: book.authorIsMember,
+						averageRating:
+							userInstanceQuery.length > 0
+								? userInstanceQuery.reduce(
+										(previous, current) =>
+											previous +
+											current.data().rating / userInstanceQuery.docs.length,
+										0
+								  )
+								: 0,
+						numberOfRatings:
+							userInstanceQuery === undefined ? 0 : userInstanceQuery.length,
+						publishedYear: book.publishedYear,
+						numberOfEditions: editionsQuery.length,
+						userStatus:
+							userBookQuery === undefined || userBookQuery.length === 0
+								? undefined
+								: userBookQuery[0].data().status,
+						userRating:
+							userBookQuery === undefined || userBookQuery.length === 0
+								? undefined
+								: userBookQuery[0].data().rating,
+						userProgress:
+							userBookQuery === undefined || userBookQuery.length === 0
+								? undefined
+								: userBookQuery[0].data().progress,
+						toReadBookPosition:
+							userBookQuery === undefined || userBookQuery.length === 0
+								? undefined
+								: userBookQuery[0].data().position,
+						pageCount: book.pageCount,
+						genreShelves: await Promise.all(
+							(
+								await database
+									.collection('shelves')
+									.where('genre', '!=', null)
+									.where('rootBooks', 'array-contains', book.rootBookId)
+									.get()
+							).docs.map(async (doc) => {
+								return {
+									name: doc.data().genre,
+									parentGenre: (
+										await database
+											.collection('genres')
+											.doc(doc.data().genre)
+											.get()
+									).data().parentGenre,
+								};
+							})
+						),
+					};
+				})
+			);
+		} else {
+			const allPeople = (await database.collection('users').get()).docs;
+			const filteredPeople = allPeople.filter((doc) =>
+				(
+					doc.data().firstName +
+					(doc.data().lastName !== undefined ? ' ' + doc.data().lastName : '')
+				)
+					.toLowerCase()
+					.includes(query)
+			);
+
+			return await Promise.all(
+				filteredPeople.map(async (person) => {
+					return {
+						id: person.id,
+						name:
+							person.data().lastName !== undefined
+								? person.data().firstName + ' ' + person.data().lastName
+								: person.data().firstName,
+						profilePicture: person.data().profileImage,
+						location:
+							person.data().country === undefined ? '' : person.data().country,
+						numberOfFriends: person.data().friends.length,
+						numberOfBooks: (
+							await database
+								.collection('userBooksInstances')
+								.where('userId', '==', person.id)
+								.get()
+						).docs.length,
+					};
+				})
+			);
+		}
+	};
+
 	return {
 		pageGenerator,
 		getAlsoEnjoyedBooksDetailsForBook,
@@ -5354,6 +5521,7 @@ const Firebase = (() => {
 		deleteRecommendation,
 		getInfoForFollowPage,
 		getInfoForExplorePage,
+		getInfoForSearchPage,
 	};
 })();
 

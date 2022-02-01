@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
+import { trackPromise } from 'react-promise-tracker';
 import Firebase from '../../Firebase';
 import TopBar from '../Global/TopBar';
 import HomePageFootBar from '../Authentication/HomePageFootBar';
@@ -41,48 +42,8 @@ const SearchPage = () => {
 		searchType === 'people' ? 'author' : searchField
 	);
 	const [books, setBooks] = useState([]);
-	/*
-    books: [{
-        id,
-        amazonLink,
-        title,
-        cover,
-        authorId,
-        authorName,
-        authorIsMember,
-        averageRating,
-        numberOfRatings,
-        publishedYear,
-        numberOfEditions,
-        userStatus,
-        userRating,
-        userProgress,
-        toReadBookPosition,
-        pageCount,
-        genreShelves: [{
-            name,
-            numberOfBooks,
-        }],
-    }]
-    */
 	const [people, setPeople] = useState([]);
-	/*
-    people: [{
-        id,
-        name,
-        profilePicture,
-        location,
-        numberOfFriends,
-        numberOfBooks,
-    }]
-    */
 	const [genre, setGenre] = useState(null);
-	/*
-    genre: {
-        name,
-        parentGenre,
-    }
-    */
 	const [page, setPage] = useState(1);
 
 	const user = JSON.parse(localStorage.getItem('userState'));
@@ -95,40 +56,16 @@ const SearchPage = () => {
 
 	useEffect(() => {
 		const loadInfo = async () => {
+			const info = await trackPromise(
+				Firebase.getInfoForSearchPage(user.userUID, q, searchType, searchField)
+			);
 			if (q.length === 0) {
 				setBooks([]);
 				setPeople([]);
 				setGenre(null);
 			} else if (searchField === 'genre') {
-				const info = {
-					name: 'paranormal',
-					parentGenre: 'fiction',
-				};
 				setGenre(info);
 			} else if (searchType === 'books') {
-				const info = Array(60).fill({
-					id: '234',
-					amazonLink: 'https://www.amazon.com/gp/product/1501154648',
-					title: 'Then She Was Gone',
-					cover:
-						'https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1523891273l/35297426.jpg',
-					authorId: '222',
-					authorName: 'Lisa Wingate',
-					authorIsMember: true,
-					averageRating: 4,
-					numberOfRatings: 200,
-					publishedYear: 2017,
-					numberOfEditions: 12,
-					userStatus: undefined,
-					userRating: undefined,
-					userProgress: undefined,
-					toReadBookPosition: undefined,
-					pageCount: 450,
-					genreShelves: Array(10).fill({
-						name: 'mystery',
-						numberOfBooks: 14567,
-					}),
-				});
 				setSavingShelves(info.map((_book) => false));
 				setAreAddShelfInputSectionsHidden(info.map((_book) => true));
 				setAddShelfInputs(info.map((_book) => ''));
@@ -143,21 +80,12 @@ const SearchPage = () => {
 				setShelfPopupToReadInputs(info.map((_book) => ''));
 				setBooks(info);
 			} else {
-				const info = Array(50).fill({
-					id: '78',
-					name: 'Nils Hol',
-					profilePicture:
-						'https://tmbidigitalassetsazure.blob.core.windows.net/rms3-prod/attachments/37/1200x1200/Homemade-Chocolate-Pudding_EXPS_DIYD19_7927_B04_16_3b.jpg',
-					location: 'Canada',
-					numberOfFriends: 4500,
-					numberOfBooks: 460,
-				});
 				setPeople(info);
 			}
 			setLoaded(true);
 		};
 		loadInfo();
-	}, [q, searchType, searchField]);
+	}, [q, searchType, searchField, user.userUID]);
 
 	const displayRemoveBookConfirm = () => {
 		return window.confirm(
@@ -772,7 +700,7 @@ const SearchPage = () => {
 				<input
 					type="text"
 					value={searchInput}
-					onChange={(e) => setSearchInput(e.value)}
+					onChange={(e) => setSearchInput(e.target.value)}
 				></input>
 				<a
 					href={Firebase.pageGenerator.generateSearchPage(
@@ -876,6 +804,11 @@ const SearchPage = () => {
 											>
 												{book.authorName}
 											</a>
+											{book.authorIsMember ? (
+												<span className="goodreads-member-span">
+													{' (Goodreads Author)'}
+												</span>
+											) : null}
 										</span>
 										<div className="other-info-section">
 											<div className="search-page-general-rating-stars">
@@ -937,7 +870,7 @@ const SearchPage = () => {
 											</div>
 											<span>
 												<span>{`${book.averageRating.toFixed(2)} avg rating — ${
-													book.ratings
+													book.numberOfRatings
 												} ratings ${
 													book.publishedYear !== undefined
 														? `— published ${book.publishedYear}`
