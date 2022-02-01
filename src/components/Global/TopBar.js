@@ -4,7 +4,6 @@ import { formatDistance } from 'date-fns';
 import TopBarSearchBar from './TopBarSearchBar';
 import Firebase from '../../Firebase';
 import '../styles/Global/TopBar.css';
-import { trackPromise } from 'react-promise-tracker';
 
 const TopBar = () => {
 	const [browseClicked, setBrowseClicked] = useState(false);
