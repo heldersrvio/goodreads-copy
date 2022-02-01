@@ -1287,37 +1287,21 @@ const Firebase = (() => {
 		return updatesQuery.docs.map((document) => document.data());
 	};
 
-	const setNewNotificationsToSeen = async () => {
-		try {
-			const query = await database.collection('heldersrvioNotifications').get();
-			query.forEach((doc) => doc.ref.set({ new: false }, { merge: true }));
-		} catch (error) {
-			console.log(error);
-		}
-	};
-
-	const setNewFriendsToZero = async () => {
-		try {
-			const query = await database
-				.collection('users')
-				.where('username', '==', 'heldersrvio')
-				.get();
-			query.forEach((doc) =>
-				doc.ref.set({ newFriendsRequests: [] }, { merge: true })
-			);
-		} catch (error) {
-			console.log(error);
-		}
-	};
-
 	const signOut = async (history) => {
-		console.log('Signing out...');
 		try {
 			await firebase.auth().signOut();
 			localStorage.userInfo = null;
 			history.push({
 				pathname: '/user/sign_out',
 			});
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const resetPassword = async (email) => {
+		try {
+			await firebase.auth().sendPasswordResetEmail(email);
 		} catch (error) {
 			console.log(error);
 		}
@@ -1476,21 +1460,42 @@ const Firebase = (() => {
 			if (email.length === 0) {
 				throw new Error('email-missing');
 			}
-			const newUserDocRef = database.collection('users').doc(email);
-			const newUserDoc = await newUserDocRef.get();
-			if (newUserDoc.exists) {
-				throw new Error('email-exists');
+
+			console.log(
+				`Creating user with email ${email} and password ${password}...`
+			);
+			const result = await firebase
+				.auth()
+				.createUserWithEmailAndPassword(email, password);
+			const userUID = result.user.uid;
+
+			if (!(await database.collection('users').doc(userUID).get()).exists) {
+				await database
+					.collection('users')
+					.doc(userUID)
+					.set({
+						firstName: name.split(' ')[0],
+						lastName:
+							name.split(' ').length > 1
+								? name.split(' ').slice(1).join(' ')
+								: '',
+						email,
+						membershipDate: firebase.firestore.Timestamp.fromDate(new Date()),
+						favoriteAuthors: [],
+						friends: [],
+						newFriendsRequests: [],
+					});
 			}
-			await database.collection('users').doc(email).set({
-				name,
-				email,
-				password,
+
+			history.push({
+				pathname: '/',
 			});
 		} catch (error) {
 			history.push({
 				pathname: '/user/sign_up',
 				state: { error: error.message },
 			});
+			return error;
 		}
 	};
 
@@ -5505,9 +5510,8 @@ const Firebase = (() => {
 		queryBookRecommendedToFriendsStatus,
 		queryStatusUpdatesForRootBook,
 		queryStatusUpdatesForBook,
-		setNewNotificationsToSeen,
-		setNewFriendsToZero,
 		signOut,
+		resetPassword,
 		passwordSignIn,
 		facebookSignIn,
 		twitterSignIn,

@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import Firebase from '../../Firebase';
 import '../styles/Authentication/SignUpPage.css';
 
 const SignUpPage = (props) => {
+	const history = useHistory();
+	const location = useLocation();
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [name, setName] = useState('');
-	const location = useLocation();
 
 	const errorMessage =
 		location.state !== undefined && location.state.error === 'name' ? (
@@ -39,17 +42,41 @@ const SignUpPage = (props) => {
 						Sign up to see what your friends are reading, get book
 						recommendations, and join the world’s largest community of readers.
 					</span>
-					<button id="continue-with-facebook" onClick={props.facebookSignIn}>
+					<button
+						id="continue-with-facebook"
+						onClick={async () => {
+							await Firebase.facebookSignIn();
+							history.push({
+								pathname: '/',
+							});
+						}}
+					>
 						<span className="facebook-icon"></span>
 						<span className="continue-with-facebook-label">
 							Continue with Facebook
 						</span>
 					</button>
 					<div className="smaller-buttons">
-						<button id="sign-in-with-twitter" onClick={props.twitterSignIn}>
+						<button
+							id="sign-in-with-twitter"
+							onClick={async () => {
+								await Firebase.twitterSignIn();
+								history.push({
+									pathname: '/',
+								});
+							}}
+						>
 							Sign in with Twitter
 						</button>
-						<button id="sign-in-with-google" onClick={props.googleSignIn}>
+						<button
+							id="sign-in-with-google"
+							onClick={async () => {
+								await Firebase.googleSignIn();
+								history.push({
+									pathname: '/',
+								});
+							}}
+						>
 							Sign in with Google
 						</button>
 					</div>
@@ -96,7 +123,10 @@ const SignUpPage = (props) => {
 					>
 						<button
 							className="sign-in-up-page-sign-in"
-							onClick={() => props.signUp(email, password, name)}
+							onClick={async (e) => {
+								e.preventDefault();
+								await Firebase.signUp(email, password, name, history);
+							}}
 						>
 							Sign up
 						</button>

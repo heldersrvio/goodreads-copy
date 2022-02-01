@@ -131,7 +131,6 @@ const TopBar = () => {
 						id="notifications-button"
 						onClick={() => {
 							if (newNotifications > 0) {
-								Firebase.setNewNotificationsToSeen();
 								setNewNotifications(0);
 							}
 							setNotificationsClicked(!notificationsClicked);
@@ -168,7 +167,6 @@ const TopBar = () => {
 					<button
 						id="friends-link"
 						onClick={async () => {
-							await Firebase.setNewFriendsToZero();
 							setNewFriends(0);
 							document.location.href = Firebase.pageGenerator.generateUserFriendsPage(
 								user.userUID,

@@ -11,7 +11,6 @@ import { trackPromise } from 'react-promise-tracker';
 
 /*
 	TODO (Brushing up):
-		- Verify password change and email login
 		- Remove unused content from Home Page
 		- Test app from private navigation
 		- Test account creation (and other pages thereafter)
@@ -31,7 +30,7 @@ const App = () => {
 			dispatch(
 				reducer.login(userUID, {
 					...newUserInfo,
-					firstName: displayName.split(' ')[0],
+					firstName: displayName !== null ? displayName.split(' ')[0] : '',
 				})
 			);
 			setLoading(false);

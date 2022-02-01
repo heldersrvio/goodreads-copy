@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
+import Firebase from '../../Firebase';
 import '../styles/Authentication/ForgotPasswordPage.css';
 
 const ForgotPasswordPage = (props) => {
+	const history = useHistory();
 	const [email, setEmail] = useState('');
 
 	return (
@@ -30,7 +32,12 @@ const ForgotPasswordPage = (props) => {
 					<div className="sign-in-up-page-main-card-center-bottom-buttons">
 						<button
 							className="sign-in-up-page-sign-in"
-							onClick={() => props.resetPassword(email)}
+							onClick={async () => {
+								await Firebase.resetPassword(email);
+								history.push({
+									pathname: '/user/sign_in',
+								});
+							}}
 						>
 							Reset password
 						</button>
@@ -49,10 +56,6 @@ const ForgotPasswordPage = (props) => {
 			<div className="sign-in-up-page-bottom-section"></div>
 		</div>
 	);
-};
-
-ForgotPasswordPage.propTypes = {
-	resetPassword: PropTypes.func,
 };
 
 export default ForgotPasswordPage;
