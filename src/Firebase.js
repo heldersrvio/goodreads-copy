@@ -1471,7 +1471,7 @@ const Firebase = (() => {
 			await firebase.auth().signOut();
 			localStorage.userInfo = null;
 			history.push({
-				pathname: '/user/sign_out',
+				pathname: '/' + process.env.REACT_APP_BASE_URL + '/user/sign_out',
 			});
 		} catch (error) {
 			console.log(error);
@@ -1494,11 +1494,11 @@ const Firebase = (() => {
 				localStorage.password = password;
 			}
 			history.push({
-				pathname: '/',
+				pathname: '/' + process.env.REACT_APP_BASE_URL + '/',
 			});
 		} catch (error) {
 			history.push({
-				pathname: '/user/sign_in',
+				pathname: '/' + process.env.REACT_APP_BASE_URL + '/user/sign_in',
 				state: { error: error.message },
 			});
 		}
@@ -1803,11 +1803,11 @@ const Firebase = (() => {
 			}
 
 			history.push({
-				pathname: '/',
+				pathname: '/' + process.env.REACT_APP_BASE_URL + '/',
 			});
 		} catch (error) {
 			history.push({
-				pathname: '/user/sign_up',
+				pathname: '/' + process.env.REACT_APP_BASE_URL + '/user/sign_up',
 				state: { error: error.message },
 			});
 			return error;
@@ -1852,7 +1852,7 @@ const Firebase = (() => {
 	const addBookToShelf = async (userUID, bookId, status, history) => {
 		if (userUID === undefined || userUID === null) {
 			history.push({
-				pathname: '/user/sign_in',
+				pathname: '/' + process.env.REACT_APP_BASE_URL + '/user/sign_in',
 				state: { error: 'User not logged in' },
 			});
 		} else {
@@ -1944,7 +1944,7 @@ const Firebase = (() => {
 	const rateBook = async (userUID, bookId, rating, history) => {
 		if (userUID === undefined || userUID === null) {
 			history.push({
-				pathname: '/user/sign_in',
+				pathname: '/' + process.env.REACT_APP_BASE_URL + '/user/sign_in',
 				state: { error: 'User not logged in' },
 			});
 		} else {
@@ -2055,7 +2055,7 @@ const Firebase = (() => {
 	const addNewUserShelf = async (userUID, shelf, history) => {
 		if (userUID === undefined || userUID === null) {
 			history.push({
-				pathname: '/user/sign_in',
+				pathname: '/' + process.env.REACT_APP_BASE_URL + '/user/sign_in',
 				state: { error: 'User not logged in' },
 			});
 		} else {
@@ -2094,7 +2094,7 @@ const Firebase = (() => {
 	) => {
 		if (userUID === undefined || userUID === null) {
 			history.push({
-				pathname: '/user/sign_in',
+				pathname: '/' + process.env.REACT_APP_BASE_URL + '/user/sign_in',
 				state: { error: 'User not logged in' },
 			});
 		} else {
@@ -2149,7 +2149,7 @@ const Firebase = (() => {
 	const removeBookFromUserShelf = async (userUID, rootBook, shelf, history) => {
 		if (userUID === undefined || userUID === null) {
 			history.push({
-				pathname: '/user/sign_in',
+				pathname: '/' + process.env.REACT_APP_BASE_URL + '/user/sign_in',
 				state: { error: 'User not logged in' },
 			});
 		} else {
@@ -2179,7 +2179,7 @@ const Firebase = (() => {
 	const likeUnlikeReview = async (userUID, reviewId, history) => {
 		if (userUID === undefined || userUID === null) {
 			history.push({
-				pathname: '/user/sign_in',
+				pathname: '/' + process.env.REACT_APP_BASE_URL + '/user/sign_in',
 				state: { error: 'User not logged in' },
 			});
 		} else {
@@ -2206,7 +2206,7 @@ const Firebase = (() => {
 	const followUnfollowAuthor = async (userUID, authorId, history) => {
 		if (userUID === undefined || userUID === null) {
 			history.push({
-				pathname: '/user/sign_in',
+				pathname: '/' + process.env.REACT_APP_BASE_URL + '/user/sign_in',
 				state: { error: 'User not logged in' },
 			});
 		} else {
@@ -2621,7 +2621,10 @@ const Firebase = (() => {
 			const newBookRef = await database.collection('books').add(newBookObject);
 			// 'Book was created. Please note that it will take up to 10 minutes for this book to be searchable by title/author.'
 			history.push({
-				pathname: `/review/new/${newBookRef.id}?newBook=yes`,
+				pathname:
+					'/' +
+					process.env.REACT_APP_BASE_URL +
+					`/review/new/${newBookRef.id}?newBook=yes`,
 				state: { addedNewBook: true },
 			});
 		} catch (error) {
@@ -2806,7 +2809,7 @@ const Firebase = (() => {
 	const likeQuote = async (userUID, quoteId, history) => {
 		if (userUID === null || userUID === undefined) {
 			history.push({
-				pathname: '/user/sign_in',
+				pathname: '/' + process.env.REACT_APP_BASE_URL + '/user/sign_in',
 				state: { error: 'User not logged in' },
 			});
 		} else {
@@ -2970,7 +2973,7 @@ const Firebase = (() => {
 	const addRemoveAuthorToFavorites = async (userUID, authorId, history) => {
 		if (userUID === null || userUID === undefined) {
 			history.push({
-				pathname: '/user/sign_in',
+				pathname: '/' + process.env.REACT_APP_BASE_URL + '/user/sign_in',
 				state: { error: 'User not logged in' },
 			});
 		} else {
@@ -3474,7 +3477,7 @@ const Firebase = (() => {
 	const fetchUserFavoriteAuthors = async (userUID, history) => {
 		if (userUID === null || userUID === undefined) {
 			history.push({
-				pathname: '/user/sign_in',
+				pathname: '/' + process.env.REACT_APP_BASE_URL + '/user/sign_in',
 				state: { error: 'User not logged in' },
 			});
 			return [];
@@ -3555,7 +3558,7 @@ const Firebase = (() => {
 	const getNotificationsForUser = async (userUID, history) => {
 		if (userUID === null || userUID === undefined) {
 			history.push({
-				pathname: '/user/sign_in',
+				pathname: '/' + process.env.REACT_APP_BASE_URL + '/user/sign_in',
 				state: { error: 'User not logged in' },
 			});
 			return [];
@@ -3591,7 +3594,7 @@ const Firebase = (() => {
 	const getUserSettings = async (userUID, history) => {
 		if (userUID === null || userUID === undefined) {
 			history.push({
-				pathname: '/user/sign_in',
+				pathname: '/' + process.env.REACT_APP_BASE_URL + '/user/sign_in',
 				state: { error: 'User not logged in' },
 			});
 			return {};
@@ -3670,7 +3673,7 @@ const Firebase = (() => {
 			.doc(userUID)
 			.set({ password: newPassword }, { merge: true });
 		history.push({
-			pathname: '/user/sign_in',
+			pathname: '/' + process.env.REACT_APP_BASE_URL + '/user/sign_in',
 			state: { message: 'Your password has been updated.' },
 		});
 	};
@@ -3692,7 +3695,7 @@ const Firebase = (() => {
 		});
 		await database.collection('users').doc(userUID).delete();
 		history.push({
-			pathname: '/home',
+			pathname: '/' + process.env.REACT_APP_BASE_URL + '/',
 			state: { message: 'Your account will be permanently deleted.' },
 		});
 	};
@@ -3700,7 +3703,7 @@ const Firebase = (() => {
 	const getFavoriteGenresForUser = async (userUID, history) => {
 		if (userUID === null || userUID === undefined) {
 			history.push({
-				pathname: '/user/sign_in',
+				pathname: '/' + process.env.REACT_APP_BASE_URL + '/user/sign_in',
 				state: { error: 'User not logged in' },
 			});
 			return [];
@@ -3931,7 +3934,7 @@ const Firebase = (() => {
 	const likeUnlikeArticle = async (userUID, articleId, history) => {
 		if (userUID === null || userUID === undefined) {
 			history.push({
-				pathname: '/user/sign_in',
+				pathname: '/' + process.env.REACT_APP_BASE_URL + '/user/sign_in',
 				state: { error: 'User not logged in' },
 			});
 		} else {
@@ -4482,7 +4485,7 @@ const Firebase = (() => {
 	const followUser = async (userUID, userToFollowUID, history) => {
 		if (userUID === null || userUID === undefined) {
 			history.push({
-				pathname: '/user/sign_in',
+				pathname: '/' + process.env.REACT_APP_BASE_URL + '/user/sign_in',
 				state: { error: 'User not logged in' },
 			});
 		} else {
@@ -4508,7 +4511,7 @@ const Firebase = (() => {
 	const unfollowUser = async (userUID, userToFollowUID, history) => {
 		if (userUID === null || userUID === undefined) {
 			history.push({
-				pathname: '/user/sign_in',
+				pathname: '/' + process.env.REACT_APP_BASE_URL + '/user/sign_in',
 				state: { error: 'User not logged in' },
 			});
 		} else {
@@ -4533,7 +4536,7 @@ const Firebase = (() => {
 	const unfriendUser = async (userUID, friendId, history) => {
 		if (userUID === null || userUID === undefined) {
 			history.push({
-				pathname: '/user/sign_in',
+				pathname: '/' + process.env.REACT_APP_BASE_URL + '/user/sign_in',
 				state: { error: 'User not logged in' },
 			});
 		} else {
@@ -4663,7 +4666,7 @@ const Firebase = (() => {
 
 		if (userUID === null || userUID === undefined) {
 			history.push({
-				pathname: '/user/sign_in',
+				pathname: '/' + process.env.REACT_APP_BASE_URL + '/user/sign_in',
 				state: { error: 'User not logged in' },
 			});
 		} else {
@@ -4765,7 +4768,7 @@ const Firebase = (() => {
 	) => {
 		if (userUID === null || userUID === undefined) {
 			history.push({
-				pathname: '/user/sign_in',
+				pathname: '/' + process.env.REACT_APP_BASE_URL + '/user/sign_in',
 				state: { error: 'User not logged in' },
 			});
 		} else {
