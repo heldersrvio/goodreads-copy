@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/goodreads-copy/static/css/main.a501fa15.chunk.css",
-    "main.js": "/goodreads-copy/static/js/main.34084ea4.chunk.js",
-    "main.js.map": "/goodreads-copy/static/js/main.34084ea4.chunk.js.map",
+    "main.js": "/goodreads-copy/static/js/main.1fa95be8.chunk.js",
+    "main.js.map": "/goodreads-copy/static/js/main.1fa95be8.chunk.js.map",
     "runtime-main.js": "/goodreads-copy/static/js/runtime-main.619be372.js",
     "runtime-main.js.map": "/goodreads-copy/static/js/runtime-main.619be372.js.map",
     "static/css/2.ab75b8d7.chunk.css": "/goodreads-copy/static/css/2.ab75b8d7.chunk.css",
@@ -18,6 +18,6 @@
     "static/css/2.ab75b8d7.chunk.css",
     "static/js/2.1b920e42.chunk.js",
     "static/css/main.a501fa15.chunk.css",
-    "static/js/main.34084ea4.chunk.js"
+    "static/js/main.1fa95be8.chunk.js"
   ]
 }
